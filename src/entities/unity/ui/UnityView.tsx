@@ -10,7 +10,6 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { Text } from '@app/shared/ui/Text';
 
-import { testJson } from './tmp-fixture';
 import {
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
@@ -41,18 +40,6 @@ export const UnityView: FC<Props> = props => {
   const [unityPaths, setUnityPaths] = useState<Array<string>>([]);
 
   const handleUnityReady = useCallback(async () => {
-    logger.log(
-      `!!! TODO: Load activity config: ${JSON.stringify(props.payload.file)}`,
-    );
-
-    // logger.log('!!! Sending LoadConfigFile message ...');
-    // const loadConfigFileResp = await sendMessageToUnity({
-    //   m_sId: uuidv4(),
-    //   m_sKey: 'LoadConfigFile',
-    //   m_sAdditionalInfo: JSON.stringify(testJson),
-    // });
-    // logger.log(`!!! loadConfigFileResp: ${JSON.stringify(loadConfigFileResp)}`);
-
     // TODO: Look into why this is happening.
     // We ave to wait until the loading screen appears before sending in the
     // config JSON. But for some reasons the `UnityStart` message never arrives
@@ -63,7 +50,7 @@ export const UnityView: FC<Props> = props => {
       sendMessageToUnity({
         m_sId: uuidv4(),
         m_sKey: 'LoadConfigFile',
-        m_sAdditionalInfo: JSON.stringify(testJson),
+        m_sAdditionalInfo: props.payload.file ?? undefined,
       })
         .then(resp => {
           logger.log(`!!! LoadConfigFile resp: ${JSON.stringify(resp)}`);
