@@ -38,6 +38,7 @@ export const UnityView: FC<Props> = props => {
   const unityViewKeyWas = usePreviousValue(unityViewKey);
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
+  const [unityPaths, setUnityPaths] = useState<Array<string>>([]);
 
   const handleUnityReady = useCallback(async () => {
     logger.log(
@@ -92,6 +93,21 @@ export const UnityView: FC<Props> = props => {
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
+
+  const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
+    msg => {
+      if (msg.m_sKey === 'DataExport') {
+        setUnityPaths((prevPaths: Array<string>) => [
+          ...prevPaths,
+          ...msg.m_listDataPaths,
+        ]);
+      }
+    },
+    [],
+  );
+  useEffect(() => {
+    registerEventHandler('DataExport', handleDataExport);
+  }, [handleDataExport, registerEventHandler]);
 
   // Register a backup Unity ready handler via a `Echo` message.
   useEffect(() => {
