@@ -446,7 +446,10 @@ export function ActivityItem({
         return {
           item: (
             <Box flex={1}>
-              <UnityView payload={pipelineItem.payload} />
+              <UnityView
+                payload={pipelineItem.payload}
+                onResponse={onResponse}
+              />
             </Box>
           ),
         };
