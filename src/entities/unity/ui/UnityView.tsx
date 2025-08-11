@@ -41,7 +41,9 @@ export const UnityView: FC<Props> = props => {
   const unityViewKeyWas = usePreviousValue(unityViewKey);
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
-  const [unityPaths, setUnityPaths] = useState<Array<string>>([]);
+  const unityPaths = useRef<Array<string>>([]);
+
+  logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
 
   const handleUnityReady = useCallback(async () => {
     // TODO: Look into why this is happening.
@@ -78,26 +80,43 @@ export const UnityView: FC<Props> = props => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
-    // TODO: Submit the data and send the reset unity event
+  const handleEndUnity =
+    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
+      logger.log('[UnityView] Handling EndUnity event');
+      logger.log(
+        `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
+      );
+      const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
+        const fileName = path.split('/').pop() ?? '';
 
-    const mediaFiles: MediaFile[] = unityPaths.map(path => {
-      const fileName = path.split('/').pop() ?? '';
+        return {
+          uri: path,
+          type: mime.lookup(fileName) || '',
+          fileName,
+        };
+      });
 
-      return {
-        uri: path,
-        type: mime.lookup(fileName) || '',
-        fileName,
-      };
-    });
+      logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
 
-    props.onResponse?.({
-      responseType: 'unity',
-      // TODO: Figure out what this should be
-      startTime: 0,
-      taskData: mediaFiles,
-    });
-  }, [props, unityPaths]);
+      props.onResponse?.({
+        responseType: 'unity',
+        // TODO: Figure out what this should be
+        startTime: 0,
+
+        // TODO: Uncomment this when file reading from SD card starts working
+        // taskData: mediaFiles,
+        taskData: [],
+      });
+
+      logger.log('[UnityView] Sending Reset message');
+
+      await sendMessageToUnity({
+        m_sId: uuidv4(),
+        m_sKey: 'Reset',
+      });
+
+      logger.log('[UnityView] Sent Reset message');
+    }, [logger, props, sendMessageToUnity]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
@@ -105,13 +124,14 @@ export const UnityView: FC<Props> = props => {
   const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
       if (msg.m_sKey === 'DataExport') {
-        setUnityPaths((prevPaths: Array<string>) => [
-          ...prevPaths,
-          ...msg.m_listDataPaths,
-        ]);
+        logger.log(
+          `[UnityView] Received DataExport message with paths: ${msg.m_listDataPaths.join(', ')}`,
+        );
+
+        unityPaths.current = [...unityPaths.current, ...msg.m_listDataPaths];
       }
     },
-    [],
+    [logger],
   );
   useEffect(() => {
     registerEventHandler('DataExport', handleDataExport);
