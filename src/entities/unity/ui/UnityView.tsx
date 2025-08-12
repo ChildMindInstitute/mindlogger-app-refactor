@@ -90,7 +90,7 @@ export const UnityView: FC<Props> = props => {
         const fileName = path.split('/').pop() ?? '';
 
         return {
-          uri: path,
+          uri: `file://${path}`,
           type: mime.lookup(fileName) || '',
           fileName,
         };
@@ -103,9 +103,7 @@ export const UnityView: FC<Props> = props => {
         // TODO: Figure out what this should be
         startTime: 0,
 
-        // TODO: Uncomment this when file reading from SD card starts working
-        // taskData: mediaFiles,
-        taskData: [],
+        taskData: mediaFiles,
       });
 
       logger.log('[UnityView] Sending Reset message');
