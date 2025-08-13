@@ -24,10 +24,10 @@ interface LayoutDimensions {
 export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
-  const enableBetterDrawingImageSizing = true
-    // getDefaultFeatureFlagsService().evaluateFlag(
-    //   FeatureFlagsKeys.enableBetterDrawingImageSizing,
-    // );
+  const enableBetterDrawingImageSizing =
+    getDefaultFeatureFlagsService().evaluateFlag(
+      FeatureFlagsKeys.enableBetterDrawingImageSizing,
+    ) || true;
 
   const width = props.dimensions.width - RectPadding * 2;
   const { dimensions: exampleImageDimensions } = useImageDimensions(imageUrl);
