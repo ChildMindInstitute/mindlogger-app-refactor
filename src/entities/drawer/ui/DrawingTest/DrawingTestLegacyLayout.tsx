@@ -27,7 +27,7 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
   const enableBetterDrawingImageSizing =
     getDefaultFeatureFlagsService().evaluateFlag(
       FeatureFlagsKeys.enableBetterDrawingImageSizing,
-    ) || true;
+    );
 
   const width = props.dimensions.width - RectPadding * 2;
   const { dimensions: exampleImageDimensions } = useImageDimensions(imageUrl);

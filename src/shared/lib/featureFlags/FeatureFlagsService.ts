@@ -61,6 +61,18 @@ export class FeatureFlagsService implements IFeatureFlagsService {
   }
 
   evaluateFlag(flag: string): boolean {
+    // Dev environment overrides
+    if (__DEV__) {
+      const devOverrides: Record<string, boolean> = {
+        'enable-better-drawing-image-sizing': true,
+        // Add other feature flags here as needed for dev environment
+      };
+
+      if (flag in devOverrides) {
+        return devOverrides[flag];
+      }
+    }
+
     if (!this.client) {
       return false;
     }
