@@ -24,10 +24,15 @@ interface LayoutDimensions {
 export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
+  // Dynamic Sizing Feature:
+  // We only use the smart resizing when BOTH conditions are met:
+  // 1. The feature flag is enabled (controlled by LaunchDarkly or dev override)
+  // 2. There's actually an example image to show
+  // Without an example image, we stick to the old fixed-size layout
   const enableBetterDrawingImageSizing =
     getDefaultFeatureFlagsService().evaluateFlag(
       FeatureFlagsKeys.enableBetterDrawingImageSizing,
-    );
+    ) && !!imageUrl;
 
   const width = props.dimensions.width - RectPadding * 2;
   const { dimensions: exampleImageDimensions } = useImageDimensions(imageUrl);
@@ -46,7 +51,10 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
   // Calculate dimensions based on feature flag
   const dimensions = useMemo<LayoutDimensions>(() => {
     if (!enableBetterDrawingImageSizing) {
-      // OLD IMPLEMENTATION: Fixed 300x300 sizing
+      // LEGACY LAYOUT: Fixed sizes that don't adapt to screen
+      // - Example image: Always 300x300 (might be too big on small phones)
+      // - Drawing canvas: Uses full available width (could be huge on tablets)
+      // This is what we're improving with the dynamic sizing!
       return {
         exampleImageWidth: 300,
         exampleImageHeight: 300,
@@ -54,16 +62,23 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
       };
     }
 
-    // NEW IMPLEMENTATION: Dynamic sizing
+    // SMART DYNAMIC SIZING: Adapts to any screen size
+    // Goal: Make both the example image and drawing canvas fit nicely on screen
+
+    // Step 1: Figure out how much space we have to work with
     const availableWidth = width;
     const isTablet = props.dimensions.width > 600;
-    const bottomMarginFromParent = 24; // mb="$6"
-    const additionalSafetyMargin = isTablet ? 70 : 50;
+
+    // We need some breathing room at the bottom for UI elements
+    const bottomMarginFromParent = 24; // mb="$6" from parent component
+    const additionalSafetyMargin = isTablet ? 70 : 50; // Extra space for navigation
     const safetyMargin = bottomMarginFromParent + additionalSafetyMargin;
     const availableHeight = props.dimensions.height - safetyMargin;
 
     if (!exampleImageDimensions || !imageUrl) {
-      // No example image, canvas can use most of the available space
+      // Special case: No example image to show
+      // Let the drawing canvas use as much space as possible
+      // (but keep it square and not bigger than the screen)
       return {
         exampleImageWidth: 0,
         exampleImageHeight: 0,
@@ -71,26 +86,33 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
       };
     }
 
-    // Calculate with example image
-    const gap = 20;
+    // Step 2: Start with the example image at full width
+    // We'll shrink it later if needed to fit everything on screen
+    const gap = 20; // Space between example image and drawing canvas
     let exampleImageWidth = availableWidth;
     let exampleImageHeight = Math.floor(
       availableWidth / exampleImageDimensions.aspectRatio,
     );
 
+    // Step 3: Ensure the drawing canvas gets a reasonable size
+    // At least 60% of screen width, but no more than 300px (nice for drawing)
     const minCanvasSize = Math.min(availableWidth * 0.6, 300);
     const spaceNeededForCanvas = minCanvasSize + gap;
     const totalSpaceNeeded = exampleImageHeight + spaceNeededForCanvas;
 
+    // Step 4: Check if everything fits vertically
     if (totalSpaceNeeded > availableHeight) {
+      // Oops, too tall! We need to shrink the example image
       const maxExampleHeight = availableHeight - spaceNeededForCanvas;
 
       if (maxExampleHeight > 50) {
+        // There's enough room for a decent-sized example image
         exampleImageHeight = maxExampleHeight;
         exampleImageWidth = Math.floor(
           maxExampleHeight * exampleImageDimensions.aspectRatio,
         );
 
+        // But wait, make sure it still fits horizontally!
         if (exampleImageWidth > availableWidth) {
           exampleImageWidth = availableWidth;
           exampleImageHeight = Math.floor(
@@ -98,6 +120,8 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
           );
         }
       } else {
+        // Very little space - make the example image tiny
+        // Use 25% of available height, but cap at 150px so it's not microscopic
         exampleImageHeight = Math.min(availableHeight * 0.25, 150);
         exampleImageWidth = Math.floor(
           exampleImageHeight * exampleImageDimensions.aspectRatio,
@@ -105,6 +129,8 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
       }
     }
 
+    // Step 5: Calculate the final canvas size
+    // Use whatever vertical space is left, but keep it square (width = height)
     const remainingHeight = availableHeight - exampleImageHeight - gap;
     const canvasSize = Math.min(availableWidth, remainingHeight);
 
@@ -121,7 +147,11 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
     imageUrl,
   ]);
 
-  // Render legacy layout (feature flag OFF)
+  // LEGACY LAYOUT: This is what users see when the feature flag is OFF
+  // Problems with this approach:
+  // - Fixed 300x300 example image (too big for small phones, too small for tablets)
+  // - Drawing canvas doesn't adjust to available space
+  // - Can create scrolling issues on small screens
   const renderLegacyLayout = () => (
     <Box {...props}>
       {!!imageUrl && (
@@ -163,7 +193,12 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
     </Box>
   );
 
-  // Render dynamic layout (feature flag ON)
+  // DYNAMIC LAYOUT: This is the new smart sizing when feature flag is ON
+  // Benefits:
+  // - Example image scales to fit the screen perfectly
+  // - Drawing canvas is always a comfortable size for drawing
+  // - No scrolling needed - everything fits on one screen
+  // - Works great on phones, tablets, and everything in between
   const renderDynamicLayout = () => (
     <Box {...props}>
       {!!imageUrl && !!exampleImageDimensions && (
@@ -206,7 +241,11 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
     </Box>
   );
 
-  // Return appropriate layout based on feature flag
+  // Choose which layout to render based on our feature flag
+  // This allows us to:
+  // 1. Test the new dynamic sizing with specific users/groups
+  // 2. Quickly roll back if any issues are found
+  // 3. Gradually roll out to all users once we're confident
   return enableBetterDrawingImageSizing
     ? renderDynamicLayout()
     : renderLegacyLayout();
