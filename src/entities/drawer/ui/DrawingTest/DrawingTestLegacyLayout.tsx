@@ -37,6 +37,89 @@ interface LayoutDimensions {
   canvasSize: number;
 }
 
+interface SafetyMargins {
+  bottomMargin: number;
+  additionalMargin: number;
+}
+
+interface ImageDimensions {
+  width: number;
+  height: number;
+  aspectRatio: number;
+}
+
+// Helper functions for dimension calculations
+const calculateSafetyMargins = (isTablet: boolean): SafetyMargins => ({
+  bottomMargin: BOTTOM_MARGIN_FROM_PARENT,
+  additionalMargin: isTablet ? TABLET_SAFETY_MARGIN : PHONE_SAFETY_MARGIN,
+});
+
+const calculateAvailableSpace = (
+  containerWidth: number,
+  containerHeight: number,
+  isTablet: boolean,
+): { availableWidth: number; availableHeight: number } => {
+  const { bottomMargin, additionalMargin } = calculateSafetyMargins(isTablet);
+  const safetyMargin = bottomMargin + additionalMargin;
+
+  return {
+    availableWidth: containerWidth,
+    availableHeight: containerHeight - safetyMargin,
+  };
+};
+
+const calculateInitialExampleImageSize = (
+  availableWidth: number,
+  imageDimensions: ImageDimensions,
+): { width: number; height: number } => ({
+  width: availableWidth,
+  height: Math.floor(availableWidth / imageDimensions.aspectRatio),
+});
+
+const calculateMinCanvasSize = (availableWidth: number): number =>
+  Math.min(availableWidth * MIN_CANVAS_SIZE_FACTOR, MAX_CANVAS_SIZE);
+
+const shrinkImageToFit = (
+  availableWidth: number,
+  availableHeight: number,
+  imageDimensions: ImageDimensions,
+  spaceNeededForCanvas: number,
+): { width: number; height: number } => {
+  const maxExampleHeight = availableHeight - spaceNeededForCanvas;
+
+  if (maxExampleHeight > MIN_EXAMPLE_HEIGHT) {
+    // There's enough room for a decent-sized example image
+    let height = maxExampleHeight;
+    let width = Math.floor(maxExampleHeight * imageDimensions.aspectRatio);
+
+    // But wait, make sure it still fits horizontally!
+    if (width > availableWidth) {
+      width = availableWidth;
+      height = Math.floor(availableWidth / imageDimensions.aspectRatio);
+    }
+
+    return { width, height };
+  } else {
+    // Very little space - make the example image tiny
+    const height = Math.min(
+      availableHeight * FALLBACK_EXAMPLE_HEIGHT_FACTOR,
+      MAX_FALLBACK_EXAMPLE_HEIGHT,
+    );
+    const width = Math.floor(height * imageDimensions.aspectRatio);
+
+    return { width, height };
+  }
+};
+
+const calculateFinalCanvasSize = (
+  availableWidth: number,
+  availableHeight: number,
+  exampleImageHeight: number,
+): number => {
+  const remainingHeight = availableHeight - exampleImageHeight - GAP_SIZE;
+  return Math.min(availableWidth, remainingHeight);
+};
+
 export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
   const { value, backgroundImageUrl, imageUrl, onLog } = props;
 
@@ -82,15 +165,12 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
     // Goal: Make both the example image and drawing canvas fit nicely on screen
 
     // Step 1: Figure out how much space we have to work with
-    const availableWidth = width;
     const isTablet = props.dimensions.width > TABLET_WIDTH_THRESHOLD;
-
-    // We need some breathing room at the bottom for UI elements
-    const additionalSafetyMargin = isTablet
-      ? TABLET_SAFETY_MARGIN
-      : PHONE_SAFETY_MARGIN;
-    const safetyMargin = BOTTOM_MARGIN_FROM_PARENT + additionalSafetyMargin;
-    const availableHeight = props.dimensions.height - safetyMargin;
+    const { availableWidth, availableHeight } = calculateAvailableSpace(
+      width,
+      props.dimensions.height,
+      isTablet,
+    );
 
     if (!exampleImageDimensions || !imageUrl) {
       // Special case: No example image to show
@@ -105,57 +185,39 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
 
     // Step 2: Start with the example image at full width
     // We'll shrink it later if needed to fit everything on screen
-    const gap = GAP_SIZE; // Space between example image and drawing canvas
-    let exampleImageWidth = availableWidth;
-    let exampleImageHeight = Math.floor(
-      availableWidth / exampleImageDimensions.aspectRatio,
+    const initialExampleImage = calculateInitialExampleImageSize(
+      availableWidth,
+      exampleImageDimensions,
     );
+    let exampleImageWidth = initialExampleImage.width;
+    let exampleImageHeight = initialExampleImage.height;
 
     // Step 3: Ensure the drawing canvas gets a reasonable size
     // At least 60% of screen width, but no more than 300px (nice for drawing)
-    const minCanvasSize = Math.min(
-      availableWidth * MIN_CANVAS_SIZE_FACTOR,
-      MAX_CANVAS_SIZE,
-    );
-    const spaceNeededForCanvas = minCanvasSize + gap;
+    const minCanvasSize = calculateMinCanvasSize(availableWidth);
+    const spaceNeededForCanvas = minCanvasSize + GAP_SIZE;
     const totalSpaceNeeded = exampleImageHeight + spaceNeededForCanvas;
 
     // Step 4: Check if everything fits vertically
     if (totalSpaceNeeded > availableHeight) {
       // Oops, too tall! We need to shrink the example image
-      const maxExampleHeight = availableHeight - spaceNeededForCanvas;
-
-      if (maxExampleHeight > MIN_EXAMPLE_HEIGHT) {
-        // There's enough room for a decent-sized example image
-        exampleImageHeight = maxExampleHeight;
-        exampleImageWidth = Math.floor(
-          maxExampleHeight * exampleImageDimensions.aspectRatio,
-        );
-
-        // But wait, make sure it still fits horizontally!
-        if (exampleImageWidth > availableWidth) {
-          exampleImageWidth = availableWidth;
-          exampleImageHeight = Math.floor(
-            availableWidth / exampleImageDimensions.aspectRatio,
-          );
-        }
-      } else {
-        // Very little space - make the example image tiny
-        // Use 25% of available height, but cap at 150px so it's not microscopic
-        exampleImageHeight = Math.min(
-          availableHeight * FALLBACK_EXAMPLE_HEIGHT_FACTOR,
-          MAX_FALLBACK_EXAMPLE_HEIGHT,
-        );
-        exampleImageWidth = Math.floor(
-          exampleImageHeight * exampleImageDimensions.aspectRatio,
-        );
-      }
+      const shrunkImage = shrinkImageToFit(
+        availableWidth,
+        availableHeight,
+        exampleImageDimensions,
+        spaceNeededForCanvas,
+      );
+      exampleImageWidth = shrunkImage.width;
+      exampleImageHeight = shrunkImage.height;
     }
 
     // Step 5: Calculate the final canvas size
     // Use whatever vertical space is left, but keep it square (width = height)
-    const remainingHeight = availableHeight - exampleImageHeight - gap;
-    const canvasSize = Math.min(availableWidth, remainingHeight);
+    const canvasSize = calculateFinalCanvasSize(
+      availableWidth,
+      availableHeight,
+      exampleImageHeight,
+    );
 
     return {
       exampleImageWidth,
