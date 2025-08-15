@@ -13,7 +13,23 @@ import { DrawResult } from '../../lib/types/draw';
 import { getDefaultSvgFileManager } from '../../lib/utils/svgFileManagerInstance';
 import { DrawingBoard } from '../DrawingBoard';
 
-const RectPadding = 15;
+// Layout Constants
+const RECT_PADDING = 15;
+const DEFAULT_IMAGE_SIZE = 300;
+const GAP_SIZE = 20;
+const MIN_EXAMPLE_HEIGHT = 50;
+const FALLBACK_EXAMPLE_HEIGHT_FACTOR = 0.25;
+const MAX_FALLBACK_EXAMPLE_HEIGHT = 150;
+const MIN_CANVAS_SIZE_FACTOR = 0.6;
+const MAX_CANVAS_SIZE = 300;
+
+// Device Detection
+const TABLET_WIDTH_THRESHOLD = 600;
+
+// Margins
+const BOTTOM_MARGIN_FROM_PARENT = 24; // mb="$6"
+const TABLET_SAFETY_MARGIN = 70;
+const PHONE_SAFETY_MARGIN = 50;
 
 interface LayoutDimensions {
   exampleImageWidth: number;
@@ -34,7 +50,7 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
       FeatureFlagsKeys.enableBetterDrawingImageSizing,
     ) && !!imageUrl;
 
-  const width = props.dimensions.width - RectPadding * 2;
+  const width = props.dimensions.width - RECT_PADDING * 2;
   const { dimensions: exampleImageDimensions } = useImageDimensions(imageUrl);
 
   const onResult = (result: DrawResult) => {
@@ -56,8 +72,8 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
       // - Drawing canvas: Uses full available width (could be huge on tablets)
       // This is what we're improving with the dynamic sizing!
       return {
-        exampleImageWidth: 300,
-        exampleImageHeight: 300,
+        exampleImageWidth: DEFAULT_IMAGE_SIZE,
+        exampleImageHeight: DEFAULT_IMAGE_SIZE,
         canvasSize: width,
       };
     }
@@ -67,12 +83,13 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
 
     // Step 1: Figure out how much space we have to work with
     const availableWidth = width;
-    const isTablet = props.dimensions.width > 600;
+    const isTablet = props.dimensions.width > TABLET_WIDTH_THRESHOLD;
 
     // We need some breathing room at the bottom for UI elements
-    const bottomMarginFromParent = 24; // mb="$6" from parent component
-    const additionalSafetyMargin = isTablet ? 70 : 50; // Extra space for navigation
-    const safetyMargin = bottomMarginFromParent + additionalSafetyMargin;
+    const additionalSafetyMargin = isTablet
+      ? TABLET_SAFETY_MARGIN
+      : PHONE_SAFETY_MARGIN;
+    const safetyMargin = BOTTOM_MARGIN_FROM_PARENT + additionalSafetyMargin;
     const availableHeight = props.dimensions.height - safetyMargin;
 
     if (!exampleImageDimensions || !imageUrl) {
@@ -88,7 +105,7 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
 
     // Step 2: Start with the example image at full width
     // We'll shrink it later if needed to fit everything on screen
-    const gap = 20; // Space between example image and drawing canvas
+    const gap = GAP_SIZE; // Space between example image and drawing canvas
     let exampleImageWidth = availableWidth;
     let exampleImageHeight = Math.floor(
       availableWidth / exampleImageDimensions.aspectRatio,
@@ -96,7 +113,10 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
 
     // Step 3: Ensure the drawing canvas gets a reasonable size
     // At least 60% of screen width, but no more than 300px (nice for drawing)
-    const minCanvasSize = Math.min(availableWidth * 0.6, 300);
+    const minCanvasSize = Math.min(
+      availableWidth * MIN_CANVAS_SIZE_FACTOR,
+      MAX_CANVAS_SIZE,
+    );
     const spaceNeededForCanvas = minCanvasSize + gap;
     const totalSpaceNeeded = exampleImageHeight + spaceNeededForCanvas;
 
@@ -105,7 +125,7 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
       // Oops, too tall! We need to shrink the example image
       const maxExampleHeight = availableHeight - spaceNeededForCanvas;
 
-      if (maxExampleHeight > 50) {
+      if (maxExampleHeight > MIN_EXAMPLE_HEIGHT) {
         // There's enough room for a decent-sized example image
         exampleImageHeight = maxExampleHeight;
         exampleImageWidth = Math.floor(
@@ -122,7 +142,10 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
       } else {
         // Very little space - make the example image tiny
         // Use 25% of available height, but cap at 150px so it's not microscopic
-        exampleImageHeight = Math.min(availableHeight * 0.25, 150);
+        exampleImageHeight = Math.min(
+          availableHeight * FALLBACK_EXAMPLE_HEIGHT_FACTOR,
+          MAX_FALLBACK_EXAMPLE_HEIGHT,
+        );
         exampleImageWidth = Math.floor(
           exampleImageHeight * exampleImageDimensions.aspectRatio,
         );
@@ -159,11 +182,11 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
           <CachedImage
             source={imageUrl}
             style={{
-              width: 300,
-              height: 300,
-              padding: 20,
+              width: DEFAULT_IMAGE_SIZE,
+              height: DEFAULT_IMAGE_SIZE,
+              padding: GAP_SIZE,
               paddingBottom: 0,
-              marginBottom: 20,
+              marginBottom: GAP_SIZE,
             }}
             resizeMode="contain"
           />
@@ -202,7 +225,7 @@ export const DrawingTestLegacyLayout: FC<DrawingTestProps> = props => {
   const renderDynamicLayout = () => (
     <Box {...props}>
       {!!imageUrl && !!exampleImageDimensions && (
-        <XStack jc="center" mb={20}>
+        <XStack jc="center" mb={GAP_SIZE}>
           <CachedImage
             source={imageUrl}
             style={{
