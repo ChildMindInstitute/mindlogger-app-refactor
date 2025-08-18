@@ -4,7 +4,7 @@ import {
   ReactNativeLDClient,
 } from '@launchdarkly/react-native-client-sdk';
 
-import { LD_KIND_PREFIX } from './FeatureFlags.const';
+import { LD_KIND_PREFIX, FeatureFlagKeyDefaults } from './FeatureFlags.const';
 import { IFeatureFlagsService } from './IFeatureFlagsService';
 import { LAUNCHDARKLY_MOBILE_KEY } from '../constants';
 import { ILogger } from '../types/logger';
@@ -61,10 +61,15 @@ export class FeatureFlagsService implements IFeatureFlagsService {
   }
 
   evaluateFlag(flag: string): boolean {
+    // Get default value for this flag
+    const defaultValue = FeatureFlagKeyDefaults[flag] ?? false;
+
     if (!this.client) {
-      return false;
+      return defaultValue;
     }
-    return this.client.boolVariation(flag, false);
+
+    // Use LaunchDarkly value with our default as fallback
+    return this.client.boolVariation(flag, defaultValue);
   }
 
   setChangeHandler(fn: (ctx: LDContext, changedKeys: string[]) => void): void {
