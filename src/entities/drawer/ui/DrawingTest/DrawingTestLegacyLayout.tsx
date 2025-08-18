@@ -99,16 +99,16 @@ const shrinkImageToFit = (
     }
 
     return { width, height };
-  } else {
-    // Very little space - make the example image tiny
-    const height = Math.min(
-      availableHeight * FALLBACK_EXAMPLE_HEIGHT_FACTOR,
-      MAX_FALLBACK_EXAMPLE_HEIGHT,
-    );
-    const width = Math.floor(height * imageDimensions.aspectRatio);
-
-    return { width, height };
   }
+
+  // Very little space - make the example image tiny
+  const height = Math.min(
+    availableHeight * FALLBACK_EXAMPLE_HEIGHT_FACTOR,
+    MAX_FALLBACK_EXAMPLE_HEIGHT,
+  );
+  const width = Math.floor(height * imageDimensions.aspectRatio);
+
+  return { width, height };
 };
 
 const calculateFinalCanvasSize = (
