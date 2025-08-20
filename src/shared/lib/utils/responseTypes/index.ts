@@ -1,4 +1,5 @@
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
+import { AppletBaseInfoResponse } from '@app/shared/api/services/IAppletService';
 
 import {
   appSupportedResponseTypes,
@@ -19,3 +20,25 @@ export const getSupportsMobile = (responseType: ResponseType) =>
 export const getSupportsWeb = (responseType: ResponseType) =>
   getIsWebOnly(responseType) ||
   universalSupportedResponseTypes.includes(responseType);
+
+export const getResponseTypesMap = ({ result }: AppletBaseInfoResponse) => {
+  const activityResponseTypes =
+    result.activities?.reduce(
+      (curr, activity) => ({
+        ...curr,
+        [activity.id]: activity.containsResponseTypes,
+      }),
+      {} as Record<string, ResponseType[]>,
+    ) || {};
+  const flowResponseTypes = result.activityFlows?.reduce(
+    (curr, activityFlow) => ({
+      ...curr,
+      [activityFlow.id]: (activityFlow?.activityIds || [])
+        .map(activityId => activityResponseTypes[activityId])
+        .flat(),
+    }),
+    {} as Record<string, ResponseType[]>,
+  );
+
+  return { ...activityResponseTypes, ...flowResponseTypes };
+};

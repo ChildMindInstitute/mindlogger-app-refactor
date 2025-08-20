@@ -103,8 +103,8 @@ android {
         applicationId "lab.childmindinstitute.data"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1638
-        versionName "2025.07.1"
+        versionCode 1639
+        versionName "2025.08.1"
         resValue "string", "app_name", "Curious"
         resValue "string", "build_config_package", "lab.childmindinstitute.data"
         manifestPlaceholders = [

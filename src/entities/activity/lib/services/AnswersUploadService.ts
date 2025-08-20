@@ -404,7 +404,12 @@ export class AnswersUploadService implements IAnswersUploadService {
       ? `${data.eventId}_${data.eventVersion}`
       : undefined;
 
-    // Determine if consent was given to share health record data
+    // TODO: `allowedEhrIngest` flag should not be based on whether the user has opted in
+    // to sharing EHRs. Rather, it should be based on whether the `/active-assessment` deep
+    // link was called during the assessment.
+    //
+    // Here is the bug reported about this issue:
+    // https://mindlogger.atlassian.net/browse/M2-9411
     const allowedEhrIngest = data.itemTypes?.some(
       (itemType, index) =>
         itemType === 'RequestHealthRecordData' &&
