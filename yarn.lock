@@ -7215,6 +7215,14 @@ invariant@*, invariant@2.2.4, invariant@^2.2.4:
   dependencies:
     loose-envify "^1.0.0"
 
+is-arguments@^1.0.4:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/is-arguments/-/is-arguments-1.2.0.tgz#ad58c6aecf563b78ef2bf04df540da8f5d7d8e1b"
+  integrity sha512-7bVbi0huj/wrIAOzb8U1aszg9kdi3KN/CyU19CTI7tAoZYEZoL9yCDXpbXN+uPsuWnP02cyug1gleqq+TU+YCA==
+  dependencies:
+    call-bound "^1.0.2"
+    has-tostringtag "^1.0.2"
+
 is-array-buffer@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/is-array-buffer/-/is-array-buffer-3.0.4.tgz#7a1f92b3d61edd2bc65d24f130530ea93d7fae98"
@@ -7390,6 +7398,16 @@ is-generator-function@^1.0.10:
   dependencies:
     has-tostringtag "^1.0.0"
 
+is-generator-function@^1.0.7:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/is-generator-function/-/is-generator-function-1.1.0.tgz#bf3eeda931201394f57b5dba2800f91a238309ca"
+  integrity sha512-nPUB5km40q9e8UfN/Zc24eLlzdSf9OfKByBw9CIdw4H1giPMeA0OIJvbchsCu4npfI2QcMVBsGEBHKZ7wLTWmQ==
+  dependencies:
+    call-bound "^1.0.3"
+    get-proto "^1.0.0"
+    has-tostringtag "^1.0.2"
+    safe-regex-test "^1.1.0"
+
 is-glob@^4.0.0, is-glob@^4.0.1, is-glob@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-4.0.3.tgz#64f61e42cbbb2eec2071a9dac0b28ba1e65d5084"
@@ -7539,7 +7557,7 @@ is-typed-array@^1.1.13:
   dependencies:
     which-typed-array "^1.1.14"
 
-is-typed-array@^1.1.14, is-typed-array@^1.1.15:
+is-typed-array@^1.1.14, is-typed-array@^1.1.15, is-typed-array@^1.1.3:
   version "1.1.15"
   resolved "https://registry.yarnpkg.com/is-typed-array/-/is-typed-array-1.1.15.tgz#4bfb4a45b61cee83a5a46fba778e4e8d59c0ce0b"
   integrity sha512-p3EcsicXjit7SaskXHs1hA91QxgTw46Fv6EFKKGS5DRFLD8yKnohjF3hxoju94b/OcMZoQukzpPpBE9uLVKzgQ==
@@ -9989,10 +10007,12 @@ react-native-file-access@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-native-file-access/-/react-native-file-access-3.0.7.tgz#7d2530dc474678849d569bea3284e7579ec9b7e2"
   integrity sha512-6uqq5om5NNI+g2QAmM5uQqSt3QQgcfkEYbBB9HNNHxOxKtPysNINR+CoYlgeDyFfWQDtTUEBKS0AKy5rup7IEQ==
 
-react-native-file-logger@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-file-logger/-/react-native-file-logger-0.4.1.tgz#6d4cdfd333489a32b20242f898cff0b196444707"
-  integrity sha512-UpdMtpQvSgOB4ohid2QxwWFkI92gqKEl2woFbcPEWRbmfrwpTZuNPzNEooMTjmIhFBQPfaOcymCL9gK1naE01g==
+react-native-file-logger@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/react-native-file-logger/-/react-native-file-logger-0.7.1.tgz#bbcc0aadf348fa1afd3464220afab154034aed64"
+  integrity sha512-oQDR+3jdnTw+zvJsrHRarQ1v3EM5JfbWj+GF56ajEj1iiSPtACavWp0zjoBMqZ62F3O/3bvGYqTk0rQVMW7VPw==
+  dependencies:
+    util "^0.12.5"
 
 react-native-fit-image@^1.5.5:
   version "1.5.5"
@@ -11901,6 +11921,17 @@ util@^0.11.0:
   dependencies:
     inherits "2.0.3"
 
+util@^0.12.5:
+  version "0.12.5"
+  resolved "https://registry.yarnpkg.com/util/-/util-0.12.5.tgz#5f17a6059b73db61a875668781a1c2b136bd6fbc"
+  integrity sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==
+  dependencies:
+    inherits "^2.0.3"
+    is-arguments "^1.0.4"
+    is-generator-function "^1.0.7"
+    is-typed-array "^1.1.3"
+    which-typed-array "^1.1.2"
+
 utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
@@ -12392,7 +12423,7 @@ which-typed-array@^1.1.14, which-typed-array@^1.1.15:
     gopd "^1.0.1"
     has-tostringtag "^1.0.2"
 
-which-typed-array@^1.1.16, which-typed-array@^1.1.19:
+which-typed-array@^1.1.16, which-typed-array@^1.1.19, which-typed-array@^1.1.2:
   version "1.1.19"
   resolved "https://registry.yarnpkg.com/which-typed-array/-/which-typed-array-1.1.19.tgz#df03842e870b6b88e117524a4b364b6fc689f956"
   integrity sha512-rEvr90Bck4WZt9HHFC4DJMsjvu7x+r6bImz0/BrbWb7A2djJ8hnZMrWnHo9F8ssv0OMErasDhftrfROTyqSDrw==
