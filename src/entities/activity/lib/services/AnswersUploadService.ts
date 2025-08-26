@@ -24,14 +24,14 @@ import {
 import { isLocalFileUrl } from '@app/shared/lib/utils/file';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
-
-import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 import {
   CheckAnswersInput,
   CheckFilesUploadResults,
   CheckFileUploadResult,
   SendAnswersInput,
-} from '../types/uploadAnswers';
+} from '@entities/activity/lib/types/uploadAnswers';
+
+import { IMediaFilesCleaner } from './IMediaFilesCleaner';
 
 export class AnswersUploadService implements IAnswersUploadService {
   private createdAt: number | null;
@@ -97,7 +97,6 @@ export class AnswersUploadService implements IAnswersUploadService {
     const response = await this.answerService.checkIfAnswersExist({
       activityId: checkInput.activityId,
       appletId: checkInput.appletId,
-      createdAt: checkInput.createdAt,
       submitId: checkInput.submitId,
     });
 
@@ -321,14 +320,12 @@ export class AnswersUploadService implements IAnswersUploadService {
     let uploaded: boolean;
 
     try {
-      const { activityId, appletId, flowId, createdAt, submitId } =
-        encryptedData;
+      const { activityId, appletId, flowId, submitId } = encryptedData;
 
       uploaded = await this.checkIfAnswersUploaded({
         activityId,
         appletId,
         flowId,
-        createdAt,
         submitId,
       });
     } catch (error) {
@@ -361,7 +358,6 @@ export class AnswersUploadService implements IAnswersUploadService {
         activityId: encryptedData.activityId,
         appletId: encryptedData.appletId,
         flowId: encryptedData.flowId,
-        createdAt: encryptedData.createdAt,
         submitId: encryptedData.submitId,
       });
     } catch (error) {
