@@ -145,15 +145,21 @@ const checkEntityAvailabilityInternal = ({
     return;
   }
 
-  const isEntityCompletedToday = isProgressionCompletedToday(progression);
+  // Use the same logic as the activity list to check if completed
+  // The activity list uses GroupUtility.isEventCompletedToday which checks endedAtTimestamp
+  // The progression might still show "in-progress" status even after completion
+  const groupUtility = new GroupUtility(appletId, entityProgressions);
+  const isCompletedUsingGroupUtility = groupUtility.isEventCompletedToday(
+    event,
+    targetSubjectId,
+  );
 
+  const isEntityCompletedToday = isProgressionCompletedToday(progression);
   const isSpread = GroupUtility.isSpreadToNextDay(event);
 
-  if (isEntityCompletedToday && !isSpread) {
-    logger.log(
-      '[checkEntityAvailability] Check done: false (completed today, not spread)',
-    );
-
+  // Check both ways - if either says completed, block access
+  if ((isEntityCompletedToday && !isSpread) || isCompletedUsingGroupUtility) {
+    logger.log('[checkEntityAvailability] Check done: false (completed today)');
     onCompletedToday(entityName, () => callback(false));
     return;
   }
