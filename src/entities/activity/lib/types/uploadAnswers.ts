@@ -49,7 +49,6 @@ export type CheckFilesUploadResults = Array<CheckFileUploadResult>;
 
 export type CheckAnswersInput = {
   appletId: string;
-  createdAt: number;
   activityId: string;
   flowId: string | null;
   submitId: string;

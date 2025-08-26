@@ -209,7 +209,6 @@ export type ActivityAnswersResponse = SuccessfulEmptyResponse;
 
 export type CheckIfAnswersExistRequest = {
   appletId: string;
-  createdAt: number;
   activityId: string;
   submitId: string;
 };
