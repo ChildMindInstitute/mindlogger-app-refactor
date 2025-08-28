@@ -2,6 +2,8 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
 import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
+import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
+import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { mapEventFromDto } from '@app/entities/event/model/mappers';
 import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import {
@@ -47,12 +49,16 @@ const checkEntityAvailabilityInternal = ({
   queryClient,
   callback,
 }: InputInternal): void => {
+  // Always fetch the freshest progressions from the store to avoid stale closures
+  const freshProgressions: EntityProgression[] =
+    selectAppletsEntityProgressions(reduxStore.getState());
+
   const progression = getEntityProgression(
     appletId,
     entityId,
     eventId,
     targetSubjectId,
-    entityProgressions,
+    freshProgressions,
   );
 
   logger.log(
@@ -90,7 +96,7 @@ const checkEntityAvailabilityInternal = ({
 
   const shouldBeAutocompleted = isProgressionReadyForAutocompletion(
     { appletId, entityId, eventId, entityType, targetSubjectId },
-    entityProgressions,
+    freshProgressions,
   );
 
   if (isInProgress && !shouldBeAutocompleted) {
@@ -117,12 +123,12 @@ const checkEntityAvailabilityInternal = ({
 
   const isAvailable = new AvailableGroupEvaluator(
     appletId,
-    entityProgressions,
+    freshProgressions,
   ).isEventInGroup(event, targetSubjectId);
 
   const isScheduled = new ScheduledGroupEvaluator(
     appletId,
-    entityProgressions,
+    freshProgressions,
   ).isEventInGroup(event, targetSubjectId);
 
   if (isAvailable) {
