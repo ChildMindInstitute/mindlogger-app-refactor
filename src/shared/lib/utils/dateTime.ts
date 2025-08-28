@@ -5,7 +5,7 @@ import {
   getUnixTime,
   subMonths,
 } from 'date-fns';
-import { enGB, fr, el, es } from 'date-fns/locale';
+import { enGB, fr, el, es, ptBR } from 'date-fns/locale';
 import i18n from 'i18next';
 
 import { getTwoDigits, range } from './common';
@@ -17,7 +17,7 @@ import {
 import { DayMonthYear, HourMinute } from '../types/dateTime';
 import { Language } from '../types/language';
 
-const dateFnsLocales = { fr, en: enGB, el, es };
+const dateFnsLocales = { fr, en: enGB, el, es, pt: ptBR };
 
 export const getMsFromHours = (hours: number): number => {
   return hours * (MINUTES_IN_HOUR * MS_IN_MINUTE);
