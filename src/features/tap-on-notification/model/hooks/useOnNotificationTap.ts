@@ -161,7 +161,10 @@ export function useOnNotificationTap({
       }
 
       setTimeout(
-        () => {
+        async () => {
+          // Refresh to get latest completion data before checking availability
+          await refresh();
+          
           startEntity(
             appletId!,
             entityId,
