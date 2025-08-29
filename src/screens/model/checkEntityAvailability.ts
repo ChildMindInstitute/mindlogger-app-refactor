@@ -2,6 +2,8 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
 import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
+import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
+import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { mapEventFromDto } from '@app/entities/event/model/mappers';
 import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
 import {
@@ -47,12 +49,16 @@ const checkEntityAvailabilityInternal = ({
   queryClient,
   callback,
 }: InputInternal): void => {
+  // Always fetch the freshest progressions from the store to avoid stale closures
+  const freshProgressions: EntityProgression[] =
+    selectAppletsEntityProgressions(reduxStore.getState());
+
   const progression = getEntityProgression(
     appletId,
     entityId,
     eventId,
     targetSubjectId,
-    entityProgressions,
+    freshProgressions,
   );
 
   logger.log(
@@ -90,7 +96,7 @@ const checkEntityAvailabilityInternal = ({
 
   const shouldBeAutocompleted = isProgressionReadyForAutocompletion(
     { appletId, entityId, eventId, entityType, targetSubjectId },
-    entityProgressions,
+    freshProgressions,
   );
 
   if (isInProgress && !shouldBeAutocompleted) {
@@ -117,12 +123,12 @@ const checkEntityAvailabilityInternal = ({
 
   const isAvailable = new AvailableGroupEvaluator(
     appletId,
-    entityProgressions,
+    freshProgressions,
   ).isEventInGroup(event, targetSubjectId);
 
   const isScheduled = new ScheduledGroupEvaluator(
     appletId,
-    entityProgressions,
+    freshProgressions,
   ).isEventInGroup(event, targetSubjectId);
 
   if (isAvailable) {
@@ -145,15 +151,21 @@ const checkEntityAvailabilityInternal = ({
     return;
   }
 
-  const isEntityCompletedToday = isProgressionCompletedToday(progression);
+  // Use the same logic as the activity list to check if completed
+  // The activity list uses GroupUtility.isEventCompletedToday which checks endedAtTimestamp
+  // The progression might still show "in-progress" status even after completion
+  const groupUtility = new GroupUtility(appletId, entityProgressions);
+  const isCompletedUsingGroupUtility = groupUtility.isEventCompletedToday(
+    event,
+    targetSubjectId,
+  );
 
+  const isEntityCompletedToday = isProgressionCompletedToday(progression);
   const isSpread = GroupUtility.isSpreadToNextDay(event);
 
-  if (isEntityCompletedToday && !isSpread) {
-    logger.log(
-      '[checkEntityAvailability] Check done: false (completed today, not spread)',
-    );
-
+  // Check both ways - if either says completed, block access
+  if ((isEntityCompletedToday && !isSpread) || isCompletedUsingGroupUtility) {
+    logger.log('[checkEntityAvailability] Check done: false (completed today)');
     onCompletedToday(entityName, () => callback(false));
     return;
   }
