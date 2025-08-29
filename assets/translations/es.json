@@ -239,7 +239,8 @@
     "en": "English",
     "fr": "Français",
     "el": "Ελληνικά",
-    "es": "Español"
+    "es": "Español",
+    "pt": "Português"
   },
   "application_logs_screen": {
     "upload_button": "Cargar registros",
