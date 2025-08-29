@@ -349,7 +349,6 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
-      createdAt: 1234567890,
     } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(false);
@@ -372,7 +371,6 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
-      createdAt: 1234567890,
     });
     expect(mockSendActivityAnswers).toHaveBeenCalledWith(encryptedData);
   });
@@ -382,7 +380,6 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
-      createdAt: 1234567890,
     } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(false);
@@ -404,7 +401,6 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
-      createdAt: 1234567890,
     });
 
     expect(mockSendActivityAnswers).toHaveBeenCalledWith(encryptedData);
@@ -415,7 +411,6 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
-      createdAt: 1234567890,
     } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(true);
@@ -434,7 +429,6 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
-      createdAt: 1234567890,
     });
     expect(mockSendActivityAnswers).not.toHaveBeenCalled();
   });
