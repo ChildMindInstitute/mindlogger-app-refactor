@@ -1288,7 +1288,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF87EFF52DF2E29B00EA7285 /* AppDelegate.swift in Sources */,
-				288FAB3129C88A590089AB98 /* CustomText.swift in Sources */,
+				288FAB3129C88A590089AB98 /*
+        
+        CustomText.swift in Sources */,
 				288FAB2B29C88A590089AB98 /* UIColor+Extension.swift in Sources */,
 				288FAB3029C88A590089AB98 /* ParameterModel.swift in Sources */,
 				288FAB2F29C88A590089AB98 /* TimeInterval+Extension.swift in Sources */,
