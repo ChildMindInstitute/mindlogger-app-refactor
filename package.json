@@ -119,7 +119,7 @@
     "react-native-config": "^1.5.1",
     "react-native-device-info": "^10.12.0",
     "react-native-file-access": "^3.0.4",
-    "react-native-file-logger": "^0.4.1",
+    "react-native-file-logger": "^0.7.1",
     "react-native-gesture-handler": "^2.24.0",
     "react-native-get-random-values": "^1.10.0",
     "react-native-image-picker": "^7.1.0",
