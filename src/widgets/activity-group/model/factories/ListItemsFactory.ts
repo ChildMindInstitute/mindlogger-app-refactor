@@ -12,6 +12,7 @@ import {
 import { AvailableToEvaluator } from '@app/entities/event/model/AvailableToEvaluator';
 import { MIDNIGHT_DATE } from '@app/shared/lib/constants/dateTime';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
+import { ILogger } from '@app/shared/lib/types/logger';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 
 import { GroupUtility } from './GroupUtility';
@@ -25,15 +26,17 @@ import {
 export class ListItemsFactory {
   private utility: GroupUtility;
   private availableToEvaluator: AvailableToEvaluator;
+  private logger: ILogger;
   protected activities: Activity[];
 
-  constructor(inputParams: GroupsBuildContext) {
+  constructor(inputParams: GroupsBuildContext, logger: ILogger) {
     this.utility = new GroupUtility(
       inputParams.appletId,
       inputParams.entityProgressions,
     );
     this.availableToEvaluator = new AvailableToEvaluator(this.utility);
     this.activities = inputParams.allAppletActivities;
+    this.logger = logger;
   }
 
   private populateActivityFlowFields(
@@ -56,7 +59,7 @@ export class ListItemsFactory {
       assignment?.target.id || null,
     );
 
-    let activity: Activity;
+    let activity: Activity | null;
 
     if (isInProgress) {
       const progressionRecord = this.utility.getProgressionRecord(
@@ -73,17 +76,30 @@ export class ListItemsFactory {
       item.activityFlowDetails.numberOfActivitiesInFlow =
         progressionRecord.totalActivitiesInPipeline;
     } else {
-      activity = this.activities.find(
-        x => x.id === activityFlow.activityIds[0],
-      ) as Activity;
+      activity = this.safeGetActivity(activityFlow.activityIds[0]);
 
-      item.activityId = activity.id;
-      item.name = activity.name;
-      item.description = activity.description;
-      item.image = activity.image;
-      item.activityFlowDetails.activityPositionInFlow = 1;
-      item.activityFlowDetails.numberOfActivitiesInFlow =
-        activityFlow.activityIds.length;
+      if (activity) {
+        item.activityId = activity.id;
+        item.name = activity.name;
+        item.description = activity.description;
+        item.image = activity.image;
+        item.activityFlowDetails.activityPositionInFlow = 1;
+        item.activityFlowDetails.numberOfActivitiesInFlow =
+          activityFlow.activityIds.length;
+      } else {
+        // Generate placeholder data for missing activity
+        const placeholderData = this.generatePlaceholderActivityData(
+          activityFlow.activityIds[0],
+          activityFlow.name,
+        );
+        item.activityId = placeholderData.id;
+        item.name = placeholderData.name;
+        item.description = placeholderData.description;
+        item.image = null;
+        item.activityFlowDetails.activityPositionInFlow = 1;
+        item.activityFlowDetails.numberOfActivitiesInFlow =
+          activityFlow.activityIds.length;
+      }
     }
   }
 
@@ -218,5 +234,55 @@ export class ListItemsFactory {
     }
 
     return item;
+  }
+
+  /**
+   * Safely retrieves an activity by ID with null checking
+   * @param activityId - The activity ID to retrieve
+   * @returns Activity if found, null otherwise
+   */
+  private safeGetActivity(activityId: string): Activity | null {
+    try {
+      const activity = this.activities.find(x => x.id === activityId);
+
+      if (!activity) {
+        this.logger.warn(
+          `[ListItemsFactory.safeGetActivity]: Activity not found - activityId=${activityId}`,
+        );
+        return null;
+      }
+
+      return activity;
+    } catch (error) {
+      this.logger.warn(
+        `[ListItemsFactory.safeGetActivity]: Error retrieving activity - activityId=${activityId}, error=${error}`,
+      );
+      return null;
+    }
+  }
+
+  /**
+   * Generates placeholder data for missing activities to prevent crashes
+   * @param activityId - The missing activity ID
+   * @param flowName - Name of the flow containing the missing activity
+   * @returns Placeholder activity data
+   */
+  private generatePlaceholderActivityData(
+    activityId: string,
+    flowName: string,
+  ): {
+    id: string;
+    name: string;
+    description: string;
+  } {
+    this.logger.warn(
+      `[ListItemsFactory.generatePlaceholderActivityData]: Generating placeholder for missing activity - activityId=${activityId}, flowName=${flowName}`,
+    );
+
+    return {
+      id: activityId,
+      name: 'Unavailable Activity',
+      description: `This activity is no longer available. Please contact your administrator. (Flow: ${flowName})`,
+    };
   }
 }

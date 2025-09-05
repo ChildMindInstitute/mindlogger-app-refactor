@@ -1,4 +1,5 @@
 import { ActivityListItem } from '@app/entities/activity/lib/types/activityListItem';
+import { ILogger } from '@app/shared/lib/types/logger';
 import { IActivityGroupsBuilder } from '@widgets/activity-group/model/factories/IActivityGroupsBuilder';
 
 import { AvailableGroupEvaluator } from './AvailableGroupEvaluator';
@@ -24,8 +25,11 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
   private utility: GroupUtility;
 
-  constructor(inputParams: GroupsBuildContext) {
-    this.itemsFactory = new ListItemsFactory(inputParams);
+  private logger: ILogger;
+
+  constructor(inputParams: GroupsBuildContext, logger: ILogger) {
+    this.logger = logger;
+    this.itemsFactory = new ListItemsFactory(inputParams, logger);
     this.scheduledEvaluator = new ScheduledGroupEvaluator(
       inputParams.appletId,
       inputParams.entityProgressions,
@@ -139,6 +143,7 @@ export class ActivityGroupsBuilder implements IActivityGroupsBuilder {
 
 export const createActivityGroupsBuilder = (
   inputData: GroupsBuildContext,
+  logger: ILogger,
 ): ActivityGroupsBuilder => {
-  return new ActivityGroupsBuilder(inputData);
+  return new ActivityGroupsBuilder(inputData, logger);
 };
