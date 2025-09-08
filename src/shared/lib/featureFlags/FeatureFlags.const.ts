@@ -10,6 +10,5 @@ export const FeatureFlagKeyDefaults: Record<
   boolean
 > = {
   'enable-loris-integration': false,
-  'enable-activity-assign': false,
   'enable-better-drawing-image-sizing': true,
 };
