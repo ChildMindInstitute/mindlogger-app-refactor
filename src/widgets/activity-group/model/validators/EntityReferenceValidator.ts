@@ -78,7 +78,7 @@ export class EntityReferenceValidator implements IEntityReferenceValidator {
           }
         } else {
           // Validate activity flow reference
-          const activityFlow = entity as ActivityFlow;
+          // TypeScript should narrow this to ActivityFlow based on pipelineType check
           if (!flowsById.has(entity.id)) {
             this.logger.warn(
               `[EntityReferenceValidator.validate]: Activity flow not found - entityId=${entity.id}, eventId=${event.id}`,
@@ -93,8 +93,9 @@ export class EntityReferenceValidator implements IEntityReferenceValidator {
           }
 
           // Validate activity references within the flow
+          // Since pipelineType !== Regular, entity must be ActivityFlow
           const activityValidation = this.validateActivityReferences(
-            activityFlow,
+            entity,
             availableActivities,
           );
 

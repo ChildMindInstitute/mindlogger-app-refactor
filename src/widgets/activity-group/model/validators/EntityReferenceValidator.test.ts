@@ -1,11 +1,11 @@
 import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
-import { ActivityType } from '@app/entities/activity/lib/types/activityListItem';
 import {
   AvailabilityType,
   PeriodicityType,
 } from '@app/abstract/lib/types/event';
-import { ILogger } from '@app/shared/lib/types/logger';
+import { ActivityType } from '@app/entities/activity/lib/types/activityListItem';
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import {
   EntityReferenceValidator,
@@ -32,7 +32,10 @@ const createMockLogger = (): ILogger => ({
 });
 
 // Test data factories
-const createMockActivity = (id: string, name: string = 'Test Activity'): Activity => ({
+const createMockActivity = (
+  id: string,
+  name: string = 'Test Activity',
+): Activity => ({
   id,
   name,
   description: `Description for ${name}`,
@@ -61,7 +64,10 @@ const createMockActivityFlow = (
   pipelineType: ActivityPipelineType.Flow,
 });
 
-const createMockEvent = (id: string = 'event-1', entityId: string = 'entity-1'): ScheduleEvent => ({
+const createMockEvent = (
+  id: string = 'event-1',
+  entityId: string = 'entity-1',
+): ScheduleEvent => ({
   id,
   entityId,
   availability: {
@@ -143,7 +149,10 @@ describe('EntityReferenceValidator', () => {
       // Arrange
       const activity1 = createMockActivity('activity-1');
       const activity2 = createMockActivity('activity-2');
-      const flow1 = createMockActivityFlow('flow-1', 'Flow 1', ['activity-1', 'activity-2']);
+      const flow1 = createMockActivityFlow('flow-1', 'Flow 1', [
+        'activity-1',
+        'activity-2',
+      ]);
       const eventEntity = createMockEventEntity(flow1, 'event-1');
 
       const context: EntityValidationContext = {
@@ -258,8 +267,14 @@ describe('EntityReferenceValidator', () => {
       // Arrange
       const validActivity = createMockActivity('valid-activity');
       const missingActivity = createMockActivity('missing-activity');
-      const validFlow = createMockActivityFlow('valid-flow', 'Valid Flow', ['valid-activity']);
-      const invalidFlow = createMockActivityFlow('invalid-flow', 'Invalid Flow', ['missing-activity']);
+      const validFlow = createMockActivityFlow('valid-flow', 'Valid Flow', [
+        'valid-activity',
+      ]);
+      const invalidFlow = createMockActivityFlow(
+        'invalid-flow',
+        'Invalid Flow',
+        ['missing-activity'],
+      );
 
       const eventEntities = [
         createMockEventEntity(validActivity, 'event-1'),
@@ -306,10 +321,16 @@ describe('EntityReferenceValidator', () => {
       // Arrange
       const activity1 = createMockActivity('activity-1');
       const activity2 = createMockActivity('activity-2');
-      const flow = createMockActivityFlow('flow-1', 'Flow 1', ['activity-1', 'activity-2']);
+      const flow = createMockActivityFlow('flow-1', 'Flow 1', [
+        'activity-1',
+        'activity-2',
+      ]);
 
       // Act
-      const result = validator.validateActivityReferences(flow, [activity1, activity2]);
+      const result = validator.validateActivityReferences(flow, [
+        activity1,
+        activity2,
+      ]);
 
       // Assert
       expect(result.validActivityIds).toEqual(['activity-1', 'activity-2']);
@@ -330,7 +351,10 @@ describe('EntityReferenceValidator', () => {
 
       // Assert
       expect(result.validActivityIds).toEqual(['activity-1']);
-      expect(result.missingActivityIds).toEqual(['missing-activity-1', 'missing-activity-2']);
+      expect(result.missingActivityIds).toEqual([
+        'missing-activity-1',
+        'missing-activity-2',
+      ]);
       expect(mockLogger.warn).toHaveBeenCalledTimes(2);
     });
 
@@ -369,7 +393,9 @@ describe('EntityReferenceValidator', () => {
       expect(result.isValid).toBe(false);
       expect(result.validEntities).toHaveLength(0);
       expect(result.staleReferences).toHaveLength(1);
-      expect(result.staleReferences[0].reason).toContain('Activity flow not found in available flows');
+      expect(result.staleReferences[0].reason).toContain(
+        'Activity flow not found in available flows',
+      );
       expect(mockLogger.warn).toHaveBeenCalled();
     });
   });

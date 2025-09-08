@@ -246,7 +246,7 @@ export const createActivityGroupsBuildManager = (
       logger.warn(
         `[ActivityGroupsBuildManager.processInternal]: Found ${validationResult.staleReferences.length} stale entity references`,
       );
-      
+
       // Log details of stale references
       validationResult.staleReferences.forEach(ref => {
         logger.warn(
@@ -273,11 +273,14 @@ export const createActivityGroupsBuildManager = (
 
     let logInfo = '';
     const result: BuildResult = { groups: [] };
-    const builder = createActivityGroupsBuilder({
-      allAppletActivities: activities,
-      appletId: appletId,
-      entityProgressions,
-    }, logger);
+    const builder = createActivityGroupsBuilder(
+      {
+        allAppletActivities: activities,
+        appletId: appletId,
+        entityProgressions,
+      },
+      logger,
+    );
 
     try {
       logInfo = 'building in-progress';
