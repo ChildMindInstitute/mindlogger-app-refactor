@@ -7,7 +7,7 @@ cd "$SCRIPT_DIR"
 echo "[PostInstall] Running yarn patch-package ..."
 yarn patch-package
 
-if [ -n "${BUILD_UNITY}"]; then
+if [ -n "${BUILD_UNITY}" ]; then
   echo "[PostInstall] Running unity/unlink-react-native-unity.sh ..."
   ./unity/unlink-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity
 else
