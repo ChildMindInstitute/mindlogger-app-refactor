@@ -11,7 +11,6 @@ import {
   AppletDetailsResponse,
 } from '@app/shared/api/services/IAppletService';
 import { AppletEventsResponse } from '@app/shared/api/services/IEventsService';
-import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
 import { IFeatureFlagsService } from '@app/shared/lib/featureFlags/IFeatureFlagsService';
 import { ILogger } from '@app/shared/lib/types/logger';
 import {
@@ -165,10 +164,6 @@ export const createActivityGroupsBuildManager = (
     // Create entity reference validator to check for stale references
     const entityValidator = createEntityReferenceValidator(logger);
 
-    const enableActivityAssign = featureFlagsService.evaluateFlag(
-      FeatureFlagsKeys.enableActivityAssign,
-    );
-
     const entityEvents: EventEntity[] = [];
     for (const event of events) {
       const entity = entitiesById[event.entityId];
@@ -184,52 +179,47 @@ export const createActivityGroupsBuildManager = (
         continue;
       }
 
-      if (enableActivityAssign) {
-        let entityAssignments: Assignment[];
-        if (entity.pipelineType === ActivityPipelineType.Flow) {
-          entityAssignments = assignments.filter(
-            _assignment =>
-              _assignment.__type === 'activityFlow' &&
-              _assignment.activityFlowId === entity.id,
-          );
-        } else {
-          entityAssignments = assignments.filter(
-            _assignment =>
-              _assignment.__type === 'activity' &&
-              _assignment.activityId === entity.id,
-          );
-        }
+      let entityAssignments: Assignment[];
+      if (entity.pipelineType === ActivityPipelineType.Flow) {
+        entityAssignments = assignments.filter(
+          _assignment =>
+            _assignment.__type === 'activityFlow' &&
+            _assignment.activityFlowId === entity.id,
+        );
+      } else {
+        entityAssignments = assignments.filter(
+          _assignment =>
+            _assignment.__type === 'activity' &&
+            _assignment.activityId === entity.id,
+        );
+      }
 
-        // If the entity is auto-assigned, always include an entry for it.
+      // If the entity is auto-assigned, always include an entry for it.
+      if (entity.autoAssign) {
+        entityEvents.push({ entity, event, assignment: null });
+      }
+
+      for (const assignment of entityAssignments) {
+        const isSelfAssign = assignment.target.id === assignment.respondent.id;
+
         if (entity.autoAssign) {
-          entityEvents.push({ entity, event, assignment: null });
-        }
-
-        for (const assignment of entityAssignments) {
-          const isSelfAssign =
-            assignment.target.id === assignment.respondent.id;
-
-          if (entity.autoAssign) {
-            if (isSelfAssign) {
-              // Skip entities that are both auto-assign and self-assigned
-              // to avoid duplicating the auto-assign entry above.
-            } else {
-              // Include entities that are auto-assign and have manual
-              // assignment for someone else.
-              entityEvents.push({ entity, event, assignment });
-            }
+          if (isSelfAssign) {
+            // Skip entities that are both auto-assign and self-assigned
+            // to avoid duplicating the auto-assign entry above.
           } else {
-            if (isSelfAssign) {
-              // Include entities that are manual-assign and self-assigned.
-              entityEvents.push({ entity, event, assignment: null });
-            } else {
-              // Include entities that are manual-assigned to someone else.
-              entityEvents.push({ entity, event, assignment });
-            }
+            // Include entities that are auto-assign and have manual
+            // assignment for someone else.
+            entityEvents.push({ entity, event, assignment });
+          }
+        } else {
+          if (isSelfAssign) {
+            // Include entities that are manual-assign and self-assigned.
+            entityEvents.push({ entity, event, assignment: null });
+          } else {
+            // Include entities that are manual-assigned to someone else.
+            entityEvents.push({ entity, event, assignment });
           }
         }
-      } else {
-        entityEvents.push({ entity, event, assignment: null });
       }
     }
 
