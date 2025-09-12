@@ -27,6 +27,7 @@ import {
 } from '@app/entities/activity/lib/types/activityListItem';
 import { EventAvailability } from '@app/entities/event/lib/types/event';
 import { MIDNIGHT_DATE } from '@app/shared/lib/constants/dateTime';
+import { ILogger } from '@app/shared/lib/types/logger';
 
 import {
   ActivityGroupsBuilder,
@@ -225,6 +226,18 @@ const mockGetNow = (builder: ActivityGroupsBuilder, mockedNowDate: Date) => {
   );
 };
 
+// Mock logger for testing
+const createMockLogger = (): ILogger => ({
+  log: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  configure: jest.fn(),
+  send: jest.fn().mockResolvedValue(true),
+  cancelSending: jest.fn(),
+  clearAllLogFiles: jest.fn(),
+});
+
 describe('ActivityGroupsBuilder', () => {
   describe('Test In-progress group', () => {
     it('Should return group item when event is always-available and startAt is set in progress record', () => {
@@ -238,7 +251,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -270,7 +283,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -298,7 +311,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -326,7 +339,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         startDate: subDays(startOfDay(date), 2),
@@ -361,7 +374,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         startDate: subDays(day, 2),
@@ -404,7 +417,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         startDate: subDays(day, 2),
@@ -447,7 +460,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         startDate: subDays(day, 2),
@@ -492,7 +505,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -530,7 +543,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -568,7 +581,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getAlwaysAvailableEventEntity({
         scheduledAt: startAt,
@@ -609,7 +622,7 @@ describe('ActivityGroupsBuilder', () => {
           appletId: 'test-applet-id-1',
         };
 
-        const builder = createActivityGroupsBuilder(input);
+        const builder = createActivityGroupsBuilder(input, createMockLogger());
 
         const eventEntity: EventEntity = getScheduledEventEntity({
           scheduledAt,
@@ -656,7 +669,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -704,7 +717,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -753,7 +766,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -799,7 +812,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -838,7 +851,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -876,7 +889,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -917,7 +930,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      let builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -947,7 +960,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      builder = createActivityGroupsBuilder(input);
+      builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = addMinutes(scheduledAt, 10);
 
@@ -968,7 +981,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      let builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -995,7 +1008,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      builder = createActivityGroupsBuilder(input);
+      builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = addMinutes(scheduledAt, 10);
 
@@ -1023,7 +1036,7 @@ describe('ActivityGroupsBuilder', () => {
           appletId: 'test-applet-id-1',
         };
 
-        const builder = createActivityGroupsBuilder(input);
+        const builder = createActivityGroupsBuilder(input, createMockLogger());
 
         const eventEntity: EventEntity = getScheduledEventEntity({
           scheduledAt,
@@ -1070,7 +1083,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1112,7 +1125,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1162,7 +1175,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1210,7 +1223,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const eventEntity: EventEntity = getScheduledEventEntity({
         scheduledAt,
@@ -1252,7 +1265,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = subHours(scheduledAt, 1);
 
@@ -1291,7 +1304,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = subHours(scheduledAt, 1);
 
@@ -1339,7 +1352,7 @@ describe('ActivityGroupsBuilder', () => {
           appletId: 'test-applet-id-1',
         };
 
-        const builder = createActivityGroupsBuilder(input);
+        const builder = createActivityGroupsBuilder(input, createMockLogger());
 
         const eventEntity: EventEntity = getScheduledEventEntity({
           scheduledAt,
@@ -1388,7 +1401,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = subHours(scheduledAt, 1);
 
@@ -1438,7 +1451,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = subHours(scheduledAt, 1);
 
@@ -1488,7 +1501,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      let builder = createActivityGroupsBuilder(input);
+      let builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = subHours(scheduledAt, 1);
 
@@ -1531,7 +1544,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      builder = createActivityGroupsBuilder(input);
+      builder = createActivityGroupsBuilder(input, createMockLogger());
 
       mockGetNow(builder, new Date(now));
 
@@ -1553,7 +1566,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = subHours(scheduledAt, 1);
 
@@ -1595,7 +1608,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const now = subHours(scheduledAt, 1);
 
@@ -1676,7 +1689,7 @@ describe('ActivityGroupsBuilder', () => {
         appletId: 'test-applet-id-1',
       };
 
-      const builder = createActivityGroupsBuilder(input);
+      const builder = createActivityGroupsBuilder(input, createMockLogger());
 
       const activityFlow: Entity = {
         description: 'test-flow-description-1',

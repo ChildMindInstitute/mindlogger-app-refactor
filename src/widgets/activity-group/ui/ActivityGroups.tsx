@@ -77,24 +77,53 @@ export const ActivityGroups: FC<Props> = props => {
       ) : (
         <Box {...props}>
           <YStack aria-label="activity-group-list" flex={1}>
-            {renderedGroups && responseTypes ? (
-              <ActivitySectionList
-                activityResponseTypes={responseTypes}
-                appletId={props.appletId}
-                groups={renderedGroups}
-                completeEntity={props.completeEntity}
-                checkAvailability={props.checkAvailability}
-              />
-            ) : (
-              !isLoading && (
-                <EmptyState
-                  aria-label="activity-group-empty"
-                  flex={1}
-                  icon={<ChecklistIcon />}
-                  description={t('activity_list_component:no_activities')}
-                />
-              )
-            )}
+            {renderedGroups && responseTypes
+              ? (() => {
+                  // Filter out activities without valid responseTypes to ensure consistency
+                  const validGroups = renderedGroups
+                    .map(group => ({
+                      ...group,
+                      activities: group.activities.filter(activity => {
+                        const entityId = activity.flowId || activity.activityId;
+                        const types = responseTypes?.[entityId];
+                        // Only include activities with valid, non-empty responseTypes
+                        return (
+                          types &&
+                          Array.isArray(types) &&
+                          types.length > 0 &&
+                          types.every(Boolean)
+                        );
+                      }),
+                    }))
+                    .filter(
+                      group => group.activities.length > 0 || group.type === 0,
+                    ); // Keep Available group even if empty
+
+                  return validGroups.length > 0 ? (
+                    <ActivitySectionList
+                      activityResponseTypes={responseTypes}
+                      appletId={props.appletId}
+                      groups={validGroups}
+                      completeEntity={props.completeEntity}
+                      checkAvailability={props.checkAvailability}
+                    />
+                  ) : (
+                    <EmptyState
+                      aria-label="activity-group-empty"
+                      flex={1}
+                      icon={<ChecklistIcon />}
+                      description={t('activity_list_component:no_activities')}
+                    />
+                  );
+                })()
+              : !isLoading && (
+                  <EmptyState
+                    aria-label="activity-group-empty"
+                    flex={1}
+                    icon={<ChecklistIcon />}
+                    description={t('activity_list_component:no_activities')}
+                  />
+                )}
           </YStack>
         </Box>
       )}
