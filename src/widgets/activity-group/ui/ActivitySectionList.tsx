@@ -187,9 +187,25 @@ export function ActivitySectionList({
         )}
         renderItem={({ item, section }) => {
           const entityId = item.flowId || item.activityId;
-          const responseTypes = activityResponseTypes[entityId];
-          const supportsApp = responseTypes.every(getSupportsMobile);
-          const isWebOnly = responseTypes.some(getIsWebOnly);
+          const responseTypes = activityResponseTypes?.[entityId];
+
+          // Skip rendering if no valid responseTypes found
+          if (
+            !responseTypes ||
+            !Array.isArray(responseTypes) ||
+            responseTypes.length === 0
+          ) {
+            return null;
+          }
+
+          // Additional safety: filter out any undefined values before array methods
+          const validResponseTypes = responseTypes.filter(Boolean);
+          if (validResponseTypes.length === 0) {
+            return null;
+          }
+
+          const supportsApp = validResponseTypes.every(getSupportsMobile);
+          const isWebOnly = validResponseTypes.some(getIsWebOnly);
 
           return (
             <ActivityCard
