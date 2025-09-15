@@ -7,13 +7,14 @@ cd "$SCRIPT_DIR"
 echo "[PostInstall] Running yarn patch-package ..."
 yarn patch-package
 
-#if [ -n "${BUILD_UNITY}" ]; then
-#  echo "[PostInstall] Running unity/unlink-react-native-unity.sh ..."
-#  ./unity/unlink-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity
+# if BUILD_UNITY is unset, unlink from build
+if [ -z "${BUILD_UNITY+x}" ]; then
+  echo "[PostInstall] Running unity/unlink-react-native-unity.sh ..."
+  ./unity/unlink-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity
 #else
 #  echo "[PostInstall] Running unity/relink-react-native-unity.sh ..."
 #  ./unity/relink-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity
-#fi
+fi
 
 # We can't use patch-package to patch @azesmway/react-native-unity because
 # the above unlinking script would change the path of the android source
