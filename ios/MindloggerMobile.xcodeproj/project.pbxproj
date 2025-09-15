@@ -1448,7 +1448,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1474,7 +1474,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1622,7 +1622,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1777,7 +1777,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2104,7 +2104,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2259,7 +2259,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2414,7 +2414,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2569,7 +2569,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2722,7 +2722,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2876,7 +2876,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -3031,7 +3031,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -3186,7 +3186,7 @@
 					"\"$(SDKROOT)/usr/lib/swift\"",
 					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 				);
-				MARKETING_VERSION = 2025.09.2;
+				MARKETING_VERSION = 2025.09.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
