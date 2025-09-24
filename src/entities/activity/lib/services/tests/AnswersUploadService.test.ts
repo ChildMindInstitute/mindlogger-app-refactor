@@ -6,7 +6,9 @@ import { getDefaultAnswerService } from '@app/shared/api/services/answerServiceI
 import {
   ActivityAnswersRequest,
   AnswerDto,
+  DrawerAnswerDto,
   IAnswerService,
+  ObjectAnswerDto,
   UserActionDto,
 } from '@app/shared/api/services/IAnswerService';
 import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
@@ -21,6 +23,23 @@ import { AnswersUploadService } from '../AnswersUploadService';
 import { getDefaultAnswersUploadService } from '../answersUploadServiceInstance';
 import { IMediaFilesCleaner } from '../IMediaFilesCleaner';
 import { getDefaultMediaFilesCleaner } from '../mediaFilesCleanerInstance';
+
+jest.mock('@app/entities/drawer/lib/utils/svgFileManagerInstance', () => {
+  const svgManagerMock = {
+    writeFile: jest.fn(),
+  };
+
+  return {
+    getDefaultSvgFileManager: () => svgManagerMock,
+    __svgManagerMock: svgManagerMock,
+  };
+});
+
+const {
+  __svgManagerMock: svgManagerMock,
+} = jest.requireMock('@app/entities/drawer/lib/utils/svgFileManagerInstance') as {
+  __svgManagerMock: { writeFile: jest.Mock };
+};
 
 type ITestAnswersUploadService = IAnswersUploadService & {
   createdAt: number | null;
@@ -43,8 +62,13 @@ describe('AnswersUploadService', () => {
   let mediaFileCleaner: IMediaFilesCleaner;
 
   beforeEach(() => {
+    svgManagerMock.writeFile.mockReset();
+    (FileSystem.exists as jest.Mock).mockReset();
+
     logger = getDefaultLogger();
     jest.spyOn(logger, 'log').mockImplementation(() => {});
+    jest.spyOn(logger, 'warn').mockImplementation(() => {});
+    jest.spyOn(logger, 'info').mockImplementation(() => {});
 
     userPrivateKeyRecord = getDefaultUserPrivateKeyRecord();
 
@@ -159,21 +183,32 @@ describe('AnswersUploadService', () => {
   });
 
   jest.mock('react-native-file-access', () => ({
-    exists: jest.fn(),
+    FileSystem: {
+      exists: jest.fn(),
+      writeFile: jest.fn(),
+      unlink: jest.fn(),
+    },
   }));
 
   describe('processFileUpload function', () => {
     it('should throw an error for non-existing local file', async () => {
-      jest.spyOn(FileSystem, 'exists').mockResolvedValue(false);
+      (FileSystem.exists as jest.Mock).mockResolvedValue(false);
 
-      const mediaAnswer = { uri: 'file:///non/existing/file.jpg' } as MediaFile;
+      const itemAnswer = {
+        value: {
+          uri: 'file:///non/existing/file.jpg',
+          type: 'image/jpeg',
+          fileName: 'file.jpg',
+        },
+      } as unknown as ObjectAnswerDto;
+
       const uploadResults = [
         { fileId: 'fileId1', uploaded: false, remoteUrl: null },
       ];
 
       await expect(
         answersUploadService.processFileUpload(
-          mediaAnswer,
+          itemAnswer,
           uploadResults,
           0,
           'mock-applet-id',
@@ -182,21 +217,93 @@ describe('AnswersUploadService', () => {
     });
 
     it('should throw an error for missing upload record', async () => {
-      jest.spyOn(FileSystem, 'exists').mockResolvedValue(true);
+      (FileSystem.exists as jest.Mock).mockResolvedValue(true);
 
-      const mediaAnswer = { uri: 'file:///path/to/image.jpg' } as MediaFile;
+      const itemAnswer = {
+        value: {
+          uri: 'file:///path/to/image.jpg',
+          type: 'image/jpeg',
+          fileName: 'image.jpg',
+        },
+      } as unknown as ObjectAnswerDto;
+
       const uploadResults = [
         { fileId: 'fileId1', uploaded: false, remoteUrl: null },
       ];
 
       await expect(
         answersUploadService.processFileUpload(
-          mediaAnswer,
+          itemAnswer,
           uploadResults,
           0,
           'mock-applet-id',
         ),
       ).rejects.toThrow(/uploadRecord does not exist/);
+    });
+
+    it('should recreate missing svg file and continue upload', async () => {
+      (FileSystem.exists as jest.Mock)
+        .mockResolvedValueOnce(false)
+        .mockResolvedValue(true);
+
+      const drawerAnswer = {
+        uri: 'file:///path/to/drawing.svg',
+        type: 'image/svg',
+        fileName: 'drawing.svg',
+        svgString: '<svg></svg>',
+        lines: [],
+        width: 100,
+      } as unknown as DrawerAnswerDto;
+
+      const itemAnswer = {
+        value: drawerAnswer,
+      } as unknown as ObjectAnswerDto;
+
+      const uploadResults = [
+        {
+          fileId: `${MOCK_CREATED_AT}/drawing.svg`,
+          uploaded: false,
+          remoteUrl: null,
+        },
+      ];
+
+      svgManagerMock.writeFile.mockResolvedValue(undefined);
+
+      const fileService = (
+        answersUploadService as unknown as { fileService: any }
+      ).fileService;
+
+      const remoteUrl = 'https://example.com/drawing.svg';
+
+      jest
+        .spyOn(fileService, 'getFieldsForFileUpload')
+        .mockResolvedValue({
+          data: {
+            result: {
+              fields: {},
+              uploadUrl: 'https://upload-url',
+              url: remoteUrl,
+            },
+          },
+        });
+
+      jest
+        .spyOn(fileService, 'uploadAppletFileToS3')
+        .mockResolvedValue(undefined);
+
+      const result = await answersUploadService.processFileUpload(
+        itemAnswer,
+        uploadResults,
+        0,
+        'mock-applet-id',
+      );
+
+      expect(result).toBe(remoteUrl);
+      expect(svgManagerMock.writeFile).toHaveBeenCalledWith(
+        drawerAnswer.uri,
+        drawerAnswer.svgString,
+      );
+      expect(FileSystem.exists).toHaveBeenCalledTimes(2);
     });
   });
 
