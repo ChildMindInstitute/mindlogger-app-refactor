@@ -1,5 +1,6 @@
 import { FileSystem } from 'react-native-file-access';
 
+import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
 import { IUserPrivateKeyRecord } from '@app/entities/identity/lib/IUserPrivateKeyRecord';
 import { EHRConsent } from '@app/shared/api/services/ActivityItemDto';
 import {
@@ -23,7 +24,6 @@ import {
 } from '@app/shared/lib/utils/dateTime';
 import { isLocalFileUrl } from '@app/shared/lib/utils/file';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
-import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
 import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
 import {
   CheckAnswersInput,

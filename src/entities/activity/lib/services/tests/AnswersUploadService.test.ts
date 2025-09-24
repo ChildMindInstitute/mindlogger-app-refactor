@@ -15,7 +15,6 @@ import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encrypti
 import { IEncryptionManager } from '@app/shared/lib/encryption/IEncryptionManager';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
-import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
 
 import { SendAnswersInput } from '../../types/uploadAnswers';
@@ -35,11 +34,10 @@ jest.mock('@app/entities/drawer/lib/utils/svgFileManagerInstance', () => {
   };
 });
 
-const {
-  __svgManagerMock: svgManagerMock,
-} = jest.requireMock('@app/entities/drawer/lib/utils/svgFileManagerInstance') as {
-  __svgManagerMock: { writeFile: jest.Mock };
-};
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const { __svgManagerMock: svgManagerMock } = jest.requireMock(
+  '@app/entities/drawer/lib/utils/svgFileManagerInstance',
+);
 
 type ITestAnswersUploadService = IAnswersUploadService & {
   createdAt: number | null;
@@ -275,17 +273,15 @@ describe('AnswersUploadService', () => {
 
       const remoteUrl = 'https://example.com/drawing.svg';
 
-      jest
-        .spyOn(fileService, 'getFieldsForFileUpload')
-        .mockResolvedValue({
-          data: {
-            result: {
-              fields: {},
-              uploadUrl: 'https://upload-url',
-              url: remoteUrl,
-            },
+      jest.spyOn(fileService, 'getFieldsForFileUpload').mockResolvedValue({
+        data: {
+          result: {
+            fields: {},
+            uploadUrl: 'https://upload-url',
+            url: remoteUrl,
           },
-        });
+        },
+      });
 
       jest
         .spyOn(fileService, 'uploadAppletFileToS3')
