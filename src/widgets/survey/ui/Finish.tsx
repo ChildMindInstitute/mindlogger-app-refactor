@@ -6,6 +6,7 @@ import { EntityPathParams } from '@app/abstract/lib/types/entity';
 import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
 import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
+import { getDefaultAnswersQueueService } from '@app/entities/activity/lib/services/answersQueueServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alertsExtractorInstance';
 import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
@@ -126,6 +127,7 @@ export function FinishItem({
       dispatch,
       ReduxPersistor,
       entityProgressions,
+      getDefaultAnswersQueueService(),
     );
 
     if (isCompletedAutomatically && isFlow) {

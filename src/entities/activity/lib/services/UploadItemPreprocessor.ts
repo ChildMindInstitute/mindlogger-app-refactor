@@ -6,6 +6,7 @@ import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientIn
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { IPreprocessor } from '@app/shared/lib/types/service';
 import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService';
+import { getDefaultAnswersQueueService } from '@entities/activity/lib/services/answersQueueServiceInstance';
 
 export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
   private queryDataUtils: QueryDataUtils;
@@ -42,6 +43,24 @@ export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
     );
   }
 
+  private fixStuckFlowCompletion(uploadItem: UploadItem) {
+    const { isFlowCompleted, flowId, submitId, activityId } = uploadItem.input;
+    
+    // If this item is marked as completing the flow
+    if (isFlowCompleted && flowId) {
+      const queueService = getDefaultAnswersQueueService();
+      const hasOthers = queueService.hasOtherPendingFlowActivities(submitId, activityId, flowId);
+      
+      if (hasOthers) {
+        // Fix: Don't mark flow as complete if other activities are pending
+        uploadItem.input.isFlowCompleted = false;
+        getDefaultLogger().warn(
+          `[UploadItemPreprocessor] Fixed premature flow completion for activity ${activityId}`,
+        );
+      }
+    }
+  }
+
   public preprocess(uploadItem: UploadItem) {
     getDefaultLogger().log(
       '[UploadItemPreprocessor] started preprocessing upload item',
@@ -49,6 +68,7 @@ export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
 
     try {
       this.preprocessConsents(uploadItem);
+      this.fixStuckFlowCompletion(uploadItem);
 
       getDefaultLogger().log(
         '[UploadItemPreprocessor] successfully preprocessed',

@@ -30,6 +30,7 @@ import {
 } from '@app/shared/lib/utils/survey/survey';
 import { trackCompleteSurvey } from '@app/widgets/survey/lib/surveyStateAnalytics';
 import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
+import { IAnswersQueueService } from '@entities/activity/lib/services/IAnswersQueueService';
 
 import { getClientInformation } from '../../lib/metaHelpers';
 import {
@@ -97,6 +98,7 @@ export class ConstructCompletionsService {
   private dispatch: AppDispatch;
   private persistor: Persistor;
   private itemTypesMap: Record<string, ResponseType[]>;
+  private queueService: IAnswersQueueService;
 
   constructor(
     saveActivitySummary: SaveActivitySummary | null,
@@ -108,6 +110,7 @@ export class ConstructCompletionsService {
     dispatch: AppDispatch,
     persistor: Persistor,
     entityProgressions: EntityProgression[],
+    queueService: IAnswersQueueService,
   ) {
     this.saveActivitySummary = saveActivitySummary;
     this.logger = logger;
@@ -119,6 +122,7 @@ export class ConstructCompletionsService {
     this.entityProgressions = entityProgressions;
     this.persistor = persistor;
     this.itemTypesMap = {};
+    this.queueService = queueService;
   }
 
   private getLogDates(
@@ -541,7 +545,9 @@ export class ConstructCompletionsService {
       alerts,
       eventId,
       targetSubjectId,
-      isFlowCompleted: !!flowId,
+      isFlowCompleted: flowId 
+        ? !this.queueService.hasOtherPendingFlowActivities(submitId, activityId, flowId)
+        : false,
       tzOffset: getTimezoneOffset(),
       eventVersion: scheduledEvent?.version,
     };
