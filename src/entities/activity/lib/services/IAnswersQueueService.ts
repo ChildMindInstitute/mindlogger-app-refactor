@@ -10,4 +10,10 @@ export interface IAnswersQueueService {
   dequeue: () => void;
   swap: () => void;
   getLength: () => number;
+  getAllItems: () => UploadItem[];
+  hasOtherPendingFlowActivities: (
+    submitId: string,
+    currentActivityId: string,
+    flowId: string,
+  ) => boolean;
 }

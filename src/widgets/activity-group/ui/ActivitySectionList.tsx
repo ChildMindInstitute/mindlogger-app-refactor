@@ -108,7 +108,7 @@ export function ActivitySectionList({
     }
 
     const responseTypes = activityResponseTypes[flowId || activityId];
-    const isWebOnly = responseTypes.some(getIsWebOnly);
+    const isWebOnly = responseTypes?.some(getIsWebOnly) ?? false;
 
     if (isWebOnly) {
       await Linking.openURL(
@@ -188,8 +188,8 @@ export function ActivitySectionList({
         renderItem={({ item, section }) => {
           const entityId = item.flowId || item.activityId;
           const responseTypes = activityResponseTypes[entityId];
-          const supportsApp = responseTypes.every(getSupportsMobile);
-          const isWebOnly = responseTypes.some(getIsWebOnly);
+          const supportsApp = responseTypes?.every(getSupportsMobile) ?? true;
+          const isWebOnly = responseTypes?.some(getIsWebOnly) ?? false;
 
           return (
             <ActivityCard

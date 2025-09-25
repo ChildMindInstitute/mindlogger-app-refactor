@@ -89,4 +89,33 @@ export class AnswersQueueService implements IAnswersQueueService {
   public getLength(): number {
     return this.getKeys().length;
   }
+
+  public getAllItems(): UploadItem[] {
+    const keys = this.getKeys();
+    const items: UploadItem[] = [];
+
+    for (const key of keys) {
+      const json = this.uploadQueueStorage.getString(String(key));
+      if (json) {
+        items.push(JSON.parse(json) as UploadItem);
+      }
+    }
+
+    return items;
+  }
+
+  public hasOtherPendingFlowActivities(
+    submitId: string,
+    currentActivityId: string,
+    flowId: string,
+  ): boolean {
+    const allItems = this.getAllItems();
+
+    return allItems.some(
+      item =>
+        item.input.submitId === submitId &&
+        item.input.flowId === flowId &&
+        item.input.activityId !== currentActivityId,
+    );
+  }
 }
