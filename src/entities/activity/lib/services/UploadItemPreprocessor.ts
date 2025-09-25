@@ -5,8 +5,8 @@ import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/feat
 import { getDefaultQueryClient } from '@app/shared/lib/queryClient/queryClientInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { IPreprocessor } from '@app/shared/lib/types/service';
-import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService';
 import { getDefaultAnswersQueueService } from '@entities/activity/lib/services/answersQueueServiceInstance';
+import { UploadItem } from '@entities/activity/lib/services/IAnswersQueueService';
 
 export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
   private queryDataUtils: QueryDataUtils;
@@ -45,12 +45,16 @@ export class UploadItemPreprocessor implements IPreprocessor<UploadItem> {
 
   private fixStuckFlowCompletion(uploadItem: UploadItem) {
     const { isFlowCompleted, flowId, submitId, activityId } = uploadItem.input;
-    
+
     // If this item is marked as completing the flow
     if (isFlowCompleted && flowId) {
       const queueService = getDefaultAnswersQueueService();
-      const hasOthers = queueService.hasOtherPendingFlowActivities(submitId, activityId, flowId);
-      
+      const hasOthers = queueService.hasOtherPendingFlowActivities(
+        submitId,
+        activityId,
+        flowId,
+      );
+
       if (hasOthers) {
         // Fix: Don't mark flow as complete if other activities are pending
         uploadItem.input.isFlowCompleted = false;

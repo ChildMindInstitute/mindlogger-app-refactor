@@ -29,8 +29,8 @@ import {
   getEntityProgression,
 } from '@app/shared/lib/utils/survey/survey';
 import { trackCompleteSurvey } from '@app/widgets/survey/lib/surveyStateAnalytics';
-import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
 import { IAnswersQueueService } from '@entities/activity/lib/services/IAnswersQueueService';
+import { IQueueProcessingService } from '@entities/activity/lib/services/IQueueProcessingService';
 
 import { getClientInformation } from '../../lib/metaHelpers';
 import {
@@ -545,8 +545,12 @@ export class ConstructCompletionsService {
       alerts,
       eventId,
       targetSubjectId,
-      isFlowCompleted: flowId 
-        ? !this.queueService.hasOtherPendingFlowActivities(submitId, activityId, flowId)
+      isFlowCompleted: flowId
+        ? !this.queueService.hasOtherPendingFlowActivities(
+            submitId,
+            activityId,
+            flowId,
+          )
         : false,
       tzOffset: getTimezoneOffset(),
       eventVersion: scheduledEvent?.version,

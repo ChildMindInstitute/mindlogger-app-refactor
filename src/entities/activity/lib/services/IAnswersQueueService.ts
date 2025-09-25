@@ -11,5 +11,9 @@ export interface IAnswersQueueService {
   swap: () => void;
   getLength: () => number;
   getAllItems: () => UploadItem[];
-  hasOtherPendingFlowActivities: (submitId: string, currentActivityId: string, flowId: string) => boolean;
+  hasOtherPendingFlowActivities: (
+    submitId: string,
+    currentActivityId: string,
+    flowId: string,
+  ) => boolean;
 }
