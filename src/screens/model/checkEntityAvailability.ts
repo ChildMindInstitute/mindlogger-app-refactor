@@ -143,7 +143,8 @@ const checkEntityAvailabilityInternal = ({
 
       if (!matchesEntity) return false;
 
-      const isRespondent = assignment.respondentSubject.userId === currentUserId;
+      const isRespondent =
+        assignment.respondentSubject.userId === currentUserId;
 
       // For self-reports (no targetSubjectId), respondent must equal target
       if (!targetSubjectId) {
