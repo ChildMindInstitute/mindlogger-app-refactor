@@ -36,6 +36,10 @@ import {
   mapActivityFlowsFromDto,
   mapAssignmentsFromDto,
 } from '../mappers';
+import {
+  createEntityReferenceValidator,
+  EntityValidationContext,
+} from '../validators/EntityReferenceValidator';
 
 export const createActivityGroupsBuildManager = (
   logger: ILogger,
@@ -157,6 +161,9 @@ export const createActivityGroupsBuildManager = (
 
     const entitiesById = buildIdToEntityMap(activities, activityFlows);
 
+    // Create entity reference validator to check for stale references
+    const entityValidator = createEntityReferenceValidator(logger);
+
     const entityEvents: EventEntity[] = [];
     for (const event of events) {
       const entity = entitiesById[event.entityId];
@@ -216,15 +223,54 @@ export const createActivityGroupsBuildManager = (
       }
     }
 
-    const sortedEntityEvents = sortEntityEvents(entityEvents);
+    // Validate entity references before processing
+    const validationContext: EntityValidationContext = {
+      eventEntities: entityEvents,
+      availableActivities: activities,
+      availableFlows: activityFlows,
+    };
+
+    const validationResult = entityValidator.validate(validationContext);
+
+    if (validationResult.staleReferences.length > 0) {
+      logger.warn(
+        `[ActivityGroupsBuildManager.processInternal]: Found ${validationResult.staleReferences.length} stale entity references`,
+      );
+
+      // Log details of stale references
+      validationResult.staleReferences.forEach(ref => {
+        logger.warn(
+          `[ActivityGroupsBuildManager.processInternal]: Stale reference - entityId=${ref.entityId}, type=${ref.entityType}, reason=${ref.reason}`,
+        );
+      });
+
+      // If validation fails, mark cache as insufficient to trigger refresh
+      if (!validationResult.isValid) {
+        logger.warn(
+          '[ActivityGroupsBuildManager.processInternal]: Entity validation failed, marking cache as insufficient',
+        );
+        return { groups: [], isCacheInsufficientError: true };
+      }
+    }
+
+    // Use only valid entities for processing
+    const validEntityEvents = validationResult.validEntities;
+    const sortedEntityEvents = sortEntityEvents(validEntityEvents);
+
+    logger.log(
+      `[ActivityGroupsBuildManager.processInternal]: Processing ${sortedEntityEvents.length} valid entities (filtered from ${entityEvents.length} total)`,
+    );
 
     let logInfo = '';
     const result: BuildResult = { groups: [] };
-    const builder = createActivityGroupsBuilder({
-      allAppletActivities: activities,
-      appletId: appletId,
-      entityProgressions,
-    });
+    const builder = createActivityGroupsBuilder(
+      {
+        allAppletActivities: activities,
+        appletId: appletId,
+        entityProgressions,
+      },
+      logger,
+    );
 
     try {
       logInfo = 'building in-progress';

@@ -35,7 +35,9 @@ export const getResponseTypesMap = ({ result }: AppletBaseInfoResponse) => {
       ...curr,
       [activityFlow.id]: (activityFlow?.activityIds || [])
         .map(activityId => activityResponseTypes[activityId])
-        .flat(),
+        .filter(Boolean) // Remove undefined values from deleted activities
+        .flat()
+        .filter(Boolean), // Remove any undefined values after flattening
     }),
     {} as Record<string, ResponseType[]>,
   );
