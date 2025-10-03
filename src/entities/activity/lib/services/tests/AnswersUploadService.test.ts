@@ -15,6 +15,7 @@ import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encrypti
 import { IEncryptionManager } from '@app/shared/lib/encryption/IEncryptionManager';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
 
 import { SendAnswersInput } from '../../types/uploadAnswers';
@@ -859,6 +860,8 @@ describe('AnswersUploadService real example', () => {
   beforeEach(() => {
     logger = getDefaultLogger();
     jest.spyOn(logger, 'log').mockImplementation(() => {});
+    jest.spyOn(logger, 'warn').mockImplementation(() => {});
+    jest.spyOn(logger, 'info').mockImplementation(() => {});
 
     userPrivateKeyRecord = getDefaultUserPrivateKeyRecord();
 
@@ -1043,6 +1046,582 @@ describe('AnswersUploadService real example', () => {
       expect(mediaFileCleaner.cleanUpByAnswers).toHaveBeenCalledWith(
         body.answers,
       );
+    });
+  });
+
+  describe('Media File Upload Tests', () => {
+    describe('Missing File Handling', () => {
+      it('should throw error when audio file is missing and cannot be regenerated', async () => {
+        (FileSystem.exists as jest.Mock).mockResolvedValue(false);
+
+        const audioAnswer = {
+          uri: 'file:///path/to/audio.m4a',
+          type: 'audio/m4a',
+          fileName: 'audio.m4a',
+        } as MediaFile;
+
+        const itemAnswer = {
+          value: audioAnswer,
+        } as unknown as ObjectAnswerDto;
+
+        const uploadResults = [
+          {
+            fileId: `${MOCK_CREATED_AT}/audio.m4a`,
+            uploaded: false,
+            remoteUrl: null,
+          },
+        ];
+
+        await expect(
+          answersUploadService.processFileUpload(
+            itemAnswer,
+            uploadResults,
+            0,
+            'mock-applet-id',
+          ),
+        ).rejects.toThrow(
+          '[UploadAnswersService.processFileUpload]: Local file (audio/m4a, from answer #0) does not exist',
+        );
+      });
+
+      it('should throw error when video file is missing and cannot be regenerated', async () => {
+        (FileSystem.exists as jest.Mock).mockResolvedValue(false);
+
+        const videoAnswer = {
+          uri: 'file:///path/to/video.mp4',
+          type: 'video/mp4',
+          fileName: 'video.mp4',
+        } as MediaFile;
+
+        const itemAnswer = {
+          value: videoAnswer,
+        } as unknown as ObjectAnswerDto;
+
+        const uploadResults = [
+          {
+            fileId: `${MOCK_CREATED_AT}/video.mp4`,
+            uploaded: false,
+            remoteUrl: null,
+          },
+        ];
+
+        await expect(
+          answersUploadService.processFileUpload(
+            itemAnswer,
+            uploadResults,
+            0,
+            'mock-applet-id',
+          ),
+        ).rejects.toThrow(
+          '[UploadAnswersService.processFileUpload]: Local file (video/mp4, from answer #0) does not exist',
+        );
+      });
+
+      it('should throw error when photo file is missing and cannot be regenerated', async () => {
+        (FileSystem.exists as jest.Mock).mockResolvedValue(false);
+
+        const photoAnswer = {
+          uri: 'file:///path/to/photo.jpg',
+          type: 'image/jpeg',
+          fileName: 'photo.jpg',
+        } as MediaFile;
+
+        const itemAnswer = {
+          value: photoAnswer,
+        } as unknown as ObjectAnswerDto;
+
+        const uploadResults = [
+          {
+            fileId: `${MOCK_CREATED_AT}/photo.jpg`,
+            uploaded: false,
+            remoteUrl: null,
+          },
+        ];
+
+        await expect(
+          answersUploadService.processFileUpload(
+            itemAnswer,
+            uploadResults,
+            0,
+            'mock-applet-id',
+          ),
+        ).rejects.toThrow(
+          '[UploadAnswersService.processFileUpload]: Local file (image/jpeg, from answer #0) does not exist',
+        );
+      });
+    });
+
+    describe('Successful Media Uploads', () => {
+      it('should successfully upload audio file when it exists', async () => {
+        (FileSystem.exists as jest.Mock).mockResolvedValue(true);
+
+        const audioAnswer = {
+          uri: 'file:///path/to/audio.m4a',
+          type: 'audio/m4a',
+          fileName: 'audio.m4a',
+        } as MediaFile;
+
+        const itemAnswer = {
+          value: audioAnswer,
+        } as unknown as ObjectAnswerDto;
+
+        const uploadResults = [
+          {
+            fileId: `${MOCK_CREATED_AT}/audio.m4a`,
+            uploaded: false,
+            remoteUrl: null,
+          },
+        ];
+
+        const fileService = (
+          answersUploadService as unknown as { fileService: any }
+        ).fileService;
+
+        const remoteUrl = 'https://example.com/audio.m4a';
+
+        jest.spyOn(fileService, 'getFieldsForFileUpload').mockResolvedValue({
+          data: {
+            result: {
+              fields: {},
+              uploadUrl: 'https://upload-url',
+              url: remoteUrl,
+            },
+          },
+        });
+
+        jest
+          .spyOn(fileService, 'uploadAppletFileToS3')
+          .mockResolvedValue(undefined);
+
+        const result = await answersUploadService.processFileUpload(
+          itemAnswer,
+          uploadResults,
+          0,
+          'mock-applet-id',
+        );
+
+        expect(result).toBe(remoteUrl);
+        expect(FileSystem.exists).toHaveBeenCalledWith(audioAnswer.uri);
+        expect(fileService.uploadAppletFileToS3).toHaveBeenCalled();
+      });
+
+      it('should successfully upload video file when it exists', async () => {
+        (FileSystem.exists as jest.Mock).mockResolvedValue(true);
+
+        const videoAnswer = {
+          uri: 'file:///path/to/video.mp4',
+          type: 'video/mp4',
+          fileName: 'video.mp4',
+        } as MediaFile;
+
+        const itemAnswer = {
+          value: videoAnswer,
+        } as unknown as ObjectAnswerDto;
+
+        const uploadResults = [
+          {
+            fileId: `${MOCK_CREATED_AT}/video.mp4`,
+            uploaded: false,
+            remoteUrl: null,
+          },
+        ];
+
+        const fileService = (
+          answersUploadService as unknown as { fileService: any }
+        ).fileService;
+
+        const remoteUrl = 'https://example.com/video.mp4';
+
+        jest.spyOn(fileService, 'getFieldsForFileUpload').mockResolvedValue({
+          data: {
+            result: {
+              fields: {},
+              uploadUrl: 'https://upload-url',
+              url: remoteUrl,
+            },
+          },
+        });
+
+        jest
+          .spyOn(fileService, 'uploadAppletFileToS3')
+          .mockResolvedValue(undefined);
+
+        const result = await answersUploadService.processFileUpload(
+          itemAnswer,
+          uploadResults,
+          0,
+          'mock-applet-id',
+        );
+
+        expect(result).toBe(remoteUrl);
+        expect(FileSystem.exists).toHaveBeenCalledWith(videoAnswer.uri);
+        expect(fileService.uploadAppletFileToS3).toHaveBeenCalled();
+      });
+
+      it('should successfully upload photo file when it exists', async () => {
+        (FileSystem.exists as jest.Mock).mockResolvedValue(true);
+
+        const photoAnswer = {
+          uri: 'file:///path/to/photo.jpg',
+          type: 'image/jpeg',
+          fileName: 'photo.jpg',
+        } as MediaFile;
+
+        const itemAnswer = {
+          value: photoAnswer,
+        } as unknown as ObjectAnswerDto;
+
+        const uploadResults = [
+          {
+            fileId: `${MOCK_CREATED_AT}/photo.jpg`,
+            uploaded: false,
+            remoteUrl: null,
+          },
+        ];
+
+        const fileService = (
+          answersUploadService as unknown as { fileService: any }
+        ).fileService;
+
+        const remoteUrl = 'https://example.com/photo.jpg';
+
+        jest.spyOn(fileService, 'getFieldsForFileUpload').mockResolvedValue({
+          data: {
+            result: {
+              fields: {},
+              uploadUrl: 'https://upload-url',
+              url: remoteUrl,
+            },
+          },
+        });
+
+        jest
+          .spyOn(fileService, 'uploadAppletFileToS3')
+          .mockResolvedValue(undefined);
+
+        const result = await answersUploadService.processFileUpload(
+          itemAnswer,
+          uploadResults,
+          0,
+          'mock-applet-id',
+        );
+
+        expect(result).toBe(remoteUrl);
+        expect(FileSystem.exists).toHaveBeenCalledWith(photoAnswer.uri);
+        expect(fileService.uploadAppletFileToS3).toHaveBeenCalled();
+      });
+    });
+
+    describe('Mixed Media Upload', () => {
+      it('should handle mixed media types in single submission', async () => {
+        // Mock file existence: drawing missing (can regenerate), others exist
+        (FileSystem.exists as jest.Mock)
+          .mockResolvedValueOnce(false) // drawing doesn't exist
+          .mockResolvedValueOnce(true) // after regeneration
+          .mockResolvedValueOnce(true) // audio exists
+          .mockResolvedValueOnce(true) // video exists
+          .mockResolvedValueOnce(true); // photo exists
+
+        const answers = [
+          {
+            value: {
+              uri: 'file:///path/to/drawing.svg',
+              type: 'image/svg',
+              fileName: 'drawing.svg',
+              svgString: '<svg>test</svg>',
+              lines: [],
+              width: 100,
+            } as unknown as DrawerAnswerDto,
+          },
+          {
+            value: {
+              uri: 'file:///path/to/audio.m4a',
+              type: 'audio/m4a',
+              fileName: 'audio.m4a',
+            },
+          },
+          {
+            value: {
+              uri: 'file:///path/to/video.mp4',
+              type: 'video/mp4',
+              fileName: 'video.mp4',
+            },
+          },
+          {
+            value: {
+              uri: 'file:///path/to/photo.jpg',
+              type: 'image/jpeg',
+              fileName: 'photo.jpg',
+            },
+          },
+        ] as AnswerDto[];
+
+        const checkResults = {
+          fileIds: [
+            `${MOCK_CREATED_AT}/drawing.svg`,
+            `${MOCK_CREATED_AT}/audio.m4a`,
+            `${MOCK_CREATED_AT}/video.mp4`,
+            `${MOCK_CREATED_AT}/photo.jpg`,
+          ],
+          results: [
+            {
+              fileId: `${MOCK_CREATED_AT}/drawing.svg`,
+              uploaded: false,
+              remoteUrl: null,
+            },
+            {
+              fileId: `${MOCK_CREATED_AT}/audio.m4a`,
+              uploaded: false,
+              remoteUrl: null,
+            },
+            {
+              fileId: `${MOCK_CREATED_AT}/video.mp4`,
+              uploaded: false,
+              remoteUrl: null,
+            },
+            {
+              fileId: `${MOCK_CREATED_AT}/photo.jpg`,
+              uploaded: false,
+              remoteUrl: null,
+            },
+          ],
+        };
+
+        const fileService = (
+          answersUploadService as unknown as { fileService: any }
+        ).fileService;
+
+        // Mock file uploads
+        jest
+          .spyOn(fileService, 'checkIfFilesExist')
+          .mockResolvedValueOnce({
+            data: {
+              result: checkResults.results.map(r => ({
+                fileId: r.fileId,
+                url: r.remoteUrl,
+                uploaded: r.uploaded,
+              })),
+            },
+          } as any)
+          .mockResolvedValueOnce({
+            data: {
+              result: [
+                {
+                  fileId: `${MOCK_CREATED_AT}/drawing.svg`,
+                  url: 'https://example.com/drawing.svg',
+                  uploaded: true,
+                },
+                {
+                  fileId: `${MOCK_CREATED_AT}/audio.m4a`,
+                  url: 'https://example.com/audio.m4a',
+                  uploaded: true,
+                },
+                {
+                  fileId: `${MOCK_CREATED_AT}/video.mp4`,
+                  url: 'https://example.com/video.mp4',
+                  uploaded: true,
+                },
+                {
+                  fileId: `${MOCK_CREATED_AT}/photo.jpg`,
+                  url: 'https://example.com/photo.jpg',
+                  uploaded: true,
+                },
+              ],
+            },
+          } as any);
+
+        jest
+          .spyOn(fileService, 'getFieldsForFileUpload')
+          .mockImplementation((req: any) => {
+            const urlMap: { [key: string]: string } = {
+              [`${MOCK_CREATED_AT}/drawing.svg`]:
+                'https://example.com/drawing.svg',
+              [`${MOCK_CREATED_AT}/audio.m4a`]: 'https://example.com/audio.m4a',
+              [`${MOCK_CREATED_AT}/video.mp4`]: 'https://example.com/video.mp4',
+              [`${MOCK_CREATED_AT}/photo.jpg`]: 'https://example.com/photo.jpg',
+            };
+            return Promise.resolve({
+              data: {
+                result: {
+                  fields: {},
+                  uploadUrl: 'https://upload-url',
+                  url: urlMap[req.fileId],
+                },
+              },
+            });
+          });
+
+        jest
+          .spyOn(fileService, 'uploadAppletFileToS3')
+          .mockResolvedValue(undefined);
+
+        svgManagerMock.writeFile.mockResolvedValue(undefined);
+
+        const body = {
+          appletId: 'mock-applet-id',
+          version: '1.0.0',
+          activityId: 'activity-1',
+          flowId: null,
+          submitId: 'submit-1',
+          isFlowCompleted: false,
+          startTime: 1234567890,
+          endTime: 1234567900,
+          answers,
+          itemIds: ['item-1', 'item-2', 'item-3', 'item-4'],
+          userActions: [],
+          scheduledTime: null,
+          eventId: 'event-1',
+          tzOffset: -240,
+          createdAt: MOCK_CREATED_AT,
+          client: {
+            appId: 'app-1',
+            appVersion: '1.0.0',
+            width: 100,
+            height: 200,
+          },
+          targetSubjectId: null,
+          itemTypes: ['DrawingTest', 'Audio', 'Video', 'Photo'],
+          alerts: [],
+          activityName: 'Test Activity',
+          appletEncryption: {
+            accountId: 'account-123',
+            prime: '123',
+            base: '456',
+            publicKey: '789',
+          },
+        } as SendAnswersInput;
+
+        const result = await answersUploadService.uploadAllMediaFiles(body);
+
+        // Verify SVG was regenerated
+        expect(svgManagerMock.writeFile).toHaveBeenCalledWith(
+          'file:///path/to/drawing.svg',
+          '<svg>test</svg>',
+        );
+
+        // Verify all files were uploaded
+        expect(fileService.uploadAppletFileToS3).toHaveBeenCalledTimes(4);
+        expect(result.answers).toHaveLength(4);
+        expect(fileService.checkIfFilesExist).toHaveBeenCalled();
+      });
+    });
+
+    describe('Error Recovery', () => {
+      it('should handle partial upload failure gracefully', async () => {
+        (FileSystem.exists as jest.Mock)
+          .mockResolvedValueOnce(true) // audio exists
+          .mockResolvedValueOnce(false); // video missing
+
+        const answers = [
+          {
+            value: {
+              uri: 'file:///path/to/audio.m4a',
+              type: 'audio/m4a',
+              fileName: 'audio.m4a',
+            },
+          },
+          {
+            value: {
+              uri: 'file:///path/to/video.mp4',
+              type: 'video/mp4',
+              fileName: 'video.mp4',
+            },
+          },
+        ] as AnswerDto[];
+
+        const checkResults = {
+          fileIds: [
+            `${MOCK_CREATED_AT}/audio.m4a`,
+            `${MOCK_CREATED_AT}/video.mp4`,
+          ],
+          results: [
+            {
+              fileId: `${MOCK_CREATED_AT}/audio.m4a`,
+              uploaded: false,
+              remoteUrl: null,
+            },
+            {
+              fileId: `${MOCK_CREATED_AT}/video.mp4`,
+              uploaded: false,
+              remoteUrl: null,
+            },
+          ],
+        };
+
+        const fileService = (
+          answersUploadService as unknown as { fileService: any }
+        ).fileService;
+
+        jest.spyOn(fileService, 'checkIfFilesExist').mockResolvedValue({
+          data: {
+            result: checkResults.results.map(r => ({
+              fileId: r.fileId,
+              url: r.remoteUrl,
+              uploaded: r.uploaded,
+            })),
+          },
+        } as any);
+
+        jest
+          .spyOn(fileService, 'getFieldsForFileUpload')
+          .mockResolvedValueOnce({
+            data: {
+              result: {
+                fields: {},
+                uploadUrl: 'https://upload-url',
+                url: 'https://example.com/audio.m4a',
+              },
+            },
+          });
+
+        jest
+          .spyOn(fileService, 'uploadAppletFileToS3')
+          .mockResolvedValueOnce(undefined);
+
+        const body = {
+          appletId: 'mock-applet-id',
+          version: '1.0.0',
+          activityId: 'activity-1',
+          flowId: null,
+          submitId: 'submit-1',
+          isFlowCompleted: false,
+          startTime: 1234567890,
+          endTime: 1234567900,
+          answers,
+          itemIds: ['item-1', 'item-2'],
+          userActions: [],
+          scheduledTime: null,
+          eventId: 'event-1',
+          tzOffset: -240,
+          createdAt: MOCK_CREATED_AT,
+          client: {
+            appId: 'app-1',
+            appVersion: '1.0.0',
+            width: 100,
+            height: 200,
+          },
+          targetSubjectId: null,
+          itemTypes: ['Audio', 'Video'],
+          alerts: [],
+          activityName: 'Test Activity',
+          appletEncryption: {
+            accountId: 'account-123',
+            prime: '123',
+            base: '456',
+            publicKey: '789',
+          },
+        } as SendAnswersInput;
+
+        // Should throw error for missing video file
+        await expect(
+          answersUploadService.uploadAllMediaFiles(body),
+        ).rejects.toThrow(
+          '[UploadAnswersService.processFileUpload]: Local file (video/mp4, from answer #1) does not exist',
+        );
+
+        // Verify audio upload was attempted
+        expect(fileService.uploadAppletFileToS3).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });
