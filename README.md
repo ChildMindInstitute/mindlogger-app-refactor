@@ -178,3 +178,6 @@ For concerns related to Unity integration, see [unity/README.md](unity/README.md
 Common Public Attribution License Version 1.0 (CPAL-1.0)
 
 Refer to [LICENSE.md](./LICENSE.md)
+
+# Browser Testing
+This project is tested with [BrowserStack](https://www.browserstack.com/).
