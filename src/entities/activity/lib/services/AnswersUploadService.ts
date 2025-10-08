@@ -99,6 +99,7 @@ export class AnswersUploadService implements IAnswersUploadService {
       activityId: checkInput.activityId,
       appletId: checkInput.appletId,
       submitId: checkInput.submitId,
+      createdAt: this.createdAt ?? undefined,
     });
 
     return response.data.result.exists;
