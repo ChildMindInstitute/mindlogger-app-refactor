@@ -131,6 +131,7 @@ export const RootNavigator = () => {
         },
         queryClient,
         entityProgressions,
+        isFromNotification: true, // M2-8698: Validate assignments for notification taps
       });
 
       if (!isSuccess) {
