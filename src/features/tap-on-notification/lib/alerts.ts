@@ -58,30 +58,12 @@ export function onScheduledToday(
 
   Alert.alert(
     '',
-    `${i18n.t('firebase_messaging:not_able_to_start')}, '${name}' ${i18n.t(
+    `${i18n.t('firebase_messaging:not_able_to_start')}, ‘${name}’ ${i18n.t(
       'firebase_messaging:is',
     )} ` +
       `${i18n.t('firebase_messaging:scheduled_to_start_at')} ${from} ${i18n.t(
         'firebase_messaging:today',
       )}`,
-    [
-      {
-        onPress: onOk,
-        text: i18n.t('system:ok'),
-      },
-    ],
-  );
-}
-
-export function onNotAssigned(entityName: string, onOk: () => void) {
-  Alert.alert(
-    i18n.t('firebase_messaging:not_assigned_title', {
-      defaultValue: 'Access Denied',
-    }),
-    i18n.t('firebase_messaging:not_assigned_message', {
-      entityName,
-      defaultValue: `You are not assigned to '${entityName}'`,
-    }),
     [
       {
         onPress: onOk,

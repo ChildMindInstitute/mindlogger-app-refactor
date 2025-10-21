@@ -6,12 +6,10 @@ import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { mapEventFromDto } from '@app/entities/event/model/mappers';
 import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
-import { selectUserId } from '@app/entities/identity/model/selectors';
 import {
   onActivityNotAvailable,
   onAppWasKilledOnReduxPersist,
   onCompletedToday,
-  onNotAssigned,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib/alerts';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
@@ -109,61 +107,6 @@ const checkEntityAvailabilityInternal = ({
   }
 
   const queryUtils = new QueryDataUtils(queryClient);
-
-  // Check assignment before other validations
-  const appletDetails = queryUtils.getAppletDto(appletId);
-  const entity =
-    entityType === 'flow'
-      ? appletDetails?.activityFlows.find(f => f.id === entityId)
-      : appletDetails?.activities.find(a => a.id === entityId);
-
-  if (!entity) {
-    logger.log(
-      '[checkEntityAvailability] Check done: false (entity not found)',
-    );
-    callback(false);
-    return;
-  }
-
-  // Auto-assigned activities are available to everyone
-  if (!entity.autoAssign) {
-    // Manual assignment - need to check if user has assignment
-    const currentUserId = selectUserId(reduxStore.getState());
-    const assignments = queryUtils.getAssignmentsDto(appletId);
-
-    logger.log(
-      `[checkEntityAvailability] Checking assignments for user="${currentUserId}", entityId="${entityId}", entityType="${entityType}"`,
-    );
-
-    const hasAssignment = assignments?.some(assignment => {
-      const matchesEntity =
-        entityType === 'flow'
-          ? assignment.activityFlowId === entityId
-          : assignment.activityId === entityId;
-
-      if (!matchesEntity) return false;
-
-      const isRespondent =
-        assignment.respondentSubject.userId === currentUserId;
-
-      // For self-reports (no targetSubjectId), respondent must equal target
-      if (!targetSubjectId) {
-        return (
-          isRespondent &&
-          assignment.respondentSubject.id === assignment.targetSubject.id
-        );
-      }
-
-      // For assessments of others, check target matches
-      return isRespondent && assignment.targetSubject.id === targetSubjectId;
-    });
-
-    if (!hasAssignment) {
-      logger.log('[checkEntityAvailability] Check done: false (not assigned)');
-      onNotAssigned(entityName, () => callback(false));
-      return;
-    }
-  }
 
   const event = mapEventFromDto(queryUtils.getEventDto(appletId, eventId));
 
