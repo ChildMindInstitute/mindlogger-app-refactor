@@ -1,12 +1,9 @@
 name: Build and Deploy to UAT
 
 on:
-  release: 
+  release:
     types:
-      - prereleased
-#  push:
-#    tags:
-#      - "*-rc[0-9]+"
+      - released
   workflow_dispatch:
     inputs:
       target-ref:
@@ -32,7 +29,6 @@ jobs:
     steps:
       - id: ref
         name: Select Ref
-        # github.refname
         run: |
           TARGET_REF="${{ github.event.inputs.target-ref }}"
           # Use shell parameter expansion to provide a default value if input is unset or empty
@@ -51,9 +47,9 @@ jobs:
       - name: Trigger Bitrise Build
         run: |
           curl https://app.bitrise.io/app/${{ secrets.BITRISE_APP_SLUG }}/build/start.json -L \
-            --data '{"build_params":{"workflow_id":"start_uat","tag":"${{ needs.ref.outputs.target-ref }}"},"hook_info":{"build_trigger_token":"${{ secrets.BITRISE_BUILD_TOKEN }}","type":"bitrise"},"triggered_by":"gha"}' \
+            --data '{"build_params":{"workflow_id":"start_prod","tag":"${{ needs.ref.outputs.target-ref }}"},"hook_info":{"build_trigger_token":"${{ secrets.BITRISE_BUILD_TOKEN }}","type":"bitrise"},"triggered_by":"gha"}' \
             -H "Content-Type: application/json"
-          
+      
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -63,7 +59,7 @@ jobs:
       - name: Store version in SSM
         run: |
           aws ssm put-parameter \
-                  --name "/curious/app/mobile/uat/version" \
+                  --name "/curious/app/mobile/prod/version" \
                   --value "${{ needs.ref.outputs.target-ref }}" \
                   --type "String" \
                   --overwrite
