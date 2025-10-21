@@ -1,4 +1,4 @@
-name: Build and Deploy to UAT
+name: Build and Deploy to Prod
 
 on:
   release:
@@ -7,13 +7,13 @@ on:
   workflow_dispatch:
     inputs:
       target-ref:
-        description: The RC tag to use
+        description: The release tag to use
         required: true
         type: string
 
 concurrency:
   cancel-in-progress: true
-  group: admin-build-deploy-uat
+  group: mobile-build-deploy-prod
 
 permissions:
   id-token: write

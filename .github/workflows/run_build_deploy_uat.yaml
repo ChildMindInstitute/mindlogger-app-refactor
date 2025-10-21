@@ -16,7 +16,7 @@ on:
 
 concurrency:
   cancel-in-progress: true
-  group: admin-build-deploy-uat
+  group: mobile-build-deploy-uat
 
 permissions:
   id-token: write
