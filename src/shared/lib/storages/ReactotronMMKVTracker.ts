@@ -1,6 +1,5 @@
 import Config from 'react-native-config';
 import { MMKV } from 'react-native-mmkv';
-import type { ReactotronReactNative } from 'reactotron-react-native';
 import mmkvPlugin from 'reactotron-react-native-mmkv';
 
 /**
@@ -60,7 +59,9 @@ class MMKVStorageTracker {
     const storages = this.getAllStorages();
 
     if (storages.length === 0) {
-      console.warn('[ReactotronMMKVTracker] No storages registered for tracking');
+      console.warn(
+        '[ReactotronMMKVTracker] No storages registered for tracking',
+      );
       return;
     }
 
