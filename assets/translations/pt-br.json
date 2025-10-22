@@ -238,7 +238,7 @@
     "change_app_language": "Alterar idioma",
     "en": "English",
     "fr": "Français",
-    "el": "Grego",
+    "el": "Ελληνικά",
     "es": "Español",
     "pt": "Português"
   },
@@ -330,7 +330,7 @@
     "day": "day",
     "days": "days",
     "am": "AM",
-    "the_following_day": "o dia seguinte"
+    "the_following_day": "do dia seguinte"
   },
   "form_item": {
     "required": "Obrigatório",
@@ -436,7 +436,7 @@
     "submit": "Enviar",
     "submit_flow_answers_ex": "para salvar suas respostas e continuar:",
     "close": "Fechar",
-    "resume_activity": "Retomar a atividade",
+    "resume_activity": "Retomar atividade",
     "activity_resume_restart": "Você gostaria de retomar essa atividade em andamento ou reiniciá-la?",
     "restart": "Reiniciar",
     "resume": "Retomar",
