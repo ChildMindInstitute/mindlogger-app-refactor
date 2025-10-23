@@ -142,7 +142,7 @@
     "react-native-system-navigation-bar": "^2.6.4",
     "react-native-tcp-socket": "^6.0.6",
     "react-native-toast-message": "^2.2.0",
-    "react-native-video": "^6.14.1",
+    "react-native-video": "^6.17.0",
     "react-native-video-player": "^0.16.3",
     "react-native-webview": "^13.13.1",
     "react-redux": "^9.0.4",
