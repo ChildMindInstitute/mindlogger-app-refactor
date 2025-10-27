@@ -133,31 +133,37 @@ const checkEntityAvailabilityInternal = ({
         const respondentUserId = respondent.userId;
         const isSelfAssignment = respondent.id === target.id;
 
+        // Check if this assignment is for the current user
         if (respondentUserId && currentUserId) {
+          // If both IDs exist, they must match
           if (respondentUserId !== currentUserId) {
             return false;
           }
         } else if (respondentUserId && !currentUserId) {
-          logger.warn(
-            '[checkEntityAvailability] Missing current user id while validating assignment; falling back to target matching',
+          // Assignment has userId but current user doesn't - skip this assignment
+          logger.log(
+            '[checkEntityAvailability] Assignment has userId but current user is not logged in; skipping',
           );
+          return false;
         }
+        // If respondentUserId is null/undefined, we'll check based on target matching below
 
-        // For self-reports (no targetSubjectId), accept any self-assignment
+        // For self-reports (no targetSubjectId), check if it's a self-assignment
         if (!targetSubjectId) {
           return isSelfAssignment;
         }
 
-        // For assessments of others, require target subject match.
+        // For assessments of others, check if target matches
         if (target.id !== targetSubjectId) {
           return false;
         }
 
-        // If we reach here, we matched entity + target; when userId is absent we allow it,
-        // mirroring activity list behaviour (M2-9876).
+        // If we reach here, we matched entity + target
+        // When respondent.userId is absent, we allow the assignment based on target match
+        // This mirrors the activity list behavior from ActivityGroupsBuildManager (M2-9876)
         if (!respondentUserId) {
           logger.log(
-            '[checkEntityAvailability] Assignment matched without respondent userId; allowing based on target match',
+            '[checkEntityAvailability] Assignment matched without respondent userId; allowing based on entity+target match',
           );
         }
 
