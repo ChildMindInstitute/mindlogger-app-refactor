@@ -1,0 +1,51 @@
+name: Notifications and JIRA
+
+on:
+  workflow_call:
+    inputs:
+      git-tag:
+        required: true
+        description: Version Tag
+        type: string
+      env-name:
+        required: true
+        description: Environment name
+        type: string
+    secrets:
+      devops-repo-key:
+        required: true
+      jira-api-token:
+        required: true
+      github-pat:
+        required: true
+      slack-webhook:
+        required: true
+
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout devops
+        uses: actions/checkout@v5
+        with:
+          repository: ChildMindInstitute/cmiml-devops
+          ssh-key: ${{ secrets.devops-repo-key }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Send notifications
+        env:
+          APP_NAME: mobile
+          GITHUB_REPO: ${{ github.repository }}
+          JIRA_USERNAME: andrew.weiland@childmind.org
+          JIRA_API_TOKEN: ${{ secrets.jira-api-token }}
+          GITHUB_TOKEN: ${{ secrets.github-pat }}
+          SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
+          MENTION_USERS: U07AP86C133,U022MMR13KQ,U06HTJBUXC4
+        run: |
+          sudo apt install -y expect
+          unbuffer uv run slack-issues.py from-release-notes ${{ inputs.git-tag }} ${{ inputs.env-name }}
+        working-directory: ./jira
+

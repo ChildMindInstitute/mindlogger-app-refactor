@@ -24,6 +24,7 @@ import {
   isProgressionCompletedToday,
   isProgressionReadyForAutocompletion,
 } from '@app/shared/lib/utils/survey/survey';
+import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 import { AvailableGroupEvaluator } from '@app/widgets/activity-group/model/factories/AvailableGroupEvaluator';
 import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
 import { ScheduledGroupEvaluator } from '@app/widgets/activity-group/model/factories/ScheduledGroupEvaluator';
@@ -104,28 +105,63 @@ const checkEntityAvailabilityInternal = ({
       );
 
       // Match ActivityGroupsBuildManager logic - check if assignment exists for entity+target
-      const hasAssignment = assignments?.some(assignment => {
+      const normalizedAssignments = assignments
+        ? mapAssignmentsFromDto(assignments)
+        : [];
+
+      const hasAssignment = normalizedAssignments.some(assignment => {
         const matchesEntity =
           entityType === 'flow'
-            ? assignment.activityFlowId === entityId
-            : assignment.activityId === entityId;
+            ? assignment.__type === 'activityFlow' &&
+              assignment.activityFlowId === entityId
+            : assignment.__type === 'activity' &&
+              assignment.activityId === entityId;
 
-        if (!matchesEntity) return false;
-
-        // Verify current user is the respondent (not just any assignment exists)
-        if (assignment.respondentSubject.userId !== currentUserId) {
+        if (!matchesEntity) {
           return false;
         }
 
-        // For self-reports (no targetSubjectId), check it's a self-assignment
-        if (!targetSubjectId) {
-          return (
-            assignment.respondentSubject.id === assignment.targetSubject.id
+        const { respondent, target } = assignment;
+
+        if (!respondent || !target) {
+          logger.warn(
+            '[checkEntityAvailability] Assignment is missing respondent or target data; skipping entry',
+          );
+          return false;
+        }
+
+        const respondentUserId = respondent.userId;
+        const isSelfAssignment = respondent.id === target.id;
+
+        if (respondentUserId && currentUserId) {
+          if (respondentUserId !== currentUserId) {
+            return false;
+          }
+        } else if (respondentUserId && !currentUserId) {
+          logger.warn(
+            '[checkEntityAvailability] Missing current user id while validating assignment; falling back to target matching',
           );
         }
 
-        // For assessments of others, check target matches
-        return assignment.targetSubject.id === targetSubjectId;
+        // For self-reports (no targetSubjectId), accept any self-assignment
+        if (!targetSubjectId) {
+          return isSelfAssignment;
+        }
+
+        // For assessments of others, require target subject match.
+        if (target.id !== targetSubjectId) {
+          return false;
+        }
+
+        // If we reach here, we matched entity + target; when userId is absent we allow it,
+        // mirroring activity list behaviour (M2-9876).
+        if (!respondentUserId) {
+          logger.log(
+            '[checkEntityAvailability] Assignment matched without respondent userId; allowing based on target match',
+          );
+        }
+
+        return true;
       });
 
       if (!hasAssignment) {
