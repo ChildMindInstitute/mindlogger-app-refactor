@@ -63,6 +63,7 @@ export const useAutoCompletion = (): Result => {
       dispatch,
       ReduxPersistor,
       entityProgressions,
+      getDefaultAnswersQueueService(),
     );
   }, [dispatch, queryClient, entityProgressions]);
 
