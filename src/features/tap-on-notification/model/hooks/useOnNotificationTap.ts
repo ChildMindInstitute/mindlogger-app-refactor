@@ -128,6 +128,9 @@ export function useOnNotificationTap({
       );
     },
     'schedule-event-alert': eventDetail => {
+      console.log('[DEBUG] ============ NOTIFICATION TAP HANDLER ============');
+      console.log('[DEBUG] Event detail:', JSON.stringify(eventDetail, null, 2));
+
       const {
         appletId,
         activityId,
@@ -137,6 +140,15 @@ export function useOnNotificationTap({
         entityName,
       } = eventDetail.notification.data;
 
+      console.log('[DEBUG] Extracted data:', {
+        appletId,
+        activityId,
+        activityFlowId,
+        eventId,
+        targetSubjectId,
+        entityName,
+      });
+
       const entityId: string = (activityId ?? activityFlowId)!;
 
       const entityType: EntityType = activityFlowId ? 'flow' : 'regular';
@@ -145,23 +157,41 @@ export function useOnNotificationTap({
 
       const isAutocompletionWorking = getCurrentRoute() === 'Autocompletion';
 
+      console.log('[DEBUG] Route checks:', {
+        currentRoute: getCurrentRoute(),
+        executing,
+        isAutocompletionWorking,
+      });
+
       getDefaultAnalyticsService().track(MixEvents.NotificationTap, {
         [MixProperties.AppletId]: appletId,
       });
 
       if (executing) {
+        console.log('[DEBUG] Navigating back from in-progress activity');
         navigator.goBack();
       }
 
       if (isAutocompletionWorking) {
+        console.log('[DEBUG] Autocompletion working, ignoring notification');
         getDefaultLogger().log(
           '[useOnNotificationTap]: Notification tap ignored as autocompletion is working (M2-7315)',
         );
         return;
       }
 
+      console.log('[DEBUG] Scheduling startEntity with delay:', executing ? GoBackDuration : WorkaroundDuration);
       setTimeout(
         () => {
+          console.log('[DEBUG] ============ STARTING ENTITY ============');
+          console.log('[DEBUG] Calling startEntity with:', {
+            appletId,
+            entityId,
+            entityType,
+            eventId,
+            entityName,
+            targetSubjectId,
+          });
           startEntity(
             appletId!,
             entityId,

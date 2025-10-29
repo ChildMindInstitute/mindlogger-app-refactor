@@ -337,7 +337,17 @@ export function useStartEntity({
     targetSubjectId: string | null,
     itemTypes: ResponseType[],
   ): Promise<StartResult> {
+    console.log('[DEBUG] ============ START ACTIVITY ============');
+    console.log('[DEBUG] Params:', {
+      appletId,
+      activityId,
+      eventId,
+      entityName,
+      targetSubjectId,
+    });
+
     if (mutex.isBusy()) {
+      console.log('[DEBUG] BLOCKED: Mutex is busy');
       getDefaultLogger().log('[useStartEntity.startActivity] Mutex is busy');
 
       return { failed: true, failReason: 'mutex-busy' };
@@ -346,18 +356,23 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
-      if (
-        !(await checkAvailability(entityName, {
-          appletId,
-          eventId,
-          entityId: activityId,
-          entityType: 'regular',
-          targetSubjectId,
-        }))
-      ) {
+      console.log('[DEBUG] Calling checkAvailability...');
+      const isAvailable = await checkAvailability(entityName, {
+        appletId,
+        eventId,
+        entityId: activityId,
+        entityType: 'regular',
+        targetSubjectId,
+      });
+
+      console.log('[DEBUG] checkAvailability returned:', isAvailable);
+
+      if (!isAvailable) {
+        console.log('[DEBUG] BLOCKED: checkAvailability returned false');
         return { failed: true, failReason: 'not-available' };
       }
 
+      console.log('[DEBUG] Calling startActivityInternal...');
       const result = await startActivityInternal(
         appletId,
         activityId,
@@ -370,6 +385,7 @@ export function useStartEntity({
 
       result.failed = !!result.failReason;
 
+      console.log('[DEBUG] Final result:', result);
       getDefaultLogger().log(
         `[useStartEntity.startActivity]: Result: ${JSON.stringify(result)}`,
       );
