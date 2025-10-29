@@ -110,6 +110,11 @@ android {
         manifestPlaceholders = [
             max_sdk_version: rootProject.ext.targetSdkVersion
         ]
+        
+        // Explicitly specify ABIs for 16KB page size support
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
     }
     signingConfigs {
         debug {
@@ -156,6 +161,13 @@ android {
         }
         production {
             manifestPlaceholders = [domainName: "web.gettingcurious.com", secondaryDomain: "web.mindlogger.org"]
+        }
+    }
+    
+    // Add packaging options to ensure proper alignment for 16KB page sizes
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
         }
     }
 }

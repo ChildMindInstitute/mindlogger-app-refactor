@@ -211,6 +211,7 @@ export type CheckIfAnswersExistRequest = {
   appletId: string;
   activityId: string;
   submitId: string;
+  createdAt?: number;
 };
 
 export type CheckIfAnswersExistResponse = SuccessfulResponse<{
