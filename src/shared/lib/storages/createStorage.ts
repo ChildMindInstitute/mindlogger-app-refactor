@@ -1,24 +1,35 @@
 import { MMKV } from 'react-native-mmkv';
 
 import { AsyncStorage } from './AsyncStorage';
+import { registerMMKVStorage } from './ReactotronMMKVTracker';
 import { SyncStorage } from './SyncStorage';
 
 export function createSecureStorage(id: string, encryptionKey: string) {
-  return new MMKV({ id, encryptionKey });
+  const storage = new MMKV({ id, encryptionKey });
+  registerMMKVStorage(id, storage);
+  return storage;
 }
 
 export function createStorage(id: string) {
-  return new MMKV({ id });
+  const storage = new MMKV({ id });
+  registerMMKVStorage(id, storage);
+  return storage;
 }
 
 export function createSyncStorage(id: string) {
-  return new SyncStorage(new MMKV({ id }));
+  const mmkv = new MMKV({ id });
+  registerMMKVStorage(id, mmkv);
+  return new SyncStorage(mmkv);
 }
 
 export function createAsyncStorage(id: string) {
-  return new AsyncStorage(new MMKV({ id }));
+  const mmkv = new MMKV({ id });
+  registerMMKVStorage(id, mmkv);
+  return new AsyncStorage(mmkv);
 }
 
 export function createSecureAsyncStorage(id: string, encryptionKey: string) {
-  return new AsyncStorage(new MMKV({ id, encryptionKey }));
+  const mmkv = new MMKV({ id, encryptionKey });
+  registerMMKVStorage(id, mmkv);
+  return new AsyncStorage(mmkv);
 }
