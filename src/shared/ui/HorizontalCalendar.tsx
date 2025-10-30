@@ -1,16 +1,22 @@
 import React, { FC } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Box, BoxProps, XStack, YStack } from './base';
 import { Text } from './Text';
 import { IS_SMALL_WIDTH_SCREEN } from '../lib/constants';
 import { format, getLast7Dates } from '../lib/utils/dateTime';
 
 export const HorizontalCalendar: FC<BoxProps> = styledProps => {
+  const { t } = useTranslation();
   const currentDate = new Date();
   const title = format(currentDate, 'MMMM y');
   const dates = getLast7Dates();
 
   const daySize = IS_SMALL_WIDTH_SCREEN ? 44 : 50;
+
+  // Get weekday abbreviations from translations instead of date-fns locale
+  const weekdays = t('calendar:weekdays').split('_');
 
   return (
     <Box gap={8} pt={16} px={16} {...styledProps}>
@@ -21,7 +27,8 @@ export const HorizontalCalendar: FC<BoxProps> = styledProps => {
       <XStack aria-label="calendar-dates-container" jc="space-around">
         {dates.map(date => {
           const dateOfMonth = date.getDate();
-          const weekDayName = format(date, 'EE').toUpperCase();
+          const dayIndex = date.getDay(); // 0 = Sunday, 6 = Saturday
+          const weekDayName = weekdays[dayIndex].toUpperCase();
 
           const isToday = currentDate.getDate() === dateOfMonth;
           const textColor = isToday ? '$primary' : '$outline';

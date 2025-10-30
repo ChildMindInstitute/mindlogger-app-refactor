@@ -71,7 +71,7 @@
   },
   "calendar": {
     "months": "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre",
-    "weekdays": "Dom._Lun._Mar._Mié._Jue._Vie._Sáb.",
+    "weekdays": "Dom_Lun_Mar_Mié_Jue_Vie_Sáb",
     "x_days": "L_M_M_J_V_S_D"
   },
   "applet_data": {
