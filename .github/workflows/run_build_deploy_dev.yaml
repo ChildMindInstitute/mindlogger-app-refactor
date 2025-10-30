@@ -1,8 +1,9 @@
-name: Build and Deploy to UAT
+name: Build and Deploy to Dev
 
 on:
   push:
-    
+    branches:
+      - dev
 
 concurrency:
   cancel-in-progress: true
