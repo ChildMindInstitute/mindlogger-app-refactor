@@ -76,3 +76,21 @@ jobs:
       jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
       github-pat: ${{ secrets.DEVOPS_GITHUB_TOKEN }}
       slack-webhook: ${{ secrets.SLACK_WEBHOOK_RELEASE_COMMUNICATIONS }}
+      
+  slack-scheduler:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send scheduled Slack message
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CHANNEL_ID: C1234567890  # Replace with your channel ID
+        run: |
+          POST_AT=$(($(date +%s) + 86400))  # 24 hours from now
+          curl -X POST https://slack.com/api/chat.scheduleMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"channel\": \"$CHANNEL_ID\",
+              \"text\": \"This is a scheduled message from GitHub Actions!\",
+              \"post_at\": $POST_AT
+            }"
