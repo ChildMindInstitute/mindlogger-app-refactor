@@ -5,8 +5,8 @@ import { selectUserId } from '@app/entities/identity/model/selectors';
 import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
-import { useDefaultBanners } from './useDefaultBanners';
 import { useAnnouncementBanner } from './useAnnouncementBanner';
+import { useDefaultBanners } from './useDefaultBanners';
 import { dismissedBannersSelector } from '../../model/selectors';
 
 // Mock dependencies
@@ -33,9 +33,8 @@ describe('useDefaultBanners', () => {
   const mockUseAppSelector = useAppSelector as jest.MockedFunction<
     typeof useAppSelector
   >;
-  const mockUseAnnouncementBanner = useAnnouncementBanner as jest.MockedFunction<
-    typeof useAnnouncementBanner
-  >;
+  const mockUseAnnouncementBanner =
+    useAnnouncementBanner as jest.MockedFunction<typeof useAnnouncementBanner>;
 
   beforeEach(() => {
     // Reset all mocks
