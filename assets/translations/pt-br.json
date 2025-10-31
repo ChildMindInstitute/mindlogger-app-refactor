@@ -520,7 +520,7 @@
     "no": "No",
     "noResults": "Não foram encontrados provedores de serviços de saúde que correspondam à sua pesquisa."
   },
-  "rebrandBanner": {
+  "announcementBanner": {
     "content": "<0>Estamos reformulando nossa marca!</0> <1>Atualizações de design estão a caminho: o mesmo excelente aplicativo, com um novo visual. Curioso?</1> <2>Toque para saber mais.</2>"
   }
 }

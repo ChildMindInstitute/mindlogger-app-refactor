@@ -5,7 +5,7 @@ import { BannerOrder } from '@app/entities/banner/model/slice';
 import { ScreenRoute } from '@app/screens/config/types';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 
-import { useRebrandBanner } from './useRebrandBanner';
+import { useAnnouncementBanner } from './useAnnouncementBanner';
 import { defaultBannersActions } from '../../model/slice';
 
 // Mock dependencies
@@ -17,7 +17,7 @@ jest.mock('../../model/slice', () => ({
   },
 }));
 
-describe('useRebrandBanner', () => {
+describe('useAnnouncementBanner', () => {
   // Setup mock values
   const mockBannerKey = 'user-123';
 
@@ -54,7 +54,7 @@ describe('useRebrandBanner', () => {
 
     // Execute
     const { unmount } = renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+      useAnnouncementBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Verify
@@ -86,7 +86,7 @@ describe('useRebrandBanner', () => {
 
     // Execute
     renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+      useAnnouncementBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Verify
@@ -100,7 +100,7 @@ describe('useRebrandBanner', () => {
 
     // Execute
     renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+      useAnnouncementBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Get the onClose callback from the addBanner call
@@ -127,7 +127,7 @@ describe('useRebrandBanner', () => {
 
     // Execute
     renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+      useAnnouncementBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Get the onClose callback from the addBanner call
@@ -149,7 +149,7 @@ describe('useRebrandBanner', () => {
 
     // Execute
     renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+      useAnnouncementBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Verify
@@ -163,7 +163,7 @@ describe('useRebrandBanner', () => {
 
     // Execute
     renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+      useAnnouncementBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Verify
@@ -177,7 +177,7 @@ describe('useRebrandBanner', () => {
 
     // Execute
     renderHook(() =>
-      useRebrandBanner(dismissed, mockBannerKey, currentRouteName),
+      useAnnouncementBanner(dismissed, mockBannerKey, currentRouteName),
     );
 
     // Verify - should still add banner when route is undefined
