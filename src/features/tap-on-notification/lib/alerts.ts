@@ -72,21 +72,3 @@ export function onScheduledToday(
     ],
   );
 }
-
-export function onNotAssigned(entityName: string, onOk: () => void) {
-  Alert.alert(
-    i18n.t('firebase_messaging:not_assigned_title', {
-      defaultValue: 'Access Denied',
-    }),
-    i18n.t('firebase_messaging:not_assigned_message', {
-      entityName,
-      defaultValue: `You are not assigned to '${entityName}'`,
-    }),
-    [
-      {
-        onPress: onOk,
-        text: i18n.t('system:ok'),
-      },
-    ],
-  );
-}

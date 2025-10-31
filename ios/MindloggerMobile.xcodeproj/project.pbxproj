@@ -842,13 +842,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -863,13 +859,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -884,13 +876,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -927,13 +915,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -948,13 +932,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging/Pods-MindloggerMobileCommonPods-MindloggerMobileStaging-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -969,13 +949,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobile/Pods-MindloggerMobileCommonPods-MindloggerMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -990,13 +966,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1033,13 +1005,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileDev/Pods-MindloggerMobileCommonPods-MindloggerMobileDev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1076,13 +1044,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT/Pods-MindloggerMobileCommonPods-MindloggerMobileUAT-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1097,13 +1061,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-MindloggerMobileCommonPods-MindloggerMobileQA/Pods-MindloggerMobileCommonPods-MindloggerMobileQA-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2172,9 +2132,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MindloggerMobileDevRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1645;
-				DEVELOPMENT_TEAM = 8RHKE85KB6;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8RHKE85KB6;
 				INFOPLIST_FILE = "MindloggerMobile dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindlogger Dev";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
@@ -2306,6 +2268,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = lab.childmindinstitute.data.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MindLogger DEV Distribution";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;

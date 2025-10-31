@@ -11,7 +11,6 @@ import {
   onActivityNotAvailable,
   onAppWasKilledOnReduxPersist,
   onCompletedToday,
-  onNotAssigned,
   onScheduledToday,
 } from '@app/features/tap-on-notification/lib/alerts';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
@@ -24,10 +23,10 @@ import {
   isProgressionCompletedToday,
   isProgressionReadyForAutocompletion,
 } from '@app/shared/lib/utils/survey/survey';
-import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 import { AvailableGroupEvaluator } from '@app/widgets/activity-group/model/factories/AvailableGroupEvaluator';
 import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
 import { ScheduledGroupEvaluator } from '@app/widgets/activity-group/model/factories/ScheduledGroupEvaluator';
+import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 import { isCurrentActivityRecordExist } from '@app/widgets/survey/lib/storageHelpers';
 
 type Input = {
@@ -54,17 +53,6 @@ const checkEntityAvailabilityInternal = ({
   isFromNotification = false,
   callback,
 }: InputInternal): void => {
-  console.log('[DEBUG] ============ CHECK ENTITY AVAILABILITY ============');
-  console.log('[DEBUG] Input:', {
-    entityName,
-    appletId,
-    entityId,
-    entityType,
-    eventId,
-    targetSubjectId,
-    isFromNotification,
-  });
-
   // Always fetch the freshest progressions from the store to avoid stale closures
   const freshProgressions: EntityProgression[] =
     selectAppletsEntityProgressions(reduxStore.getState());
@@ -86,26 +74,19 @@ const checkEntityAvailabilityInternal = ({
   );
 
   const queryUtils = new QueryDataUtils(queryClient);
-  console.log('[DEBUG] Created QueryDataUtils');
 
   // ONLY validate assignments for notification taps (M2-8698)
   // Activity list already filters by assignments, so skip validation for list taps
   // IMPORTANT: Check assignments BEFORE allowing in-progress activities to continue
   if (isFromNotification) {
-    console.log('[DEBUG] isFromNotification=true, checking assignments');
     const appletDetails = queryUtils.getAppletDto(appletId);
-    console.log('[DEBUG] appletDetails exists?', !!appletDetails);
 
     const entity =
       entityType === 'flow'
         ? appletDetails?.activityFlows.find(f => f.id === entityId)
         : appletDetails?.activities.find(a => a.id === entityId);
 
-    console.log('[DEBUG] entity found?', !!entity);
-    console.log('[DEBUG] entity:', entity ? { id: entity.id, name: entity.name, autoAssign: entity.autoAssign } : null);
-
     if (!entity) {
-      console.log('[DEBUG] RETURN FALSE: entity not found in appletDetails');
       logger.log(
         '[checkEntityAvailability] Check done: false (entity not found)',
       );
@@ -191,9 +172,9 @@ const checkEntityAvailabilityInternal = ({
 
       if (!hasAssignment) {
         logger.log(
-          '[checkEntityAvailability] Check done: false (not assigned - notification blocked)',
+          '[checkEntityAvailability] Check done: false (not assigned - notification blocked silently)',
         );
-        onNotAssigned(entityName, () => callback(false));
+        callback(false);
         return;
       }
     }
