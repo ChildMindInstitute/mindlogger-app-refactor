@@ -11,7 +11,6 @@ import {
   EntityReferenceValidator,
   createEntityReferenceValidator,
   EntityValidationContext,
-  EntityValidationResult,
 } from './EntityReferenceValidator';
 import {
   Activity,

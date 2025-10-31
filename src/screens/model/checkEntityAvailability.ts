@@ -6,6 +6,7 @@ import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { mapEventFromDto } from '@app/entities/event/model/mappers';
 import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
+import { selectUserId } from '@app/entities/identity/model/selectors';
 import {
   onActivityNotAvailable,
   onAppWasKilledOnReduxPersist,
@@ -25,6 +26,7 @@ import {
 import { AvailableGroupEvaluator } from '@app/widgets/activity-group/model/factories/AvailableGroupEvaluator';
 import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
 import { ScheduledGroupEvaluator } from '@app/widgets/activity-group/model/factories/ScheduledGroupEvaluator';
+import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 import { isCurrentActivityRecordExist } from '@app/widgets/survey/lib/storageHelpers';
 
 type Input = {
@@ -32,6 +34,7 @@ type Input = {
   identifiers: EntityPath;
   entityProgressions: EntityProgression[];
   queryClient: QueryClient;
+  isFromNotification?: boolean; // Only validate assignments for notification taps
 };
 
 type InputInternal = Input & {
@@ -47,6 +50,7 @@ const checkEntityAvailabilityInternal = ({
   identifiers: { appletId, entityId, entityType, eventId, targetSubjectId },
   entityProgressions,
   queryClient,
+  isFromNotification = false,
   callback,
 }: InputInternal): void => {
   // Always fetch the freshest progressions from the store to avoid stale closures
@@ -69,6 +73,114 @@ const checkEntityAvailabilityInternal = ({
     `[checkEntityAvailability] record = ${JSON.stringify(progression, null, 2)}`,
   );
 
+  const queryUtils = new QueryDataUtils(queryClient);
+
+  // ONLY validate assignments for notification taps (M2-8698)
+  // Activity list already filters by assignments, so skip validation for list taps
+  // IMPORTANT: Check assignments BEFORE allowing in-progress activities to continue
+  if (isFromNotification) {
+    const appletDetails = queryUtils.getAppletDto(appletId);
+
+    const entity =
+      entityType === 'flow'
+        ? appletDetails?.activityFlows.find(f => f.id === entityId)
+        : appletDetails?.activities.find(a => a.id === entityId);
+
+    if (!entity) {
+      logger.log(
+        '[checkEntityAvailability] Check done: false (entity not found)',
+      );
+      callback(false);
+      return;
+    }
+
+    // Auto-assigned activities are available to everyone
+    if (!entity.autoAssign) {
+      // Manual assignment - check if assignment exists (matching activity list logic)
+      const assignments = queryUtils.getAssignmentsDto(appletId);
+      const currentUserId = selectUserId(reduxStore.getState());
+
+      logger.log(
+        `[checkEntityAvailability] Notification tap: validating assignment for entityId="${entityId}", entityType="${entityType}", targetSubjectId="${targetSubjectId || 'NULL'}", currentUserId="${currentUserId || 'NULL'}"`,
+      );
+
+      // Match ActivityGroupsBuildManager logic - check if assignment exists for entity+target
+      const normalizedAssignments = assignments
+        ? mapAssignmentsFromDto(assignments)
+        : [];
+
+      const hasAssignment = normalizedAssignments.some(assignment => {
+        const matchesEntity =
+          entityType === 'flow'
+            ? assignment.__type === 'activityFlow' &&
+              assignment.activityFlowId === entityId
+            : assignment.__type === 'activity' &&
+              assignment.activityId === entityId;
+
+        if (!matchesEntity) {
+          return false;
+        }
+
+        const { respondent, target } = assignment;
+
+        if (!respondent || !target) {
+          logger.warn(
+            '[checkEntityAvailability] Assignment is missing respondent or target data; skipping entry',
+          );
+          return false;
+        }
+
+        const respondentUserId = respondent.userId;
+        const isSelfAssignment = respondent.id === target.id;
+
+        // Check if this assignment is for the current user
+        if (respondentUserId && currentUserId) {
+          // If both IDs exist, they must match
+          if (respondentUserId !== currentUserId) {
+            return false;
+          }
+        } else if (respondentUserId && !currentUserId) {
+          // Assignment has userId but current user doesn't - skip this assignment
+          logger.log(
+            '[checkEntityAvailability] Assignment has userId but current user is not logged in; skipping',
+          );
+          return false;
+        }
+        // If respondentUserId is null/undefined, we'll check based on target matching below
+
+        // For self-reports (no targetSubjectId), check if it's a self-assignment
+        if (!targetSubjectId) {
+          return isSelfAssignment;
+        }
+
+        // For assessments of others, check if target matches
+        if (target.id !== targetSubjectId) {
+          return false;
+        }
+
+        // If we reach here, we matched entity + target
+        // When respondent.userId is absent, we allow the assignment based on target match
+        // This mirrors the activity list behavior from ActivityGroupsBuildManager (M2-9876)
+        if (!respondentUserId) {
+          logger.log(
+            '[checkEntityAvailability] Assignment matched without respondent userId; allowing based on entity+target match',
+          );
+        }
+
+        return true;
+      });
+
+      if (!hasAssignment) {
+        logger.log(
+          '[checkEntityAvailability] Check done: false (not assigned - notification blocked silently)',
+        );
+        callback(false);
+        return;
+      }
+    }
+  }
+
+  // Check in-progress status AFTER assignment validation for notification taps
   const isInProgress = isEntityProgressionInProgress(progression);
 
   if (
@@ -105,8 +217,6 @@ const checkEntityAvailabilityInternal = ({
     callback(true);
     return;
   }
-
-  const queryUtils = new QueryDataUtils(queryClient);
 
   const event = mapEventFromDto(queryUtils.getEventDto(appletId, eventId));
 
@@ -180,6 +290,7 @@ export const checkEntityAvailability = ({
   identifiers,
   entityProgressions,
   queryClient,
+  isFromNotification = false,
 }: Input): Promise<boolean> => {
   return new Promise(resolve => {
     const onCheckDone = (result: boolean) => {
@@ -191,6 +302,7 @@ export const checkEntityAvailability = ({
       identifiers,
       entityProgressions,
       queryClient,
+      isFromNotification,
       callback: onCheckDone,
     });
   });
