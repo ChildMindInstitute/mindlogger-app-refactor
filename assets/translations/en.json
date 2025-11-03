@@ -352,6 +352,8 @@
     "applet_not_found_1": "Applet was not found",
     "applet_not_found_2": "There is no applet for given id.",
     "activity_not_found": "Activity \"{{entityName}}\" is not available now.",
+    "activity_not_available_title": "Activity Unavailable",
+    "activity_not_available_message": "The activity you tried to access is currently unavailable. You may try again later during the next scheduled time window.",
     "already_completed": "You have already completed",
     "app_killed_on_redux_persist": "This activity cannot be started. Please, contact support.",
     "activity_was_due_at": "This activity was due at",

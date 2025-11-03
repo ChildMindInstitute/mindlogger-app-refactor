@@ -2,6 +2,7 @@ import { Alert } from 'react-native';
 
 import { format } from 'date-fns';
 import i18n from 'i18next';
+import ToastMessage from 'react-native-toast-message';
 
 export function onAppletNotFound() {
   Alert.alert(
@@ -71,4 +72,15 @@ export function onScheduledToday(
       },
     ],
   );
+}
+
+export function showNotAssignedToast(entityName: string) {
+  ToastMessage.show({
+    type: 'toast',
+    text1: i18n.t('firebase_messaging:activity_not_available_message', {
+      defaultValue:
+        'The activity you tried to access is currently unavailable. You may try again later during the next scheduled time window.',
+    }),
+    position: 'bottom',
+  });
 }

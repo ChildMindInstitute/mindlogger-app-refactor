@@ -12,6 +12,7 @@ import {
   onAppWasKilledOnReduxPersist,
   onCompletedToday,
   onScheduledToday,
+  showNotAssignedToast,
 } from '@app/features/tap-on-notification/lib/alerts';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -172,8 +173,9 @@ const checkEntityAvailabilityInternal = ({
 
       if (!hasAssignment) {
         logger.log(
-          '[checkEntityAvailability] Check done: false (not assigned - notification blocked silently)',
+          '[checkEntityAvailability] Check done: false (not assigned)',
         );
+        showNotAssignedToast(entityName);
         callback(false);
         return;
       }
