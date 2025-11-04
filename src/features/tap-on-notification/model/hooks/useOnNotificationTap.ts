@@ -23,6 +23,7 @@ import {
   selectAppletsEntityProgressions,
   selectEntityResponseTimes,
 } from '@app/entities/applet/model/selectors';
+import { checkEntityAvailability } from '@app/screens/model/checkEntityAvailability';
 import { getTimeToComplete } from '@app/entities/event/model/timers';
 import { useBackgroundEvents } from '@app/entities/notification/lib/hooks/useBackgroundEvents';
 import { useForegroundEvents } from '@app/entities/notification/lib/hooks/useForegroundEvents';
@@ -56,7 +57,6 @@ import {
 import { NotificationPostponer } from '../services/NotificationPostponer';
 
 type Input = {
-  checkAvailability: CheckAvailability;
   hasMediaReferences: (input: LookupEntityInput) => boolean;
   hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
@@ -79,7 +79,6 @@ Sometimes I've observed the Alert right after 10-20 seconds, probably because of
 const WorkaroundDuration = 100;
 
 export function useOnNotificationTap({
-  checkAvailability,
   hasMediaReferences,
   cleanUpMediaFiles,
   hasActivityWithHiddenAllItems,
@@ -99,6 +98,29 @@ export function useOnNotificationTap({
   const responseTimes = useAppSelector(selectEntityResponseTimes);
 
   const { mutateAsync: refresh } = useRefreshMutation();
+
+  // Create checkAvailability wrapper with isFromNotification: true for M2-8698
+  // This validates assignments for manually assigned activities
+  const checkAvailability: CheckAvailability = async (
+    entityName: string,
+    identifiers: EntityPath,
+  ) => {
+    const isSuccess = await checkEntityAvailability({
+      entityName,
+      identifiers,
+      queryClient,
+      entityProgressions: progressions,
+      isFromNotification: true, // M2-8698: Validate assignments for notification taps
+    });
+
+    if (!isSuccess) {
+      Emitter.emit<AutocompletionEventOptions>('autocomplete', {
+        checksToExclude: ['start-entity'],
+        logTrigger: 'check-availability',
+      });
+    }
+    return isSuccess;
+  };
 
   const { startFlow, startActivity } = useStartEntity({
     hasMediaReferences,

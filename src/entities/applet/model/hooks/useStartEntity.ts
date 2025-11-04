@@ -346,15 +346,15 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
-      const isAvailable = await checkAvailability(entityName, {
-        appletId,
-        eventId,
-        entityId: activityId,
-        entityType: 'regular',
-        targetSubjectId,
-      });
-
-      if (!isAvailable) {
+      if (
+        !(await checkAvailability(entityName, {
+          appletId,
+          eventId,
+          entityId: activityId,
+          entityType: 'regular',
+          targetSubjectId,
+        }))
+      ) {
         return { failed: true, failReason: 'not-available' };
       }
 

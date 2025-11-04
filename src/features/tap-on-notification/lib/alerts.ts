@@ -76,11 +76,14 @@ export function onScheduledToday(
 
 export function showNotAssignedToast(entityName: string) {
   ToastMessage.show({
-    type: 'toast',
+    type: 'info',
     text1: i18n.t('firebase_messaging:activity_not_available_message', {
       defaultValue:
         'The activity you tried to access is currently unavailable. You may try again later during the next scheduled time window.',
     }),
-    position: 'bottom',
+    position: 'top',
+    visibilityTime: 4000,
+    autoHide: true,
+    topOffset: 60,
   });
 }

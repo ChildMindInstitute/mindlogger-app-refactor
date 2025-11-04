@@ -116,32 +116,6 @@ export const RootNavigator = () => {
     useAutoCompletion();
 
   useOnNotificationTap({
-    checkAvailability: async (
-      entityName: string,
-      { appletId, eventId, entityId, entityType, targetSubjectId }: EntityPath,
-    ) => {
-      const isSuccess = await checkEntityAvailability({
-        entityName,
-        identifiers: {
-          appletId,
-          eventId,
-          entityId,
-          entityType,
-          targetSubjectId,
-        },
-        queryClient,
-        entityProgressions,
-        isFromNotification: true, // M2-8698: Validate assignments for notification taps
-      });
-
-      if (!isSuccess) {
-        Emitter.emit<AutocompletionEventOptions>('autocomplete', {
-          checksToExclude: ['start-entity'],
-          logTrigger: 'check-availability',
-        });
-      }
-      return isSuccess;
-    },
     hasMediaReferences: getDefaultMediaLookupService().hasMediaReferences,
     cleanUpMediaFiles: getDefaultMediaFilesCleaner().cleanUp,
     hasActivityWithHiddenAllItems:
