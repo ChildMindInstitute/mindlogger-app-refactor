@@ -88,11 +88,6 @@ const checkEntityAvailabilityInternal = ({
     logger.warn(
       '[checkEntityAvailability] Check done: false (app killed during redux persist)',
     );
-
-    // TODO: M2-7407 - Maybe make this part idempotent? If the activity record
-    //                 does exist, maybe we should just restart the activity and
-    //                 recreate the record (instead of just not letting people
-    //                 pass)?
     if (!FORCE_RECREATE_RECORD) {
       onAppWasKilledOnReduxPersist(() => callback(false));
       return;
@@ -108,74 +103,70 @@ const checkEntityAvailabilityInternal = ({
     logger.log('[checkEntityAvailability] Check done: true (in-progress)');
 
     callback(true);
-    return;
+   // return;
   }
 
   const queryUtils = new QueryDataUtils(queryClient);
 
   // ONLY validate assignments for notification taps (M2-8698)
   if (isFromNotification) {
-    try {
-      const appletDto = queryUtils.getAppletDto(appletId);
-      const assignments = queryUtils.getAssignmentsDto(appletId);
+    const appletDto = queryUtils.getAppletDto(appletId);
+    const assignments = queryUtils.getAssignmentsDto(appletId);
 
-      if (appletDto && assignments) {
-        const entity =
-          entityType === 'flow'
-            ? appletDto.activityFlows.find(f => f.id === entityId)
-            : appletDto.activities.find(a => a.id === entityId);
-        logger.log(`[checkEntityAvailability] entiry: ${entity} `);
-        if (entity && !entity.autoAssign) {
-          const currentUserId = selectUserId(reduxStore.getState());
-          const normalizedAssignments = mapAssignmentsFromDto(assignments);
+    if (appletDto && assignments) {
+      const entity =
+        entityType === 'flow'
+          ? appletDto.activityFlows.find(f => f.id === entityId)
+          : appletDto.activities.find(a => a.id === entityId);
+      logger.log(`[checkEntityAvailability] entiry: ${entity} `);
+      if (entity && !entity.autoAssign) {
+        const currentUserId = selectUserId(reduxStore.getState());
+        const normalizedAssignments = mapAssignmentsFromDto(assignments);
 
-          const hasAssignment = normalizedAssignments.some(assignment => {
-            const matchesEntity =
-              entityType === 'flow'
-                ? assignment.__type === 'activityFlow' &&
-                  assignment.activityFlowId === entityId
-                : assignment.__type === 'activity' &&
-                  assignment.activityId === entityId;
+        const hasAssignment = normalizedAssignments.some(assignment => {
+          const matchesEntity =
+            entityType === 'flow'
+              ? assignment.__type === 'activityFlow' &&
+                assignment.activityFlowId === entityId
+              : assignment.__type === 'activity' &&
+                assignment.activityId === entityId;
 
-            if (!matchesEntity) return false;
+          if (!matchesEntity) return false;
 
-            const { respondent, target } = assignment;
-            if (!respondent || !target) return false;
+          const { respondent, target } = assignment;
+          if (!respondent || !target) return false;
 
-            // Match user
-            if (
-              respondent.userId &&
-              currentUserId &&
-              respondent.userId !== currentUserId
-            ) {
-              return false;
-            }
-
-            // Match target for assessments
-            if (targetSubjectId && target.id !== targetSubjectId) {
-              return false;
-            }
-
-            // Self-report: check self-assignment
-            if (!targetSubjectId && respondent.id !== target.id) {
-              return false;
-            }
-
-            return true;
-          });
-
-          if (!hasAssignment) {
-            logger.log(
-              '[checkEntityAvailability] Check done: false (not assigned)',
-            );
-            showNotAssignedToast(entityName);
-            callback(false);
-            return;
+          // Match user
+          if (
+            respondent.userId &&
+            currentUserId &&
+            respondent.userId !== currentUserId
+          ) {
+            return false;
           }
+
+          // Match target for assessments
+          if (targetSubjectId && target.id !== targetSubjectId) {
+            return false;
+          }
+
+          // Self-report: check self-assignment
+          if (!targetSubjectId && respondent.id !== target.id) {
+            return false;
+          }
+
+          return true;
+        });
+
+        if (!hasAssignment) {
+          logger.log(
+            '[checkEntityAvailability] Check done: false (not assigned)',
+          );
+          showNotAssignedToast(entityName);
+          callback(false);
+          return;
         }
       }
-    } catch (error) {
-      logger.log(`[checkEntityAvailability] error: ${error}`);
     }
   }
 
