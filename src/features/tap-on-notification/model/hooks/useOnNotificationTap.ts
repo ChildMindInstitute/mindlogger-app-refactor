@@ -23,7 +23,6 @@ import {
   selectAppletsEntityProgressions,
   selectEntityResponseTimes,
 } from '@app/entities/applet/model/selectors';
-import { checkEntityAvailability } from '@app/screens/model/checkEntityAvailability';
 import { getTimeToComplete } from '@app/entities/event/model/timers';
 import { useBackgroundEvents } from '@app/entities/notification/lib/hooks/useBackgroundEvents';
 import { useForegroundEvents } from '@app/entities/notification/lib/hooks/useForegroundEvents';
@@ -34,6 +33,7 @@ import {
   PushNotificationType,
 } from '@app/entities/notification/lib/types/notifications';
 import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { checkEntityAvailability } from '@app/screens/model/checkEntityAvailability';
 import { getDefaultAppletsService } from '@app/shared/api/services/appletsServiceInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';

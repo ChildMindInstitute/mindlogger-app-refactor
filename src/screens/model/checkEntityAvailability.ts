@@ -4,9 +4,9 @@ import { EntityPath } from '@app/abstract/lib/types/entity';
 import { EntityProgression } from '@app/abstract/lib/types/entityProgress';
 import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
-import { selectUserId } from '@app/entities/identity/model/selectors';
 import { mapEventFromDto } from '@app/entities/event/model/mappers';
 import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
+import { selectUserId } from '@app/entities/identity/model/selectors';
 import {
   onActivityNotAvailable,
   onAppWasKilledOnReduxPersist,
