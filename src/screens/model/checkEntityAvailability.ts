@@ -103,83 +103,143 @@ const checkEntityAvailabilityInternal = ({
     logger.log('[checkEntityAvailability] Check done: true (in-progress)');
 
     callback(true);
-   // return;
+    return;
   }
 
   const queryUtils = new QueryDataUtils(queryClient);
 
   // ONLY validate assignments for notification taps (M2-8698)
+  // Use same logic as ActivityGroupsBuildManager for consistency
   if (isFromNotification) {
     const appletDto = queryUtils.getAppletDto(appletId);
     const assignments = queryUtils.getAssignmentsDto(appletId);
 
-    if (appletDto && assignments) {
-      const entity =
-        entityType === 'flow'
-          ? appletDto.activityFlows.find(f => f.id === entityId)
-          : appletDto.activities.find(a => a.id === entityId);
-      logger.log(`[checkEntityAvailability] entiry: ${entity} `);
-      if (entity && !entity.autoAssign) {
-        const currentUserId = selectUserId(reduxStore.getState());
-        const normalizedAssignments = mapAssignmentsFromDto(assignments);
+    if (!appletDto) {
+      logger.warn(
+        '[checkEntityAvailability] Check done: false (applet data not found)',
+      );
+      callback(false);
+      return;
+    }
 
-        const hasAssignment = normalizedAssignments.some(assignment => {
-          const matchesEntity =
-            entityType === 'flow'
-              ? assignment.__type === 'activityFlow' &&
-                assignment.activityFlowId === entityId
-              : assignment.__type === 'activity' &&
-                assignment.activityId === entityId;
+    const entity =
+      entityType === 'flow'
+        ? appletDto.activityFlows.find(f => f.id === entityId)
+        : appletDto.activities.find(a => a.id === entityId);
 
-          if (!matchesEntity) return false;
+    if (!entity) {
+      logger.warn(
+        '[checkEntityAvailability] Check done: false (entity not found in applet)',
+      );
+      callback(false);
+      return;
+    }
 
-          const { respondent, target } = assignment;
-          if (!respondent || !target) return false;
+    logger.log(
+      `[checkEntityAvailability] Validating assignment for entity: ${entityName}, autoAssign: ${entity.autoAssign}`,
+    );
 
-          // Match user
-          if (
-            respondent.userId &&
-            currentUserId &&
-            respondent.userId !== currentUserId
-          ) {
-            return false;
-          }
+    // Auto-assigned activities are always accessible (matches ActivityGroupsBuildManager logic line 198)
+    if (entity.autoAssign) {
+      logger.log(
+        '[checkEntityAvailability] Auto-assigned entity, skipping assignment validation',
+      );
 
-          // Match target for assessments
-          if (targetSubjectId && target.id !== targetSubjectId) {
-            return false;
-          }
+      // For auto-assigned activities, skip full availability checks and allow if not completed
+      // This matches activity list behavior where auto-assigned activities are always shown
+      const isCompleted = isProgressionCompletedToday(progression);
+      logger.log(
+        `[checkEntityAvailability] Auto-assigned activity check: isCompleted=${isCompleted}`,
+      );
 
-          // Self-report: check self-assignment
-          if (!targetSubjectId && respondent.id !== target.id) {
-            return false;
-          }
-
-          return true;
-        });
-
-        if (!hasAssignment) {
-          logger.log(
-            '[checkEntityAvailability] Check done: false (not assigned)',
-          );
-          showNotAssignedToast(entityName);
-          callback(false);
-          return;
-        }
+      if (!isCompleted) {
+        logger.log(
+          '[checkEntityAvailability] Check done: true (auto-assigned and not completed)',
+        );
+        callback(true);
+        return;
       }
+      // If completed, continue to completion check below
+    } else {
+      // Manually assigned - verify user has assignment (matches ActivityGroupsBuildManager logic line 202-223)
+      if (!assignments) {
+        logger.log(
+          '[checkEntityAvailability] Check done: false (no assignments data for manually assigned entity)',
+        );
+        showNotAssignedToast(entityName);
+        callback(false);
+        return;
+      }
+
+      const currentUserId = selectUserId(reduxStore.getState());
+      const normalizedAssignments = mapAssignmentsFromDto(assignments);
+
+      const hasAssignment = normalizedAssignments.some(assignment => {
+        const matchesEntity =
+          entityType === 'flow'
+            ? assignment.__type === 'activityFlow' &&
+              assignment.activityFlowId === entityId
+            : assignment.__type === 'activity' &&
+              assignment.activityId === entityId;
+
+        if (!matchesEntity) return false;
+
+        const { respondent, target } = assignment;
+        if (!respondent || !target) return false;
+
+        // Match user - if both IDs exist, they must match
+        if (
+          respondent.userId &&
+          currentUserId &&
+          respondent.userId !== currentUserId
+        ) {
+          return false;
+        }
+
+        // For self-reports (no targetSubjectId), check if it's a self-assignment
+        if (!targetSubjectId) {
+          return respondent.id === target.id;
+        }
+
+        // For assessments of others, check if target matches
+        return target.id === targetSubjectId;
+      });
+
+      if (!hasAssignment) {
+        logger.log(
+          '[checkEntityAvailability] Check done: false (no assignment found for current user)',
+        );
+        showNotAssignedToast(entityName);
+        callback(false);
+        return;
+      }
+
+      logger.log('[checkEntityAvailability] Assignment validation passed');
     }
   }
 
-  const event = mapEventFromDto(queryUtils.getEventDto(appletId, eventId));
+  const eventDto = queryUtils.getEventDto(appletId, eventId);
 
+  if (!eventDto) {
+    logger.warn(
+      `[checkEntityAvailability] Check done: false (event not found) eventId="${eventId}"`,
+    );
+    onActivityNotAvailable(entityName, () => callback(false));
+    return;
+  }
+
+  const event = mapEventFromDto(eventDto);
   event.scheduledAt = getDefaultScheduledDateCalculator().calculate(event);
 
-  if (!event.scheduledAt) {
-    logger.log(
-      '[checkEntityAvailability] Check done: false (scheduledAt is missed)',
-    );
+  logger.log(
+    `[checkEntityAvailability] Event found: eventId="${eventId}", scheduledAt="${event.scheduledAt}", targetSubjectId="${targetSubjectId || 'NULL'}"`,
+  );
 
-    callback(false);
+  if (!event.scheduledAt) {
+    logger.warn(
+      '[checkEntityAvailability] Check done: false (scheduledAt calculation failed)',
+    );
+    onActivityNotAvailable(entityName, () => callback(false));
     return;
   }
 
@@ -192,6 +252,10 @@ const checkEntityAvailabilityInternal = ({
     appletId,
     freshProgressions,
   ).isEventInGroup(event, targetSubjectId);
+
+  logger.log(
+    `[checkEntityAvailability] Availability checks: isAvailable=${isAvailable}, isScheduled=${isScheduled}`,
+  );
 
   if (isAvailable) {
     logger.log('[checkEntityAvailability] Check done: true (available)');

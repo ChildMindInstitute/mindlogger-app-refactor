@@ -267,17 +267,44 @@ export function useOnNotificationTap({
     entityName: string,
     targetSubjectId: string | null,
   ) => {
+    const queryUtils = new QueryDataUtils(queryClient);
+
+    // Check if notification eventId exists in cache (might be stale/filtered by API)
+    let actualEventId = eventId;
+    let eventDto = queryUtils.getEventDto(appletId, eventId);
+
+    if (!eventDto) {
+      // Notification has stale eventId - find current event for this entity
+      const allEvents = queryUtils.getEventsDto(appletId);
+      const currentEvent = allEvents?.find(e =>
+        entityType === 'flow'
+          ? e.entityId === entityId
+          : e.entityId === entityId,
+      );
+
+      if (currentEvent) {
+        getDefaultLogger().log(
+          `[useOnNotificationTap.startEntity] Notification eventId ${eventId} not found, using current event ${currentEvent.id} for entity ${entityId}`,
+        );
+        actualEventId = currentEvent.id;
+        eventDto = currentEvent;
+      } else {
+        getDefaultLogger().warn(
+          `[useOnNotificationTap.startEntity] No event found for entity ${entityId} in applet ${appletId}`,
+        );
+        return;
+      }
+    }
+
     const progression = getEntityProgression(
       appletId,
       entityId,
-      eventId,
+      actualEventId,
       targetSubjectId,
       progressions,
     );
 
-    const timer: HourMinute | null =
-      new QueryDataUtils(queryClient).getEventDto(appletId, eventId)?.timers
-        .timer ?? null;
+    const timer: HourMinute | null = eventDto?.timers?.timer ?? null;
 
     let isTimerElapsed = false;
 
@@ -308,7 +335,7 @@ export function useOnNotificationTap({
       const result = await startFlow(
         appletId,
         entityId,
-        eventId,
+        actualEventId,
         entityName,
         isTimerElapsed,
         targetSubjectId,
@@ -324,12 +351,12 @@ export function useOnNotificationTap({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId, targetSubjectId);
+        clearStorageRecords.byEventId(actualEventId, targetSubjectId);
       }
 
       navigateSurvey({
         appletId,
-        eventId,
+        eventId: actualEventId,
         entityId,
         entityType,
         targetSubjectId,
@@ -338,7 +365,7 @@ export function useOnNotificationTap({
       const result = await startActivity(
         appletId,
         entityId,
-        eventId,
+        actualEventId,
         entityName,
         isTimerElapsed,
         targetSubjectId,
@@ -354,12 +381,12 @@ export function useOnNotificationTap({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId, targetSubjectId);
+        clearStorageRecords.byEventId(actualEventId, targetSubjectId);
       }
 
       navigateSurvey({
         appletId,
-        eventId,
+        eventId: actualEventId,
         entityId,
         entityType,
         targetSubjectId,
