@@ -82,7 +82,7 @@ export function showNotAssignedToast(entityName: string) {
         'The activity you tried to access is currently unavailable. You may try again later during the next scheduled time window.',
     }),
     position: 'top',
-    visibilityTime: 4000,
+    visibilityTime: 10000,
     autoHide: true,
     topOffset: 60,
   });

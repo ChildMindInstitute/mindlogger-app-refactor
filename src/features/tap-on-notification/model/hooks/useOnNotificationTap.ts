@@ -289,8 +289,25 @@ export function useOnNotificationTap({
         actualEventId = currentEvent.id;
         eventDto = currentEvent;
       } else {
+        // No current event found - check if activity is auto-assigned
+        const appletDto = queryUtils.getAppletDto(appletId);
+        const entity =
+          entityType === 'flow'
+            ? appletDto?.activityFlows.find(f => f.id === entityId)
+            : appletDto?.activities.find(a => a.id === entityId);
+
+        // If auto-assigned, bypass validation and try checkAvailability
+        if (entity?.autoAssign) {
+          getDefaultLogger().log(
+            `[useOnNotificationTap.startEntity] Event not found but activity is auto-assigned, will try checkAvailability`,
+          );
+          // Let checkAvailability handle showing appropriate error
+          return;
+        }
+
+        // Not auto-assigned and no event found - not assigned to user
         getDefaultLogger().warn(
-          `[useOnNotificationTap.startEntity] No event found for entity ${entityId} in applet ${appletId}`,
+          `[useOnNotificationTap.startEntity] No event found for manually assigned entity ${entityId} in applet ${appletId}`,
         );
         return;
       }
