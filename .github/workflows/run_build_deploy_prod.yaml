@@ -79,18 +79,17 @@ jobs:
       
   slack-scheduler:
     runs-on: ubuntu-latest
+    needs: build-deploy
     steps:
+      - uses: actions/checkout@v5
       - name: Send scheduled Slack message
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           CHANNEL_ID: C1234567890 
         run: |
           POST_AT=$(($(date +%s) + 86400))  # 24 hours from now
+          DATA=$(jq --arg channel "$CHANNEL_ID" --arg postat "$POST_AT" '.channel = $channel | .post_at = $postat' .github/config/appstore-slack.json)
           curl -X POST https://slack.com/api/chat.scheduleMessage \
             -H "Authorization: Bearer $SLACK_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"channel\": \"$CHANNEL_ID\",
-              \"text\": \"This is a scheduled message from GitHub Actions!\",
-              \"post_at\": $POST_AT
-            }"
+            -d "$DATA"
