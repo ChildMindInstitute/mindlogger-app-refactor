@@ -14,9 +14,10 @@ jobs:
           CHANNEL_ID: C09GKJQP1BM
         run: |
           POST_AT=$(($(date +%s) + 1))  # 24 hours from now
-          DATA=$(jq --arg channel "CHANNEL_ID" --arg postat "$POST_AT" '.channel = $channel | .postat = $postat' .github/config/appstore-slack.json)
+          DATA=$(jq --arg channel "$CHANNEL_ID" --arg postat "$POST_AT" '.channel = $channel | .post_at = $postat' .github/config/appstore-slack.json)
           echo $DATA
           curl -X POST https://slack.com/api/chat.scheduleMessage \
             -H "Authorization: Bearer $SLACK_TOKEN" \
             -H "Content-Type: application/json" \
             -d "$DATA"
+          
