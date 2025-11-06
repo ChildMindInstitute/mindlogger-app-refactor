@@ -13,7 +13,7 @@ jobs:
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           CHANNEL_ID: C09GKJQP1BM
         run: |
-          POST_AT=$(($(date +%s) + 1))  # 24 hours from now
+          POST_AT=$(($(date +%s) + 10))  # 24 hours from now
           DATA=$(jq --arg channel "$CHANNEL_ID" --arg postat "$POST_AT" '.channel = $channel | .post_at = $postat' .github/config/appstore-slack.json)
           echo $DATA
           curl -X POST https://slack.com/api/chat.scheduleMessage \
