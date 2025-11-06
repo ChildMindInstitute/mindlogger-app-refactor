@@ -17,7 +17,6 @@ jobs:
           DATA=$(jq --arg channel "$CHANNEL_ID" --arg postat "$POST_AT" '.channel = $channel | .post_at = $postat' .github/config/appstore-slack.json)
           echo $DATA
           curl -X POST https://slack.com/api/chat.scheduleMessage \
-            -H 'Content-Type: application/json' \
             -H "Authorization: Bearer $SLACK_TOKEN" \
             -H "Content-Type: application/json" \
             -d "$DATA"
