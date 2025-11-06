@@ -12,9 +12,9 @@ import { Text } from '@app/shared/ui/Text';
 import { curiousIcon } from '@assets/images';
 
 import { defaultBannersActions } from '../../model/slice';
-import { REBRAND_BANNER_EXCLUDED_ROUTES } from '../constants';
+import { ANNOUNCEMENT_BANNER_EXCLUDED_ROUTES } from '../constants';
 
-export const useRebrandBanner = (
+export const useAnnouncementBanner = (
   dismissed: Record<string, string[]>,
   bannerScope: string,
   currentRouteName?: ScreenRoute,
@@ -31,7 +31,7 @@ export const useRebrandBanner = (
     // Only show the banner if not performing an assessment and we have a route name
     if (
       currentRouteName &&
-      REBRAND_BANNER_EXCLUDED_ROUTES.includes(currentRouteName)
+      ANNOUNCEMENT_BANNER_EXCLUDED_ROUTES.includes(currentRouteName)
     ) {
       return;
     }
@@ -40,7 +40,7 @@ export const useRebrandBanner = (
       'BrandUpdateBanner',
       {
         children: (
-          <Trans i18nKey="rebrandBanner:content">
+          <Trans i18nKey="announcementBanner:content">
             <Text color="$on_primary" lineHeight={20} fontWeight="700">
               We are rebranding!
             </Text>
