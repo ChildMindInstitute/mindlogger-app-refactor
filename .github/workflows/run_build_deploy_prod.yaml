@@ -83,7 +83,7 @@ jobs:
       - name: Send scheduled Slack message
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          CHANNEL_ID: C1234567890  # Replace with your channel ID
+          CHANNEL_ID: C1234567890 
         run: |
           POST_AT=$(($(date +%s) + 86400))  # 24 hours from now
           curl -X POST https://slack.com/api/chat.scheduleMessage \
