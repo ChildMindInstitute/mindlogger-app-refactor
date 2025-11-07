@@ -123,9 +123,11 @@ const checkEntityAvailabilityInternal = ({
             return false;
           }
 
-          // Self-report: check self-assignment
-          if (!targetSubjectId && respondent.id !== target.id) {
-            return false;
+          // If no targetSubjectId specified, allow any assignment where user is respondent
+          // This matches ActivityGroupsBuildManager logic which shows all assignments
+          // where the user is respondent, not just self-reports
+          if (!targetSubjectId) {
+            return true;
           }
 
           return true;
