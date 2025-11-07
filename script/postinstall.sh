@@ -8,7 +8,7 @@ echo "[PostInstall] Running yarn patch-package ..."
 yarn patch-package
 
 # if BUILD_UNITY is unset, unlink from build
-if [ -z "${BUILD_UNITY+x}" ]; then
+if [ -z "${BUILD_WITH_UNITY+x}" ]; then
   echo "[PostInstall] Running unity/unlink-react-native-unity.sh ..."
   ./unity/unlink-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity
 #else
