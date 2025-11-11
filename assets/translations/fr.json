@@ -629,7 +629,7 @@
     "no": "Non",
     "noResults": "Aucun prestataire de soins de santé ne correspond à votre recherche."
 	},
-  "rebrandBanner": {
+  "announcementBanner": {
     "content": "<0>Nous changeons de marque!</0> <1>Des mises à jour de design arrivent—même excellente application, nouveau look rafraîchi. Curieux ?</1> <2>Tapez ici pour en savoir plus.</2>"
   }
 }
