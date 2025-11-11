@@ -7,7 +7,7 @@ import el from '@assets/translations/el.json';
 import en from '@assets/translations/en.json';
 import es from '@assets/translations/es.json';
 import fr from '@assets/translations/fr.json';
-import ptBr from '@assets/translations/pt-br.json';
+import ptBr from '@assets/translations/pt.json';
 
 import { getDefaultLocalizationStorage } from './localizationStorageInstance';
 
