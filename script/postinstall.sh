@@ -14,11 +14,12 @@ if [ -z "${BUILD_WITH_UNITY+x}" ]; then
 #else
 #  echo "[PostInstall] Running unity/relink-react-native-unity.sh ..."
 #  ./unity/relink-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity
+else
+  # We can't use patch-package to patch @azesmway/react-native-unity because
+  # the above unlinking script would change the path of the android source
+  # directory in the package, and that would cause patch-package to fail.
+  echo "[PostInstall] Running unity/patch-react-native-unity.sh ..."
+  ./unity/patch-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity \
+    $SCRIPT_DIR/unity/react-native-unity.patch
 fi
 
-# We can't use patch-package to patch @azesmway/react-native-unity because
-# the above unlinking script would change the path of the android source
-# directory in the package, and that would cause patch-package to fail.
-echo "[PostInstall] Running unity/patch-react-native-unity.sh ..."
-./unity/patch-react-native-unity.sh $SCRIPT_DIR/../node_modules/@azesmway/react-native-unity \
-  $SCRIPT_DIR/unity/react-native-unity.patch
