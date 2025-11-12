@@ -161,7 +161,8 @@ const checkEntityAvailabilityInternal = ({
       '[checkEntityAvailability] Check done: false (app killed during redux persist)',
     );
     if (!FORCE_RECREATE_RECORD) {
-      onAppWasKilledOnReduxPersist(() => callback(false));
+      onAppWasKilledOnReduxPersist();
+      callback(false);
       return;
     }
   }
@@ -184,7 +185,8 @@ const checkEntityAvailabilityInternal = ({
     logger.warn(
       `[checkEntityAvailability] Check done: false (event not found) eventId="${eventId}"`,
     );
-    onActivityNotAvailable(entityName, () => callback(false));
+    onActivityNotAvailable(entityName);
+    callback(false);
     return;
   }
 
@@ -199,7 +201,8 @@ const checkEntityAvailabilityInternal = ({
     logger.warn(
       '[checkEntityAvailability] Check done: false (scheduledAt calculation failed)',
     );
-    onActivityNotAvailable(entityName, () => callback(false));
+    onActivityNotAvailable(entityName);
+    callback(false);
     return;
   }
 
@@ -233,7 +236,8 @@ const checkEntityAvailabilityInternal = ({
 
     logger.log('[checkEntityAvailability] Check done: false (scheduled today)');
 
-    onScheduledToday(entityName, from, () => callback(false));
+    onScheduledToday(entityName, from);
+    callback(false);
     return;
   }
 
@@ -252,13 +256,15 @@ const checkEntityAvailabilityInternal = ({
   // Check both ways - if either says completed, block access
   if ((isEntityCompletedToday && !isSpread) || isCompletedUsingGroupUtility) {
     logger.log('[checkEntityAvailability] Check done: false (completed today)');
-    onCompletedToday(entityName, () => callback(false));
+    onCompletedToday(entityName);
+    callback(false);
     return;
   }
 
   logger.log('[checkEntityAvailability] Check done: false (not available)');
 
-  onActivityNotAvailable(entityName, () => callback(false));
+  onActivityNotAvailable(entityName);
+  callback(false);
 };
 
 export const checkEntityAvailability = ({

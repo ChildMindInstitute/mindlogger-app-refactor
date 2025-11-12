@@ -354,6 +354,10 @@
     "activity_not_found": "Activity \"{{entityName}}\" is not available now.",
     "activity_not_available_title": "Activity Unavailable",
     "activity_not_available_message": "The activity you tried to access is currently unavailable. You may try again later during the next scheduled time window.",
+    "activity_not_assigned": "This {{entityName}} is not assigned to you.",
+    "activity_not_available": "This {{entityName}} is no longer available.",
+    "activity_scheduled_today": "The {{entityName}} is scheduled to be available at {{time}}.",
+    "activity_completed_today": "{{entityName}} has already been completed for today.",
     "already_completed": "You have already completed",
     "app_killed_on_redux_persist": "This activity cannot be started. Please, contact support.",
     "activity_was_due_at": "This activity was due at",
@@ -362,10 +366,10 @@
     "today": "today.",
     "today2": "Scheduled today",
     "activity_not_ready": "Activity not ready",
-    "not_able_to_start": "You’re not able to start activity yet",
+    "not_able_to_start": "You're not able to start activity yet",
     "is": "is",
     "scheduled_to_start_at": "scheduled to start at",
-    "postponed_notification": "Once the responses are uploaded, we’ll attempt to open the activity"
+    "postponed_notification": "Once the responses are uploaded, we'll attempt to open the activity"
   },
   "local_notifications": {
     "complete_activity": "Please complete this activity."
