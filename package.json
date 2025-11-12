@@ -23,7 +23,7 @@
     "lint:fix": "yarn lint --fix",
     "type:check": "tsc --noEmit --skipLibCheck",
     "pods": "yarn pods:install",
-    "pods:reinstall": "npm-run-all pods:clean pods:install",
+    "pods:reinstall": "npm-run-all pods:clean pods:install:bundler",
     "pods:clean": "rimraf ios/Pods",
     "pods:install": "npm-run-all unity:prebuild pods:install:bundler",
     "pods:install:bundler": "cd ios && RCT_NEW_ARCH_ENABLED=0 bundle exec pod install",
