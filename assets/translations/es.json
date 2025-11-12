@@ -1,4 +1,4 @@
-﻿{
+{
   "auth": {
     "email": "Correo electrónico",
     "email_address": "Dirección de correo electrónico",
@@ -71,7 +71,7 @@
   },
   "calendar": {
     "months": "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre",
-    "weekdays": "Dom._Lun._Mar._Mié._Jue._Vie._Sáb.",
+    "weekdays": "Dom_Lun_Mar_Mié_Jue_Vie_Sáb",
     "x_days": "L_M_M_J_V_S_D"
   },
   "applet_data": {
@@ -524,7 +524,7 @@
     "no": "No",
     "noResults": "No se encontraron proveedores de atención médica que coincidan con tu búsqueda."
   },
-  "rebrandBanner": {
+  "announcementBanner": {
     "content": "<0>¡Estamos renovando nuestra marca!</0> <1>Pronto habrá actualizaciones de diseño: la misma gran aplicación, con una nueva apariencia. ¿Tienes curiosidad?</1> <2>Toca para saber más.</2>"
   }
 }

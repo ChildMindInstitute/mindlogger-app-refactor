@@ -1,0 +1,33 @@
+{
+  "channel": "CHANNEL_ID",
+  "post_at": 0,
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "🚀 Time to Approve the Release!",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Hey team! Just a friendly reminder to head over to the *App Store* and *Google Play Console* to approve the latest release. Let’s keep those updates flowing! 💪📱"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "⏰ Scheduled reminder • 🛒 App Store & Play Console • ✅ Let's ship it!"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+name: Test Slack message
+on:
+  workflow_dispatch: 
+    
+
+jobs:
+  slack-scheduler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Send scheduled Slack message
+        env:
+          SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CHANNEL_ID: C09GKJQP1BM
+        run: |
+          POST_AT=$(($(date +%s) + 30))  # 24 hours from now
+          DATA=$(jq --arg channel "$CHANNEL_ID" --arg postat "$POST_AT" '.channel = $channel | .post_at = $postat' .github/config/appstore-slack.json)
+          echo $DATA
+          curl -X POST https://slack.com/api/chat.scheduleMessage \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "$DATA"
+          

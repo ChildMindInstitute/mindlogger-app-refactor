@@ -7,7 +7,7 @@ import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
 import { RootStackParamList } from '@app/screens/config/types';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
-import { useRebrandBanner } from './useRebrandBanner';
+import { useAnnouncementBanner } from './useAnnouncementBanner';
 import { dismissedBannersSelector } from '../../model/selectors';
 
 export const useDefaultBanners = () => {
@@ -39,5 +39,5 @@ export const useDefaultBanners = () => {
     dismissedRef.current = dismissed;
   }, [dismissed]);
 
-  useRebrandBanner(dismissedRef.current, bannerScope, currentRouteName);
+  useAnnouncementBanner(dismissedRef.current, bannerScope, currentRouteName);
 };

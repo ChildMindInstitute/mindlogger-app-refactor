@@ -15,7 +15,7 @@ import { getDefaultMediaFilesCleaner } from '@app/entities/activity/lib/services
 import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
 import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
-import { useDefaultBanners } from '@app/entities/defaultBanners/lib/hooks/useDefaultBanners';
+// import { useDefaultBanners } from '@app/entities/defaultBanners/lib/hooks/useDefaultBanners';
 import { useOnNotificationRefresh } from '@app/entities/notification/model/hooks/useOnNotificationRefresh';
 import { topUpNotifications } from '@app/entities/notification/model/operations/topUpNotifications';
 import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
@@ -163,7 +163,7 @@ export const RootNavigator = () => {
 
   useOnNotificationRefresh();
 
-  useDefaultBanners();
+  // useDefaultBanners();
 
   return (
     <Stack.Navigator

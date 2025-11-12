@@ -49,9 +49,9 @@ jobs:
     needs: ref
     steps:
       - name: Trigger Bitrise Build
-        run: |
+        run: |      
           curl https://app.bitrise.io/app/${{ secrets.BITRISE_APP_SLUG }}/build/start.json -L \
-            --data '{"build_params":{"workflow_id":"start_uat","tag":"${{ needs.ref.outputs.target-ref }}"},"hook_info":{"build_trigger_token":"${{ secrets.BITRISE_BUILD_TOKEN }}","type":"bitrise"},"triggered_by":"gha"}' \
+            --data '{"build_params":{"pipeline_id":"start_uat","tag":"${{ needs.ref.outputs.target-ref }}"},"hook_info":{"build_trigger_token":"${{ secrets.BITRISE_BUILD_TOKEN }}","type":"bitrise"},"triggered_by":"gha"}' \
             -H "Content-Type: application/json"
           
       - name: configure aws credentials
