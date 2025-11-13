@@ -10195,10 +10195,10 @@ react-native-tcp-socket@^6.0.6:
     buffer "^5.4.3"
     eventemitter3 "^4.0.7"
 
-react-native-toast-message@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.2.0.tgz#c53a4746b15616858a7d61c4386b92cbe9fbf911"
-  integrity sha512-AFti8VzUk6JvyGAlLm9/BknTNDXrrhqnUk7ak/pM7uCTxDPveAu2ekszU0on6vnUPFnG04H/QfYE2IlETqeaWw==
+react-native-toast-message@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.3.3.tgz#e301508d386a9902ff6b4559ecc6674f8cfdf97a"
+  integrity sha512-4IIUHwUPvKHu4gjD0Vj2aGQzqPATiblL1ey8tOqsxOWRPGGu52iIbL8M/mCz4uyqecvPdIcMY38AfwRuUADfQQ==
 
 react-native-video-player@^0.16.3:
   version "0.16.3"

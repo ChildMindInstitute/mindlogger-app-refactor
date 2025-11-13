@@ -33,6 +33,7 @@ import {
   PushNotificationType,
 } from '@app/entities/notification/lib/types/notifications';
 import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { checkEntityAvailability } from '@app/screens/model/checkEntityAvailability';
 import { getDefaultAppletsService } from '@app/shared/api/services/appletsServiceInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
@@ -56,7 +57,6 @@ import {
 import { NotificationPostponer } from '../services/NotificationPostponer';
 
 type Input = {
-  checkAvailability: CheckAvailability;
   hasMediaReferences: (input: LookupEntityInput) => boolean;
   hasActivityWithHiddenAllItems: (input: LookupEntityInput) => boolean;
   cleanUpMediaFiles: (keyParams: ActivityRecordKeyParams) => void;
@@ -79,7 +79,6 @@ Sometimes I've observed the Alert right after 10-20 seconds, probably because of
 const WorkaroundDuration = 100;
 
 export function useOnNotificationTap({
-  checkAvailability,
   hasMediaReferences,
   cleanUpMediaFiles,
   hasActivityWithHiddenAllItems,
@@ -99,6 +98,29 @@ export function useOnNotificationTap({
   const responseTimes = useAppSelector(selectEntityResponseTimes);
 
   const { mutateAsync: refresh } = useRefreshMutation();
+
+  // Create checkAvailability wrapper with isFromNotification: true for M2-8698
+  // This validates assignments for manually assigned activities
+  const checkAvailability: CheckAvailability = async (
+    entityName: string,
+    identifiers: EntityPath,
+  ) => {
+    const isSuccess = await checkEntityAvailability({
+      entityName,
+      identifiers,
+      queryClient,
+      entityProgressions: progressions,
+      isFromNotification: true, // M2-8698: Validate assignments for notification taps
+    });
+
+    if (!isSuccess) {
+      Emitter.emit<AutocompletionEventOptions>('autocomplete', {
+        checksToExclude: ['start-entity'],
+        logTrigger: 'check-availability',
+      });
+    }
+    return isSuccess;
+  };
 
   const { startFlow, startActivity } = useStartEntity({
     hasMediaReferences,
@@ -245,17 +267,61 @@ export function useOnNotificationTap({
     entityName: string,
     targetSubjectId: string | null,
   ) => {
+    const queryUtils = new QueryDataUtils(queryClient);
+
+    // Check if notification eventId exists in cache (might be stale/filtered by API)
+    let actualEventId = eventId;
+    let eventDto = queryUtils.getEventDto(appletId, eventId);
+
+    if (!eventDto) {
+      // Notification has stale eventId - find current event for this entity
+      const allEvents = queryUtils.getEventsDto(appletId);
+      const currentEvent = allEvents?.find(e =>
+        entityType === 'flow'
+          ? e.entityId === entityId
+          : e.entityId === entityId,
+      );
+
+      if (currentEvent) {
+        getDefaultLogger().log(
+          `[useOnNotificationTap.startEntity] Notification eventId ${eventId} not found, using current event ${currentEvent.id} for entity ${entityId}`,
+        );
+        actualEventId = currentEvent.id;
+        eventDto = currentEvent;
+      } else {
+        // No current event found - check if activity is auto-assigned
+        const appletDto = queryUtils.getAppletDto(appletId);
+        const entity =
+          entityType === 'flow'
+            ? appletDto?.activityFlows.find(f => f.id === entityId)
+            : appletDto?.activities.find(a => a.id === entityId);
+
+        // If auto-assigned, bypass validation and try checkAvailability
+        if (entity?.autoAssign) {
+          getDefaultLogger().log(
+            `[useOnNotificationTap.startEntity] Event not found but activity is auto-assigned, will try checkAvailability`,
+          );
+          // Let checkAvailability handle showing appropriate error
+          return;
+        }
+
+        // Not auto-assigned and no event found - not assigned to user
+        getDefaultLogger().warn(
+          `[useOnNotificationTap.startEntity] No event found for manually assigned entity ${entityId} in applet ${appletId}`,
+        );
+        return;
+      }
+    }
+
     const progression = getEntityProgression(
       appletId,
       entityId,
-      eventId,
+      actualEventId,
       targetSubjectId,
       progressions,
     );
 
-    const timer: HourMinute | null =
-      new QueryDataUtils(queryClient).getEventDto(appletId, eventId)?.timers
-        .timer ?? null;
+    const timer: HourMinute | null = eventDto?.timers?.timer ?? null;
 
     let isTimerElapsed = false;
 
@@ -286,7 +352,7 @@ export function useOnNotificationTap({
       const result = await startFlow(
         appletId,
         entityId,
-        eventId,
+        actualEventId,
         entityName,
         isTimerElapsed,
         targetSubjectId,
@@ -302,12 +368,12 @@ export function useOnNotificationTap({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId, targetSubjectId);
+        clearStorageRecords.byEventId(actualEventId, targetSubjectId);
       }
 
       navigateSurvey({
         appletId,
-        eventId,
+        eventId: actualEventId,
         entityId,
         entityType,
         targetSubjectId,
@@ -316,7 +382,7 @@ export function useOnNotificationTap({
       const result = await startActivity(
         appletId,
         entityId,
-        eventId,
+        actualEventId,
         entityName,
         isTimerElapsed,
         targetSubjectId,
@@ -332,12 +398,12 @@ export function useOnNotificationTap({
       }
 
       if (result.fromScratch) {
-        clearStorageRecords.byEventId(eventId, targetSubjectId);
+        clearStorageRecords.byEventId(actualEventId, targetSubjectId);
       }
 
       navigateSurvey({
         appletId,
-        eventId,
+        eventId: actualEventId,
         entityId,
         entityType,
         targetSubjectId,
