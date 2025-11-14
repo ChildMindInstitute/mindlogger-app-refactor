@@ -55,9 +55,11 @@ export function useActivityStepper(state: ActivityState | undefined) {
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
   const canReset =
     currentPipelineItem?.canBeReset && (hasAnswer || hasAdditionalAnswer);
-  const showTopNavigation = currentPipelineItem?.hasTopNavigation;
-  const showBottomNavigation = !showTopNavigation;
-  const showWatermark = !isSplashStep && !showTopNavigation;
+  const isUnityStep = currentPipelineItem?.type === 'Unity';
+  const showTopNavigation =
+    currentPipelineItem?.hasTopNavigation && !isUnityStep;
+  const showBottomNavigation = !showTopNavigation && !isUnityStep;
+  const showWatermark = !isSplashStep && !showTopNavigation && !isUnityStep;
 
   const isConditionalLogicItem = ConditionalLogicItems.includes(
     currentPipelineItem!?.type,
