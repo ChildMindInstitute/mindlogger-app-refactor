@@ -6,6 +6,7 @@ import {
   configureStore,
   ThunkAction,
 } from '@reduxjs/toolkit';
+import Config from 'react-native-config';
 import { Provider } from 'react-redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -18,6 +19,7 @@ import { identityReducer } from '@app/entities/identity/model/slice';
 import { streamingReducer } from '@app/entities/streaming/model/slice';
 import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
 import { createAsyncStorage } from '@app/shared/lib/storages/createStorage';
+import Reactotron from '@shared/config/reactotron.config';
 
 const storage = createAsyncStorage('redux-storage');
 
@@ -52,6 +54,16 @@ const persistedReducer = persistReducer(
 
 export const reduxStore = configureStore({
   reducer: persistedReducer,
+  enhancers: getDefaultEnhancers => {
+    const enhancers = getDefaultEnhancers();
+
+    // Add Reactotron enhancer in dev environment only
+    if (Config.ENV === 'dev' && Reactotron.createEnhancer) {
+      return enhancers.concat(Reactotron.createEnhancer());
+    }
+
+    return enhancers;
+  },
 });
 
 export const persistor = persistStore(reduxStore);

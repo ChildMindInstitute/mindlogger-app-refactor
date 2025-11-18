@@ -337,6 +337,10 @@
     "applet_not_found_1": "L'applet n'a pas été trouvé",
     "applet_not_found_2": "Il n'y a pas d'applet pour cet identifiant.",
     "activity_not_found": "L'activité \"{{entityName}}\" n'a pas été trouvée', 'Il n'y a pas d'activité pour cet identifiant.",
+    "activity_not_assigned": "This {{entityName}} is not assigned to you.",
+    "activity_not_available": "This {{entityName}} is no longer available.",
+    "activity_scheduled_today": "The {{entityName}} is scheduled to be available at {{time}}.",
+    "activity_completed_today": "{{entityName}} has already been completed for today.",
     "already_completed": "Vous avez déjà terminé",
     "app_killed_on_redux_persist": "Cette activité ne peut pas être démarrée. S'il vous plaît, contactez le support.",
     "activity_was_due_at": "Cette activité était prévue à",
@@ -629,7 +633,7 @@
     "no": "Non",
     "noResults": "Aucun prestataire de soins de santé ne correspond à votre recherche."
 	},
-  "rebrandBanner": {
+  "announcementBanner": {
     "content": "<0>Nous changeons de marque!</0> <1>Des mises à jour de design arrivent—même excellente application, nouveau look rafraîchi. Curieux ?</1> <2>Tapez ici pour en savoir plus.</2>"
   }
 }

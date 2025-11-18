@@ -8,16 +8,14 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import {
-  AutocompletionEventOptions,
   AutocompletionExecuteOptions,
   LogAutocompletionTrigger,
 } from '@app/abstract/lib/types/autocompletion';
-import { EntityPath } from '@app/abstract/lib/types/entity';
 import { getDefaultMediaFilesCleaner } from '@app/entities/activity/lib/services/mediaFilesCleanerInstance';
 import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
 import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
-import { useDefaultBanners } from '@app/entities/defaultBanners/lib/hooks/useDefaultBanners';
+// import { useDefaultBanners } from '@app/entities/defaultBanners/lib/hooks/useDefaultBanners';
 import { useOnNotificationRefresh } from '@app/entities/notification/model/hooks/useOnNotificationRefresh';
 import { topUpNotifications } from '@app/entities/notification/model/operations/topUpNotifications';
 import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
@@ -39,7 +37,6 @@ import { useOnceRef } from '@app/shared/lib/hooks/useOnceRef';
 import { useOnForegroundDebounced } from '@app/shared/lib/hooks/useOnForegroundDebounced';
 import { useOnlineEstablished } from '@app/shared/lib/hooks/useOnlineEstablished';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
-import { Emitter } from '@app/shared/lib/services/Emitter';
 import { useDelayedInterval } from '@app/shared/lib/timers/hooks/useDelayedInterval';
 import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 import { BackButton } from '@app/shared/ui/BackButton';
@@ -69,7 +66,6 @@ import { SignUpScreen } from './SignUpScreen';
 import { getScreenOptions } from '../config/theme';
 import { RootStackParamList } from '../config/types';
 import { onBeforeAppClose } from '../lib/alerts';
-import { checkEntityAvailability } from '../model/checkEntityAvailability';
 import { useDefaultRoute } from '../model/hooks/useDefaultRoute';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -116,31 +112,6 @@ export const RootNavigator = () => {
     useAutoCompletion();
 
   useOnNotificationTap({
-    checkAvailability: async (
-      entityName: string,
-      { appletId, eventId, entityId, entityType, targetSubjectId }: EntityPath,
-    ) => {
-      const isSuccess = await checkEntityAvailability({
-        entityName,
-        identifiers: {
-          appletId,
-          eventId,
-          entityId,
-          entityType,
-          targetSubjectId,
-        },
-        queryClient,
-        entityProgressions,
-      });
-
-      if (!isSuccess) {
-        Emitter.emit<AutocompletionEventOptions>('autocomplete', {
-          checksToExclude: ['start-entity'],
-          logTrigger: 'check-availability',
-        });
-      }
-      return isSuccess;
-    },
     hasMediaReferences: getDefaultMediaLookupService().hasMediaReferences,
     cleanUpMediaFiles: getDefaultMediaFilesCleaner().cleanUp,
     hasActivityWithHiddenAllItems:
@@ -192,7 +163,7 @@ export const RootNavigator = () => {
 
   useOnNotificationRefresh();
 
-  useDefaultBanners();
+  // useDefaultBanners();
 
   return (
     <Stack.Navigator

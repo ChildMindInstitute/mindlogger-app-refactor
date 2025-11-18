@@ -52,6 +52,10 @@ See Curious's [Knowledge Base article](https://mindlogger.atlassian.net/serviced
 - [Axios](https://axios-http.com/) - A Promise-based HTTP client for JavaScript
 - [Feature-Sliced Design](https://feature-sliced.design/) - Architectural methodology
 
+## Developer Tools
+
+- [Reactotron Setup & Usage Guide](./docs/ReactotronSetup.md)
+
 ## Available Scripts
 
 In the project directory, you can run the following commands from the project root:
@@ -178,3 +182,6 @@ For concerns related to Unity integration, see [unity/README.md](unity/README.md
 Common Public Attribution License Version 1.0 (CPAL-1.0)
 
 Refer to [LICENSE.md](./LICENSE.md)
+
+# Browser Testing
+This project is tested with [BrowserStack](https://www.browserstack.com/).

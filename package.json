@@ -1,6 +1,6 @@
 {
   "name": "mindlogger-mobile",
-  "version": "2025.09.3",
+  "version": "2.0.1",
   "private": true,
   "scripts": {
     "android": "yarn android:dev",
@@ -141,7 +141,7 @@
     "react-native-svg": "^15.11.2",
     "react-native-system-navigation-bar": "^2.6.4",
     "react-native-tcp-socket": "^6.0.6",
-    "react-native-toast-message": "^2.2.0",
+    "react-native-toast-message": "^2.3.3",
     "react-native-video": "^6.14.1",
     "react-native-video-player": "^0.16.3",
     "react-native-webview": "^13.13.1",
@@ -197,6 +197,9 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^3.2.5",
     "react-test-renderer": "19.0.0",
+    "reactotron-react-native": "^5.1.18",
+    "reactotron-react-native-mmkv": "^0.2.9",
+    "reactotron-redux": "^3.2.1",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",

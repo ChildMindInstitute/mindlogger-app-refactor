@@ -5,8 +5,8 @@ import { selectUserId } from '@app/entities/identity/model/selectors';
 import { useHasSession } from '@app/entities/session/model/hooks/useHasSession';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 
+import { useAnnouncementBanner } from './useAnnouncementBanner';
 import { useDefaultBanners } from './useDefaultBanners';
-import { useRebrandBanner } from './useRebrandBanner';
 import { dismissedBannersSelector } from '../../model/selectors';
 
 // Mock dependencies
@@ -15,7 +15,7 @@ jest.mock('@app/shared/lib/hooks/redux');
 jest.mock('@react-navigation/native', () => ({
   useNavigationState: jest.fn(),
 }));
-jest.mock('./useRebrandBanner');
+jest.mock('./useAnnouncementBanner');
 jest.mock('../../model/selectors');
 
 describe('useDefaultBanners', () => {
@@ -33,9 +33,8 @@ describe('useDefaultBanners', () => {
   const mockUseAppSelector = useAppSelector as jest.MockedFunction<
     typeof useAppSelector
   >;
-  const mockUseRebrandBanner = useRebrandBanner as jest.MockedFunction<
-    typeof useRebrandBanner
-  >;
+  const mockUseAnnouncementBanner =
+    useAnnouncementBanner as jest.MockedFunction<typeof useAnnouncementBanner>;
 
   beforeEach(() => {
     // Reset all mocks
@@ -48,7 +47,7 @@ describe('useDefaultBanners', () => {
       if (selector === dismissedBannersSelector) return mockDismissedBanners;
       return undefined;
     });
-    mockUseRebrandBanner.mockImplementation(() => {});
+    mockUseAnnouncementBanner.mockImplementation(() => {});
 
     // Mock navigation state with a default route based on authentication status
     (useNavigationState as jest.Mock).mockImplementation(callback => {
@@ -71,7 +70,7 @@ describe('useDefaultBanners', () => {
     expect(mockUseHasSession).toHaveBeenCalledTimes(1);
     expect(mockUseAppSelector).toHaveBeenCalledWith(selectUserId);
     expect(mockUseAppSelector).toHaveBeenCalledWith(dismissedBannersSelector);
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       mockDismissedBanners,
       'global',
       'Login',
@@ -98,7 +97,7 @@ describe('useDefaultBanners', () => {
     expect(mockUseHasSession).toHaveBeenCalledTimes(1);
     expect(mockUseAppSelector).toHaveBeenCalledWith(selectUserId);
     expect(mockUseAppSelector).toHaveBeenCalledWith(dismissedBannersSelector);
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       mockDismissedBanners,
       `user-${mockUserId}`,
       'Applets',
@@ -110,7 +109,7 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Initial verification
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       mockDismissedBanners,
       'global',
       'Login',
@@ -131,8 +130,8 @@ describe('useDefaultBanners', () => {
     // Re-render with updated values
     renderHook(() => useDefaultBanners());
 
-    // Verify ref was updated (useRebrandBanner called with new values)
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    // Verify ref was updated (useAnnouncementBanner called with new values)
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       updatedDismissedBanners,
       'global',
       'Login',
@@ -151,7 +150,7 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Verify
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       mockDismissedBanners,
       'global',
       'Login',
@@ -171,14 +170,14 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Verify
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       emptyDismissedBanners,
       'global',
       'Login',
     );
   });
 
-  test('should pass different route names to useRebrandBanner', () => {
+  test('should pass different route names to useAnnouncementBanner', () => {
     // Setup - mock different route for authenticated user
     mockUseHasSession.mockReturnValue(true);
     (useNavigationState as jest.Mock).mockImplementation(callback => {
@@ -193,7 +192,7 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Verify correct route name is passed
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       mockDismissedBanners,
       `user-${mockUserId}`,
       'AppletDetails',
@@ -210,7 +209,7 @@ describe('useDefaultBanners', () => {
     renderHook(() => useDefaultBanners());
 
     // Verify undefined is passed for route name
-    expect(mockUseRebrandBanner).toHaveBeenCalledWith(
+    expect(mockUseAnnouncementBanner).toHaveBeenCalledWith(
       mockDismissedBanners,
       'global',
       undefined,
