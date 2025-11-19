@@ -75,6 +75,16 @@ const mockScoresExtractor = {
     ]),
 } as never as IScoresExtractor;
 
+const mockQueueService = {
+  pick: jest.fn(),
+  enqueue: jest.fn(),
+  dequeue: jest.fn(),
+  swap: jest.fn(),
+  getLength: jest.fn().mockReturnValue(0),
+  getAllItems: jest.fn().mockReturnValue([]),
+  hasOtherPendingFlowActivities: jest.fn().mockReturnValue(false),
+} as never as import('@app/entities/activity/lib/services/IAnswersQueueService').IAnswersQueueService;
+
 const mockAlertsExtractor = {
   extractForSummary: jest.fn().mockReturnValue([
     {
@@ -138,6 +148,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       jest.fn(),
       mockPersistor,
       entityProgressions,
+      mockQueueService,
     );
 
     //@ts-expect-error
@@ -239,6 +250,7 @@ describe('Test ConstructCompletionsService.constructForIntermediate', () => {
       jest.fn(),
       mockPersistor,
       entityProgressions,
+      mockQueueService,
     );
 
     //@ts-expect-error
@@ -318,6 +330,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       jest.fn(),
       mockPersistor,
       entityProgressions,
+      mockQueueService,
     );
 
     //@ts-expect-error
@@ -437,6 +450,7 @@ describe('Test ConstructCompletionsService.constructForFinish', () => {
       jest.fn(),
       mockPersistor,
       entityProgressions,
+      mockQueueService,
     );
 
     //@ts-expect-error
@@ -536,6 +550,7 @@ describe('Test ConstructCompletionsService: edge cases', () => {
       jest.fn(),
       mockPersistor,
       entityProgressions,
+      mockQueueService,
     );
 
     //@ts-expect-error
@@ -586,6 +601,7 @@ describe('Test ConstructCompletionsService: edge cases', () => {
         jest.fn(),
         mockPersistor,
         entityProgressions,
+        mockQueueService,
       );
 
       expect(() =>
@@ -634,6 +650,7 @@ describe('Test ConstructCompletionsService: edge cases', () => {
         jest.fn(),
         mockPersistor,
         entityProgressions,
+        mockQueueService,
       );
 
       //@ts-expect-error
@@ -748,6 +765,7 @@ describe('Test ConstructCompletionsService: evaluateEndAt', () => {
           jest.fn(),
           mockPersistor,
           entityProgressions,
+          mockQueueService,
         );
 
         // @ts-expect-error

@@ -1,5 +1,6 @@
 import { FileSystem } from 'react-native-file-access';
 
+import { getDefaultSvgFileManager } from '@app/entities/drawer/lib/utils/svgFileManagerInstance';
 import { IUserPrivateKeyRecord } from '@app/entities/identity/lib/IUserPrivateKeyRecord';
 import { EHRConsent } from '@app/shared/api/services/ActivityItemDto';
 import {
@@ -138,20 +139,15 @@ export class AnswersUploadService implements IAnswersUploadService {
   }
 
   private async processFileUpload(
-    mediaFile: MediaFile,
+    itemAnswer: ObjectAnswerDto,
     uploadChecks: CheckFilesUploadResults,
     logAnswerIndex: number,
     appletId: string,
   ): Promise<string> {
-    const localFileExists = await FileSystem.exists(mediaFile.uri);
-
+    const mediaFile = itemAnswer?.value as MediaFile;
     const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
 
-    if (!localFileExists) {
-      throw new Error(
-        `[UploadAnswersService.processFileUpload]: Local file ${logFileInfo} does not exist`,
-      );
-    }
+    await this.ensureMediaFileAvailability(itemAnswer, mediaFile, logFileInfo);
 
     const uploadRecord = this.getUploadRecord(
       uploadChecks,
@@ -274,7 +270,7 @@ export class AnswersUploadService implements IAnswersUploadService {
       this.uploadProgressObservable.currentFile++;
 
       const remoteUrl = await this.processFileUpload(
-        mediaAnswer,
+        itemAnswer,
         uploadChecks,
         logAnswerIndex,
         body.appletId,
@@ -572,6 +568,54 @@ export class AnswersUploadService implements IAnswersUploadService {
 
     await this.uploadProgressObservable.setCurrentSecondLevelStepKey(
       'completed',
+    );
+  }
+
+  private async ensureMediaFileAvailability(
+    itemAnswer: ObjectAnswerDto,
+    mediaFile: MediaFile,
+    logFileInfo: string,
+  ) {
+    const localFileExists = await FileSystem.exists(mediaFile.uri);
+
+    if (localFileExists) {
+      return;
+    }
+
+    const isSvgFile = mediaFile.type === 'image/svg';
+
+    if (isSvgFile) {
+      const drawerAnswer = itemAnswer?.value as DrawerAnswerDto | undefined;
+
+      if (drawerAnswer?.svgString) {
+        try {
+          this.logger.warn(
+            `[UploadAnswersService.processFileUpload] Local svg file ${logFileInfo} is missing. Recreating from cached data`,
+          );
+
+          await getDefaultSvgFileManager().writeFile(
+            drawerAnswer.uri,
+            drawerAnswer.svgString,
+          );
+
+          const recreated = await FileSystem.exists(mediaFile.uri);
+
+          if (recreated) {
+            this.logger.info(
+              `[UploadAnswersService.processFileUpload] Successfully recreated svg file ${logFileInfo}`,
+            );
+            return;
+          }
+        } catch (error) {
+          this.logger.warn(
+            `[UploadAnswersService.processFileUpload] Failed to recreate svg file ${logFileInfo}\n\n${error}`,
+          );
+        }
+      }
+    }
+
+    throw new Error(
+      `[UploadAnswersService.processFileUpload]: Local file ${logFileInfo} does not exist`,
     );
   }
 }
