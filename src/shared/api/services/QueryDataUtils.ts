@@ -6,14 +6,17 @@ import {
   getAppletsKey,
   getEventsKey,
   getAppletBaseInfoKey,
+  getAssignmentsKey,
 } from '@app/shared/lib/utils/reactQueryHelpers';
 
 import {
+  AppletAssignmentsResponse,
   AppletBaseInfoResponse,
   AppletDetailsDto,
   AppletDetailsResponse,
   AppletDto,
   AppletsResponse,
+  AssignmentDto,
 } from './IAppletService';
 import { AppletEventsResponse, ScheduleEventDto } from './IEventsService';
 
@@ -70,5 +73,14 @@ export class QueryDataUtils {
     const eventDto = eventsDto.find(dto => dto.id === eventId);
 
     return eventDto ?? null;
+  }
+
+  getAssignmentsDto(appletId: string): AssignmentDto[] | null {
+    const result = getDataFromQuery<AppletAssignmentsResponse>(
+      getAssignmentsKey(appletId),
+      this.queryClient,
+    );
+
+    return result?.result.assignments ?? null;
   }
 }

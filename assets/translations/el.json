@@ -1,4 +1,4 @@
-﻿{
+{
   "auth": {
     "email": "Email",
     "email_address": "Διεύθυνση email",
@@ -352,6 +352,10 @@
     "applet_not_found_1": "Η βοηθητική εφαρμογή δεν βρέθηκε",
     "applet_not_found_2": "Δεν υπάρχει βοηθητική εφαρμογή για το συγκεκριμένο αναγνωριστικό.",
     "activity_not_found": "Η δραστηριότητα «{{entityName}}» δεν είναι διαθέσιμη τώρα.",
+    "activity_not_assigned": "This {{entityName}} is not assigned to you.",
+    "activity_not_available": "This {{entityName}} is no longer available.",
+    "activity_scheduled_today": "The {{entityName}} is scheduled to be available at {{time}}.",
+    "activity_completed_today": "{{entityName}} has already been completed for today.",
     "already_completed": "Έχετε ήδη ολοκληρώσει το",
     "app_killed_on_redux_persist": "Αυτή η δραστηριότητα δεν μπορεί να αρχίσει. Επικοινωνήστε με την υποστήριξη.",
     "activity_was_due_at": "This activity was due at",
@@ -520,7 +524,7 @@
     "no": "Όχι",
     "noResults": "Δεν βρέθηκαν πάροχοι υγειονομικής περίθαλψης που να αντιστοιχούν στην αναζήτησή σας."
 	},
-  "rebrandBanner": {
+  "announcementBanner": {
     "content": "<0>Ανανεωνόμαστε!</0> <1>Έρχονται ενημερώσεις σχεδίασης—ίδια εξαιρετική εφαρμογή, νέα φρέσκια εμφάνιση. Ενδιαφέρεστε;</1> <2>Πατήστε για να μάθετε περισσότερα.</2>"
   }
 }

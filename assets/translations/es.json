@@ -1,4 +1,4 @@
-﻿{
+{
   "auth": {
     "email": "Correo electrónico",
     "email_address": "Dirección de correo electrónico",
@@ -71,7 +71,7 @@
   },
   "calendar": {
     "months": "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre",
-    "weekdays": "Dom._Lun._Mar._Mié._Jue._Vie._Sáb.",
+    "weekdays": "Dom_Lun_Mar_Mié_Jue_Vie_Sáb",
     "x_days": "L_M_M_J_V_S_D"
   },
   "applet_data": {
@@ -351,7 +351,11 @@
     "refresh_request_text": "Tus gerentes iniciarán la actualización en breve.",
     "applet_not_found_1": "Applet no encontrado",
     "applet_not_found_2": "No existe un applet para el código de identificación proporcionado.",
-    "activity_not_found": "La actividad “{{entityName}}” no está disponible ahora.",
+    "activity_not_found": "La actividad \"{{entityName}}\" no está disponible ahora.",
+    "activity_not_assigned": "This {{entityName}} is not assigned to you.",
+    "activity_not_available": "This {{entityName}} is no longer available.",
+    "activity_scheduled_today": "The {{entityName}} is scheduled to be available at {{time}}.",
+    "activity_completed_today": "{{entityName}} has already been completed for today.",
     "already_completed": "Ya has completado",
     "app_killed_on_redux_persist": "No puedes iniciar esta actividad. Contacta al Servicio de Asistencia.",
     "activity_was_due_at": "This activity was due at",
@@ -520,7 +524,7 @@
     "no": "No",
     "noResults": "No se encontraron proveedores de atención médica que coincidan con tu búsqueda."
   },
-  "rebrandBanner": {
+  "announcementBanner": {
     "content": "<0>¡Estamos renovando nuestra marca!</0> <1>Pronto habrá actualizaciones de diseño: la misma gran aplicación, con una nueva apariencia. ¿Tienes curiosidad?</1> <2>Toca para saber más.</2>"
   }
 }

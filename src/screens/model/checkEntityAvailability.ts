@@ -6,11 +6,13 @@ import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { mapEventFromDto } from '@app/entities/event/model/mappers';
 import { getDefaultScheduledDateCalculator } from '@app/entities/event/model/operations/scheduledDateCalculatorInstance';
+import { selectUserId } from '@app/entities/identity/model/selectors';
 import {
   onActivityNotAvailable,
   onAppWasKilledOnReduxPersist,
   onCompletedToday,
   onScheduledToday,
+  showNotAssignedToast,
 } from '@app/features/tap-on-notification/lib/alerts';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -25,6 +27,7 @@ import {
 import { AvailableGroupEvaluator } from '@app/widgets/activity-group/model/factories/AvailableGroupEvaluator';
 import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
 import { ScheduledGroupEvaluator } from '@app/widgets/activity-group/model/factories/ScheduledGroupEvaluator';
+import { mapAssignmentsFromDto } from '@app/widgets/activity-group/model/mappers';
 import { isCurrentActivityRecordExist } from '@app/widgets/survey/lib/storageHelpers';
 
 type Input = {
@@ -32,6 +35,7 @@ type Input = {
   identifiers: EntityPath;
   entityProgressions: EntityProgression[];
   queryClient: QueryClient;
+  isFromNotification?: boolean;
 };
 
 type InputInternal = Input & {
@@ -47,6 +51,7 @@ const checkEntityAvailabilityInternal = ({
   identifiers: { appletId, entityId, entityType, eventId, targetSubjectId },
   entityProgressions,
   queryClient,
+  isFromNotification = false,
   callback,
 }: InputInternal): void => {
   // Always fetch the freshest progressions from the store to avoid stale closures
@@ -69,6 +74,78 @@ const checkEntityAvailabilityInternal = ({
     `[checkEntityAvailability] record = ${JSON.stringify(progression, null, 2)}`,
   );
 
+  const queryUtils = new QueryDataUtils(queryClient);
+
+  // ONLY validate assignments for notification taps (M2-8698)
+  // Assignment validation must happen BEFORE in-progress check to match activity list behavior
+  // Activity list filters assignments at BUILD time (ActivityGroupsBuildManager line 197-223)
+  // Notification taps must apply same filtering at ACCESS time
+  if (isFromNotification) {
+    const appletDto = queryUtils.getAppletDto(appletId);
+    const assignments = queryUtils.getAssignmentsDto(appletId);
+
+    if (appletDto && assignments) {
+      const entity =
+        entityType === 'flow'
+          ? appletDto.activityFlows.find(f => f.id === entityId)
+          : appletDto.activities.find(a => a.id === entityId);
+
+      // Auto-assigned activities skip assignment validation (matches ActivityGroupsBuildManager line 198)
+      // Manual-assigned activities require assignment validation (matches ActivityGroupsBuildManager line 202-223)
+      if (entity && !entity.autoAssign) {
+        const currentUserId = selectUserId(reduxStore.getState());
+        const normalizedAssignments = mapAssignmentsFromDto(assignments);
+
+        const hasAssignment = normalizedAssignments.some(assignment => {
+          const matchesEntity =
+            entityType === 'flow'
+              ? assignment.__type === 'activityFlow' &&
+                assignment.activityFlowId === entityId
+              : assignment.__type === 'activity' &&
+                assignment.activityId === entityId;
+
+          if (!matchesEntity) return false;
+
+          const { respondent, target } = assignment;
+          if (!respondent || !target) return false;
+
+          // Match user
+          if (
+            respondent.userId &&
+            currentUserId &&
+            respondent.userId !== currentUserId
+          ) {
+            return false;
+          }
+
+          // Match target for assessments
+          if (targetSubjectId && target.id !== targetSubjectId) {
+            return false;
+          }
+
+          // If no targetSubjectId specified, allow any assignment where user is respondent
+          // This matches ActivityGroupsBuildManager logic which shows all assignments
+          // where the user is respondent, not just self-reports
+          if (!targetSubjectId) {
+            return true;
+          }
+
+          return true;
+        });
+
+        if (!hasAssignment) {
+          logger.log(
+            '[checkEntityAvailability] Check done: false (not assigned)',
+          );
+          showNotAssignedToast(entityName);
+          callback(false);
+          return;
+        }
+      }
+    }
+  }
+
+  // Check in-progress status AFTER assignment validation (for notifications)
   const isInProgress = isEntityProgressionInProgress(progression);
 
   if (
@@ -83,13 +160,9 @@ const checkEntityAvailabilityInternal = ({
     logger.warn(
       '[checkEntityAvailability] Check done: false (app killed during redux persist)',
     );
-
-    // TODO: M2-7407 - Maybe make this part idempotent? If the activity record
-    //                 does exist, maybe we should just restart the activity and
-    //                 recreate the record (instead of just not letting people
-    //                 pass)?
     if (!FORCE_RECREATE_RECORD) {
-      onAppWasKilledOnReduxPersist(() => callback(false));
+      onAppWasKilledOnReduxPersist();
+      callback(false);
       return;
     }
   }
@@ -106,17 +179,29 @@ const checkEntityAvailabilityInternal = ({
     return;
   }
 
-  const queryUtils = new QueryDataUtils(queryClient);
+  const eventDto = queryUtils.getEventDto(appletId, eventId);
 
-  const event = mapEventFromDto(queryUtils.getEventDto(appletId, eventId));
+  if (!eventDto) {
+    logger.warn(
+      `[checkEntityAvailability] Check done: false (event not found) eventId="${eventId}"`,
+    );
+    onActivityNotAvailable(entityName);
+    callback(false);
+    return;
+  }
 
+  const event = mapEventFromDto(eventDto);
   event.scheduledAt = getDefaultScheduledDateCalculator().calculate(event);
 
-  if (!event.scheduledAt) {
-    logger.log(
-      '[checkEntityAvailability] Check done: false (scheduledAt is missed)',
-    );
+  logger.log(
+    `[checkEntityAvailability] Event found: eventId="${eventId}", scheduledAt="${event.scheduledAt}", targetSubjectId="${targetSubjectId || 'NULL'}"`,
+  );
 
+  if (!event.scheduledAt) {
+    logger.warn(
+      '[checkEntityAvailability] Check done: false (scheduledAt calculation failed)',
+    );
+    onActivityNotAvailable(entityName);
     callback(false);
     return;
   }
@@ -130,6 +215,10 @@ const checkEntityAvailabilityInternal = ({
     appletId,
     freshProgressions,
   ).isEventInGroup(event, targetSubjectId);
+
+  logger.log(
+    `[checkEntityAvailability] Availability checks: isAvailable=${isAvailable}, isScheduled=${isScheduled}`,
+  );
 
   if (isAvailable) {
     logger.log('[checkEntityAvailability] Check done: true (available)');
@@ -147,7 +236,8 @@ const checkEntityAvailabilityInternal = ({
 
     logger.log('[checkEntityAvailability] Check done: false (scheduled today)');
 
-    onScheduledToday(entityName, from, () => callback(false));
+    onScheduledToday(entityName, from);
+    callback(false);
     return;
   }
 
@@ -166,13 +256,15 @@ const checkEntityAvailabilityInternal = ({
   // Check both ways - if either says completed, block access
   if ((isEntityCompletedToday && !isSpread) || isCompletedUsingGroupUtility) {
     logger.log('[checkEntityAvailability] Check done: false (completed today)');
-    onCompletedToday(entityName, () => callback(false));
+    onCompletedToday(entityName);
+    callback(false);
     return;
   }
 
   logger.log('[checkEntityAvailability] Check done: false (not available)');
 
-  onActivityNotAvailable(entityName, () => callback(false));
+  onActivityNotAvailable(entityName);
+  callback(false);
 };
 
 export const checkEntityAvailability = ({
@@ -180,6 +272,7 @@ export const checkEntityAvailability = ({
   identifiers,
   entityProgressions,
   queryClient,
+  isFromNotification = false,
 }: Input): Promise<boolean> => {
   return new Promise(resolve => {
     const onCheckDone = (result: boolean) => {
@@ -191,6 +284,7 @@ export const checkEntityAvailability = ({
       identifiers,
       entityProgressions,
       queryClient,
+      isFromNotification,
       callback: onCheckDone,
     });
   });
