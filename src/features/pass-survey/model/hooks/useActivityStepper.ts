@@ -60,8 +60,7 @@ export function useActivityStepper(state: ActivityState | undefined) {
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
   const canReset =
     currentPipelineItem?.canBeReset && (hasAnswer || hasAdditionalAnswer);
-  const isUnityStep =
-    currentPipelineItem?.isUnity ?? currentType === 'unity';
+  const isUnityStep = currentPipelineItem?.isUnity ?? currentType === 'unity';
   const showTopNavigation =
     currentPipelineItem?.hasTopNavigation && !isUnityStep;
   const showBottomNavigation = !showTopNavigation && !isUnityStep;

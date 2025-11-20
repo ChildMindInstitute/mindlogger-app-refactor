@@ -325,19 +325,7 @@ export function ActivityStepper({
     return <Spinner withOverlay />;
   }
 
-  const safeAreaEdges = isUnityStep
-    ? {
-        left: 'off',
-        right: 'off',
-        bottom: 'off',
-        top: 'off',
-      }
-    : {
-        left: 'off',
-        right: 'off',
-        bottom: 'maximum',
-        top: 'off',
-      };
+  const safeAreaEdges = isUnityStep ? [] : ['bottom' as const];
 
   return (
     <Box flex={1}>
@@ -478,9 +466,7 @@ export function ActivityStepper({
 
                   {canMoveNext && (
                     <Stepper.NextButton
-                      accessibilityLabel={getAccessibilityLabel(
-                        nextButtonText,
-                      )}
+                      accessibilityLabel={getAccessibilityLabel(nextButtonText)}
                     >
                       {t(nextButtonText)}
                     </Stepper.NextButton>
