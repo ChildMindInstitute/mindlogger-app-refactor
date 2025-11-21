@@ -18,6 +18,7 @@ import { FlankerGameResponse } from '@app/entities/flanker/lib/types/response';
 import { HtmlFlanker } from '@app/entities/flanker/ui/HtmlFlanker/HtmlFlanker';
 import { NativeIosFlanker } from '@app/entities/flanker/ui/NativeIosFlanker/NativeIosFlanker';
 import { StabilityTracker } from '@app/entities/stabilityTracker/ui/StabilityTracker';
+import { UnityResult } from '@app/entities/unity/lib/types/unityType';
 import { IS_ANDROID } from '@app/shared/lib/constants';
 import { LiveEvent } from '@app/shared/lib/tcp/types';
 import { useSendEvent } from '@app/shared/lib/tcp/useSendLiveEvent';
@@ -149,6 +150,14 @@ export function ActivityItem({
     async radioValue => {
       await wait(100);
       onResponse(radioValue);
+      moveToNextItem();
+    },
+    [moveToNextItem, onResponse],
+  );
+
+  const handleUnityComplete = useCallback(
+    (response: UnityResult) => {
+      onResponse(response);
       moveToNextItem();
     },
     [moveToNextItem, onResponse],
@@ -448,7 +457,7 @@ export function ActivityItem({
             <Box flex={1}>
               <UnityView
                 payload={pipelineItem.payload}
-                onResponse={onResponse}
+                onResponse={handleUnityComplete}
               />
             </Box>
           ),
