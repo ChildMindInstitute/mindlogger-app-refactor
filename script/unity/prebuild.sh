@@ -6,6 +6,9 @@ cd "$SCRIPT_DIR"
 
 echo "[Unity][Pre-build] Removing snapshotted UnityFramework.framework ..."
 rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/UnityFramework.framework
+rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/baselib.a
+rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/il2cpp.a
+rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/libGameAssembly.a
 
 echo "[Unity][Pre-build] Removing <intent-filter /> from AndroidManifest.xml ..."
 if [ -d $SCRIPT_DIR/../../unity/builds/android ]; then
