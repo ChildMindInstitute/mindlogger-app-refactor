@@ -1,3 +1,4 @@
+import { DdLogs } from '@datadog/mobile-react-native';
 import { format } from 'date-fns';
 import DeviceInfo from 'react-native-device-info';
 import { Dirs, FileSystem } from 'react-native-file-access';
@@ -254,6 +255,7 @@ export class Logger implements ILogger {
   public log(message: string) {
     if (this.consoleLogLevel <= LogLevel.Debug) {
       console.log(this.withTime(message));
+      DdLogs.info(message);
     }
 
     callWithMutex(this.mutex, () => FileLogger.debug(message));
@@ -262,6 +264,7 @@ export class Logger implements ILogger {
   public info(message: string) {
     if (this.consoleLogLevel <= LogLevel.Info) {
       console.info(this.withTime(message));
+      DdLogs.info(message);
     }
 
     callWithMutex(this.mutex, () => FileLogger.info(message));
@@ -270,6 +273,7 @@ export class Logger implements ILogger {
   public warn(message: string) {
     if (this.consoleLogLevel <= LogLevel.Warning) {
       console.warn(this.withTime(message));
+      DdLogs.warn(message);
     }
 
     callWithMutex(this.mutex, () => FileLogger.warn(message));
@@ -278,6 +282,7 @@ export class Logger implements ILogger {
   public error(message: string) {
     if (this.consoleLogLevel <= LogLevel.Error) {
       console.error(this.withTime(message));
+      DdLogs.error(message);
     }
 
     callWithMutex(this.mutex, () => FileLogger.error(message));
