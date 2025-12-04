@@ -31,6 +31,7 @@ export function buildPipeline(activity: ActivityDetails): PipelineItem[] {
             id: item.id,
             name: item.name,
             type: item.inputType,
+            isUnity: true,
             payload: item.config,
             question: item.question,
             isSkippable: item.isSkippable,

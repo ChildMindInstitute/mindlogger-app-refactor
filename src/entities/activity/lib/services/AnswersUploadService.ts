@@ -267,7 +267,7 @@ export class AnswersUploadService implements IAnswersUploadService {
 
     const itemsAnswers = [...body.answers] as ObjectAnswerDto[];
 
-    const updatedAnswers = [];
+    const updatedAnswers: AnswerDto[] = [];
     let logAnswerIndex = -1;
     this.uploadProgressObservable.currentFile = -1;
 
@@ -319,19 +319,47 @@ export class AnswersUploadService implements IAnswersUploadService {
         remoteUrls.push(remoteUrl);
       }
 
-      const isSvg = mediaAnswer.type === 'image/svg';
+      const isSvg = !isUnityItem && mediaAnswer?.type === 'image/svg';
 
-      if (remoteUrls.length && !isSvg) {
-        updatedAnswers.push({ value: remoteUrls, text });
-      } else if (remoteUrls.length) {
+      if (!remoteUrls.length) {
+        continue;
+      }
+
+      if (isSvg) {
         const svgValue = itemAnswer.value as DrawerAnswerDto;
 
         const copy: ObjectAnswerDto = {
-          text,
           value: { ...svgValue, uri: remoteUrls[0] },
         };
 
+        if (text !== undefined) {
+          copy.text = text;
+        }
+
         updatedAnswers.push(copy);
+        continue;
+      }
+
+      if (isUnityItem) {
+        const unityAnswer: ObjectAnswerDto = {
+          value: remoteUrls,
+        };
+
+        if (text !== undefined) {
+          unityAnswer.text = text;
+        }
+
+        updatedAnswers.push(unityAnswer);
+      } else {
+        const mediaAnswerWithUrl: ObjectAnswerDto = {
+          value: remoteUrls[0],
+        };
+
+        if (text !== undefined) {
+          mediaAnswerWithUrl.text = text;
+        }
+
+        updatedAnswers.push(mediaAnswerWithUrl);
       }
     }
 
