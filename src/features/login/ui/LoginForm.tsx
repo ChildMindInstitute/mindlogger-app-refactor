@@ -30,6 +30,7 @@ import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
 import { cleanupData } from '../../auth/model/cleanupData';
 import { LoginFormSchema } from '../model/LoginFormSchema';
+import {DdSdkReactNative} from "@datadog/mobile-react-native";
 
 type Props = {
   onLoginSuccess: () => void;
@@ -58,6 +59,8 @@ export const LoginForm: FC<Props> = props => {
         email: response.data.result.user.email,
         password: variables.password,
       };
+
+      await DdSdkReactNative.setUserInfo({ id: response.data.result.user.id });
 
       // If the previously logged-in user's ID is not the same as the just
       // logged-in user's ID, then clear previously stored data.
