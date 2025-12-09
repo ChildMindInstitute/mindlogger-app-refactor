@@ -16,6 +16,7 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
 import { isAppOnline } from '@app/shared/lib/utils/networkHelpers';
 import { hasPendingMutations } from '@app/shared/lib/utils/reactQueryHelpers';
+import {DdSdkReactNative} from "@datadog/mobile-react-native";
 
 export function useLogout() {
   const queryClient = useQueryClient();
@@ -39,6 +40,7 @@ export function useLogout() {
     }
 
     getDefaultAnalyticsService().logout();
+    await DdSdkReactNative.setUser({});
 
     getDefaultFeatureFlagsService().logout();
 
