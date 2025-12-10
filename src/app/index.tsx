@@ -52,6 +52,13 @@ config.nativeCrashReportEnabled = true;
 config.sessionSamplingRate = 100;
 config.serviceName = 'mindlogger-mobile';
 config.version = APP_VERSION;
+config.firstPartyHosts = [
+  'api-v2.mindlogger.org',
+  'api-v2.gettingcurious.com',
+  'api-dev.cmiml.net',
+  'api-uat.cmiml.net',
+  'api-prod.cmiml.net',
+];
 
 if (__DEV__) {
   // Optional: Send data more frequently
