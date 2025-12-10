@@ -18,6 +18,7 @@ import {
   DATADOG_APPLICATION_ID,
   DATDOG_CLIENT_TOKEN,
   ENV,
+  APP_VERSION
 } from '@shared/lib/constants';
 
 import { AppProvider } from './ui/AppProvider';
@@ -49,6 +50,8 @@ config.longTaskThresholdMs = 100;
 config.nativeCrashReportEnabled = true;
 // Optional: sample RUM sessions (here, 100% of session will be sent to Datadog. Default = 100%. Only tracked sessions send RUM events.)
 config.sessionSamplingRate = 100;
+config.serviceName = 'mindlogger-mobile';
+config.version = APP_VERSION;
 
 if (__DEV__) {
   // Optional: Send data more frequently
