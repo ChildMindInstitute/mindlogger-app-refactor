@@ -18,12 +18,14 @@ import { FeatureFlagsProvider } from './FeatureFlagsProvider';
 import { FontLanguageProvider } from './FontLanguageProvider';
 import { NavigationProvider } from './NavigationProvider';
 import { ReactQueryProvider } from './ReactQueryProvider';
-import { ReduxProvider } from './ReduxProvider';
+import {ReduxProvider, reduxStore} from './ReduxProvider';
 import { SplashProvider } from './SplashProvider';
 import { StorageMigrationProvider } from './StorageMigrationProvider';
 import { SystemBootUpProvider } from './SystemBootUpProvider';
 import { TamaguiProvider } from './TamaguiProvider';
 import { ToastConfig } from './ToastConfig';
+import {selectUserId} from "@entities/identity/model/selectors.ts";
+import {DdSdkReactNative} from "@datadog/mobile-react-native";
 
 CacheManager.config = {
   baseDir: `${Dirs.CacheDir}/images_cache/`,
@@ -40,6 +42,13 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     getDefaultLogger().log('[AppProvider]: App loaded');
 
     getDefaultAnalyticsService().track(MixEvents.AppOpen);
+
+    // Set the user id on wakeup
+    const currentUserId = selectUserId(reduxStore.getState());
+    if (currentUserId) {
+      // eslint-disable-next-line no-void
+      void DdSdkReactNative.setUserInfo({ id: currentUserId });
+    }
 
     setIsBootingUp(false);
   };
