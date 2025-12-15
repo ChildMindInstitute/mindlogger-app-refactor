@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
+import { DdSdkReactNative } from '@datadog/mobile-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +32,6 @@ import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
 import { cleanupData } from '../../auth/model/cleanupData';
 import { LoginFormSchema } from '../model/LoginFormSchema';
-import {DdSdkReactNative} from "@datadog/mobile-react-native";
 
 type Props = {
   onLoginSuccess: () => void;
