@@ -43,7 +43,7 @@ jobs:
           JIRA_API_TOKEN: ${{ secrets.jira-api-token }}
           GITHUB_TOKEN: ${{ secrets.github-pat }}
           SLACK_WEBHOOK: ${{ secrets.slack-webhook }}
-          MENTION_USERS: U07AP86C133,U022MMR13KQ,U06HTJBUXC4
+          MENTION_USERS: U022MMR13KQ,U06HTJBUXC4
         run: |
           sudo apt install -y expect
           unbuffer uv run slack-issues.py from-release-notes ${{ inputs.git-tag }} ${{ inputs.env-name }}
