@@ -18,7 +18,7 @@ import {
   DATADOG_APPLICATION_ID,
   DATDOG_CLIENT_TOKEN,
   ENV,
-  APP_VERSION
+  APP_VERSION,
 } from '@shared/lib/constants';
 
 import { AppProvider } from './ui/AppProvider';

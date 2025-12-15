@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { DdSdkReactNative } from '@datadog/mobile-react-native';
 import { CacheManager } from '@georstat/react-native-image-cache';
 import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
@@ -12,20 +13,19 @@ import { LocalizationProvider } from '@app/entities/localization/ui/Localization
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { selectUserId } from '@entities/identity/model/selectors.ts';
 
 import { AnalyticsProvider } from './AnalyticsProvider';
 import { FeatureFlagsProvider } from './FeatureFlagsProvider';
 import { FontLanguageProvider } from './FontLanguageProvider';
 import { NavigationProvider } from './NavigationProvider';
 import { ReactQueryProvider } from './ReactQueryProvider';
-import {ReduxProvider, reduxStore} from './ReduxProvider';
+import { ReduxProvider, reduxStore } from './ReduxProvider';
 import { SplashProvider } from './SplashProvider';
 import { StorageMigrationProvider } from './StorageMigrationProvider';
 import { SystemBootUpProvider } from './SystemBootUpProvider';
 import { TamaguiProvider } from './TamaguiProvider';
 import { ToastConfig } from './ToastConfig';
-import {selectUserId} from "@entities/identity/model/selectors.ts";
-import {DdSdkReactNative} from "@datadog/mobile-react-native";
 
 CacheManager.config = {
   baseDir: `${Dirs.CacheDir}/images_cache/`,
