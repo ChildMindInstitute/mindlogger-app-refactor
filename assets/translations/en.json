@@ -172,6 +172,24 @@
     "success": "Your password has been reset successfully. Please log in with your new password.",
     "error": "Error resetting your password"
   },
+  "mfa_recovery": {
+    "title": "Confirm Your Identity",
+    "subtitle": "Please enter an account recovery code.",
+    "continue": "Continue",
+    "back": "Back",
+    "invalid_code_format": "Recovery code must be in format XXXX-XXXX",
+    "error": "Invalid recovery code. Please try again.",
+    "success": "Identity confirmed successfully"
+  },
+  "mfa_verification": {
+    "title": "Two-Factor Authentication",
+    "subtitle": "Enter the 6-digit code from your authenticator app.",
+    "verify": "Verify",
+    "invalid_code_format": "Verification code must be 6 digits",
+    "error": "Invalid verification code. Please try again.",
+    "success": "Verification successful",
+    "use_recovery_code": "Use a recovery code instead"
+  },
   "change_study": {
     "reset": "Reset",
     "submit": "Submit",
