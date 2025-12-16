@@ -60,6 +60,8 @@ import { ForgotPasswordScreen } from './ForgotPasswordScreen';
 import { HeaderTitle } from './HeaderTitle';
 import { InProgressActivityScreen } from './InProgressActivityScreen';
 import { LoginScreen } from './LoginScreen';
+import { MfaRecoveryScreen } from './MfaRecoveryScreen';
+import { MfaVerificationScreen } from './MfaVerificationScreen';
 import { PasswordRecoveryScreen } from './PasswordRecoveryScreen';
 import { SettingsScreen } from './SettingsScreen';
 import { SignUpScreen } from './SignUpScreen';
@@ -176,6 +178,18 @@ export const RootNavigator = () => {
             options={{ headerShown: false }}
             name="Login"
             component={LoginScreen}
+          />
+
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="MfaVerification"
+            component={MfaVerificationScreen}
+          />
+
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="MfaRecovery"
+            component={MfaRecoveryScreen}
           />
 
           <Stack.Screen
