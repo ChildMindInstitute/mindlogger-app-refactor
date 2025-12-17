@@ -50,7 +50,25 @@ export const MfaVerificationScreen: FC = () => {
       setErrorMessage(undefined);
 
       // Complete the login process
-      const { user, token: session } = response.data.result;
+      console.log(
+        'MFA verification response:',
+        JSON.stringify(response, null, 2),
+      );
+      
+      const result = response.data.result;
+      
+      if (!result || !result.user || !result.token) {
+        console.error('Invalid response structure:', result);
+        setErrorMessage(t('mfa_verification:error_unknown'));
+        return;
+      }
+
+      const { user, token: session } = result;
+
+      // Handle both snake_case and camelCase formats from backend
+      const accessToken = session.accessToken || session.access_token || '';
+      const refreshToken = session.refreshToken || session.refresh_token || '';
+      const tokenType = session.tokenType || session.token_type || 'Bearer';
 
       const userParams = {
         userId: user.id,
@@ -65,11 +83,11 @@ export const MfaVerificationScreen: FC = () => {
       dispatch(identityActions.onAuthSuccess(user));
       getDefaultUserInfoRecord().setEmail(user.email);
 
-      // Map backend response (snake_case) to app format (camelCase)
+      // Map backend response (snake_case or camelCase) to app format (camelCase)
       storeSession({
-        accessToken: session.access_token,
-        refreshToken: session.refresh_token,
-        tokenType: session.token_type,
+        accessToken,
+        refreshToken,
+        tokenType,
       });
 
       getDefaultAnalyticsService()

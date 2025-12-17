@@ -177,7 +177,7 @@
     "subtitle": "Please enter an account recovery code.",
     "continue": "Continue",
     "back": "Back",
-    "invalid_code_format": "Recovery code must be in format XXXX-XXXX",
+    "invalid_code_format": "Recovery code must be in format XXXXX-XXXXX",
     "error": "Invalid recovery code. Please try again.",
     "success": "Identity confirmed successfully",
     "error_invalid_code": "Invalid recovery code. Please check and try again.",

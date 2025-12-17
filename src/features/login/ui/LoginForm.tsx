@@ -56,12 +56,27 @@ export const LoginForm: FC<Props> = props => {
     onSuccess: async (response, variables) => {
       const data = response.data.result;
 
+      console.log('Login response:', JSON.stringify(data, null, 2));
+
       // Type guard to check if MFA is required
-      // Backend returns mfa_required (snake_case)
-      if ('mfa_required' in data && data.mfa_required) {
+      // Backend may return mfa_required (snake_case) or mfaRequired (camelCase) depending on transformation
+      const isMfaRequired =
+        ('mfa_required' in data && data.mfa_required) ||
+        ('mfaRequired' in data && data.mfaRequired);
+
+      if (isMfaRequired) {
         // MFA is enabled - navigate to verification screen
+        const mfaToken =
+          ('mfaToken' in data ? data.mfaToken : undefined) ||
+          ('mfa_token' in data ? data.mfa_token : undefined);
+
+        if (!mfaToken) {
+          console.error('MFA required but no mfa_token in response');
+          return;
+        }
+
         navigate('MfaVerification', {
-          mfaToken: data.mfa_token,
+          mfaToken,
           email: variables.email,
           password: variables.password, // Keep for post-MFA encryption setup
         });
@@ -74,7 +89,7 @@ export const LoginForm: FC<Props> = props => {
         token: { accessToken: string; refreshToken: string; tokenType: string };
         user: UserDto;
       };
-      
+
       const userParams = {
         userId: loginData.user.id,
         email: loginData.user.email,

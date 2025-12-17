@@ -66,14 +66,14 @@ export const MfaRecoveryForm: FC<Props> = ({
               <InputField
                 name="recoveryCode"
                 accessibilityLabel="mfa-recovery-code-input"
-                placeholder="XXXX-XXXX"
+                placeholder="XXXXX-XXXXX"
                 autoCapitalize="characters"
-                maxLength={9}
+                maxLength={11}
                 onChangeText={text => {
-                  // Auto-format: add hyphen after 4 characters
+                  // Auto-format: add hyphen after 5 characters
                   const cleaned = text.replace(/-/g, '').toUpperCase();
-                  if (cleaned.length > 4) {
-                    const formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 8)}`;
+                  if (cleaned.length > 5) {
+                    const formatted = `${cleaned.slice(0, 5)}-${cleaned.slice(5, 10)}`;
                     form.setValue('recoveryCode', formatted);
                   } else {
                     form.setValue('recoveryCode', cleaned);

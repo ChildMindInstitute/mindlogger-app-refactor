@@ -50,10 +50,14 @@ export type LoginSuccessResponse = SuccessfulResponse<{
 }>;
 
 // MFA challenge response (when MFA is enabled)
+// Note: Backend returns snake_case but gets transformed to camelCase by API layer
 export type LoginMfaRequiredResponse = SuccessfulResponse<{
-  mfa_required: true;
-  mfa_session_id: string;
-  mfa_token: string;
+  mfa_required?: true; // snake_case version (if not transformed)
+  mfaRequired?: true; // camelCase version (after transformation)
+  mfa_session_id?: string;
+  mfaSessionId?: string;
+  mfa_token?: string;
+  mfaToken?: string;
 }>;
 
 // Union type for login response
@@ -74,11 +78,15 @@ export type MfaVerifyRequest = {
 };
 
 // MFA verification response
+// Note: Backend returns snake_case but may get transformed to camelCase
 export type MfaVerifyResponse = SuccessfulResponse<{
   token: {
-    access_token: string;
-    refresh_token: string;
-    token_type: string;
+    access_token?: string;
+    refresh_token?: string;
+    token_type?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    tokenType?: string;
   };
   user: UserDto;
 }>;
@@ -91,11 +99,15 @@ export type MfaRecoveryRequest = {
 };
 
 // MFA recovery response
+// Note: Backend returns snake_case but may get transformed to camelCase
 export type MfaRecoveryResponse = SuccessfulResponse<{
   token: {
-    access_token: string;
-    refresh_token: string;
-    token_type: string;
+    access_token?: string;
+    refresh_token?: string;
+    token_type?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    tokenType?: string;
   };
   user: UserDto;
 }>;
