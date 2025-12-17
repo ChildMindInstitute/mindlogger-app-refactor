@@ -39,7 +39,8 @@ export type ChangePasswordRequest = {
   prev_password: string;
 };
 
-export type LoginResponse = SuccessfulResponse<{
+// Standard login response (when MFA is not enabled)
+export type LoginSuccessResponse = SuccessfulResponse<{
   token: {
     accessToken: string;
     refreshToken: string;
@@ -48,12 +49,56 @@ export type LoginResponse = SuccessfulResponse<{
   user: UserDto;
 }>;
 
+// MFA challenge response (when MFA is enabled)
+export type LoginMfaRequiredResponse = SuccessfulResponse<{
+  mfa_required: true;
+  mfa_session_id: string;
+  mfa_token: string;
+}>;
+
+// Union type for login response
+export type LoginResponse = LoginSuccessResponse | LoginMfaRequiredResponse;
+
 export type UserDto = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
 };
+
+// MFA verification request (for 6-digit TOTP codes)
+export type MfaVerifyRequest = {
+  mfa_token: string;
+  totp_code: string;
+  device_id?: string;
+};
+
+// MFA verification response
+export type MfaVerifyResponse = SuccessfulResponse<{
+  token: {
+    access_token: string;
+    refresh_token: string;
+    token_type: string;
+  };
+  user: UserDto;
+}>;
+
+// MFA recovery request (for backup codes)
+export type MfaRecoveryRequest = {
+  mfa_token: string;
+  code: string;
+  device_id?: string;
+};
+
+// MFA recovery response
+export type MfaRecoveryResponse = SuccessfulResponse<{
+  token: {
+    access_token: string;
+    refresh_token: string;
+    token_type: string;
+  };
+  user: UserDto;
+}>;
 
 export type RefreshTokenRequest = {
   refreshToken: string;
@@ -95,4 +140,12 @@ export type IIdentityService = {
   changePassword: (
     request: ChangePasswordRequest,
   ) => Promise<AxiosResponse<ChangePasswordResponse>>;
+  
+  // MFA verification methods
+  mfaVerify: (
+    request: MfaVerifyRequest,
+  ) => Promise<AxiosResponse<MfaVerifyResponse>>;
+  mfaRecovery: (
+    request: MfaRecoveryRequest,
+  ) => Promise<AxiosResponse<MfaRecoveryResponse>>;
 };
