@@ -54,9 +54,9 @@ export const MfaVerificationScreen: FC = () => {
         'MFA verification response:',
         JSON.stringify(response, null, 2),
       );
-      
+
       const result = response.data.result;
-      
+
       if (!result || !result.user || !result.token) {
         console.error('Invalid response structure:', result);
         setErrorMessage(t('mfa_verification:error_unknown'));

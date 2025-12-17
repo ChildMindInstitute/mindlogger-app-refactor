@@ -7,6 +7,4 @@ export const MfaVerificationFormSchema = z.object({
     .regex(/^[0-9]{6}$/, 'mfa_verification:invalid_code_format'),
 });
 
-export type MfaVerificationFormData = z.infer<
-  typeof MfaVerificationFormSchema
->;
+export type MfaVerificationFormData = z.infer<typeof MfaVerificationFormSchema>;

@@ -152,7 +152,7 @@ export type IIdentityService = {
   changePassword: (
     request: ChangePasswordRequest,
   ) => Promise<AxiosResponse<ChangePasswordResponse>>;
-  
+
   // MFA verification methods
   mfaVerify: (
     request: MfaVerifyRequest,
