@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -12,6 +12,10 @@ import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userP
 import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
 import { MfaRecoveryForm } from '@app/features/mfa-recovery/ui/MfaRecoveryForm';
+import {
+  getMfaErrorMessage,
+  shouldNavigateToLogin,
+} from '@app/features/mfa-verification/lib/mfaErrorHandler';
 import { openUrl } from '@app/screens/lib/utils/helpers';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
@@ -34,12 +38,17 @@ export const MfaRecoveryScreen: FC = () => {
 
   const { mfaToken, email, password } = route.params;
 
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+
   const {
     mutate: verifyRecoveryCode,
     isLoading,
     error,
   } = useMfaRecoveryMutation({
     onSuccess: response => {
+      // Clear any previous errors
+      setErrorMessage(undefined);
+
       // Complete the login process
       const { user, token: session } = response.data.result;
 
@@ -75,10 +84,29 @@ export const MfaRecoveryScreen: FC = () => {
       navigate('Applets');
     },
     onError: err => {
-      // Error handling will be improved in next step
       console.error('MFA recovery failed:', err);
+
+      // Get user-friendly error message
+      const errorKey = getMfaErrorMessage(err, 'mfa_recovery');
+      setErrorMessage(t(errorKey));
+
+      // Check if we should navigate back to login
+      if (shouldNavigateToLogin(err)) {
+        // Add a delay so user can see the error message
+        setTimeout(() => {
+          navigate('Login');
+        }, 2000);
+      }
     },
   });
+
+  // Update error message when error object changes
+  useEffect(() => {
+    if (error) {
+      const errorKey = getMfaErrorMessage(error, 'mfa_recovery');
+      setErrorMessage(t(errorKey));
+    }
+  }, [error, t]);
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
@@ -111,7 +139,7 @@ export const MfaRecoveryScreen: FC = () => {
               onRecoverySuccess={handleRecoverySuccess}
               onBack={handleBack}
               isLoading={isLoading}
-              error={error?.message}
+              error={errorMessage}
             />
           </Box>
 

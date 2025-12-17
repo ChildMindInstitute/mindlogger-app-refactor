@@ -179,7 +179,13 @@
     "back": "Back",
     "invalid_code_format": "Recovery code must be in format XXXX-XXXX",
     "error": "Invalid recovery code. Please try again.",
-    "success": "Identity confirmed successfully"
+    "success": "Identity confirmed successfully",
+    "error_invalid_code": "Invalid recovery code. Please check and try again.",
+    "error_code_not_found": "Recovery code not found or already used.",
+    "error_session_expired": "Your session has expired. Please log in again.",
+    "error_too_many_attempts": "Too many failed attempts. Please try logging in again.",
+    "error_network": "Network error. Please check your connection and try again.",
+    "error_unknown": "An error occurred. Please try again."
   },
   "mfa_verification": {
     "title": "Two-Factor Authentication",
@@ -188,7 +194,12 @@
     "invalid_code_format": "Verification code must be 6 digits",
     "error": "Invalid verification code. Please try again.",
     "success": "Verification successful",
-    "use_recovery_code": "Use a recovery code instead"
+    "use_recovery_code": "Use a recovery code instead",
+    "error_invalid_code": "Invalid verification code. Please check and try again.",
+    "error_session_expired": "Your session has expired. Please log in again.",
+    "error_too_many_attempts": "Too many failed attempts. Please try logging in again.",
+    "error_network": "Network error. Please check your connection and try again.",
+    "error_unknown": "An error occurred. Please try again."
   },
   "change_study": {
     "reset": "Reset",
