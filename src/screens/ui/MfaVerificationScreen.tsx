@@ -29,7 +29,12 @@ export const MfaVerificationScreen: FC = () => {
 
   const handleUseRecoveryCode = () => {
     // Navigate to the recovery code screen
-    navigate('MfaRecovery');
+    // TODO: Pass actual mfaToken, email, password from route params once API is wired up
+    navigate('MfaRecovery', {
+      mfaToken: '',
+      email: '',
+      password: '',
+    });
   };
 
   return (
