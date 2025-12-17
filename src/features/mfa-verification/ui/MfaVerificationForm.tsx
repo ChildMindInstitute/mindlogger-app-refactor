@@ -15,7 +15,7 @@ import { Text } from '@app/shared/ui/Text';
 import { MfaVerificationFormSchema } from '../model/MfaVerificationFormSchema';
 
 type Props = BoxProps & {
-  onVerificationSuccess: () => void;
+  onVerificationSuccess: (code: string) => void;
   onUseRecoveryCode: () => void;
   isLoading?: boolean;
   error?: string;
@@ -36,9 +36,8 @@ export const MfaVerificationForm: FC<Props> = ({
     },
     onSubmitSuccess: data => {
       executeIfOnline(() => {
-        // TODO: This will be wired up in the next step
-        console.log('Verification code submitted:', data.verificationCode);
-        onVerificationSuccess();
+        // Pass the verification code to the parent component
+        onVerificationSuccess(data.verificationCode);
       });
     },
   });

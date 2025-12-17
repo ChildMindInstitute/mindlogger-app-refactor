@@ -1,39 +1,104 @@
 import { FC } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useMfaVerifyMutation } from '@app/entities/identity/api/hooks/useMfaVerifyMutation';
+import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
+import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
+import { identityActions } from '@app/entities/identity/model/slice';
+import { storeSession } from '@app/entities/session/model/operations';
 import { MfaVerificationForm } from '@app/features/mfa-verification/ui/MfaVerificationForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
+import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
+import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
+import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
+import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, XStack } from '@app/shared/ui/base';
 import { Link } from '@app/shared/ui/Link';
 
+import { RootStackParamList } from '../config/types';
+
 export const MfaVerificationScreen: FC = () => {
   const { navigate } = useNavigation();
+  const route = useRoute<RouteProp<RootStackParamList, 'MfaVerification'>>();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
+
+  const { mfaToken, email, password } = route.params;
+
+  const {
+    mutate: verifyMfa,
+    isLoading,
+    error,
+  } = useMfaVerifyMutation({
+    onSuccess: response => {
+      // Complete the login process
+      const { user, token: session } = response.data.result;
+
+      const userParams = {
+        userId: user.id,
+        email,
+        password,
+      };
+
+      const userPrivateKey =
+        getDefaultEncryptionManager().getPrivateKey(userParams);
+
+      getDefaultUserPrivateKeyRecord().set(userPrivateKey);
+      dispatch(identityActions.onAuthSuccess(user));
+      getDefaultUserInfoRecord().setEmail(user.email);
+
+      // Map backend response (snake_case) to app format (camelCase)
+      storeSession({
+        accessToken: session.access_token,
+        refreshToken: session.refresh_token,
+        tokenType: session.token_type,
+      });
+
+      getDefaultAnalyticsService()
+        .login(user.id)
+        .then(() => {
+          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful);
+        })
+        .catch(console.error);
+
+      getDefaultFeatureFlagsService().login(user.id).catch(console.error);
+
+      navigate('Applets');
+    },
+    onError: err => {
+      // Error handling will be improved in next step
+      console.error('MFA verification failed:', err);
+    },
+  });
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
   };
 
-  const handleVerificationSuccess = () => {
-    // TODO: Navigate to the appropriate screen after successful verification
-    // This will be wired up in the next step
-    console.log('Verification successful, navigating...');
-    navigate('Applets');
+  const handleVerificationSuccess = (code: string) => {
+    executeIfOnline(() => {
+      verifyMfa({
+        mfa_token: mfaToken,
+        totp_code: code,
+        device_id: getDefaultSystemRecord().getDeviceId(),
+      });
+    });
   };
 
   const handleUseRecoveryCode = () => {
-    // Navigate to the recovery code screen
-    // TODO: Pass actual mfaToken, email, password from route params once API is wired up
     navigate('MfaRecovery', {
-      mfaToken: '',
-      email: '',
-      password: '',
+      mfaToken,
+      email,
+      password,
     });
   };
 
@@ -45,6 +110,8 @@ export const MfaVerificationScreen: FC = () => {
             <MfaVerificationForm
               onVerificationSuccess={handleVerificationSuccess}
               onUseRecoveryCode={handleUseRecoveryCode}
+              isLoading={isLoading}
+              error={error?.message}
             />
           </Box>
 
