@@ -14,7 +14,7 @@ import { Text } from '@app/shared/ui/Text';
 import { MfaRecoveryFormSchema } from '../model/MfaRecoveryFormSchema';
 
 type Props = BoxProps & {
-  onRecoverySuccess: () => void;
+  onRecoverySuccess: (recoveryCode: string) => void;
   onBack: () => void;
   isLoading?: boolean;
   error?: string;
@@ -35,9 +35,8 @@ export const MfaRecoveryForm: FC<Props> = ({
     },
     onSubmitSuccess: data => {
       executeIfOnline(() => {
-        // TODO: This will be wired up in the next step
-        console.log('Recovery code submitted:', data.recoveryCode);
-        onRecoverySuccess();
+        // Pass the recovery code to the parent component
+        onRecoverySuccess(data.recoveryCode);
       });
     },
   });
