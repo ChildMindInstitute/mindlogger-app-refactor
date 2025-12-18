@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -39,12 +39,19 @@ export const MfaVerificationScreen: FC = () => {
   const { mfaToken, email, password } = route.params;
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [sessionExpired, setSessionExpired] = useState(false);
+  const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const {
-    mutate: verifyMfa,
-    isLoading,
-    error,
-  } = useMfaVerifyMutation({
+  // Cleanup navigation timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (navigationTimeoutRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const { mutate: verifyMfa, isLoading } = useMfaVerifyMutation({
     onSuccess: response => {
       // Clear any previous errors
       setErrorMessage(undefined);
@@ -110,21 +117,19 @@ export const MfaVerificationScreen: FC = () => {
 
       // Check if we should navigate back to login
       if (shouldNavigateToLogin(err)) {
+        // Mark session as expired to disable auto-submit
+        setSessionExpired(true);
+
         // Add a delay so user can see the error message
-        setTimeout(() => {
+        navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, 2000);
       }
     },
   });
 
-  // Update error message when error object changes
-  useEffect(() => {
-    if (error) {
-      const errorKey = getMfaErrorMessage(error, 'mfa_verification');
-      setErrorMessage(t(errorKey));
-    }
-  }, [error, t]);
+  // Remove duplicate error handling useEffect - onError callback handles everything
+  // The old useEffect was redundant and could cause race conditions
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
@@ -158,6 +163,7 @@ export const MfaVerificationScreen: FC = () => {
               onUseRecoveryCode={handleUseRecoveryCode}
               isLoading={isLoading}
               error={errorMessage}
+              sessionExpired={sessionExpired}
             />
           </Box>
 

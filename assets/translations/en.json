@@ -195,6 +195,7 @@
     "error": "Invalid verification code. Please try again.",
     "success": "Verification successful",
     "use_recovery_code": "Use a recovery code instead",
+    "session_expiry_warning": "Session may have expired. Please verify manually or log in again.",
     "error_invalid_code": "Invalid verification code. Please check and try again.",
     "error_session_expired": "Your session has expired. Please log in again.",
     "error_too_many_attempts": "Too many failed attempts. Please try logging in again.",

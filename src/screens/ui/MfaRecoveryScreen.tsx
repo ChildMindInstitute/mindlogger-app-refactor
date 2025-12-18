@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -39,12 +39,18 @@ export const MfaRecoveryScreen: FC = () => {
   const { mfaToken, email, password } = route.params;
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const {
-    mutate: verifyRecoveryCode,
-    isLoading,
-    error,
-  } = useMfaRecoveryMutation({
+  // Cleanup navigation timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (navigationTimeoutRef.current) {
+        clearTimeout(navigationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const { mutate: verifyRecoveryCode, isLoading } = useMfaRecoveryMutation({
     onSuccess: response => {
       // Clear any previous errors
       setErrorMessage(undefined);
@@ -108,20 +114,14 @@ export const MfaRecoveryScreen: FC = () => {
       // Check if we should navigate back to login
       if (shouldNavigateToLogin(err)) {
         // Add a delay so user can see the error message
-        setTimeout(() => {
+        navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, 2000);
       }
     },
   });
 
-  // Update error message when error object changes
-  useEffect(() => {
-    if (error) {
-      const errorKey = getMfaErrorMessage(error, 'mfa_recovery');
-      setErrorMessage(t(errorKey));
-    }
-  }, [error, t]);
+  // Remove duplicate error handling useEffect - onError callback handles everything
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');

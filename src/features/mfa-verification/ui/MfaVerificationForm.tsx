@@ -1,8 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useAutoSubmit } from '@app/features/mfa-verification/lib/useAutoSubmit';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
@@ -19,6 +20,7 @@ type Props = BoxProps & {
   onUseRecoveryCode: () => void;
   isLoading?: boolean;
   error?: string;
+  sessionExpired?: boolean;
 };
 
 export const MfaVerificationForm: FC<Props> = ({
@@ -26,9 +28,15 @@ export const MfaVerificationForm: FC<Props> = ({
   onUseRecoveryCode,
   isLoading = false,
   error,
+  sessionExpired = false,
   ...props
 }) => {
   const { t } = useTranslation();
+
+  // Local state for translated session expiry warning
+  const [translatedWarning, setTranslatedWarning] = useState<
+    string | undefined
+  >();
 
   const { form, submit } = useAppForm(MfaVerificationFormSchema, {
     defaultValues: {
@@ -41,6 +49,27 @@ export const MfaVerificationForm: FC<Props> = ({
       });
     },
   });
+
+  // Watch for changes in verification code
+  const verificationCode = useWatch({
+    control: form.control,
+    name: 'verificationCode',
+  });
+
+  // Use auto-submit hook
+  const { sessionExpiryWarning } = useAutoSubmit({
+    verificationCode,
+    isLoading,
+    sessionExpired,
+    form,
+    submit,
+    onSessionExpiry: warningKey => {
+      setTranslatedWarning(t(warningKey));
+    },
+  });
+
+  // Use translated warning if available, otherwise use the warning from hook
+  const displayWarning = translatedWarning || sessionExpiryWarning;
 
   return (
     <Box {...props}>
@@ -95,6 +124,15 @@ export const MfaVerificationForm: FC<Props> = ({
                 mode="light"
                 accessibilityLabel="mfa-verification-error-message"
                 error={{ message: error }}
+                mt={8}
+              />
+            )}
+
+            {displayWarning && !error && (
+              <ErrorMessage
+                mode="light"
+                accessibilityLabel="mfa-verification-session-warning"
+                error={{ message: displayWarning }}
                 mt={8}
               />
             )}
