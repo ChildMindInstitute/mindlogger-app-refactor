@@ -1,11 +1,11 @@
 import { BaseError } from '@app/shared/api/types';
+import { MfaApiError, MfaErrorMetadata } from '@app/shared/types/mfaMetadata';
 
-/**
- * Maps backend MFA error responses to user-friendly translation keys
- * @param error - The error object from the API
- * @param namespace - The translation namespace ('mfa_verification' or 'mfa_recovery')
- * @returns Translation key for the error message
- */
+export interface MfaErrorResult {
+  messageKey: string;
+  metadata: MfaErrorMetadata | null;
+}
+
 export const getMfaErrorMessage = (
   error: BaseError | null | undefined,
   namespace: 'mfa_verification' | 'mfa_recovery',
@@ -70,14 +70,30 @@ export const getMfaErrorMessage = (
     return `${namespace}:error_code_not_found`;
   }
 
-  // Default fallback
   return `${namespace}:error_unknown`;
 };
 
-/**
- * Checks if the error requires navigation back to login
- * (expired session or too many attempts)
- */
+export const extractMfaErrorMetadata = (
+  error: unknown,
+): MfaErrorMetadata | null => {
+  try {
+    const apiError = error as MfaApiError;
+    return apiError?.response?.data?.metadata || null;
+  } catch {
+    return null;
+  }
+};
+
+export const getMfaErrorDetails = (
+  error: unknown,
+  namespace: 'mfa_verification' | 'mfa_recovery',
+): MfaErrorResult => {
+  const messageKey = getMfaErrorMessage(error as BaseError, namespace);
+  const metadata = extractMfaErrorMetadata(error);
+
+  return { messageKey, metadata };
+};
+
 export const shouldNavigateToLogin = (
   error: BaseError | null | undefined,
 ): boolean => {
@@ -88,7 +104,6 @@ export const shouldNavigateToLogin = (
   const status = error.response?.status;
   const errorMessage = error.message?.toLowerCase() || '';
 
-  // Navigate to login if session expired or too many attempts
   return (
     status === 429 ||
     (status === 401 &&
