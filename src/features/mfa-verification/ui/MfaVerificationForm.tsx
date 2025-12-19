@@ -21,6 +21,8 @@ type Props = BoxProps & {
   isLoading?: boolean;
   error?: string;
   sessionExpired?: boolean;
+  /** Warning message for remaining attempts */
+  attemptsWarning?: string;
 };
 
 export const MfaVerificationForm: FC<Props> = ({
@@ -29,6 +31,7 @@ export const MfaVerificationForm: FC<Props> = ({
   isLoading = false,
   error,
   sessionExpired = false,
+  attemptsWarning,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -128,7 +131,16 @@ export const MfaVerificationForm: FC<Props> = ({
               />
             )}
 
-            {displayWarning && !error && (
+            {attemptsWarning && (
+              <ErrorMessage
+                mode="light"
+                accessibilityLabel="mfa-verification-attempts-warning"
+                error={{ message: attemptsWarning }}
+                mt={8}
+              />
+            )}
+
+            {displayWarning && !error && !attemptsWarning && (
               <ErrorMessage
                 mode="light"
                 accessibilityLabel="mfa-verification-session-warning"

@@ -200,7 +200,11 @@
     "error_session_expired": "Your session has expired. Please log in again.",
     "error_too_many_attempts": "Too many failed attempts. Please try logging in again.",
     "error_network": "Network error. Please check your connection and try again.",
-    "error_unknown": "An error occurred. Please try again."
+    "error_unknown": "An error occurred. Please try again.",
+    "warning_session_attempts_remaining": "{{count}} attempt remaining for this session",
+    "warning_session_attempts_remaining_plural": "{{count}} attempts remaining for this session",
+    "warning_global_attempts_remaining": "{{count}} attempt remaining before temporary lockout",
+    "warning_global_attempts_remaining_plural": "{{count}} attempts remaining before temporary lockout"
   },
   "change_study": {
     "reset": "Reset",

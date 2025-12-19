@@ -18,6 +18,8 @@ type Props = BoxProps & {
   onBack: () => void;
   isLoading?: boolean;
   error?: string;
+  /** Warning message for remaining attempts */
+  attemptsWarning?: string;
 };
 
 export const MfaRecoveryForm: FC<Props> = ({
@@ -25,6 +27,7 @@ export const MfaRecoveryForm: FC<Props> = ({
   onBack,
   isLoading = false,
   error,
+  attemptsWarning,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -114,6 +117,15 @@ export const MfaRecoveryForm: FC<Props> = ({
                 mode="light"
                 accessibilityLabel="mfa-recovery-error-message"
                 error={{ message: error }}
+                mt={8}
+              />
+            )}
+
+            {attemptsWarning && (
+              <ErrorMessage
+                mode="light"
+                accessibilityLabel="mfa-recovery-attempts-warning"
+                error={{ message: attemptsWarning }}
                 mt={8}
               />
             )}

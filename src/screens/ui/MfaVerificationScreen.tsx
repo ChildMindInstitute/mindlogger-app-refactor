@@ -15,6 +15,7 @@ import {
   getMfaErrorMessage,
   shouldNavigateToLogin,
 } from '@app/features/mfa-verification/lib/mfaErrorHandler';
+import { useMfaAttemptsTracker } from '@app/features/mfa-verification/lib/useMfaAttemptsTracker';
 import { MfaVerificationForm } from '@app/features/mfa-verification/ui/MfaVerificationForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
@@ -42,7 +43,13 @@ export const MfaVerificationScreen: FC = () => {
   const [sessionExpired, setSessionExpired] = useState(false);
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Cleanup navigation timeout on unmount
+  const {
+    updateFromApiError,
+    resetAttempts,
+    getWarningMessage,
+    getWarningCount,
+  } = useMfaAttemptsTracker();
+
   useEffect(() => {
     return () => {
       if (navigationTimeoutRef.current) {
@@ -53,14 +60,8 @@ export const MfaVerificationScreen: FC = () => {
 
   const { mutate: verifyMfa, isLoading } = useMfaVerifyMutation({
     onSuccess: response => {
-      // Clear any previous errors
       setErrorMessage(undefined);
-
-      // Complete the login process
-      console.log(
-        'MFA verification response:',
-        JSON.stringify(response, null, 2),
-      );
+      resetAttempts();
 
       const result = response.data.result;
 
@@ -111,25 +112,20 @@ export const MfaVerificationScreen: FC = () => {
     onError: err => {
       console.error('MFA verification failed:', err);
 
-      // Get user-friendly error message
+      updateFromApiError(err);
+
       const errorKey = getMfaErrorMessage(err, 'mfa_verification');
       setErrorMessage(t(errorKey));
 
-      // Check if we should navigate back to login
       if (shouldNavigateToLogin(err)) {
-        // Mark session as expired to disable auto-submit
         setSessionExpired(true);
 
-        // Add a delay so user can see the error message
         navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, 2000);
       }
     },
   });
-
-  // Remove duplicate error handling useEffect - onError callback handles everything
-  // The old useEffect was redundant and could cause race conditions
 
   const navigateToAppLanguage = () => {
     navigate('ChangeLanguage');
@@ -153,6 +149,14 @@ export const MfaVerificationScreen: FC = () => {
     });
   };
 
+  const warningKey = getWarningMessage();
+  const warningCount = getWarningCount();
+
+  const attemptsWarningMessage =
+    warningKey && warningCount !== null
+      ? t(warningKey, { count: warningCount })
+      : undefined;
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Box flex={1} px={isTablet() ? '$20' : 0}>
@@ -164,6 +168,7 @@ export const MfaVerificationScreen: FC = () => {
               isLoading={isLoading}
               error={errorMessage}
               sessionExpired={sessionExpired}
+              attemptsWarning={attemptsWarningMessage}
             />
           </Box>
 

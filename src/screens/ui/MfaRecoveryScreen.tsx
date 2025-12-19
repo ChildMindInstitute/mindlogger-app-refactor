@@ -16,6 +16,7 @@ import {
   getMfaErrorMessage,
   shouldNavigateToLogin,
 } from '@app/features/mfa-verification/lib/mfaErrorHandler';
+import { useMfaAttemptsTracker } from '@app/features/mfa-verification/lib/useMfaAttemptsTracker';
 import { openUrl } from '@app/screens/lib/utils/helpers';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
@@ -41,7 +42,13 @@ export const MfaRecoveryScreen: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Cleanup navigation timeout on unmount
+  const {
+    updateFromApiError,
+    resetAttempts,
+    getWarningMessage,
+    getWarningCount,
+  } = useMfaAttemptsTracker();
+
   useEffect(() => {
     return () => {
       if (navigationTimeoutRef.current) {
@@ -52,11 +59,8 @@ export const MfaRecoveryScreen: FC = () => {
 
   const { mutate: verifyRecoveryCode, isLoading } = useMfaRecoveryMutation({
     onSuccess: response => {
-      // Clear any previous errors
       setErrorMessage(undefined);
-
-      // Complete the login process
-      console.log('MFA recovery response:', JSON.stringify(response, null, 2));
+      resetAttempts();
 
       const result = response.data.result;
 
@@ -107,13 +111,12 @@ export const MfaRecoveryScreen: FC = () => {
     onError: err => {
       console.error('MFA recovery failed:', err);
 
-      // Get user-friendly error message
+      updateFromApiError(err);
+
       const errorKey = getMfaErrorMessage(err, 'mfa_recovery');
       setErrorMessage(t(errorKey));
 
-      // Check if we should navigate back to login
       if (shouldNavigateToLogin(err)) {
-        // Add a delay so user can see the error message
         navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, 2000);
@@ -145,6 +148,15 @@ export const MfaRecoveryScreen: FC = () => {
     });
   };
 
+  // Get warning message and count for attempts
+  const warningKey = getWarningMessage();
+  const warningCount = getWarningCount();
+
+  const attemptsWarningMessage =
+    warningKey && warningCount !== null
+      ? t(warningKey, { count: warningCount })
+      : undefined;
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Box flex={1} px={isTablet() ? '$20' : 0}>
@@ -155,6 +167,7 @@ export const MfaRecoveryScreen: FC = () => {
               onBack={handleBack}
               isLoading={isLoading}
               error={errorMessage}
+              attemptsWarning={attemptsWarningMessage}
             />
           </Box>
 
