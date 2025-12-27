@@ -56,14 +56,6 @@ export const useAutoSubmit = ({
 
   // Auto-submit logic when 6 digits are entered
   useEffect(() => {
-    console.log('[useAutoSubmit] Effect triggered', {
-      codeLength: verificationCode.length,
-      isLoading,
-      isAutoSubmitting: isAutoSubmittingRef.current,
-      hasAutoSubmitted: hasAutoSubmittedRef.current,
-      sessionExpired,
-    });
-
     // Clear any existing timer
     if (autoSubmitTimerRef.current) {
       clearTimeout(autoSubmitTimerRef.current);
@@ -89,12 +81,10 @@ export const useAutoSubmit = ({
       !hasAutoSubmittedRef.current &&
       !sessionExpired
     ) {
-      console.log('[useAutoSubmit] Conditions met, starting auto-submit');
       // Check if session might be expired (4.5 minute threshold)
       const timeElapsed = Date.now() - screenLoadTime.current;
 
       if (timeElapsed > SESSION_EXPIRY_THRESHOLD_MS) {
-        console.log('[useAutoSubmit] Session expired, showing warning');
         // Session might be expired, show warning instead of auto-submitting
         const warning = 'mfa_verification:session_expiry_warning';
         setSessionExpiryWarning(warning);
@@ -102,24 +92,20 @@ export const useAutoSubmit = ({
         return;
       }
 
-      console.log('[useAutoSubmit] Session valid, validating form');
       // Validate the code format before auto-submitting
       form
         .trigger('verificationCode')
         .then(isValid => {
-          console.log('[useAutoSubmit] Form validation result:', isValid);
           if (!isValid) {
             return; // Invalid format, don't auto-submit
           }
 
-          console.log('[useAutoSubmit] Form valid, scheduling submit');
           // Set refs to prevent double submission
           isAutoSubmittingRef.current = true;
           hasAutoSubmittedRef.current = true;
 
           // Delay auto-submit slightly for better UX (user can see the complete code)
           autoSubmitTimerRef.current = setTimeout(() => {
-            console.log('[useAutoSubmit] Executing submit');
             submit()
               .catch(console.error)
               .finally(() => {
