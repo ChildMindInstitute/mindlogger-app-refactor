@@ -188,23 +188,23 @@
     "error_unknown": "An error occurred. Please try again."
   },
   "mfa_verification": {
-    "title": "Two-Factor Authentication",
-    "subtitle": "Enter the 6-digit code from your authenticator app.",
-    "verify": "Verify",
+    "title": "Confirm Your Identity",
+    "subtitle": "Please enter the verification code shown in your authenticator app.",
+    "verify": "Continue",
     "invalid_code_format": "Verification code must be 6 digits",
-    "error": "Invalid verification code. Please try again.",
+    "error": "Invalid code",
     "success": "Verification successful",
-    "use_recovery_code": "Use a recovery code instead",
+    "use_recovery_code": "I can't access my authenticator app",
     "session_expiry_warning": "Session may have expired. Please verify manually or log in again.",
     "error_invalid_code": "Invalid verification code. Please check and try again.",
     "error_session_expired": "Your session has expired. Please log in again.",
     "error_too_many_attempts": "Too many failed attempts. Please try logging in again.",
     "error_network": "Network error. Please check your connection and try again.",
     "error_unknown": "An error occurred. Please try again.",
-    "warning_session_attempts_remaining": "{{count}} attempt remaining for this session",
-    "warning_session_attempts_remaining_plural": "{{count}} attempts remaining for this session",
-    "warning_global_attempts_remaining": "{{count}} attempt remaining before temporary lockout",
-    "warning_global_attempts_remaining_plural": "{{count}} attempts remaining before temporary lockout"
+    "warning_session_attempts_remaining": ". {{count}} attempt remaining",
+    "warning_session_attempts_remaining_plural": ". {{count}} attempts remaining",
+    "warning_global_attempts_remaining": ". {{count}} attempt remaining before temporary lockout",
+    "warning_global_attempts_remaining_plural": ". {{count}} attempts remaining before temporary lockout"
   },
   "change_study": {
     "reset": "Reset",
