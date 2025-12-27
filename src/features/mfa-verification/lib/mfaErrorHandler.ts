@@ -20,14 +20,26 @@ export const getMfaErrorMessage = (
     error.response?.data?.result?.[0]?.type?.toLowerCase() || '';
 
   // Handle specific HTTP status codes
+  if (status === 400) {
+    // 400 Bad Request - Invalid code (RecoveryCodeInvalidError, InvalidTOTPCodeError from users domain)
+    if (
+      errorMessage.includes('invalid') ||
+      errorMessage.includes('incorrect') ||
+      errorType.includes('invalid') ||
+      errorType.includes('bad_request')
+    ) {
+      return `${namespace}:error`;
+    }
+  }
+
   if (status === 401) {
-    // 401 Unauthorized - Invalid code or expired session
+    // 401 Unauthorized - Invalid code or expired session (from authentication domain)
     if (
       errorMessage.includes('invalid') ||
       errorMessage.includes('incorrect') ||
       errorType.includes('invalid')
     ) {
-      return `${namespace}:error_invalid_code`;
+      return `${namespace}:error`;
     }
     if (
       errorMessage.includes('expired') ||
@@ -36,7 +48,7 @@ export const getMfaErrorMessage = (
     ) {
       return `${namespace}:error_session_expired`;
     }
-    return `${namespace}:error_invalid_code`;
+    return `${namespace}:error`;
   }
 
   if (status === 404) {
@@ -70,7 +82,10 @@ export const getMfaErrorMessage = (
     return `${namespace}:error_code_not_found`;
   }
 
-  return `${namespace}:error_unknown`;
+  // Default to simple error message for better UX
+  // mfa_verification:error = "Invalid code"
+  // mfa_recovery:error = "Invalid recovery code. Please try again."
+  return `${namespace}:error`;
 };
 
 export const extractMfaErrorMetadata = (
