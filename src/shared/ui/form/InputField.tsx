@@ -87,7 +87,7 @@ export const InputField: FC<Props> = ({
       {!hideError && (
         <ErrorMessage
           mode={mode === 'dark' ? 'dark' : 'light'}
-          mt={8}
+          mt={4}
           error={error}
           accessibilityLabel={`${name}-error-text`}
         />
