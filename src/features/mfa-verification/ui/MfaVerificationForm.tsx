@@ -1,15 +1,16 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 
 import { FormProvider, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useAutoSubmit } from '@app/features/mfa-verification/lib/useAutoSubmit';
+import { useMfaErrorSync } from '@app/features/mfa-verification/lib/useMfaErrorSync';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
+import { Button } from '@app/shared/ui/Button';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
 import { InputField } from '@app/shared/ui/form/InputField';
-import { Link } from '@app/shared/ui/Link';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { Text } from '@app/shared/ui/Text';
 
@@ -23,6 +24,8 @@ type Props = BoxProps & {
   sessionExpired?: boolean;
   /** Warning message for remaining attempts */
   attemptsWarning?: string;
+  /** Callback to clear error when user starts typing */
+  onErrorClear?: () => void;
 };
 
 export const MfaVerificationForm: FC<Props> = ({
@@ -32,6 +35,7 @@ export const MfaVerificationForm: FC<Props> = ({
   error,
   sessionExpired = false,
   attemptsWarning,
+  onErrorClear,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -58,6 +62,25 @@ export const MfaVerificationForm: FC<Props> = ({
     control: form.control,
     name: 'verificationCode',
   });
+
+  // Sync API errors with form and handle error clearing
+  useMfaErrorSync({
+    error,
+    attemptsWarning,
+    form,
+    fieldName: 'verificationCode',
+    onErrorClear,
+    fieldValue: verificationCode,
+    clearThreshold: 6,
+  });
+
+  // Clear session expiry warning when user starts typing
+  useEffect(() => {
+    // Clear session expiry warning when user deletes or modifies code
+    if (verificationCode && verificationCode.length < 6 && translatedWarning) {
+      setTranslatedWarning(undefined);
+    }
+  }, [verificationCode, translatedWarning]);
 
   // Use auto-submit hook
   const { sessionExpiryWarning } = useAutoSubmit({
@@ -89,7 +112,7 @@ export const MfaVerificationForm: FC<Props> = ({
                 lineHeight={24}
                 letterSpacing={0.5}
                 textAlign="center"
-                color="$on_surface"
+                color="$on_surface_variant"
               >
                 {t('mfa_verification:subtitle')}
               </Text>
@@ -103,8 +126,20 @@ export const MfaVerificationForm: FC<Props> = ({
                 keyboardType="number-pad"
                 maxLength={6}
                 textAlign="center"
+                mode="outlined"
+                caretHidden={!verificationCode || verificationCode.length === 0}
               />
             </Box>
+
+            {displayWarning && !error && !attemptsWarning && (
+              <Box width={300} mt={16}>
+                <ErrorMessage
+                  mode="light"
+                  accessibilityLabel="mfa-verification-session-warning"
+                  error={{ message: displayWarning }}
+                />
+              </Box>
+            )}
           </YStack>
 
           <YStack gap={16} alignItems="center">
@@ -113,6 +148,9 @@ export const MfaVerificationForm: FC<Props> = ({
                 isLoading={isLoading}
                 accessibilityLabel="mfa-verification-verify-button"
                 onPress={() => {
+                  // Clear error before submitting so new errors trigger re-render
+                  form.clearErrors('verificationCode');
+                  onErrorClear?.();
                   submit().catch(console.error);
                 }}
                 width="100%"
@@ -122,41 +160,24 @@ export const MfaVerificationForm: FC<Props> = ({
               </SubmitButton>
             </Box>
 
-            {error && (
-              <ErrorMessage
-                mode="light"
-                accessibilityLabel="mfa-verification-error-message"
-                error={{ message: error }}
-                mt={8}
-              />
-            )}
-
-            {attemptsWarning && (
-              <ErrorMessage
-                mode="light"
-                accessibilityLabel="mfa-verification-attempts-warning"
-                error={{ message: attemptsWarning }}
-                mt={8}
-              />
-            )}
-
-            {displayWarning && !error && !attemptsWarning && (
-              <ErrorMessage
-                mode="light"
-                accessibilityLabel="mfa-verification-session-warning"
-                error={{ message: displayWarning }}
-                mt={8}
-              />
-            )}
-
-            <Link
-              textDecorationLine="underline"
-              accessibilityLabel="use-recovery-code-link"
-              onPress={onUseRecoveryCode}
-              mt={16}
-            >
-              {t('mfa_verification:use_recovery_code')}
-            </Link>
+            <Box width={300}>
+              <Button
+                onPress={onUseRecoveryCode}
+                bg="transparent"
+                textProps={{
+                  color: '$primary',
+                  fontWeight: '400',
+                  textAlign: 'center',
+                  letterSpacing: 0.15,
+                  fontSize: 16,
+                  lineHeight: 24,
+                }}
+                accessibilityLabel="use-recovery-code-link"
+                h={48}
+              >
+                {t('mfa_verification:use_recovery_code')}
+              </Button>
+            </Box>
           </YStack>
         </YStack>
       </FormProvider>

@@ -1,12 +1,13 @@
 import { FC } from 'react';
 
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { useMfaErrorSync } from '@app/features/mfa-verification/lib/useMfaErrorSync';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
-import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
+import { Button } from '@app/shared/ui/Button';
 import { InputField } from '@app/shared/ui/form/InputField';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { Text } from '@app/shared/ui/Text';
@@ -20,6 +21,8 @@ type Props = BoxProps & {
   error?: string;
   /** Warning message for remaining attempts */
   attemptsWarning?: string;
+  /** Callback to clear error when user starts typing */
+  onErrorClear?: () => void;
 };
 
 export const MfaRecoveryForm: FC<Props> = ({
@@ -28,6 +31,7 @@ export const MfaRecoveryForm: FC<Props> = ({
   isLoading = false,
   error,
   attemptsWarning,
+  onErrorClear,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -42,6 +46,23 @@ export const MfaRecoveryForm: FC<Props> = ({
         onRecoverySuccess(data.recoveryCode);
       });
     },
+  });
+
+  // Watch for changes in recovery code
+  const recoveryCode = useWatch({
+    control: form.control,
+    name: 'recoveryCode',
+  });
+
+  // Sync API errors with form and handle error clearing
+  useMfaErrorSync({
+    error,
+    attemptsWarning,
+    form,
+    fieldName: 'recoveryCode',
+    onErrorClear,
+    fieldValue: recoveryCode,
+    clearThreshold: 11,
   });
 
   return (
@@ -59,7 +80,7 @@ export const MfaRecoveryForm: FC<Props> = ({
                 lineHeight={24}
                 letterSpacing={0.5}
                 textAlign="center"
-                color="$on_surface"
+                color="$on_surface_variant"
               >
                 {t('mfa_recovery:subtitle')}
               </Text>
@@ -72,6 +93,7 @@ export const MfaRecoveryForm: FC<Props> = ({
                 placeholder="XXXXX-XXXXX"
                 autoCapitalize="characters"
                 maxLength={11}
+                mode="outlined"
                 onChangeText={text => {
                   // Auto-format: add hyphen after 5 characters
                   const cleaned = text.replace(/-/g, '').toUpperCase();
@@ -92,6 +114,9 @@ export const MfaRecoveryForm: FC<Props> = ({
                 isLoading={isLoading}
                 accessibilityLabel="mfa-recovery-continue-button"
                 onPress={() => {
+                  // Clear error before submitting so new errors trigger re-render
+                  form.clearErrors('recoveryCode');
+                  onErrorClear?.();
                   submit().catch(console.error);
                 }}
                 width="100%"
@@ -102,33 +127,23 @@ export const MfaRecoveryForm: FC<Props> = ({
             </Box>
 
             <Box width={300}>
-              <SubmitButton
-                accessibilityLabel="mfa-recovery-back-button"
+              <Button
                 onPress={onBack}
-                width="100%"
-                mode="secondary"
+                bg="transparent"
+                textProps={{
+                  color: '$primary',
+                  fontWeight: '400',
+                  textAlign: 'center',
+                  letterSpacing: 0.15,
+                  fontSize: 16,
+                  lineHeight: 24,
+                }}
+                accessibilityLabel="mfa-recovery-back-button"
+                h={48}
               >
                 {t('mfa_recovery:back')}
-              </SubmitButton>
+              </Button>
             </Box>
-
-            {error && (
-              <ErrorMessage
-                mode="light"
-                accessibilityLabel="mfa-recovery-error-message"
-                error={{ message: error }}
-                mt={8}
-              />
-            )}
-
-            {attemptsWarning && (
-              <ErrorMessage
-                mode="light"
-                accessibilityLabel="mfa-recovery-attempts-warning"
-                error={{ message: attemptsWarning }}
-                mt={8}
-              />
-            )}
           </YStack>
         </YStack>
       </FormProvider>
