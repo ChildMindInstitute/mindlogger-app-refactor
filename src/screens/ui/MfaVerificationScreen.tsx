@@ -149,6 +149,10 @@ export const MfaVerificationScreen: FC = () => {
     });
   };
 
+  const handleErrorClear = () => {
+    setErrorMessage(undefined);
+  };
+
   const warningKey = getWarningMessage();
   const warningCount = getWarningCount();
 
@@ -169,6 +173,7 @@ export const MfaVerificationScreen: FC = () => {
               error={errorMessage}
               sessionExpired={sessionExpired}
               attemptsWarning={attemptsWarningMessage}
+              onErrorClear={handleErrorClear}
             />
           </Box>
 

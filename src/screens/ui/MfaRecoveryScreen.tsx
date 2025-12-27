@@ -148,6 +148,10 @@ export const MfaRecoveryScreen: FC = () => {
     });
   };
 
+  const handleErrorClear = () => {
+    setErrorMessage(undefined);
+  };
+
   // Get warning message and count for attempts
   const warningKey = getWarningMessage();
   const warningCount = getWarningCount();
@@ -168,6 +172,7 @@ export const MfaRecoveryScreen: FC = () => {
               isLoading={isLoading}
               error={errorMessage}
               attemptsWarning={attemptsWarningMessage}
+              onErrorClear={handleErrorClear}
             />
           </Box>
 
