@@ -128,6 +128,7 @@ export const MfaVerificationForm: FC<Props> = ({
                 textAlign="center"
                 mode="outlined"
                 caretHidden={!verificationCode || verificationCode.length === 0}
+                editable={!sessionExpired}
               />
             </Box>
 
@@ -146,6 +147,7 @@ export const MfaVerificationForm: FC<Props> = ({
             <Box width={300}>
               <SubmitButton
                 isLoading={isLoading}
+                disabled={sessionExpired}
                 accessibilityLabel="mfa-verification-verify-button"
                 onPress={() => {
                   // Clear error before submitting so new errors trigger re-render
@@ -164,6 +166,7 @@ export const MfaVerificationForm: FC<Props> = ({
               <Button
                 onPress={onUseRecoveryCode}
                 bg="transparent"
+                disabled={sessionExpired}
                 textProps={{
                   color: '$primary',
                   fontWeight: '400',

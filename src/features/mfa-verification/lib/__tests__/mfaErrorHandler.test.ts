@@ -4,7 +4,7 @@ import { getMfaErrorMessage, shouldNavigateToLogin } from '../mfaErrorHandler';
 
 describe('mfaErrorHandler', () => {
   describe('getMfaErrorMessage', () => {
-    it('should return invalid code message for 401 error', () => {
+    it('should return error message for invalid TOTP code', () => {
       const error: BaseError = {
         code: 'ERR_BAD_REQUEST',
         response: {
@@ -13,16 +13,17 @@ describe('mfaErrorHandler', () => {
             result: [
               { message: 'Invalid code', type: 'InvalidCode', path: [] },
             ],
-          },
+            error_code: 'AUTH.MFA.INVALID_TOTP_CODE',
+          } as any,
         },
         message: 'Invalid code',
       };
 
       const result = getMfaErrorMessage(error, 'mfa_verification');
-      expect(result).toBe('mfa_verification:error_invalid_code');
+      expect(result).toBe('mfa_verification:error');
     });
 
-    it('should return session expired message for 404 error', () => {
+    it('should return session expired message for token expired error', () => {
       const error: BaseError = {
         code: 'ERR_NOT_FOUND',
         response: {
@@ -35,7 +36,8 @@ describe('mfaErrorHandler', () => {
                 path: [],
               },
             ],
-          },
+            error_code: 'AUTH.MFA.TOKEN_EXPIRED',
+          } as any,
         },
         message: 'Session not found',
       };
@@ -66,7 +68,7 @@ describe('mfaErrorHandler', () => {
       expect(result).toBe('mfa_recovery:error_code_not_found');
     });
 
-    it('should return too many attempts message for 429 error', () => {
+    it('should return too many attempts message for TOO_MANY_ATTEMPTS error', () => {
       const error: BaseError = {
         code: 'ERR_TOO_MANY_REQUESTS',
         response: {
@@ -79,7 +81,8 @@ describe('mfaErrorHandler', () => {
                 path: [],
               },
             ],
-          },
+            error_code: 'AUTH.MFA.TOO_MANY_ATTEMPTS',
+          } as any,
         },
         message: 'Too many attempts',
       };
@@ -88,7 +91,7 @@ describe('mfaErrorHandler', () => {
       expect(result).toBe('mfa_verification:error_too_many_attempts');
     });
 
-    it('should return generic error message for other status codes', () => {
+    it('should return generic error message for unknown error codes', () => {
       const error: BaseError = {
         code: 'ERR_INTERNAL_SERVER',
         response: {
@@ -101,13 +104,13 @@ describe('mfaErrorHandler', () => {
                 path: [],
               },
             ],
-          },
+          } as any,
         },
         message: 'Internal server error',
       };
 
       const result = getMfaErrorMessage(error, 'mfa_verification');
-      expect(result).toBe('mfa_verification:error_unknown');
+      expect(result).toBe('mfa_verification:error');
     });
 
     it('should return network error message when no response status', () => {
@@ -145,14 +148,17 @@ describe('mfaErrorHandler', () => {
       expect(shouldNavigateToLogin(error)).toBe(false);
     });
 
-    it('should return true for 401 error with expired session', () => {
+    it('should return true for TOKEN_EXPIRED error code', () => {
       const error: BaseError = {
         code: 'ERR_UNAUTHORIZED',
         response: {
           status: 401,
-          data: { result: [] },
+          data: {
+            result: [],
+            error_code: 'AUTH.MFA.TOKEN_EXPIRED',
+          } as any,
         },
-        message: 'Session expired',
+        message: 'Request failed with status code 401',
       };
 
       expect(shouldNavigateToLogin(error)).toBe(true);

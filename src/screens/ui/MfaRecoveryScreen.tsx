@@ -40,6 +40,7 @@ export const MfaRecoveryScreen: FC = () => {
   const { mfaToken, email, password } = route.params;
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [sessionExpired, setSessionExpired] = useState(false);
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
@@ -117,6 +118,8 @@ export const MfaRecoveryScreen: FC = () => {
       setErrorMessage(t(errorKey));
 
       if (shouldNavigateToLogin(err)) {
+        setSessionExpired(true);
+
         navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, 2000);
@@ -171,6 +174,7 @@ export const MfaRecoveryScreen: FC = () => {
               onBack={handleBack}
               isLoading={isLoading}
               error={errorMessage}
+              sessionExpired={sessionExpired}
               attemptsWarning={attemptsWarningMessage}
               onErrorClear={handleErrorClear}
             />

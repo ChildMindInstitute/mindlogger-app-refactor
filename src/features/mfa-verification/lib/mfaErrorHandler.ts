@@ -14,54 +14,41 @@ export const getMfaErrorMessage = (
     return `${namespace}:error_unknown`;
   }
 
-  const status = error.response?.status;
-  const errorMessage = error.message?.toLowerCase() || '';
-  const errorType =
-    error.response?.data?.result?.[0]?.type?.toLowerCase() || '';
+  const responseData = error.response?.data as any;
+  const errorCode = responseData?.error_code || '';
 
-  // Handle specific HTTP status codes
-  if (status === 400) {
-    // 400 Bad Request - Invalid code (RecoveryCodeInvalidError, InvalidTOTPCodeError from users domain)
-    if (
-      errorMessage.includes('invalid') ||
-      errorMessage.includes('incorrect') ||
-      errorType.includes('invalid') ||
-      errorType.includes('bad_request')
-    ) {
+  // Map backend error codes to translation keys
+  switch (errorCode) {
+    case 'AUTH.MFA.TOKEN_EXPIRED':
+    case 'AUTH.MFA.TOKEN_INVALID':
+    case 'AUTH.MFA.SESSION_NOT_FOUND':
+      return `${namespace}:error_session_expired`;
+
+    case 'AUTH.MFA.TOO_MANY_ATTEMPTS':
+    case 'AUTH.MFA.GLOBAL_LOCKOUT':
+      return `${namespace}:error_too_many_attempts`;
+
+    case 'AUTH.MFA.INVALID_TOTP_CODE':
       return `${namespace}:error`;
-    }
+
+    default:
+      // Fallback to status code checks if error_code is not present
+      break;
   }
 
-  if (status === 401) {
-    // 401 Unauthorized - Invalid code or expired session (from authentication domain)
-    if (
-      errorMessage.includes('invalid') ||
-      errorMessage.includes('incorrect') ||
-      errorType.includes('invalid')
-    ) {
-      return `${namespace}:error`;
-    }
-    if (
-      errorMessage.includes('expired') ||
-      errorMessage.includes('session') ||
-      errorType.includes('expired')
-    ) {
-      return `${namespace}:error_session_expired`;
-    }
-    return `${namespace}:error`;
+  // Fallback: Check HTTP status codes (legacy support)
+  const status = error.response?.status;
+  const errorMessage = error.message?.toLowerCase() || '';
+
+  if (status === 429) {
+    return `${namespace}:error_too_many_attempts`;
   }
 
   if (status === 404) {
-    // 404 Not Found - Recovery code not found (specific to recovery flow)
     if (namespace === 'mfa_recovery') {
       return `${namespace}:error_code_not_found`;
     }
     return `${namespace}:error_session_expired`;
-  }
-
-  if (status === 429) {
-    // 429 Too Many Requests - Rate limit exceeded
-    return `${namespace}:error_too_many_attempts`;
   }
 
   // Network errors (no response)
@@ -69,22 +56,7 @@ export const getMfaErrorMessage = (
     return `${namespace}:error_network`;
   }
 
-  // Check error message content for specific error types
-  if (errorMessage.includes('token') && errorMessage.includes('expired')) {
-    return `${namespace}:error_session_expired`;
-  }
-
-  if (errorMessage.includes('too many')) {
-    return `${namespace}:error_too_many_attempts`;
-  }
-
-  if (errorMessage.includes('not found') && namespace === 'mfa_recovery') {
-    return `${namespace}:error_code_not_found`;
-  }
-
   // Default to simple error message for better UX
-  // mfa_verification:error = "Invalid code"
-  // mfa_recovery:error = "Invalid recovery code. Please try again."
   return `${namespace}:error`;
 };
 
@@ -117,12 +89,27 @@ export const shouldNavigateToLogin = (
   }
 
   const status = error.response?.status;
-  const errorMessage = error.message?.toLowerCase() || '';
+  const responseData = error.response?.data as any;
+  const errorCode = responseData?.error_code || '';
 
-  return (
-    status === 429 ||
-    (status === 401 &&
-      (errorMessage.includes('expired') || errorMessage.includes('session'))) ||
-    errorMessage.includes('too many')
-  );
+  // Check backend error codes - these require navigation to login
+  const ERROR_CODES_REQUIRING_LOGIN = [
+    'AUTH.MFA.TOKEN_EXPIRED', // MFA token expired (5 min timeout)
+    'AUTH.MFA.TOKEN_INVALID', // MFA token invalid or corrupted
+    'AUTH.MFA.SESSION_NOT_FOUND', // MFA session not found (expired)
+    'AUTH.MFA.TOO_MANY_ATTEMPTS', // Too many failed attempts (rate limit)
+    'AUTH.MFA.GLOBAL_LOCKOUT', // Global lockout across all sessions
+  ];
+
+  // Check by error code (most reliable)
+  if (ERROR_CODES_REQUIRING_LOGIN.includes(errorCode)) {
+    return true;
+  }
+
+  // Fallback: Check HTTP status 429 (rate limit)
+  if (status === 429) {
+    return true;
+  }
+
+  return false;
 };

@@ -19,6 +19,7 @@ type Props = BoxProps & {
   onBack: () => void;
   isLoading?: boolean;
   error?: string;
+  sessionExpired?: boolean;
   /** Warning message for remaining attempts */
   attemptsWarning?: string;
   /** Callback to clear error when user starts typing */
@@ -30,6 +31,7 @@ export const MfaRecoveryForm: FC<Props> = ({
   onBack,
   isLoading = false,
   error,
+  sessionExpired = false,
   attemptsWarning,
   onErrorClear,
   ...props
@@ -94,6 +96,7 @@ export const MfaRecoveryForm: FC<Props> = ({
                 autoCapitalize="characters"
                 maxLength={11}
                 mode="outlined"
+                editable={!sessionExpired}
                 onChangeText={text => {
                   // Auto-format: add hyphen after 5 characters
                   const cleaned = text.replace(/-/g, '').toUpperCase();
@@ -112,6 +115,7 @@ export const MfaRecoveryForm: FC<Props> = ({
             <Box width={300}>
               <SubmitButton
                 isLoading={isLoading}
+                disabled={sessionExpired}
                 accessibilityLabel="mfa-recovery-continue-button"
                 onPress={() => {
                   // Clear error before submitting so new errors trigger re-render
@@ -130,6 +134,7 @@ export const MfaRecoveryForm: FC<Props> = ({
               <Button
                 onPress={onBack}
                 bg="transparent"
+                disabled={sessionExpired}
                 textProps={{
                   color: '$primary',
                   fontWeight: '400',
