@@ -172,6 +172,38 @@
     "success": "Votre mot de passe a été réinitialisé avec succès. Veuillez vous connecter avec votre nouveau mot de passe.",
     "error": "Erreur lors de la réinitialisation de votre mot de passe"
   },
+  "mfa_recovery": {
+    "title": "Confirmez votre identité",
+    "subtitle": "Veuillez entrer l'un de vos codes de récupération.",
+    "continue": "Continuer",
+    "back": "Retour",
+    "error": "Code de récupération invalide. Veuillez réessayer.",
+    "success": "Vérification réussie",
+    "error_code_not_found": "Code de récupération introuvable. Veuillez réessayer.",
+    "error_session_expired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "error_too_many_attempts": "Trop de tentatives échouées. Veuillez réessayer de vous connecter.",
+    "error_network": "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
+    "error_unknown": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "mfa_verification": {
+    "title": "Confirmez votre identité",
+    "subtitle": "Veuillez entrer le code de vérification affiché dans votre application d'authentification.",
+    "verify": "Continuer",
+    "invalid_code_format": "Le code de vérification doit comporter 6 chiffres",
+    "error": "Code invalide",
+    "success": "Vérification réussie",
+    "use_recovery_code": "Je ne peux pas accéder à mon application d'authentification",
+    "session_expiry_warning": "La session a peut-être expiré. Veuillez vérifier manuellement ou vous reconnecter.",
+    "error_invalid_code": "Code de vérification invalide. Veuillez vérifier et réessayer.",
+    "error_session_expired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "error_too_many_attempts": "Trop de tentatives échouées. Veuillez réessayer de vous connecter.",
+    "error_network": "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
+    "error_unknown": "Une erreur s'est produite. Veuillez réessayer.",
+    "warning_session_attempts_remaining": ". {{count}} tentative restante",
+    "warning_session_attempts_remaining_plural": ". {{count}} tentatives restantes",
+    "warning_global_attempts_remaining": ". {{count}} tentative restante avant verrouillage temporaire",
+    "warning_global_attempts_remaining_plural": ". {{count}} tentatives restantes avant verrouillage temporaire"
+  },
   "change_study": {
     "reset": "Reinitialiser",
     "submit": "Soumettre",
