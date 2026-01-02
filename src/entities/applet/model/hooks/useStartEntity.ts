@@ -1,12 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
-  EntityProgression,
-  EntityProgressionInProgress,
-} from '@app/abstract/lib/types/entityProgress';
-import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
-import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
-import {
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityPath,
@@ -14,7 +8,13 @@ import {
   EvaluateAvailableTo,
   LookupEntityInput,
 } from '@app/abstract/lib/types/entity';
+import {
+  EntityProgression,
+  EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import {
   ActivityFlowRecordDto,
