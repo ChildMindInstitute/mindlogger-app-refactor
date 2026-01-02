@@ -1,6 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
 
 import {
+  EntityProgression,
+  EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
+import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
+import {
   CheckAvailability,
   CompleteEntityIntoUploadToQueue,
   EntityPath,
@@ -8,7 +14,6 @@ import {
   EvaluateAvailableTo,
   LookupEntityInput,
 } from '@app/abstract/lib/types/entity';
-import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import {
@@ -111,6 +116,8 @@ export function useStartEntity({
 
   const { getName: getAppletDisplayName } = useAppletInfo();
 
+  const { mutateAsync: refresh } = useRefreshMutation();
+
   const logger: ILogger = getDefaultLogger();
 
   function activityStart(
@@ -201,12 +208,15 @@ export function useStartEntity({
     entityType: EntityType,
     targetSubjectId: string | null,
   ): Promise<{ isEntityInProgress: boolean; availableTo: number | null }> {
+    const freshProgressions: EntityProgression[] =
+      selectAppletsEntityProgressions(reduxStore.getState());
+
     const progression = getEntityProgression(
       appletId,
       entityId,
       eventId,
       targetSubjectId,
-      entityProgressions,
+      freshProgressions,
     );
 
     let evaluatedIsInProgress = isEntityProgressionInProgress(progression);
@@ -221,7 +231,7 @@ export function useStartEntity({
 
     const readyForAutocompletion = isProgressionReadyForAutocompletion(
       entityPath,
-      entityProgressions,
+      freshProgressions,
     );
 
     if (readyForAutocompletion) {
@@ -345,6 +355,8 @@ export function useStartEntity({
 
     try {
       mutex.setBusy();
+
+      await refresh();
 
       if (
         !(await checkAvailability(entityName, {
@@ -565,6 +577,8 @@ export function useStartEntity({
 
     try {
       mutex.setBusy();
+
+      await refresh();
 
       if (
         !(await checkAvailability(entityName, {
