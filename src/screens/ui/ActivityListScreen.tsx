@@ -7,6 +7,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { EntityPath } from '@app/abstract/lib/types/entity';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { useAutomaticRefreshOnMount } from '@app/features/applets-refresh/model/hooks/useAutomaticRefreshOnMount';
+import { AppletsRefresh } from '@app/features/applets-refresh/ui/AppletsRefresh';
 import { ConnectionStatusBar } from '@app/features/streaming/ui/ConnectionStatusBar';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
@@ -16,7 +18,9 @@ import {
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box } from '@app/shared/ui/base';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { HorizontalCalendar } from '@app/shared/ui/HorizontalCalendar';
 import { ActivityGroups } from '@app/widgets/activity-group/ui/ActivityGroups';
 import { useAutoCompletion } from '@app/widgets/survey/model/hooks/useAutoCompletion';
@@ -36,6 +40,12 @@ export const ActivityListScreen: FC<Props> = props => {
     getDefaultAnalyticsService().track(MixEvents.AppletView, {
       [MixProperties.AppletId]: appletId,
     });
+  });
+
+  const { isRefreshing } = useAutomaticRefreshOnMount(() => {
+    getDefaultLogger()
+      .send()
+      .catch(err => getDefaultLogger().error(err as never));
   });
 
   const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
@@ -85,8 +95,11 @@ export const ActivityListScreen: FC<Props> = props => {
           appletId={appletId}
           completeEntity={completeEntityIntoUploadToQueue}
           checkAvailability={checkAvailability}
+          refreshControl={<AppletsRefresh />}
         />
       )}
+
+      <Spinner withOverlay isVisible={isRefreshing} />
     </Box>
   );
 };
