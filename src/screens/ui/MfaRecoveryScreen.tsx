@@ -124,6 +124,9 @@ export const MfaRecoveryScreen: FC = () => {
       if (shouldNavigateToLogin(err)) {
         setSessionExpired(true);
 
+        // Clear MFA token when session expires
+        getDefaultMfaTokenRecord().clear();
+
         navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, 2000);
