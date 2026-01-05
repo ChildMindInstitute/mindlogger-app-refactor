@@ -6,6 +6,7 @@ import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useLoginMutation } from '@app/entities/identity/api/hooks/useLoginMutation';
+import { getDefaultMfaTokenRecord } from '@app/entities/identity/lib/mfaTokenRecordInstance';
 import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
 import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
 import { selectUserId } from '@app/entities/identity/model/selectors';
@@ -74,6 +75,15 @@ export const LoginForm: FC<Props> = props => {
           console.error('MFA required but no mfa_token in response');
           return;
         }
+
+        // Persist MFA token to encrypted storage for network failure recovery
+        getDefaultMfaTokenRecord().setToken({
+          mfaToken,
+          email: variables.email,
+          password: variables.password,
+          timestamp: Date.now(),
+          purpose: 'login',
+        });
 
         navigate('MfaVerification', {
           mfaToken,
