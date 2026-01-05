@@ -5,7 +5,8 @@ import { UseFormReturn } from 'react-hook-form';
 import {
   SESSION_EXPIRY_THRESHOLD_MS,
   AUTO_SUBMIT_DELAY_MS,
-} from '../config/constants';
+  TOTP_CODE_LENGTH,
+} from '@app/shared/lib/constants/mfa';
 
 interface UseAutoSubmitOptions {
   verificationCode: string;
@@ -63,7 +64,7 @@ export const useAutoSubmit = ({
     }
 
     // Reset warning and auto-submit state when code is cleared or modified
-    if (!verificationCode || verificationCode.length < 6) {
+    if (!verificationCode || verificationCode.length < TOTP_CODE_LENGTH) {
       setSessionExpiryWarning(undefined);
       hasAutoSubmittedRef.current = false;
       return;
@@ -75,7 +76,7 @@ export const useAutoSubmit = ({
     // 3. Not already auto-submitted for this code
     // 4. Session hasn't been marked as expired
     if (
-      verificationCode.length === 6 &&
+      verificationCode.length === TOTP_CODE_LENGTH &&
       !isLoading &&
       !isAutoSubmittingRef.current &&
       !hasAutoSubmittedRef.current &&

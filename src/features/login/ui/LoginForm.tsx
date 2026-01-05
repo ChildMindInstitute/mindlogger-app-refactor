@@ -57,22 +57,13 @@ export const LoginForm: FC<Props> = props => {
     onSuccess: async (response, variables) => {
       const data = response.data.result;
 
-      console.log('Login response:', JSON.stringify(data, null, 2));
-
-      // Type guard to check if MFA is required
-      // Backend may return mfa_required (snake_case) or mfaRequired (camelCase) depending on transformation
-      const isMfaRequired =
-        ('mfa_required' in data && data.mfa_required) ||
-        ('mfaRequired' in data && data.mfaRequired);
-
-      if (isMfaRequired) {
+      // Check if MFA is required (backend returns camelCase: mfaRequired, mfaToken)
+      if ('mfaRequired' in data && data.mfaRequired) {
         // MFA is enabled - navigate to verification screen
-        const mfaToken =
-          ('mfaToken' in data ? data.mfaToken : undefined) ||
-          ('mfa_token' in data ? data.mfa_token : undefined);
+        const mfaToken = data.mfaToken;
 
         if (!mfaToken) {
-          console.error('MFA required but no mfa_token in response');
+          console.error('MFA required but no mfaToken in response');
           return;
         }
 

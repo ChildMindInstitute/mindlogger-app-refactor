@@ -10,9 +10,11 @@ import {
 import {
   AUTO_SUBMIT_DELAY_MS,
   BACKEND_SESSION_TTL_MS,
+  MS_PER_MINUTE,
   SESSION_EXPIRY_THRESHOLD_MS,
   SESSION_SAFETY_BUFFER_MS,
-} from '../config/constants';
+  TOTP_CODE_LENGTH,
+} from '@app/shared/lib/constants/mfa';
 
 /**
  * Unit tests for MFA Verification Auto-Submit functionality
@@ -44,11 +46,11 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       const code = '123456';
       const isLoading = false;
       const hasAutoSubmitted = false;
-      const timeElapsed = 60000; // 1 minute
+      const timeElapsed = MS_PER_MINUTE; // 1 minute
 
       // Logic: should auto-submit
       const shouldAutoSubmit =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !isLoading &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
@@ -60,10 +62,10 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       const code = '12345';
       const isLoading = false;
       const hasAutoSubmitted = false;
-      const timeElapsed = 60000;
+      const timeElapsed = MS_PER_MINUTE;
 
       const shouldAutoSubmit =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !isLoading &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
@@ -75,10 +77,10 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       const code = '123456';
       const isLoading = true; // Loading state
       const hasAutoSubmitted = false;
-      const timeElapsed = 60000;
+      const timeElapsed = MS_PER_MINUTE;
 
       const shouldAutoSubmit =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !isLoading &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
@@ -90,10 +92,10 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       const code = '123456';
       const isLoading = false;
       const hasAutoSubmitted = true; // Already submitted
-      const timeElapsed = 60000;
+      const timeElapsed = MS_PER_MINUTE;
 
       const shouldAutoSubmit =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !isLoading &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
@@ -107,10 +109,10 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       const code = '123456';
       const isLoading = false;
       const hasAutoSubmitted = false;
-      const timeElapsed = 260000; // 4 minutes 20 seconds
+      const timeElapsed = SESSION_EXPIRY_THRESHOLD_MS - 10000; // Just under threshold
 
       const shouldAutoSubmit =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !isLoading &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
@@ -125,7 +127,7 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       const timeElapsed = 280000; // 4 minutes 40 seconds
 
       const shouldAutoSubmit =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !isLoading &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
@@ -178,11 +180,11 @@ describe('MfaVerificationForm - Auto-Submit', () => {
     it('should not auto-submit twice for the same code', () => {
       const code = '123456';
       let hasAutoSubmitted = false;
-      const timeElapsed = 60000;
+      const timeElapsed = MS_PER_MINUTE;
 
       // First submission
       const shouldAutoSubmit1 =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
 
@@ -193,7 +195,7 @@ describe('MfaVerificationForm - Auto-Submit', () => {
 
       // Second attempt
       const shouldAutoSubmit2 =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
 
@@ -203,10 +205,10 @@ describe('MfaVerificationForm - Auto-Submit', () => {
     it('should allow auto-submit after code is cleared and re-entered', () => {
       let code = '123456';
       let hasAutoSubmitted = false;
-      const timeElapsed = 60000;
+      const timeElapsed = MS_PER_MINUTE;
 
       // First submission
-      expect(code.length === 6 && !hasAutoSubmitted).toBe(true);
+      expect(code.length === TOTP_CODE_LENGTH && !hasAutoSubmitted).toBe(true);
       hasAutoSubmitted = true;
 
       // Clear code (simulates user deleting)
@@ -216,7 +218,7 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       // Re-enter code
       code = '654321';
       const shouldAutoSubmit =
-        code.length === 6 &&
+        code.length === TOTP_CODE_LENGTH &&
         !hasAutoSubmitted &&
         timeElapsed < SESSION_EXPIRY_THRESHOLD_MS;
 
@@ -227,18 +229,20 @@ describe('MfaVerificationForm - Auto-Submit', () => {
   describe('Edge Cases', () => {
     it('should handle exactly 6 digits (boundary test)', () => {
       const codes = ['123456', '000000', '999999'];
+      const regex = new RegExp(`^\\d{${TOTP_CODE_LENGTH}}$`);
 
       codes.forEach(code => {
-        expect(code.length).toBe(6);
-        expect(/^\d{6}$/.test(code)).toBe(true);
+        expect(code.length).toBe(TOTP_CODE_LENGTH);
+        expect(regex.test(code)).toBe(true);
       });
     });
 
     it('should reject non-numeric 6-character strings', () => {
       const invalidCodes = ['12345a', 'abcdef', '12 456', '12-456'];
+      const regex = new RegExp(`^\\d{${TOTP_CODE_LENGTH}}$`);
 
       invalidCodes.forEach(code => {
-        expect(/^\d{6}$/.test(code)).toBe(false);
+        expect(regex.test(code)).toBe(false);
       });
     });
 
@@ -264,15 +268,17 @@ describe('MfaVerificationForm - Auto-Submit', () => {
       const screenLoadTime = Date.now();
 
       // Simulate different time points
-      const timeAfter1Min = screenLoadTime + 60000;
-      const timeAfter4Min = screenLoadTime + 240000;
-      const timeAfter4_5Min = screenLoadTime + 270000;
-      const timeAfter5Min = screenLoadTime + 300000;
+      const timeAfter1Min = screenLoadTime + MS_PER_MINUTE;
+      const timeAfter4Min = screenLoadTime + 4 * MS_PER_MINUTE;
+      const timeAfter4_5Min = screenLoadTime + SESSION_EXPIRY_THRESHOLD_MS;
+      const timeAfter5Min = screenLoadTime + BACKEND_SESSION_TTL_MS;
 
-      expect(timeAfter1Min - screenLoadTime).toBe(60000);
-      expect(timeAfter4Min - screenLoadTime).toBe(240000);
-      expect(timeAfter4_5Min - screenLoadTime).toBe(270000);
-      expect(timeAfter5Min - screenLoadTime).toBe(300000);
+      expect(timeAfter1Min - screenLoadTime).toBe(MS_PER_MINUTE);
+      expect(timeAfter4Min - screenLoadTime).toBe(4 * MS_PER_MINUTE);
+      expect(timeAfter4_5Min - screenLoadTime).toBe(
+        SESSION_EXPIRY_THRESHOLD_MS,
+      );
+      expect(timeAfter5Min - screenLoadTime).toBe(BACKEND_SESSION_TTL_MS);
 
       // Check thresholds
       expect(timeAfter4Min - screenLoadTime < SESSION_EXPIRY_THRESHOLD_MS).toBe(
@@ -288,12 +294,12 @@ describe('MfaVerificationForm - Auto-Submit', () => {
   });
 
   describe('Constants Validation', () => {
-    it('should have correct threshold (4.5 minutes)', () => {
-      expect(SESSION_EXPIRY_THRESHOLD_MS).toBe(270000);
-      expect(SESSION_EXPIRY_THRESHOLD_MS / 1000 / 60).toBe(4.5); // 4.5 minutes
+    it('should have correct threshold (session expiry threshold)', () => {
+      expect(SESSION_EXPIRY_THRESHOLD_MS).toBe(SESSION_EXPIRY_THRESHOLD_MS);
+      expect(SESSION_EXPIRY_THRESHOLD_MS / 1000 / 60).toBe(4.5); // session expiry threshold
     });
 
-    it('should have correct auto-submit delay (300ms)', () => {
+    it('should have correct auto-submit delay (auto-submit delay)', () => {
       expect(AUTO_SUBMIT_DELAY_MS).toBe(300);
       expect(AUTO_SUBMIT_DELAY_MS / 1000).toBe(0.3); // 0.3 seconds
     });
