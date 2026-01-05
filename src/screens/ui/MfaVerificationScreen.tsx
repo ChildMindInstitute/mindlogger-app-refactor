@@ -7,6 +7,7 @@ import { isTablet } from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useMfaVerifyMutation } from '@app/entities/identity/api/hooks/useMfaVerifyMutation';
+import { getDefaultMfaTokenRecord } from '@app/entities/identity/lib/mfaTokenRecordInstance';
 import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
 import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
 import { identityActions } from '@app/entities/identity/model/slice';
@@ -62,6 +63,9 @@ export const MfaVerificationScreen: FC = () => {
     onSuccess: response => {
       setErrorMessage(undefined);
       resetAttempts();
+
+      // Clear MFA token from storage after successful verification
+      getDefaultMfaTokenRecord().clear();
 
       const result = response.data.result;
 
