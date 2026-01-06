@@ -127,7 +127,7 @@ export const MfaVerificationForm: FC<Props> = ({
                 maxLength={6}
                 textAlign="center"
                 mode="outlined"
-                caretHidden={!verificationCode || verificationCode.length === 0}
+                caretHidden={false}
                 editable={!sessionExpired}
               />
             </Box>
