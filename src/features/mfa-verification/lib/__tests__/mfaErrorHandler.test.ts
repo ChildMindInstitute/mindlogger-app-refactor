@@ -123,6 +123,26 @@ describe('mfaErrorHandler', () => {
       expect(result).toBe('mfa_verification:error_network');
     });
 
+    it('should return network error for timeout with ECONNABORTED code', () => {
+      const error: Partial<BaseError> = {
+        code: 'ECONNABORTED',
+        message: 'timeout of 1000ms exceeded',
+      };
+
+      const result = getMfaErrorMessage(error as BaseError, 'mfa_verification');
+      expect(result).toBe('mfa_verification:error_network');
+    });
+
+    it('should return network error for timeout with timeout in message', () => {
+      const error: Partial<BaseError> = {
+        code: 'ERR_TIMEOUT',
+        message: 'Request timeout',
+      };
+
+      const result = getMfaErrorMessage(error as BaseError, 'mfa_verification');
+      expect(result).toBe('mfa_verification:error_network');
+    });
+
     it('should handle null error', () => {
       const result = getMfaErrorMessage(null, 'mfa_verification');
       expect(result).toBe('mfa_verification:error_unknown');

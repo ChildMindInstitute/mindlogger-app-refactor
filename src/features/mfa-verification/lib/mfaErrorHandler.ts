@@ -39,6 +39,7 @@ export const getMfaErrorMessage = (
   // Fallback: Check HTTP status codes (legacy support)
   const status = error.response?.status;
   const errorMessage = error.message?.toLowerCase() || '';
+  const axiosErrorCode = error.code?.toLowerCase() || '';
 
   if (status === 429) {
     return `${namespace}:error_too_many_attempts`;
@@ -49,6 +50,11 @@ export const getMfaErrorMessage = (
       return `${namespace}:error_code_not_found`;
     }
     return `${namespace}:error_session_expired`;
+  }
+
+  // Timeout errors (request took too long)
+  if (axiosErrorCode === 'econnaborted' || errorMessage.includes('timeout')) {
+    return `${namespace}:error_network`;
   }
 
   // Network errors (no response)
