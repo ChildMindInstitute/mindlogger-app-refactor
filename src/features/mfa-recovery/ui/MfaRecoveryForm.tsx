@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useMfaErrorSync } from '@app/features/mfa-verification/lib/useMfaErrorSync';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { formatRecoveryCode } from '@app/shared/lib/utils/inputFilters';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { Button } from '@app/shared/ui/Button';
@@ -97,16 +98,7 @@ export const MfaRecoveryForm: FC<Props> = ({
                 maxLength={11}
                 mode="outlined"
                 editable={!sessionExpired}
-                onChangeText={text => {
-                  // Auto-format: add hyphen after 5 characters
-                  const cleaned = text.replace(/-/g, '').toUpperCase();
-                  if (cleaned.length > 5) {
-                    const formatted = `${cleaned.slice(0, 5)}-${cleaned.slice(5, 10)}`;
-                    form.setValue('recoveryCode', formatted);
-                  } else {
-                    form.setValue('recoveryCode', cleaned);
-                  }
-                }}
+                filterInput={formatRecoveryCode}
               />
             </Box>
           </YStack>

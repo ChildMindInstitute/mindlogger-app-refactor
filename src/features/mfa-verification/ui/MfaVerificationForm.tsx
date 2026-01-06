@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAutoSubmit } from '@app/features/mfa-verification/lib/useAutoSubmit';
 import { useMfaErrorSync } from '@app/features/mfa-verification/lib/useMfaErrorSync';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { filterDigitsOnly } from '@app/shared/lib/utils/inputFilters';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { Button } from '@app/shared/ui/Button';
@@ -129,6 +130,7 @@ export const MfaVerificationForm: FC<Props> = ({
                 mode="outlined"
                 caretHidden={false}
                 editable={!sessionExpired}
+                filterInput={filterDigitsOnly}
               />
             </Box>
 
