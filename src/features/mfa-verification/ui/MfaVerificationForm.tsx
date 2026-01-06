@@ -162,25 +162,23 @@ export const MfaVerificationForm: FC<Props> = ({
               </SubmitButton>
             </Box>
 
-            <Box width={300}>
-              <Button
-                onPress={onUseRecoveryCode}
-                bg="transparent"
-                disabled={sessionExpired}
-                textProps={{
-                  color: '$primary',
-                  fontWeight: '400',
-                  textAlign: 'center',
-                  letterSpacing: 0.15,
-                  fontSize: 16,
-                  lineHeight: 24,
-                }}
-                accessibilityLabel="use-recovery-code-link"
-                h={48}
-              >
-                {t('mfa_verification:use_recovery_code')}
-              </Button>
-            </Box>
+            <Button
+              onPress={onUseRecoveryCode}
+              bg="transparent"
+              disabled={sessionExpired}
+              textProps={{
+                color: '$primary',
+                fontWeight: '400',
+                textAlign: 'center',
+                letterSpacing: 0.15,
+                fontSize: 16,
+                lineHeight: 24,
+                numberOfLines: 1,
+              }}
+              accessibilityLabel="use-recovery-code-link"
+            >
+              {t('mfa_verification:use_recovery_code')}
+            </Button>
           </YStack>
         </YStack>
       </FormProvider>
