@@ -127,9 +127,14 @@ export const MfaVerificationScreen: FC = () => {
         // Clear MFA token when session expires
         getDefaultMfaTokenRecord().clear();
 
+        // Check if it's a global lockout error - give more time to read
+        const isLockoutError =
+          errorKey === 'mfa_verification:error_too_many_attempts';
+        const delay = isLockoutError ? 5000 : 2000;
+
         navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
-        }, 2000);
+        }, delay);
       }
     },
   });

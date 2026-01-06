@@ -88,7 +88,7 @@ describe('mfaErrorHandler', () => {
       };
 
       const result = getMfaErrorMessage(error, 'mfa_verification');
-      expect(result).toBe('mfa_verification:error_too_many_attempts');
+      expect(result).toBe('mfa_verification:error_rate_limited');
     });
 
     it('should return generic error message for unknown error codes', () => {
