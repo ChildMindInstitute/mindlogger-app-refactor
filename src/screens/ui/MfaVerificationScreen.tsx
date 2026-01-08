@@ -8,8 +8,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useMfaVerifyMutation } from '@app/entities/identity/api/hooks/useMfaVerifyMutation';
 import { getDefaultMfaTokenRecord } from '@app/entities/identity/lib/mfaTokenRecordInstance';
-import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
-import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
 import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
 import {
@@ -21,7 +19,6 @@ import { MfaVerificationForm } from '@app/features/mfa-verification/ui/MfaVerifi
 import { openUrl } from '@app/screens/lib/utils/helpers';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
-import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
 import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
@@ -38,7 +35,7 @@ export const MfaVerificationScreen: FC = () => {
   const { bottom } = useSafeAreaInsets();
   const dispatch = useAppDispatch();
 
-  const { mfaToken, email, password } = route.params;
+  const { mfaToken, userId } = route.params;
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [sessionExpired, setSessionExpired] = useState(false);
@@ -63,8 +60,6 @@ export const MfaVerificationScreen: FC = () => {
     onSuccess: response => {
       setErrorMessage(undefined);
       resetAttempts();
-
-      // Clear MFA token from storage after successful verification
       getDefaultMfaTokenRecord().clear();
 
       const result = response.data.result;
@@ -77,25 +72,12 @@ export const MfaVerificationScreen: FC = () => {
 
       const { user, token: session } = result;
 
-      // Handle both snake_case and camelCase formats from backend
       const accessToken = session.accessToken || session.access_token || '';
       const refreshToken = session.refreshToken || session.refresh_token || '';
       const tokenType = session.tokenType || session.token_type || 'Bearer';
 
-      const userParams = {
-        userId: user.id,
-        email,
-        password,
-      };
-
-      const userPrivateKey =
-        getDefaultEncryptionManager().getPrivateKey(userParams);
-
-      getDefaultUserPrivateKeyRecord().set(userPrivateKey);
+      // Store user and session
       dispatch(identityActions.onAuthSuccess(user));
-      getDefaultUserInfoRecord().setEmail(user.email);
-
-      // Map backend response (snake_case or camelCase) to app format (camelCase)
       storeSession({
         accessToken,
         refreshToken,
@@ -103,13 +85,13 @@ export const MfaVerificationScreen: FC = () => {
       });
 
       getDefaultAnalyticsService()
-        .login(user.id)
+        .login(userId)
         .then(() => {
           getDefaultAnalyticsService().track(MixEvents.LoginSuccessful);
         })
         .catch(console.error);
 
-      getDefaultFeatureFlagsService().login(user.id).catch(console.error);
+      getDefaultFeatureFlagsService().login(userId).catch(console.error);
 
       navigate('Applets');
     },
@@ -123,11 +105,9 @@ export const MfaVerificationScreen: FC = () => {
 
       if (shouldNavigateToLogin(err)) {
         setSessionExpired(true);
-
-        // Clear MFA token when session expires
         getDefaultMfaTokenRecord().clear();
 
-        // Check if it's a global lockout error - give more time to read
+        // Longer delay for lockout errors
         const isLockoutError =
           errorKey === 'mfa_verification:error_too_many_attempts';
         const delay = isLockoutError ? 5000 : 2000;
@@ -156,8 +136,7 @@ export const MfaVerificationScreen: FC = () => {
   const handleUseRecoveryCode = () => {
     navigate('MfaRecovery', {
       mfaToken,
-      email,
-      password,
+      userId,
     });
   };
 
