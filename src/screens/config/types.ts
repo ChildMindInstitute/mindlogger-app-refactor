@@ -11,13 +11,11 @@ export type RootStackParamList = {
   Login: undefined;
   MfaVerification: {
     mfaToken: string;
-    email: string;
-    password: string;
+    userId: string;
   };
   MfaRecovery: {
     mfaToken: string;
-    email: string;
-    password: string;
+    userId: string;
   };
   PasswordRecovery: { email: string; key: string };
   SignUp: undefined;

@@ -57,17 +57,44 @@ export const LoginForm: FC<Props> = props => {
     onSuccess: async (response, variables) => {
       const data = response.data.result;
 
-      // Check if MFA is required (backend returns camelCase: mfaRequired, mfaToken)
+      // MFA required
       if ('mfaRequired' in data && data.mfaRequired) {
-        // MFA is enabled - navigate to verification screen
         const mfaToken = data.mfaToken;
+        const userIdFromMfa = data.userId || data.user_id;
+        const userEmailFromMfa = data.userEmail || data.user_email;
 
         if (!mfaToken) {
           console.error('MFA required but no mfaToken in response');
           return;
         }
 
-        // Persist MFA token to encrypted storage for network failure recovery
+        if (!userIdFromMfa || !userEmailFromMfa) {
+          console.error(
+            'MFA required but missing user_id or user_email in response',
+          );
+          return;
+        }
+
+        // Setup encryption before MFA navigation
+        const userParams = {
+          userId: userIdFromMfa,
+          email: userEmailFromMfa,
+          password: variables.password,
+        };
+
+        // Cleanup if different user
+        if (userParams.userId !== userId) {
+          await cleanupData();
+          dispatch(cleanUpAction());
+        }
+
+        // Derive and store private key
+        const userPrivateKey =
+          getDefaultEncryptionManager().getPrivateKey(userParams);
+        getDefaultUserPrivateKeyRecord().set(userPrivateKey);
+        getDefaultUserInfoRecord().setEmail(userEmailFromMfa);
+
+        // Persist MFA token for recovery
         getDefaultMfaTokenRecord().setToken({
           mfaToken,
           email: variables.email,
@@ -78,8 +105,7 @@ export const LoginForm: FC<Props> = props => {
 
         navigate('MfaVerification', {
           mfaToken,
-          email: variables.email,
-          password: variables.password, // Keep for post-MFA encryption setup
+          userId: userIdFromMfa,
         });
         return;
       }

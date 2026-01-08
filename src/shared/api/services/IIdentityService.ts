@@ -58,6 +58,10 @@ export type LoginMfaRequiredResponse = SuccessfulResponse<{
   mfaSessionId?: string;
   mfa_token?: string;
   mfaToken?: string;
+  user_id?: string; // snake_case version
+  userId?: string; // camelCase version
+  user_email?: string; // snake_case version
+  userEmail?: string; // camelCase version
 }>;
 
 // Union type for login response
