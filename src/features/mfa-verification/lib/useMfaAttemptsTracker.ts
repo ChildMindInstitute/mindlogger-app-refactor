@@ -41,10 +41,10 @@ export const useMfaAttemptsTracker = (): UseMfaAttemptsTrackerReturn => {
 
   const shouldShowWarning = useMemo(() => {
     if (criticalLimit === 'session' && sessionAttemptsRemaining !== null) {
-      return sessionAttemptsRemaining <= 3;
+      return sessionAttemptsRemaining > 0 && sessionAttemptsRemaining <= 3;
     }
     if (criticalLimit === 'global' && globalAttemptsRemaining !== null) {
-      return globalAttemptsRemaining <= 3;
+      return globalAttemptsRemaining > 0 && globalAttemptsRemaining <= 3;
     }
     return false;
   }, [criticalLimit, sessionAttemptsRemaining, globalAttemptsRemaining]);

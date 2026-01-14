@@ -82,15 +82,11 @@ export type MfaVerifyRequest = {
 };
 
 // MFA verification response
-// Note: Backend returns snake_case but may get transformed to camelCase
 export type MfaVerifyResponse = SuccessfulResponse<{
   token: {
-    access_token?: string;
-    refresh_token?: string;
-    token_type?: string;
-    accessToken?: string;
-    refreshToken?: string;
-    tokenType?: string;
+    accessToken: string;
+    refreshToken: string;
+    tokenType: string;
   };
   user: UserDto;
 }>;
@@ -103,15 +99,11 @@ export type MfaRecoveryRequest = {
 };
 
 // MFA recovery response
-// Note: Backend returns snake_case but may get transformed to camelCase
 export type MfaRecoveryResponse = SuccessfulResponse<{
   token: {
-    access_token?: string;
-    refresh_token?: string;
-    token_type?: string;
-    accessToken?: string;
-    refreshToken?: string;
-    tokenType?: string;
+    accessToken: string;
+    refreshToken: string;
+    tokenType: string;
   };
   user: UserDto;
 }>;

@@ -25,10 +25,10 @@ export const getMfaErrorMessage = (
       return `${namespace}:error_session_expired`;
 
     case 'AUTH.MFA.GLOBAL_LOCKOUT':
-      return `${namespace}:error_too_many_attempts`;
+      return `${namespace}:error_global_lockout`;
 
     case 'AUTH.MFA.TOO_MANY_ATTEMPTS':
-      return `${namespace}:error_rate_limited`;
+      return `${namespace}:error_too_many_attempts`;
 
     case 'AUTH.MFA.INVALID_TOTP_CODE':
       return `${namespace}:error`;

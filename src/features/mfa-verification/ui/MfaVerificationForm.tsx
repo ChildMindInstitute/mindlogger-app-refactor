@@ -123,10 +123,9 @@ export const MfaVerificationForm: FC<Props> = ({
               <InputField
                 name="verificationCode"
                 accessibilityLabel="mfa-verification-code-input"
-                placeholder="000000"
+                placeholder="Enter verification code"
                 keyboardType="number-pad"
                 maxLength={6}
-                textAlign="center"
                 mode="outlined"
                 caretHidden={false}
                 editable={!sessionExpired}
@@ -164,23 +163,27 @@ export const MfaVerificationForm: FC<Props> = ({
               </SubmitButton>
             </Box>
 
-            <Button
-              onPress={onUseRecoveryCode}
-              bg="transparent"
-              disabled={sessionExpired}
-              textProps={{
-                color: '$primary',
-                fontWeight: '400',
-                textAlign: 'center',
-                letterSpacing: 0.15,
-                fontSize: 16,
-                lineHeight: 24,
-                numberOfLines: 1,
-              }}
-              accessibilityLabel="use-recovery-code-link"
-            >
-              {t('mfa_verification:use_recovery_code')}
-            </Button>
+            <Box width={300}>
+              <Button
+                onPress={onUseRecoveryCode}
+                bg="transparent"
+                disabled={sessionExpired}
+                w="100%"
+                px={0}
+                textProps={{
+                  color: '$primary',
+                  fontWeight: '400',
+                  textAlign: 'center',
+                  letterSpacing: 0.15,
+                  fontSize: 16,
+                  lineHeight: 24,
+                  numberOfLines: 1,
+                }}
+                accessibilityLabel="use-recovery-code-link"
+              >
+                {t('mfa_verification:use_recovery_code')}
+              </Button>
+            </Box>
           </YStack>
         </YStack>
       </FormProvider>

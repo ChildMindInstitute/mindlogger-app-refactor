@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Alert } from 'react-native';
 
 import { UseFormReturn } from 'react-hook-form';
 
@@ -108,13 +109,24 @@ export const useAutoSubmit = ({
           // Delay auto-submit slightly for better UX (user can see the complete code)
           autoSubmitTimerRef.current = setTimeout(() => {
             submit()
-              .catch(console.error)
+              .catch(err => {
+                // Auto-submit failed - show user feedback
+                console.error('Auto-submit failed:', err);
+
+                // Show alert for unexpected errors
+                Alert.alert(
+                  'Verification Failed',
+                  'Unable to verify code automatically. Please try submitting manually.',
+                );
+              })
               .finally(() => {
                 isAutoSubmittingRef.current = false;
               });
           }, AUTO_SUBMIT_DELAY_MS);
         })
-        .catch(console.error);
+        .catch(err => {
+          console.error('Form validation trigger failed:', err);
+        });
     }
 
     // Cleanup timeout on unmount

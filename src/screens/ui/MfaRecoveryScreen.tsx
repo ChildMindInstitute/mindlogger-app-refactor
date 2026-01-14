@@ -72,9 +72,9 @@ export const MfaRecoveryScreen: FC = () => {
 
       const { user, token: session } = result;
 
-      const accessToken = session.accessToken || session.access_token || '';
-      const refreshToken = session.refreshToken || session.refresh_token || '';
-      const tokenType = session.tokenType || session.token_type || 'Bearer';
+      const accessToken = session.accessToken;
+      const refreshToken = session.refreshToken;
+      const tokenType = session.tokenType || 'Bearer';
 
       // Store user and session
       dispatch(identityActions.onAuthSuccess(user));

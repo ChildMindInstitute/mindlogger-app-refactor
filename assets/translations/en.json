@@ -184,6 +184,7 @@
     "error_code_not_found": "Recovery code not found or already used.",
     "error_session_expired": "Your session has expired. Please log in again.",
     "error_too_many_attempts": "Too many failed attempts. Please try logging in again.",
+    "error_global_lockout": "Too many failed attempts. You have been temporarily locked out. Please try logging in after 15 minutes.",
     "error_network": "Network error. Please check your connection and try again.",
     "error_unknown": "An error occurred. Please try again."
   },
@@ -199,6 +200,7 @@
     "error_invalid_code": "Invalid verification code. Please check and try again.",
     "error_session_expired": "Your session has expired. Please log in again.",
     "error_too_many_attempts": "Too many failed attempts. Please try logging in again.",
+    "error_global_lockout": "Too many failed attempts. You have been temporarily locked out. Please try logging in after 15 minutes.",
     "error_network": "Network error. Please check your connection and try again.",
     "error_unknown": "An error occurred. Please try again.",
     "warning_session_attempts_remaining": ". {{count}} attempt remaining",
