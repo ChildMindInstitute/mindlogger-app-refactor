@@ -57,8 +57,8 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       eventId: completedEntityDto.scheduledEventId,
       targetSubjectId: completedEntityDto.targetSubjectId,
       endAt: buildDateTimeFromDto(
-        completedEntityDto.localEndDate,
-        completedEntityDto.localEndTime,
+        completedEntityDto.localEndDate as string,
+        completedEntityDto.localEndTime as string,
       ),
       submitId: completedEntityDto.submitId,
     };
