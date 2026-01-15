@@ -66,6 +66,7 @@ export type CompletedEntityDto = {
 
 export type CompletedEntitiesRequest = {
   fromDate: string; // YYYY-MM-DD
+  includeInProgress?: boolean;
 };
 
 export type AppletCompletedEntitiesResponse = SuccessfulResponse<{
