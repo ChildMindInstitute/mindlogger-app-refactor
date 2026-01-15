@@ -6,8 +6,8 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
-import { useAutomaticRefreshOnMount } from '@app/features/applets-refresh/model/hooks/useAutomaticRefreshOnMount';
 import { AppletsRefresh } from '@app/features/applets-refresh/ui/AppletsRefresh';
 import { ConnectionStatusBar } from '@app/features/streaming/ui/ConnectionStatusBar';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
@@ -42,10 +42,12 @@ export const ActivityListScreen: FC<Props> = props => {
     });
   });
 
-  const { isRefreshing } = useAutomaticRefreshOnMount(() => {
-    getDefaultLogger()
-      .send()
-      .catch(err => getDefaultLogger().error(err as never));
+  const { mutateAsync: refreshMutation, isLoading: isRefreshing } =
+    useRefreshMutation();
+
+  // Refresh when screen becomes focused
+  useOnFocus(() => {
+    refreshMutation().catch(err => getDefaultLogger().error(err as never));
   });
 
   const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
