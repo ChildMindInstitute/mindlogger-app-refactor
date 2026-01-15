@@ -175,6 +175,11 @@ export class RefreshService implements IRefreshService {
       return emptyResult;
     }
 
+    this.normalizeRemoteCompletionTargetSubjectIds(
+      allAppletAssignments,
+      appletRemoteCompletions,
+    );
+
     const appletDtos: AppletDto[] = appletsResponse.data.result;
 
     const unsuccessfulApplets: UnsuccessfulApplet[] = [];
@@ -209,6 +214,44 @@ export class RefreshService implements IRefreshService {
       success: unsuccessfulApplets.length === 0,
       unsuccessfulApplets,
     };
+  }
+
+  private normalizeRemoteCompletionTargetSubjectIds(
+    allAppletAssignments: CollectAllAppletAssignmentsResult,
+    appletRemoteCompletions: CollectRemoteCompletionsResult,
+  ) {
+    const appletIds = Object.keys(appletRemoteCompletions.appletEntities);
+    for (const appletId of appletIds) {
+      const assignments =
+        allAppletAssignments.appletAssignments[appletId]?.data.result
+          .assignments || [];
+
+      const appletEntitiesCompletions =
+        appletRemoteCompletions.appletEntities[appletId];
+      const assignmentAttrAndEntityCompletions = [
+        ['activityId', appletEntitiesCompletions.activities] as const,
+        ['activityFlowId', appletEntitiesCompletions.activityFlows] as const,
+      ];
+
+      for (const [attr, completions] of assignmentAttrAndEntityCompletions) {
+        for (const completion of completions) {
+          const entityAssignment = assignments.find(
+            assignment =>
+              // The `id` of a `completion` is an entity ID
+              assignment[attr] === completion.id &&
+              // The `targetSubjectId` for completion is always present
+              assignment.targetSubject.id === completion.targetSubjectId,
+          );
+          if (
+            !entityAssignment ||
+            entityAssignment.targetSubject.id ===
+              entityAssignment.respondentSubject.id
+          ) {
+            completion.targetSubjectId = null as never;
+          }
+        }
+      }
+    }
   }
 
   // PUBLIC
