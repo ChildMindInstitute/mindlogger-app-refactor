@@ -53,6 +53,13 @@ export type UpsertEntityProgressionPayload = {
   targetSubjectId: string | null;
   endAt: Date;
   submitId: string;
+  isInProgress?: boolean;
+  activityFlowOrder?: number;
+  currentActivityId?: string;
+  currentActivityName?: string;
+  currentActivityDescription?: string;
+  currentActivityImage?: string | null;
+  totalActivitiesInPipeline?: number;
 };
 
 type Consents = {
