@@ -69,6 +69,72 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     );
   }
 
+  /**
+   * Derives activity details for in-progress flows from server's activityFlowOrder.
+   * Returns null if data is invalid (flow not found, invalid order, or out of bounds).
+   */
+  private getFlowDetailsForInProgress(
+    completedEntityDto: CompletedEntityDto,
+    flowId: string,
+    appletDetails: AppletDetails,
+  ): {
+    currentActivityId: string;
+    currentActivityName: string;
+    currentActivityDescription: string;
+    currentActivityImage: string | null;
+    totalActivities: number;
+  } | null {
+    const flow = appletDetails.activityFlows.find(f => f.id === flowId);
+    if (!flow) {
+      this.logger.warn(
+        `[ProgressSyncService.getFlowDetailsForInProgress] Flow ${flowId} not found in applet ${appletDetails.id}`,
+      );
+      return null;
+    }
+
+    const activityFlowOrder = completedEntityDto.activityFlowOrder;
+
+    if (
+      activityFlowOrder === null ||
+      activityFlowOrder === undefined ||
+      activityFlowOrder < 0
+    ) {
+      this.logger.warn(
+        `[ProgressSyncService.getFlowDetailsForInProgress] Invalid activityFlowOrder: ${activityFlowOrder}`,
+      );
+      return null;
+    }
+
+    // activityFlowOrder is 0-indexed, use directly
+    const activityIndex = activityFlowOrder;
+
+    if (activityIndex >= flow.activityIds.length) {
+      this.logger.warn(
+        `[ProgressSyncService.getFlowDetailsForInProgress] activityFlowOrder ${activityFlowOrder} exceeds flow length ${flow.activityIds.length}`,
+      );
+      return null;
+    }
+
+    const currentActivityId = flow.activityIds[activityIndex];
+    const activity = appletDetails.activities.find(
+      a => a.id === currentActivityId,
+    );
+
+    if (!activity) {
+      this.logger.warn(
+        `[ProgressSyncService.getFlowDetailsForInProgress] Activity ${currentActivityId} not found in applet`,
+      );
+    }
+
+    return {
+      currentActivityId,
+      currentActivityName: activity?.name || 'Unknown Activity',
+      currentActivityDescription: activity?.description || '',
+      currentActivityImage: activity?.image || null,
+      totalActivities: flow.activityIds.length,
+    };
+  }
+
   public sync(
     appletDto: AppletDetailsDto,
     appletCompletions: EntitiesCompletionsDto,
@@ -76,9 +142,11 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     try {
       return this.syncWithAppletDto(appletDto, appletCompletions);
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       this.logger.warn(
         '[ProgressSyncService.sync]: Error occurred: \nInternal Error: \n\n' +
-          error,
+          errorMessage,
       );
 
       throw error;
