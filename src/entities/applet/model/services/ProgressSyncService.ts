@@ -63,6 +63,35 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       submitId: completedEntityDto.submitId,
     };
 
+    // Handle in-progress flows
+    if (isFlow && completedEntityDto.isFlowCompleted === false) {
+      const flowDetails = this.getFlowDetailsForInProgress(
+        completedEntityDto,
+        completedEntityDto.id,
+        appletDetails,
+      );
+
+      if (flowDetails) {
+        payload.isInProgress = true;
+        payload.activityFlowOrder = completedEntityDto.activityFlowOrder ?? 0;
+        payload.currentActivityId = flowDetails.currentActivityId;
+        payload.currentActivityName = flowDetails.currentActivityName;
+        payload.currentActivityDescription =
+          flowDetails.currentActivityDescription;
+        payload.currentActivityImage = flowDetails.currentActivityImage;
+        payload.totalActivitiesInPipeline = flowDetails.totalActivities;
+
+        this.logger.log(
+          `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${payload.activityFlowOrder + 1}/${flowDetails.totalActivities})`,
+        );
+      } else {
+        this.logger.warn(
+          `[ProgressSyncService.upsertEntityProgression]: Skipping in-progress flow with invalid data`,
+        );
+        return;
+      }
+    }
+
     this.dispatch(appletActions.upsertEntityProgression(payload));
     this.logger.log(
       `[ProgressSyncService.upsertEntityProgression]: Upserted progression ${JSON.stringify(payload)}`,
