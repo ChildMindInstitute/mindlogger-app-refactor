@@ -282,17 +282,77 @@ const slice = createSlice({
       state,
       action: PayloadAction<UpsertEntityProgressionPayload>,
     ) => {
+      const { payload } = action;
+
       const existingProgression = (state.entityProgressions || []).find(
         entityProgressionFinder({
-          appletId: action.payload.appletId,
-          entityType: action.payload.entityType,
-          entityId: action.payload.entityId,
-          eventId: action.payload.eventId,
-          targetSubjectId: action.payload.targetSubjectId,
+          appletId: payload.appletId,
+          entityType: payload.entityType,
+          entityId: payload.entityId,
+          eventId: payload.eventId,
+          targetSubjectId: payload.targetSubjectId,
         }),
       );
 
-      const endedAtTimestamp = action.payload.endAt.getTime();
+      // Handle in-progress flows from server
+      if (payload.isInProgress && payload.entityType === 'activityFlow') {
+        const serverPipelineActivityOrder = payload.activityFlowOrder ?? 0;
+        const localPipelineActivityOrder =
+          (existingProgression as EntityProgressionInProgressActivityFlow)
+            ?.pipelineActivityOrder ?? 0;
+
+        // Use Math.max to prefer furthest progress across devices
+        const pipelineActivityOrder = Math.max(
+          serverPipelineActivityOrder,
+          localPipelineActivityOrder,
+        );
+
+        // Skip if local is already at or ahead of server
+        if (
+          existingProgression &&
+          existingProgression.status === 'in-progress' &&
+          localPipelineActivityOrder >= serverPipelineActivityOrder &&
+          existingProgression.startedAtTimestamp
+        ) {
+          return;
+        }
+
+        // Create or update in-progress flow with furthest progress
+        const inProgressFlow: EntityProgressionInProgressActivityFlow = {
+          status: 'in-progress',
+          appletId: payload.appletId,
+          entityType: 'activityFlow',
+          entityId: payload.entityId,
+          eventId: payload.eventId,
+          targetSubjectId: payload.targetSubjectId,
+          startedAtTimestamp:
+            existingProgression?.startedAtTimestamp ?? payload.endAt.getTime(),
+          availableUntilTimestamp: null,
+          submitId: payload.submitId,
+          pipelineActivityOrder,
+          totalActivitiesInPipeline: payload.totalActivitiesInPipeline || 1,
+          currentActivityId: payload.currentActivityId || '',
+          currentActivityName: payload.currentActivityName || '',
+          currentActivityDescription: payload.currentActivityDescription || '',
+          currentActivityImage: payload.currentActivityImage || null,
+          currentActivityStartAt: null,
+        };
+
+        // Remove existing and add updated one
+        if (existingProgression) {
+          state.entityProgressions = (state.entityProgressions || []).filter(
+            p => p !== existingProgression,
+          );
+        }
+
+        state.entityProgressions = state.entityProgressions || [];
+        state.entityProgressions.push(inProgressFlow);
+
+        return;
+      }
+
+      // Handle completed entities (existing logic)
+      const endedAtTimestamp = payload.endAt.getTime();
 
       if (existingProgression) {
         if (existingProgression.status === 'completed') {
@@ -303,18 +363,20 @@ const slice = createSlice({
             existingCompletion.endedAtTimestamp = endedAtTimestamp;
           }
         }
+        // If existing is in-progress but payload is completed:
+        // Keep in-progress state - user hasn't completed locally yet
       } else {
         const newCompletion: EntityProgressionCompleted = {
           status: 'completed',
-          appletId: action.payload.appletId,
-          entityType: action.payload.entityType,
-          entityId: action.payload.entityId,
-          eventId: action.payload.eventId,
-          targetSubjectId: action.payload.targetSubjectId,
+          appletId: payload.appletId,
+          entityType: payload.entityType,
+          entityId: payload.entityId,
+          eventId: payload.eventId,
+          targetSubjectId: payload.targetSubjectId,
           availableUntilTimestamp: null,
           startedAtTimestamp: 0,
           endedAtTimestamp,
-          submitId: action.payload.submitId,
+          submitId: payload.submitId,
         };
         state.entityProgressions = state.entityProgressions ?? [];
         state.entityProgressions.push(newCompletion);
