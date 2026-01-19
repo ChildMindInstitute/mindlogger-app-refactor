@@ -5,9 +5,14 @@ import {
   ONEUP_HEALTH_SYSTEM_SEARCH_API_URL,
 } from '@app/shared/lib/constants';
 
+// 15-second timeout for all requests to prevent infinite hanging
+// Especially important for MFA flows and hotspot disconnect scenarios
+const REQUEST_TIMEOUT_MS = 15000;
+
 export const httpService = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  timeout: REQUEST_TIMEOUT_MS,
 });
 
 httpService.defaults.headers.common['Content-Type'] = 'application/json';

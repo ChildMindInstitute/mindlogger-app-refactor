@@ -11,6 +11,7 @@ import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userP
 import { selectUserId } from '@app/entities/identity/model/selectors';
 import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
+import { UserDto } from '@app/shared/api/services/IIdentityService';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
@@ -53,9 +54,62 @@ export const LoginForm: FC<Props> = props => {
     reset,
   } = useLoginMutation({
     onSuccess: async (response, variables) => {
+      const data = response.data.result;
+
+      // MFA required
+      if ('mfaRequired' in data && data.mfaRequired) {
+        const mfaToken = data.mfaToken;
+        const userIdFromMfa = data.userId;
+        const userEmailFromMfa = data.userEmail;
+
+        if (!mfaToken) {
+          console.error('MFA required but no mfaToken in response');
+          return;
+        }
+
+        if (!userIdFromMfa || !userEmailFromMfa) {
+          console.error(
+            'MFA required but missing user_id or user_email in response',
+          );
+          return;
+        }
+
+        // Setup encryption before MFA navigation
+        const userParams = {
+          userId: userIdFromMfa,
+          email: userEmailFromMfa,
+          password: variables.password,
+        };
+
+        // Cleanup if different user
+        if (userParams.userId !== userId) {
+          await cleanupData();
+          dispatch(cleanUpAction());
+        }
+
+        // Derive and store private key
+        const userPrivateKey =
+          getDefaultEncryptionManager().getPrivateKey(userParams);
+        getDefaultUserPrivateKeyRecord().set(userPrivateKey);
+        getDefaultUserInfoRecord().setEmail(userEmailFromMfa);
+
+        navigate('MfaVerification', {
+          mfaToken,
+          userId: userIdFromMfa,
+        });
+        return;
+      }
+
+      // Standard login flow (no MFA) - after type guard, data must be LoginSuccessResponse
+      // TypeScript doesn't narrow union types automatically, so we cast
+      const loginData = data as {
+        token: { accessToken: string; refreshToken: string; tokenType: string };
+        user: UserDto;
+      };
+
       const userParams = {
-        userId: response.data.result.user.id,
-        email: response.data.result.user.email,
+        userId: loginData.user.id,
+        email: loginData.user.email,
         password: variables.password,
       };
 
@@ -74,7 +128,7 @@ export const LoginForm: FC<Props> = props => {
 
       getDefaultUserPrivateKeyRecord().set(userPrivateKey);
 
-      const { user, token: session } = response.data.result;
+      const { user, token: session } = loginData;
 
       dispatch(identityActions.onAuthSuccess(user));
 
@@ -126,7 +180,9 @@ export const LoginForm: FC<Props> = props => {
             accessibilityLabel="login-email-input"
             placeholder={t('login_form:email_placeholder')}
             submitBehavior="submit"
-            onSubmitEditing={submit}
+            onSubmitEditing={() => {
+              submit().catch(console.error);
+            }}
             returnKeyType="go"
           />
 
@@ -136,7 +192,9 @@ export const LoginForm: FC<Props> = props => {
             accessibilityLabel="login-password-input"
             placeholder={t('auth:password')}
             submitBehavior="submit"
-            onSubmitEditing={submit}
+            onSubmitEditing={() => {
+              submit().catch(console.error);
+            }}
             returnKeyType="go"
           />
 
@@ -144,7 +202,7 @@ export const LoginForm: FC<Props> = props => {
             <ErrorMessage
               mode="light"
               accessibilityLabel="login-error-message"
-              error={{ message: error.evaluatedMessage! }}
+              error={{ message: error.evaluatedMessage ?? '' }}
             />
           )}
         </YStack>
@@ -164,7 +222,9 @@ export const LoginForm: FC<Props> = props => {
           isLoading={isLoading}
           accessibilityLabel="login-button"
           width="100%"
-          onPress={submit}
+          onPress={() => {
+            submit().catch(console.error);
+          }}
           buttonStyle={{ alignSelf: 'center', paddingVertical: 16 }}
         >
           {t('login_form:login')}
