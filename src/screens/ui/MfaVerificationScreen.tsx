@@ -7,7 +7,6 @@ import { isTablet } from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useMfaVerifyMutation } from '@app/entities/identity/api/hooks/useMfaVerifyMutation';
-import { getDefaultMfaTokenRecord } from '@app/entities/identity/lib/mfaTokenRecordInstance';
 import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
 import {
@@ -60,7 +59,6 @@ export const MfaVerificationScreen: FC = () => {
     onSuccess: response => {
       setErrorMessage(undefined);
       resetAttempts();
-      getDefaultMfaTokenRecord().clear();
 
       const result = response.data.result;
 
@@ -105,7 +103,6 @@ export const MfaVerificationScreen: FC = () => {
 
       if (shouldNavigateToLogin(err)) {
         setSessionExpired(true);
-        getDefaultMfaTokenRecord().clear();
 
         // Longer delay for lockout errors
         const isLockoutError =
@@ -126,9 +123,9 @@ export const MfaVerificationScreen: FC = () => {
   const handleVerificationSuccess = (code: string) => {
     executeIfOnline(() => {
       verifyMfa({
-        mfa_token: mfaToken,
-        totp_code: code,
-        device_id: getDefaultSystemRecord().getDeviceId(),
+        mfaToken: mfaToken,
+        totpCode: code,
+        deviceId: getDefaultSystemRecord().getDeviceId(),
       });
     });
   };

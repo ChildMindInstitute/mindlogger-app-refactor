@@ -50,18 +50,12 @@ export type LoginSuccessResponse = SuccessfulResponse<{
 }>;
 
 // MFA challenge response (when MFA is enabled)
-// Note: Backend returns snake_case but gets transformed to camelCase by API layer
 export type LoginMfaRequiredResponse = SuccessfulResponse<{
-  mfa_required?: true; // snake_case version (if not transformed)
-  mfaRequired?: true; // camelCase version (after transformation)
-  mfa_session_id?: string;
+  mfaRequired?: true;
   mfaSessionId?: string;
-  mfa_token?: string;
   mfaToken?: string;
-  user_id?: string; // snake_case version
-  userId?: string; // camelCase version
-  user_email?: string; // snake_case version
-  userEmail?: string; // camelCase version
+  userId?: string;
+  userEmail?: string;
 }>;
 
 // Union type for login response
@@ -76,9 +70,9 @@ export type UserDto = {
 
 // MFA verification request (for 6-digit TOTP codes)
 export type MfaVerifyRequest = {
-  mfa_token: string;
-  totp_code: string;
-  device_id?: string;
+  mfaToken: string;
+  totpCode: string;
+  deviceId?: string;
 };
 
 // MFA verification response
@@ -93,9 +87,9 @@ export type MfaVerifyResponse = SuccessfulResponse<{
 
 // MFA recovery request (for backup codes)
 export type MfaRecoveryRequest = {
-  mfa_token: string;
+  mfaToken: string;
   code: string;
-  device_id?: string;
+  deviceId?: string;
 };
 
 // MFA recovery response

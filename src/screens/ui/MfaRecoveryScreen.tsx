@@ -7,7 +7,6 @@ import { isTablet } from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useMfaRecoveryMutation } from '@app/entities/identity/api/hooks/useMfaRecoveryMutation';
-import { getDefaultMfaTokenRecord } from '@app/entities/identity/lib/mfaTokenRecordInstance';
 import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
 import { MfaRecoveryForm } from '@app/features/mfa-recovery/ui/MfaRecoveryForm';
@@ -60,7 +59,6 @@ export const MfaRecoveryScreen: FC = () => {
     onSuccess: response => {
       setErrorMessage(undefined);
       resetAttempts();
-      getDefaultMfaTokenRecord().clear();
 
       const result = response.data.result;
 
@@ -105,7 +103,6 @@ export const MfaRecoveryScreen: FC = () => {
 
       if (shouldNavigateToLogin(err)) {
         setSessionExpired(true);
-        getDefaultMfaTokenRecord().clear();
 
         // Longer delay for lockout errors
         const isLockoutError =
@@ -128,9 +125,9 @@ export const MfaRecoveryScreen: FC = () => {
   const handleRecoverySuccess = (recoveryCode: string) => {
     executeIfOnline(() => {
       verifyRecoveryCode({
-        mfa_token: mfaToken,
+        mfaToken: mfaToken,
         code: recoveryCode,
-        device_id: getDefaultSystemRecord().getDeviceId(),
+        deviceId: getDefaultSystemRecord().getDeviceId(),
       });
     });
   };

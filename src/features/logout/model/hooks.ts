@@ -3,7 +3,6 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { getDefaultAnswersQueueService } from '@app/entities/activity/lib/services/answersQueueServiceInstance';
 import { onBeforeLogout } from '@app/entities/identity/lib/alerts';
-import { getDefaultMfaTokenRecord } from '@app/entities/identity/lib/mfaTokenRecordInstance';
 import { getDefaultUserInfoRecord } from '@app/entities/identity/lib/userInfoRecord';
 import { getDefaultUserPrivateKeyRecord } from '@app/entities/identity/lib/userPrivateKeyRecordInstance';
 import { getDefaultNotificationManager } from '@app/entities/notification/model/notificationManagerInstance';
@@ -49,7 +48,6 @@ export function useLogout() {
 
     getDefaultUserInfoRecord().clear();
     getDefaultUserPrivateKeyRecord().clear();
-    getDefaultMfaTokenRecord().clear();
 
     getDefaultLogger().clearAllLogFiles();
 
