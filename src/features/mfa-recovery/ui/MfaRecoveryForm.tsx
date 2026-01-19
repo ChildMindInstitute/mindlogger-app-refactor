@@ -93,7 +93,7 @@ export const MfaRecoveryForm: FC<Props> = ({
               <InputField
                 name="recoveryCode"
                 accessibilityLabel="mfa-recovery-code-input"
-                placeholder="XXXXX-XXXXX"
+                placeholder={t('mfa_recovery:placeholder')}
                 autoCapitalize="characters"
                 maxLength={11}
                 mode="outlined"

@@ -123,7 +123,7 @@ export const MfaVerificationForm: FC<Props> = ({
               <InputField
                 name="verificationCode"
                 accessibilityLabel="mfa-verification-code-input"
-                placeholder="Enter verification code"
+                placeholder={t('mfa_verification:placeholder')}
                 keyboardType="number-pad"
                 maxLength={6}
                 mode="outlined"
@@ -178,6 +178,8 @@ export const MfaVerificationForm: FC<Props> = ({
                   fontSize: 16,
                   lineHeight: 24,
                   numberOfLines: 1,
+                  adjustsFontSizeToFit: true,
+                  minimumFontScale: 0.7,
                 }}
                 accessibilityLabel="use-recovery-code-link"
               >
