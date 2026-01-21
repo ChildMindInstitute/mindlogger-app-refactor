@@ -1,10 +1,15 @@
+import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
 import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
   EntitiesCompletionsDto,
 } from '@app/shared/api/services/IEventsService';
+import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
+import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
+import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
+import { buildActivityFlowPipeline } from '@app/widgets/survey/model/pipelineBuilder';
 import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService';
 
 import { AppletDetails } from '../../lib/types';
@@ -110,6 +115,13 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         this.logger.log(
           `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities})`,
         );
+
+        // Reconstruct FlowState from server data so the flow can be resumed
+        this.reconstructFlowState(
+          appletDetails,
+          completedEntityDto,
+          flowDetails,
+        );
       } else {
         this.logger.warn(
           `[ProgressSyncService.upsertEntityProgression]: Skipping in-progress flow with invalid data`,
@@ -188,6 +200,97 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       currentActivityImage: activity?.image || null,
       totalActivities: flow.activityIds.length,
     };
+  }
+
+  /**
+   * Reconstructs FlowState from server data and saves to storage
+   * so the flow can be resumed from the correct activity.
+   */
+  private reconstructFlowState(
+    appletDetails: AppletDetails,
+    completedEntityDto: CompletedEntityDto,
+    flowDetails: {
+      currentActivityId: string;
+      currentActivityName: string;
+      currentActivityDescription: string;
+      currentActivityImage: string | null;
+      totalActivities: number;
+    },
+  ) {
+    const flowId = completedEntityDto.id;
+    const flow = appletDetails.activityFlows.find(f => f.id === flowId);
+    if (!flow) {
+      this.logger.warn(
+        `[ProgressSyncService.reconstructFlowState] Flow ${flowId} not found`,
+      );
+      return;
+    }
+
+    const activityFlowOrder =
+      (completedEntityDto.activityFlowOrder as number) ?? 0;
+
+    // Build the full activities array for the flow
+    const activities = flow.activityIds
+      .map(activityId => {
+        const activity = appletDetails.activities.find(
+          a => a.id === activityId,
+        );
+        if (!activity) {
+          this.logger.warn(
+            `[ProgressSyncService.reconstructFlowState] Activity ${activityId} not found`,
+          );
+          return null;
+        }
+        return activity;
+      })
+      .filter(a => a !== null);
+
+    if (activities.length !== flow.activityIds.length) {
+      this.logger.warn(
+        `[ProgressSyncService.reconstructFlowState] Could not resolve all activities in flow`,
+      );
+      return;
+    }
+
+    // Build pipeline starting from activity 0
+    const pipeline = buildActivityFlowPipeline({
+      appletId: appletDetails.id,
+      eventId: completedEntityDto.scheduledEventId,
+      flowId,
+      targetSubjectId: completedEntityDto.targetSubjectId,
+      activities: activities as FlowProgressActivity[],
+      startFrom: 0,
+      hasSummary: () => false, // Summary info not available from server
+    });
+
+    // Calculate the step in the pipeline
+    // Each activity has 2 pipeline items: Stepper + Intermediate (except last has Stepper + Summary + Finish)
+    // For activityFlowOrder, the step is activityFlowOrder * 2 (pointing to the Stepper)
+    const step = activityFlowOrder * 2;
+
+    const flowState: FlowState = {
+      step,
+      flowName: flow.name,
+      scheduledDate: null, // Not available from server
+      pipeline,
+      isCompletedDueToTimer: false,
+      interruptionStep: null,
+      context: {},
+    };
+
+    // Save to storage
+    const key = getFlowRecordKey(
+      flowId,
+      appletDetails.id,
+      completedEntityDto.scheduledEventId,
+      completedEntityDto.targetSubjectId,
+    );
+    const storage = getDefaultStorageInstanceManager().getFlowProgressStorage();
+    storage.set(key, JSON.stringify(flowState));
+
+    this.logger.log(
+      `[ProgressSyncService.reconstructFlowState]: Reconstructed FlowState at step ${step} (activity ${activityFlowOrder + 1}/${flowDetails.totalActivities})`,
+    );
   }
 
   public sync(
