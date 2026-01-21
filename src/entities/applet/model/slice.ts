@@ -59,6 +59,7 @@ export type UpsertEntityProgressionPayload = {
   currentActivityName?: string;
   currentActivityDescription?: string;
   currentActivityImage?: string | null;
+  currentActivityStartAt?: number | null; // timestamp when current activity started
   totalActivitiesInPipeline?: number;
 };
 
@@ -335,7 +336,7 @@ const slice = createSlice({
           currentActivityName: payload.currentActivityName || '',
           currentActivityDescription: payload.currentActivityDescription || '',
           currentActivityImage: payload.currentActivityImage || null,
-          currentActivityStartAt: null,
+          currentActivityStartAt: payload.currentActivityStartAt ?? null,
         };
 
         // Remove existing and add updated one
@@ -359,12 +360,50 @@ const slice = createSlice({
           const existingCompletion =
             existingProgression as EntityProgressionCompleted;
 
+          // Don't update endedAtTimestamp if it would be BEFORE the startedAtTimestamp
+          // This can happen if user restarted a completed flow but we haven't fully synced yet
+          if (
+            existingCompletion.startedAtTimestamp &&
+            endedAtTimestamp < existingCompletion.startedAtTimestamp
+          ) {
+            // Server's completion is older than local start - ignore it
+            return;
+          }
+
           if (endedAtTimestamp > (existingCompletion.endedAtTimestamp ?? 0)) {
             existingCompletion.endedAtTimestamp = endedAtTimestamp;
           }
+        } else if (existingProgression.status === 'in-progress') {
+          // If existing is in-progress but server says completed:
+          // Only convert to completed if the server's completion happened AFTER the local start
+          // This prevents converting a restarted flow back to completed
+          const localStartedAt = existingProgression.startedAtTimestamp;
+          
+          if (localStartedAt && endedAtTimestamp < localStartedAt) {
+            // Server's completed record is OLDER than the local restart - ignore it
+            return;
+          }
+
+          // Server completion is newer - update local state to mark as completed
+          const completedProgression: EntityProgressionCompleted = {
+            status: 'completed',
+            appletId: payload.appletId,
+            entityType: payload.entityType,
+            entityId: payload.entityId,
+            eventId: payload.eventId,
+            targetSubjectId: payload.targetSubjectId,
+            availableUntilTimestamp: null,
+            startedAtTimestamp: existingProgression.startedAtTimestamp,
+            endedAtTimestamp,
+            submitId: payload.submitId,
+          };
+
+          // Remove in-progress and add completed
+          state.entityProgressions = (state.entityProgressions || []).filter(
+            p => p !== existingProgression,
+          );
+          state.entityProgressions.push(completedProgression);
         }
-        // If existing is in-progress but payload is completed:
-        // Keep in-progress state - user hasn't completed locally yet
       } else {
         const newCompletion: EntityProgressionCompleted = {
           status: 'completed',

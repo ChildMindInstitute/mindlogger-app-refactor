@@ -111,6 +111,9 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           flowDetails.currentActivityDescription;
         payload.currentActivityImage = flowDetails.currentActivityImage;
         payload.totalActivitiesInPipeline = flowDetails.totalActivities;
+        // Set currentActivityStartAt to endAt (when the previous activity completed)
+        // This ensures we have a valid start time for the current activity
+        payload.currentActivityStartAt = endAt.getTime();
 
         this.logger.log(
           `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities})`,
@@ -127,6 +130,42 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           `[ProgressSyncService.upsertEntityProgression]: Skipping in-progress flow with invalid data`,
         );
         return;
+      }
+    } else if (isFlow && completedEntityDto.isFlowCompleted === true) {
+      // Flow is completed - check if we should clean up local FlowState storage
+      // Don't clean up if user has restarted the flow locally (local start is AFTER server completion)
+      const existingProgression = this.state.applets.entityProgressions?.find(
+        p =>
+          p.appletId === appletDetails.id &&
+          p.entityType === 'activityFlow' &&
+          p.entityId === completedEntityDto.id &&
+          p.eventId === completedEntityDto.scheduledEventId &&
+          p.targetSubjectId === completedEntityDto.targetSubjectId,
+      );
+
+      const serverCompletionTime = endAt.getTime();
+      const localStartTime = existingProgression?.startedAtTimestamp;
+
+      // Only clean up if server completion is NOT older than local start
+      // (i.e., skip cleanup if flow was restarted locally after this server completion)
+      if (!localStartTime || serverCompletionTime >= localStartTime) {
+        const key = getFlowRecordKey(
+          completedEntityDto.id,
+          appletDetails.id,
+          completedEntityDto.scheduledEventId,
+          completedEntityDto.targetSubjectId,
+        );
+        const storage =
+          getDefaultStorageInstanceManager().getFlowProgressStorage();
+        storage.delete(key);
+
+        this.logger.log(
+          `[ProgressSyncService.upsertEntityProgression]: Flow completed - cleaned up FlowState for flow ${completedEntityDto.id}`,
+        );
+      } else {
+        this.logger.log(
+          `[ProgressSyncService.upsertEntityProgression]: Skipping FlowState cleanup - flow was restarted locally (local start: ${localStartTime}, server completion: ${serverCompletionTime})`,
+        );
       }
     }
 

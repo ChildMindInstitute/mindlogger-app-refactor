@@ -30,8 +30,20 @@ export class ProgressDataCollector implements IProgressDataCollector {
 
     const response = await this.collectAllCompletions();
 
+    // Log the full response to debug server data
+    this.logger.log(
+      `[ProgressDataCollector.collectInternal]: API response: ${JSON.stringify(response?.data?.result)}`,
+    );
+
     response?.data?.result?.forEach(completions => {
       result.appletEntities[completions.id] = completions;
+      
+      // Log flow completions specifically
+      if (completions.activityFlows && completions.activityFlows.length > 0) {
+        this.logger.log(
+          `[ProgressDataCollector.collectInternal]: Flow completions for applet ${completions.id}: ${JSON.stringify(completions.activityFlows)}`,
+        );
+      }
     });
 
     return result;

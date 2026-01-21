@@ -57,10 +57,26 @@ export function useFlowStateActions({
     const record: FlowState = getCurrentFlowStorageRecord()!;
 
     if (isLastStep(record)) {
+      getDefaultLogger().log(
+        `[useFlowStateActions.next] Already at last step, not incrementing`,
+      );
       return;
     }
 
     const step = getStep(record);
+    const pipeline = getPipeline(record);
+    const currentItem = pipeline[step];
+    const nextItem = pipeline[step + 1];
+
+    getDefaultLogger().log(
+      `[useFlowStateActions.next] Moving from step ${step} to ${step + 1}`,
+    );
+    getDefaultLogger().log(
+      `[useFlowStateActions.next] Current item: type=${currentItem?.type}, activityId=${currentItem?.payload?.activityId}, order=${currentItem?.payload?.order}`,
+    );
+    getDefaultLogger().log(
+      `[useFlowStateActions.next] Next item: type=${nextItem?.type}, activityId=${nextItem?.payload?.activityId}, order=${nextItem?.payload?.order}`,
+    );
 
     upsertFlowStorageRecord({
       ...record,
@@ -70,6 +86,13 @@ export function useFlowStateActions({
 
   function saveActivitySummary(activitySummary: ActivitySummaryData) {
     const record: FlowState = getCurrentFlowStorageRecord()!;
+
+    getDefaultLogger().log(
+      `[useFlowStateActions.saveActivitySummary] Saving summary for activityId=${activitySummary.activityId}`,
+    );
+    getDefaultLogger().log(
+      `[useFlowStateActions.saveActivitySummary] Current step: ${record.step}, alerts: ${activitySummary.alerts?.length ?? 0}, scores: ${activitySummary.scores ? Object.keys(activitySummary.scores).length : 0}, order: ${activitySummary.order}`,
+    );
 
     const updatedContext: Record<string, unknown> = {
       ...(record.context ?? {}),
@@ -87,6 +110,10 @@ export function useFlowStateActions({
     };
 
     updatedContext[SummaryDataKey] = summaryData;
+
+    getDefaultLogger().log(
+      `[useFlowStateActions.saveActivitySummary] Updated context, now has ${Object.keys(summaryData).length} activity summaries`,
+    );
 
     upsertFlowStorageRecord({
       ...record,
