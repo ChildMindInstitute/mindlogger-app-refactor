@@ -51,7 +51,7 @@ export type UpsertEntityProgressionPayload = {
   entityId: string;
   eventId: string | null;
   targetSubjectId: string | null;
-  endAt: Date;
+  endAt: number; // timestamp, not Date (Redux can't serialize Date objects)
   submitId: string;
   isInProgress?: boolean;
   activityFlowOrder?: number;
@@ -326,7 +326,7 @@ const slice = createSlice({
           eventId: payload.eventId,
           targetSubjectId: payload.targetSubjectId,
           startedAtTimestamp:
-            existingProgression?.startedAtTimestamp ?? payload.endAt.getTime(),
+            existingProgression?.startedAtTimestamp ?? payload.endAt,
           availableUntilTimestamp: null,
           submitId: payload.submitId,
           pipelineActivityOrder,
@@ -352,7 +352,7 @@ const slice = createSlice({
       }
 
       // Handle completed entities (existing logic)
-      const endedAtTimestamp = payload.endAt.getTime();
+      const endedAtTimestamp = payload.endAt; // Already a timestamp
 
       if (existingProgression) {
         if (existingProgression.status === 'completed') {

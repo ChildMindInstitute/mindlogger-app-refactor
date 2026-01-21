@@ -526,8 +526,25 @@ export function useStartEntity({
             const storage =
               getDefaultStorageInstanceManager().getFlowProgressStorage();
 
-            const flowState =
-              (JSON.parse(storage.getString(key) || '') as FlowState) || {};
+            let flowState: FlowState | undefined;
+            try {
+              const storedValue = storage.getString(key);
+              if (storedValue) {
+                flowState = JSON.parse(storedValue) as FlowState;
+              }
+            } catch (error) {
+              console.error(
+                '[useStartEntity.onResume] Failed to parse flow state:',
+                error,
+              );
+            }
+
+            if (!flowState || !flowState.pipeline || flowState.pipeline.length === 0) {
+              console.warn(
+                '[useStartEntity.onResume] No valid flow state found, starting from scratch',
+              );
+              return resolve({ fromScratch: true });
+            }
 
             trackResumeFlow({
               ...logParams,

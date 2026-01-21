@@ -50,16 +50,42 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       flow => flow.id === completedEntityDto.id,
     );
 
+    // For in-progress flows, localEndDate and localEndTime are null
+    // Use current time as a placeholder
+    let endAt: Date;
+
+    if (completedEntityDto.localEndDate && completedEntityDto.localEndTime) {
+      try {
+        endAt = buildDateTimeFromDto(
+          completedEntityDto.localEndDate,
+          completedEntityDto.localEndTime,
+        );
+
+        // Validate the date is not Invalid Date
+        if (isNaN(endAt.getTime())) {
+          this.logger.warn(
+            `[ProgressSyncService.upsertEntityProgression]: Invalid date, using current time`,
+          );
+          endAt = new Date();
+        }
+      } catch (error) {
+        this.logger.warn(
+          `[ProgressSyncService.upsertEntityProgression]: Error creating date: ${error}`,
+        );
+        endAt = new Date();
+      }
+    } else {
+      // For in-progress flows or missing dates, use current time
+      endAt = new Date();
+    }
+
     const payload: UpsertEntityProgressionPayload = {
       appletId: appletDetails.id,
       entityType: isFlow ? 'activityFlow' : 'activity',
       entityId: completedEntityDto.id,
       eventId: completedEntityDto.scheduledEventId,
       targetSubjectId: completedEntityDto.targetSubjectId,
-      endAt: buildDateTimeFromDto(
-        completedEntityDto.localEndDate as string,
-        completedEntityDto.localEndTime as string,
-      ),
+      endAt: endAt.getTime(),
       submitId: completedEntityDto.submitId,
     };
 
@@ -82,7 +108,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         payload.totalActivitiesInPipeline = flowDetails.totalActivities;
 
         this.logger.log(
-          `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${payload.activityFlowOrder + 1}/${flowDetails.totalActivities})`,
+          `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities})`,
         );
       } else {
         this.logger.warn(
