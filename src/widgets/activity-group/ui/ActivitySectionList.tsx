@@ -1,5 +1,6 @@
 import { useMemo, PropsWithChildren } from 'react';
 import {
+  Alert,
   Linking,
   ScrollViewProps,
   SectionList,
@@ -21,6 +22,7 @@ import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model
 import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
 import { ActivityCard } from '@app/entities/activity/ui/ActivityCard';
 import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { DEEP_LINK_PREFIXES } from '@app/shared/lib/constants';
@@ -83,6 +85,8 @@ export function ActivitySectionList({
     checkAvailability,
   });
 
+  const { mutate: triggerRefresh } = useRefreshMutation();
+
   function navigateSurvey(
     entityId: string,
     entityType: EntityType,
@@ -144,6 +148,31 @@ export function ActivitySectionList({
         targetSubjectId,
         responseTypes,
       );
+
+      console.log('[ActivitySectionList] startFlow result:', {
+        flowId,
+        failed: result.failed,
+        failReason: result.failReason,
+      });
+
+      if (result.failReason === 'completed-elsewhere') {
+        console.log('[ActivitySectionList] Showing cross-device completion alert');
+        Alert.alert(
+          t('activity:flow_completed'),
+          t('activity:flow_completed_elsewhere_message'),
+          [
+            {
+              text: t('additional:ok'),
+              onPress: () => {
+                console.log('[ActivitySectionList] User dismissed alert, triggering refresh');
+                triggerRefresh();
+              },
+            },
+          ],
+          { cancelable: false },
+        );
+        return;
+      }
 
       if (result.failReason === 'expired-while-alert-opened') {
         return autocomplete();

@@ -68,7 +68,8 @@ type FailReason =
   | 'all-items-hidden'
   | 'not-available'
   | 'mutex-busy'
-  | 'expired-while-alert-opened';
+  | 'expired-while-alert-opened'
+  | 'completed-elsewhere';
 
 type StartResult = {
   fromScratch?: boolean;
@@ -595,7 +596,67 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
+      // Capture pre-refresh state to detect cross-device completion
+      const preRefreshProgressions: EntityProgression[] =
+        selectAppletsEntityProgressions(reduxStore.getState());
+      const preRefreshProgression = getEntityProgression(
+        appletId,
+        flowId,
+        eventId,
+        targetSubjectId,
+        preRefreshProgressions,
+      );
+      const wasInProgress = isEntityProgressionInProgress(
+        preRefreshProgression,
+      );
+      const preRefreshSubmitId = wasInProgress
+        ? (preRefreshProgression as EntityProgressionInProgress).submitId
+        : null;
+
+      console.log('[useStartEntity.startFlow] PRE-REFRESH:', {
+        flowId,
+        wasInProgress,
+        preRefreshSubmitId,
+      });
+
       await refresh();
+
+      // Check if the flow we started was completed on another device
+      if (wasInProgress && preRefreshSubmitId) {
+        const postRefreshProgressions: EntityProgression[] =
+          selectAppletsEntityProgressions(reduxStore.getState());
+        const postRefreshProgression = getEntityProgression(
+          appletId,
+          flowId,
+          eventId,
+          targetSubjectId,
+          postRefreshProgressions,
+        );
+
+        const isNowCompleted = postRefreshProgression?.status === 'completed';
+        const submitIdsMatch =
+          postRefreshProgression?.submitId === preRefreshSubmitId;
+
+        console.log('[useStartEntity.startFlow] POST-REFRESH:', {
+          flowId,
+          postStatus: postRefreshProgression?.status,
+          postSubmitId: postRefreshProgression?.submitId,
+          isNowCompleted,
+          submitIdsMatch,
+        });
+
+        // SAME submitId completed elsewhere - show alert and block
+        if (isNowCompleted && submitIdsMatch) {
+          console.log(
+            '[useStartEntity.startFlow] CROSS-DEVICE COMPLETION DETECTED - Blocking start',
+          );
+          return { failed: true, failReason: 'completed-elsewhere' };
+        }
+
+        console.log(
+          '[useStartEntity.startFlow] No cross-device completion - continuing',
+        );
+      }
 
       if (
         !(await checkAvailability(entityName, {
