@@ -58,6 +58,9 @@ export const LoginForm: FC<Props> = props => {
 
       // MFA required
       if ('mfaRequired' in data && data.mfaRequired) {
+        // Track MFA Required event
+        getDefaultAnalyticsService().track(MixEvents.MFARequired);
+
         const mfaToken = data.mfaToken;
         const userIdFromMfa = data.userId;
         const userEmailFromMfa = data.userEmail;

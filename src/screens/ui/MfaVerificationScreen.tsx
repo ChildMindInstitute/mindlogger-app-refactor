@@ -11,8 +11,11 @@ import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
 import {
   getMfaErrorMessage,
+  getMfaErrorCode,
+  extractMfaErrorMetadata,
   shouldNavigateToLogin,
 } from '@app/features/mfa-verification/lib/mfaErrorHandler';
+import { useMfaAnalytics } from '@app/features/mfa-verification/lib/useMfaAnalytics';
 import { useMfaAttemptsTracker } from '@app/features/mfa-verification/lib/useMfaAttemptsTracker';
 import { MfaVerificationForm } from '@app/features/mfa-verification/ui/MfaVerificationForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
@@ -39,6 +42,15 @@ export const MfaVerificationScreen: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [sessionExpired, setSessionExpired] = useState(false);
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const {
+    trackCodeSubmitted,
+    trackVerificationSuccess,
+    trackVerificationFailed,
+    trackSessionExpired,
+    trackSwitchToRecovery,
+    trackBackToLogin,
+  } = useMfaAnalytics({ type: 'totp' });
 
   const {
     updateFromApiError,
@@ -82,6 +94,9 @@ export const MfaVerificationScreen: FC = () => {
         tokenType,
       });
 
+      // Track MFA verification success before login analytics
+      trackVerificationSuccess();
+
       getDefaultAnalyticsService()
         .login(user.id)
         .then(() => {
@@ -101,7 +116,13 @@ export const MfaVerificationScreen: FC = () => {
       const errorKey = getMfaErrorMessage(err, 'mfa_verification');
       setErrorMessage(t(errorKey));
 
+      const errorCode = getMfaErrorCode(err);
+
       if (shouldNavigateToLogin(err)) {
+        // Track session expired event
+        trackSessionExpired(errorCode);
+        trackBackToLogin();
+
         setSessionExpired(true);
 
         // Longer delay for lockout errors
@@ -112,6 +133,25 @@ export const MfaVerificationScreen: FC = () => {
         navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, delay);
+      } else {
+        // Track verification failed event
+        const metadata = extractMfaErrorMetadata(err);
+
+        // Determine attempt type based on which attempts remaining field is present
+        let attemptType: 'global' | 'session' | null = null;
+        if (metadata?.global_attempts_remaining !== undefined) {
+          attemptType = 'global';
+        } else if (metadata?.session_attempts_remaining !== undefined) {
+          attemptType = 'session';
+        }
+
+        trackVerificationFailed({
+          errorCode,
+          attemptsRemaining:
+            metadata?.global_attempts_remaining ??
+            metadata?.session_attempts_remaining,
+          attemptType,
+        });
       }
     },
   });
@@ -120,7 +160,10 @@ export const MfaVerificationScreen: FC = () => {
     navigate('ChangeLanguage');
   };
 
-  const handleVerificationSuccess = (code: string) => {
+  const handleVerificationSuccess = (code: string, isAutoSubmit = false) => {
+    // Track code submitted event
+    trackCodeSubmitted(isAutoSubmit);
+
     executeIfOnline(() => {
       verifyMfa({
         mfaToken: mfaToken,
@@ -131,6 +174,9 @@ export const MfaVerificationScreen: FC = () => {
   };
 
   const handleUseRecoveryCode = () => {
+    // Track switch to recovery event
+    trackSwitchToRecovery();
+
     navigate('MfaRecovery', {
       mfaToken,
       userId,

@@ -89,6 +89,17 @@ export const getMfaErrorDetails = (
   return { messageKey, metadata };
 };
 
+export const getMfaErrorCode = (
+  error: BaseError | null | undefined,
+): string => {
+  if (!error) {
+    return 'unknown';
+  }
+
+  const responseData = (error as unknown as MfaApiError).response?.data;
+  return responseData?.error_code ?? 'unknown';
+};
+
 export const shouldNavigateToLogin = (
   error: BaseError | null | undefined,
 ): boolean => {
@@ -97,7 +108,7 @@ export const shouldNavigateToLogin = (
   }
 
   const status = error.response?.status;
-  const responseData = error.response?.data as any;
+  const responseData = error.response?.data as unknown as MfaApiError;
   const errorCode = responseData?.error_code || '';
 
   // Check backend error codes - these require navigation to login

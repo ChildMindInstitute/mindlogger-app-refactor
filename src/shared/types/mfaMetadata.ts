@@ -5,6 +5,7 @@ export interface MfaErrorMetadata {
 }
 
 export interface MfaApiError extends Error {
+  error_code: string;
   response?: {
     data?: {
       error_code?: string;
