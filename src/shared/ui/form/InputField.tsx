@@ -17,6 +17,7 @@ type Props = {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   hideError?: boolean;
+  filterInput?: (text: string) => string;
 } & InputProps;
 
 export const InputField: FC<Props> = ({
@@ -28,6 +29,7 @@ export const InputField: FC<Props> = ({
   leftIcon,
   rightIcon,
   hideError,
+  filterInput,
   ...props
 }) => {
   const { control } = useFormContext();
@@ -39,6 +41,12 @@ export const InputField: FC<Props> = ({
     control,
     defaultValue,
   });
+
+  const handleChangeText = (text: string) => {
+    const filteredText = filterInput ? filterInput(text) : text;
+    onFormChange(filteredText);
+    props.onChangeText?.(filteredText);
+  };
 
   return (
     <>
@@ -60,7 +68,7 @@ export const InputField: FC<Props> = ({
                   onBlur();
                   props.onBlur && props.onBlur(e);
                 }}
-                onChangeText={onFormChange}
+                onChangeText={handleChangeText}
                 value={value}
                 placeholder={placeholder}
                 autoCapitalize="none"
@@ -87,7 +95,7 @@ export const InputField: FC<Props> = ({
       {!hideError && (
         <ErrorMessage
           mode={mode === 'dark' ? 'dark' : 'light'}
-          mt={8}
+          mt={4}
           error={error}
           accessibilityLabel={`${name}-error-text`}
         />

@@ -13,4 +13,5 @@ export interface IStorageInstanceManager {
   getActivityProgressStorage: () => MMKV;
   getUserInfoStorage: () => MMKV;
   getUserPrivateKeyStorage: () => MMKV;
+  getMfaTokenStorage: () => MMKV;
 }
