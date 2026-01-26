@@ -5,7 +5,6 @@ import { mapToActivity } from '@app/entities/activity/model/mappers';
 import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
 import { ActivityResponse } from '@app/shared/api/services/IActivityService';
 import { AppletDetailsResponse } from '@app/shared/api/services/IAppletService';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import {
   getDataFromQuery,
@@ -68,18 +67,11 @@ export function ActivityRecordInitializer({
       order,
     );
 
-    getDefaultLogger().log(
-      `[ActivityRecordInitializer.initializeActivity] Initializing activity ${activityId} with order ${order}, key: ${key}`,
-    );
-
     const storageRecordExist = getDefaultStorageInstanceManager()
       .getActivityProgressStorage()
       .contains(key);
 
     if (storageRecordExist) {
-      getDefaultLogger().log(
-        `[ActivityRecordInitializer.initializeActivity] Activity ${activityId} already exists, skipping`,
-      );
       moveAbTrailsStepToTutorial(key);
       return;
     }

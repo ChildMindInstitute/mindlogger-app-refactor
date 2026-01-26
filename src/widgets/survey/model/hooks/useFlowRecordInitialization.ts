@@ -157,12 +157,6 @@ export function useFlowRecordInitialization({
         `[useFlowRecordInitialization]: flowStorageRecord's step changed: step = ${step}`,
       );
       getDefaultLogger().log(
-        `[useFlowRecordInitialization]: Pipeline has ${flowStorageRecord?.pipeline?.length ?? 0} items`,
-      );
-      getDefaultLogger().log(
-        `[useFlowRecordInitialization]: Context keys: ${Object.keys(flowStorageRecord?.context ?? {}).join(', ')}`,
-      );
-      getDefaultLogger().log(
         `[useFlowRecordInitialization]: flowStorageRecord current item: ${JSON.stringify(
           logFlowStepItem,
           null,

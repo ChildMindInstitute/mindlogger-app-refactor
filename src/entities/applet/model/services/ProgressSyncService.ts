@@ -158,21 +158,10 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         const storage =
           getDefaultStorageInstanceManager().getFlowProgressStorage();
         storage.delete(key);
-
-        this.logger.log(
-          `[ProgressSyncService.upsertEntityProgression]: Flow completed - cleaned up FlowState for flow ${completedEntityDto.id}`,
-        );
-      } else {
-        this.logger.log(
-          `[ProgressSyncService.upsertEntityProgression]: Skipping FlowState cleanup - flow was restarted locally (local start: ${localStartTime}, server completion: ${serverCompletionTime})`,
-        );
       }
     }
 
     this.dispatch(appletActions.upsertEntityProgression(payload));
-    this.logger.log(
-      `[ProgressSyncService.upsertEntityProgression]: Upserted progression ${JSON.stringify(payload)}`,
-    );
   }
 
   /**
@@ -326,10 +315,6 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     );
     const storage = getDefaultStorageInstanceManager().getFlowProgressStorage();
     storage.set(key, JSON.stringify(flowState));
-
-    this.logger.log(
-      `[ProgressSyncService.reconstructFlowState]: Reconstructed FlowState at step ${step} (activity ${activityFlowOrder + 1}/${flowDetails.totalActivities})`,
-    );
   }
 
   public sync(

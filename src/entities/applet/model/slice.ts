@@ -378,7 +378,7 @@ const slice = createSlice({
           // Only convert to completed if the server's completion happened AFTER the local start
           // This prevents converting a restarted flow back to completed
           const localStartedAt = existingProgression.startedAtTimestamp;
-          
+
           if (localStartedAt && endedAtTimestamp < localStartedAt) {
             // Server's completed record is OLDER than the local restart - ignore it
             return;

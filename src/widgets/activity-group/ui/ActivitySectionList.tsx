@@ -149,14 +149,7 @@ export function ActivitySectionList({
         responseTypes,
       );
 
-      console.log('[ActivitySectionList] startFlow result:', {
-        flowId,
-        failed: result.failed,
-        failReason: result.failReason,
-      });
-
       if (result.failReason === 'completed-elsewhere') {
-        console.log('[ActivitySectionList] Showing cross-device completion alert');
         Alert.alert(
           t('activity:flow_completed'),
           t('activity:flow_completed_elsewhere_message'),
@@ -164,7 +157,6 @@ export function ActivitySectionList({
             {
               text: t('additional:ok'),
               onPress: () => {
-                console.log('[ActivitySectionList] User dismissed alert, triggering refresh');
                 triggerRefresh();
               },
             },

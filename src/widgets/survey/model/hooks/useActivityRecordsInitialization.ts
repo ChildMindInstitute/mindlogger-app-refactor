@@ -4,7 +4,6 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { EntityType } from '@app/abstract/lib/types/entity';
 import { ActivityRecordInitializer } from '@app/features/pass-survey/model/ActivityRecordInitializer';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { useFlowState } from './useFlowState';
 
@@ -44,17 +43,7 @@ export function useActivityRecordsInitialization({
   const isFlow = entityType === 'flow';
 
   useMemo(() => {
-    getDefaultLogger().log(
-      `[useActivityRecordsInitialization] isFlow: ${isFlow}, remainingActivityIds.length: ${remainingActivityIds.length}, ids: [${remainingActivityIds.join(', ')}]`,
-    );
-    getDefaultLogger().log(
-      `[useActivityRecordsInitialization] orders: [${remainingActivityOrders.join(', ')}]`,
-    );
-
     if (isFlow && remainingActivityIds.length) {
-      getDefaultLogger().log(
-        `[useActivityRecordsInitialization] Initializing flow activities for eventId: ${eventId}`,
-      );
       Initializer.initializeFlowActivities({
         eventId,
         targetSubjectId,
@@ -62,7 +51,14 @@ export function useActivityRecordsInitialization({
         flowActivityOrders: remainingActivityOrders,
       });
     }
-  }, [Initializer, eventId, targetSubjectId, isFlow, remainingActivityIds, remainingActivityOrders]);
+  }, [
+    Initializer,
+    eventId,
+    targetSubjectId,
+    isFlow,
+    remainingActivityIds,
+    remainingActivityOrders,
+  ]);
 
   useMemo(() => {
     if (!isFlow && remainingActivityIds.length) {

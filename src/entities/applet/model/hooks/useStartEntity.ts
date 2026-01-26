@@ -540,7 +540,11 @@ export function useStartEntity({
               );
             }
 
-            if (!flowState || !flowState.pipeline || flowState.pipeline.length === 0) {
+            if (
+              !flowState ||
+              !flowState.pipeline ||
+              flowState.pipeline.length === 0
+            ) {
               console.warn(
                 '[useStartEntity.onResume] No valid flow state found, starting from scratch',
               );
@@ -613,12 +617,6 @@ export function useStartEntity({
         ? (preRefreshProgression as EntityProgressionInProgress).submitId
         : null;
 
-      console.log('[useStartEntity.startFlow] PRE-REFRESH:', {
-        flowId,
-        wasInProgress,
-        preRefreshSubmitId,
-      });
-
       await refresh();
 
       // Check if the flow we started was completed on another device
@@ -637,25 +635,10 @@ export function useStartEntity({
         const submitIdsMatch =
           postRefreshProgression?.submitId === preRefreshSubmitId;
 
-        console.log('[useStartEntity.startFlow] POST-REFRESH:', {
-          flowId,
-          postStatus: postRefreshProgression?.status,
-          postSubmitId: postRefreshProgression?.submitId,
-          isNowCompleted,
-          submitIdsMatch,
-        });
-
         // SAME submitId completed elsewhere - show alert and block
         if (isNowCompleted && submitIdsMatch) {
-          console.log(
-            '[useStartEntity.startFlow] CROSS-DEVICE COMPLETION DETECTED - Blocking start',
-          );
           return { failed: true, failReason: 'completed-elsewhere' };
         }
-
-        console.log(
-          '[useStartEntity.startFlow] No cross-device completion - continuing',
-        );
       }
 
       if (
