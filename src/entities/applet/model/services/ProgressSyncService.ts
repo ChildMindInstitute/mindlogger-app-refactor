@@ -6,7 +6,6 @@ import {
 } from '@app/shared/api/services/IEventsService';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
-import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
 import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 import { buildActivityFlowPipeline } from '@app/widgets/survey/model/pipelineBuilder';
@@ -55,42 +54,15 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       flow => flow.id === completedEntityDto.id,
     );
 
-    // For in-progress flows, localEndDate and localEndTime are null
-    // Use current time as a placeholder
-    let endAt: Date;
-
-    if (completedEntityDto.localEndDate && completedEntityDto.localEndTime) {
-      try {
-        endAt = buildDateTimeFromDto(
-          completedEntityDto.localEndDate,
-          completedEntityDto.localEndTime,
-        );
-
-        // Validate the date is not Invalid Date
-        if (isNaN(endAt.getTime())) {
-          this.logger.warn(
-            `[ProgressSyncService.upsertEntityProgression]: Invalid date, using current time`,
-          );
-          endAt = new Date();
-        }
-      } catch (error) {
-        this.logger.warn(
-          `[ProgressSyncService.upsertEntityProgression]: Error creating date: ${error}`,
-        );
-        endAt = new Date();
-      }
-    } else {
-      // For in-progress flows or missing dates, use current time
-      endAt = new Date();
-    }
-
+    // Backend provides accurate startTime and endTime timestamps
+    // For in-progress flows, endTime reflects when the flow was last updated
     const payload: UpsertEntityProgressionPayload = {
       appletId: appletDetails.id,
       entityType: isFlow ? 'activityFlow' : 'activity',
       entityId: completedEntityDto.id,
       eventId: completedEntityDto.scheduledEventId,
       targetSubjectId: completedEntityDto.targetSubjectId,
-      endAt: endAt.getTime(),
+      endAt: completedEntityDto.endTime, // Use real timestamp from backend
       submitId: completedEntityDto.submitId,
     };
 
@@ -111,9 +83,8 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           flowDetails.currentActivityDescription;
         payload.currentActivityImage = flowDetails.currentActivityImage;
         payload.totalActivitiesInPipeline = flowDetails.totalActivities;
-        // Set currentActivityStartAt to endAt (when the previous activity completed)
-        // This ensures we have a valid start time for the current activity
-        payload.currentActivityStartAt = endAt.getTime();
+        // Use flow start time for consistency with web implementation
+        payload.currentActivityStartAt = completedEntityDto.startTime;
 
         this.logger.log(
           `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities})`,
@@ -143,7 +114,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           p.targetSubjectId === completedEntityDto.targetSubjectId,
       );
 
-      const serverCompletionTime = endAt.getTime();
+      const serverCompletionTime = completedEntityDto.endTime;
       const localStartTime = existingProgression?.startedAtTimestamp;
 
       // Only clean up if server completion is NOT older than local start

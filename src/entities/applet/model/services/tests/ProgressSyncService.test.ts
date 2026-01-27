@@ -132,6 +132,8 @@ describe('ProgressSyncService - Cross-device flow sync', () => {
             targetSubjectId: '',
             localEndDate: null,
             localEndTime: null,
+            startTime: 1706368800000,
+            endTime: 1706369400000,
             isFlowCompleted: false,
             activityFlowOrder: 1, // Second activity
           },
@@ -170,6 +172,8 @@ describe('ProgressSyncService - Cross-device flow sync', () => {
             targetSubjectId: '',
             localEndDate: '2026-01-26',
             localEndTime: '12:00:00',
+            startTime: 1706270400000,
+            endTime: 1706274000000,
             isFlowCompleted: true,
           },
         ],
@@ -252,6 +256,8 @@ describe('ProgressSyncService - Cross-device flow sync', () => {
             targetSubjectId: '',
             localEndDate: '2026-01-26',
             localEndTime: '10:00:00', // Completed at 10:00, but locally restarted at 11:00
+            startTime: 1706263200000,
+            endTime: 1706266800000,
             isFlowCompleted: true,
           },
         ],
