@@ -18,6 +18,7 @@ import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alert
 import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -145,6 +146,13 @@ export const useAutoCompletion = (): Result => {
         return true;
       }
 
+      logger.log(
+        '[useAutoCompletion.processAutocompletion] Started, ' +
+        `exclude=${JSON.stringify(exclude)}, ` +
+        `forceRefreshNotifications=${forceRefreshNotifications}, ` +
+        `incompletedEntitiesCount=${incompletedEntities.length}`
+      );
+
       const collectService = new CollectCompletionsService(
         logger,
         incompletedEntities,
@@ -155,8 +163,8 @@ export const useAutoCompletion = (): Result => {
 
       try {
         mutex.setBusy();
-
-        logger.log('[useAutoCompletion.processAutocompletion] Started');
+        
+        logger.log('[useAutoCompletion.processAutocompletion] Mutex acquired, collecting...');
 
         const collectOutputs = collectAllInternal(collectService, exclude);
 
@@ -171,21 +179,47 @@ export const useAutoCompletion = (): Result => {
           await constructInternal(collectOutput, constructService);
         }
 
-        logger.log('[useAutoCompletion.processAutocompletion] Done');
+        logger.log('[useAutoCompletion.processAutocompletion] Construction done');
       } finally {
         mutex.release();
+        logger.log('[useAutoCompletion.processAutocompletion] Mutex released');
       }
 
       let result = true;
+      
+      const queueLength = hasItemsInQueue();
+      logger.log(
+        `[useAutoCompletion.processAutocompletion] Queue check: hasItemsInQueue=${queueLength}`
+      );
 
-      if (hasItemsInQueue()) {
+      // Always ensure upload status is updated for UI feedback
+      // Even if queue is empty, we need to signal completion
+      if (queueLength) {
+        logger.log('[useAutoCompletion.processAutocompletion] Processing queue...');
         result = await getDefaultQueueProcessingService().process();
+        logger.log(`[useAutoCompletion.processAutocompletion] Queue processing result: ${result}`);
+      } else {
+        logger.log('[useAutoCompletion.processAutocompletion] Queue empty, manually setting completion flags');
+        // Queue is empty (no activities to upload) - manually set completion status
+        // This handles the case where activities were completed on web and synced
+        const uploadObservable = getDefaultUploadObservable();
+        uploadObservable.isCompleted = true;
+        uploadObservable.isLoading = false;
+        uploadObservable.isError = false;
+        uploadObservable.isPostponed = false;
+        logger.log(
+          '[useAutoCompletion.processAutocompletion] Flags set: ' +
+          `isCompleted=${uploadObservable.isCompleted}, ` +
+          `isLoading=${uploadObservable.isLoading}`
+        );
       }
 
       if (forceRefreshNotifications || completionsCollected) {
+        logger.log('[useAutoCompletion.processAutocompletion] Emitting notification refresh');
         Emitter.emit('on-notification-refresh', LogTrigger.EntityCompleted);
       }
 
+      logger.log(`[useAutoCompletion.processAutocompletion] Completed, returning: ${result}`);
       return result;
     },
     [mutex, incompletedEntities, createConstructService, hasItemsInQueue],

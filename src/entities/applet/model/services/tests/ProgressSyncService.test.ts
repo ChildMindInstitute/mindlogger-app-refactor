@@ -6,6 +6,7 @@ import {
 import { EntitiesCompletionsDto } from '@app/shared/api/services/IEventsService';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { QueryClient } from '@tanstack/react-query';
 
 import { ProgressSyncService } from '../ProgressSyncService';
 
@@ -16,6 +17,8 @@ const mockLogger = {
   info: jest.fn(),
   error: jest.fn(),
 } as unknown as ILogger;
+
+const mockQueryClient = new QueryClient();
 
 const mockState: any = {
   applets: {
@@ -87,7 +90,7 @@ describe('ProgressSyncService - Cross-device flow sync', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockState.applets.entityProgressions = [];
-    service = new ProgressSyncService(mockState, mockDispatch, mockLogger);
+    service = new ProgressSyncService(mockState, mockDispatch, mockLogger, mockQueryClient);
 
     mockFlowStorage = {
       set: jest.fn(),

@@ -1,15 +1,21 @@
+import { QueryClient } from '@tanstack/react-query';
+
 import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
 import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
   EntitiesCompletionsDto,
 } from '@app/shared/api/services/IEventsService';
+import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
 import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 import { buildActivityFlowPipeline } from '@app/widgets/survey/model/pipelineBuilder';
 import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService';
+import { AvailableToEvaluator } from '@entities/event/model/AvailableToEvaluator';
+import { mapEventFromDto } from '@entities/event/model/mappers';
 
 import { AppletDetails } from '../../lib/types';
 import { mapAppletDetailsFromDto } from '../mappers';
@@ -19,14 +25,21 @@ export class ProgressSyncService implements IAppletProgressSyncService {
   private logger: ILogger;
   private dispatch: AppDispatch;
   private state: RootState;
+  private queryClient: QueryClient;
 
-  constructor(state: RootState, dispatch: AppDispatch, logger: ILogger) {
+  constructor(
+    state: RootState,
+    dispatch: AppDispatch,
+    logger: ILogger,
+    queryClient: QueryClient,
+  ) {
     this.logger = logger;
     this.dispatch = dispatch;
     this.state = state;
+    this.queryClient = queryClient;
   }
 
-  private async syncWithAppletDto(
+  private syncWithAppletDto(
     appletDto: AppletDetailsDto,
     appletCompletions: EntitiesCompletionsDto,
   ) {
@@ -39,9 +52,11 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         this.upsertEntityProgression(appletDetails, completionDto);
       });
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       throw new Error(
         '[ProgressSyncService.syncWithAppletDto]: Error occurred during sync progress entities:\n\n' +
-          error,
+          errorMessage,
       );
     }
   }
@@ -86,8 +101,15 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         // Use flow start time for consistency with web implementation
         payload.currentActivityStartAt = completedEntityDto.startTime;
 
+        // Calculate availableUntilTimestamp for in-progress flows
+        const availableUntilTimestamp = this.evaluateAvailableTo(
+          appletDetails.id,
+          completedEntityDto.scheduledEventId,
+        );
+        payload.availableUntilTimestamp = availableUntilTimestamp;
+
         this.logger.log(
-          `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities})`,
+          `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities}), availableUntil=${availableUntilTimestamp ? new Date(availableUntilTimestamp).toISOString() : 'null'}`,
         );
 
         // Reconstruct FlowState from server data so the flow can be resumed
@@ -133,6 +155,38 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     }
 
     this.dispatch(appletActions.upsertEntityProgression(payload));
+  }
+
+  /**
+   * Calculates the availableUntilTimestamp for a given event.
+   * Returns null if the event is not found or is AlwaysAvailable.
+   */
+  private evaluateAvailableTo(
+    appletId: string,
+    eventId: string,
+  ): number | null {
+    try {
+      const queryDataUtils = new QueryDataUtils(this.queryClient);
+      const eventDto = queryDataUtils.getEventDto(appletId, eventId);
+
+      if (!eventDto) {
+        this.logger.warn(
+          `[ProgressSyncService.evaluateAvailableTo]: Event not found - appletId=${appletId}, eventId=${eventId}`,
+        );
+        return null;
+      }
+
+      const event = mapEventFromDto(eventDto);
+      const availableToEvaluator = new AvailableToEvaluator(GroupUtility);
+      const availableToDate = availableToEvaluator.evaluate(event);
+
+      return availableToDate?.getTime() ?? null;
+    } catch (error) {
+      this.logger.warn(
+        `[ProgressSyncService.evaluateAvailableTo]: Error calculating availableUntil - ${error}`,
+      );
+      return null;
+    }
   }
 
   /**
@@ -208,7 +262,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
   private reconstructFlowState(
     appletDetails: AppletDetails,
     completedEntityDto: CompletedEntityDto,
-    flowDetails: {
+    _flowDetails: {
       currentActivityId: string;
       currentActivityName: string;
       currentActivityDescription: string;
@@ -288,12 +342,12 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     storage.set(key, JSON.stringify(flowState));
   }
 
-  public sync(
+  public async sync(
     appletDto: AppletDetailsDto,
     appletCompletions: EntitiesCompletionsDto,
-  ) {
+  ): Promise<void> {
     try {
-      return this.syncWithAppletDto(appletDto, appletCompletions);
+      this.syncWithAppletDto(appletDto, appletCompletions);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);

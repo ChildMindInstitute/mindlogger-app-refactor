@@ -61,6 +61,7 @@ export type UpsertEntityProgressionPayload = {
   currentActivityImage?: string | null;
   currentActivityStartAt?: number | null; // timestamp when current activity started
   totalActivitiesInPipeline?: number;
+  availableUntilTimestamp?: number | null; // timestamp when entity expires
 };
 
 type Consents = {
@@ -328,7 +329,10 @@ const slice = createSlice({
           targetSubjectId: payload.targetSubjectId,
           startedAtTimestamp:
             existingProgression?.startedAtTimestamp ?? payload.endAt,
-          availableUntilTimestamp: null,
+          availableUntilTimestamp:
+            payload.availableUntilTimestamp ??
+            existingProgression?.availableUntilTimestamp ??
+            null,
           submitId: payload.submitId,
           pipelineActivityOrder,
           totalActivitiesInPipeline: payload.totalActivitiesInPipeline || 1,

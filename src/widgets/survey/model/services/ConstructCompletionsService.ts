@@ -442,6 +442,117 @@ export class ConstructCompletionsService {
     )!;
 
     if (!this.isRecordExist(activityStorageRecord)) {
+      this.logger.warn(
+        '[ConstructCompletionsService.constructForFinish] activityStorageRecord does not exist - ' +
+        `flowId=${flowId}, isAutocompletion=${isAutocompletion}`
+      );
+      
+      // No local storage exists (activities completed on another device)
+      // For auto-completion of flows (finish type), mark as completed locally AND send to backend
+      if (isAutocompletion && flowId) {
+        this.logger.log(
+          '[ConstructCompletionsService.constructForFinish] Marking flow as completed (no storage case) - will submit empty completion to backend'
+        );
+        
+        const progression = getEntityProgression(
+          appletId,
+          entityId,
+          eventId,
+          targetSubjectId,
+          this.entityProgressions,
+        ) as EntityProgressionInProgress | null;
+
+        this.logger.log(
+          '[ConstructCompletionsService.constructForFinish] Found progression: ' +
+          JSON.stringify(progression ? {
+            status: progression.status,
+            availableUntilTimestamp: progression.availableUntilTimestamp,
+            entityId: progression.entityId
+          } : null)
+        );
+
+        if (progression) {
+          const evaluatedEndAt = this.evaluateEndAt(
+            'finish',
+            progression.availableUntilTimestamp,
+            isAutocompletion,
+          );
+
+          this.logger.log(
+            `[ConstructCompletionsService.constructForFinish] Dispatching completeEntity with endAt=${evaluatedEndAt}`
+          );
+
+          this.dispatch(
+            appletActions.completeEntity({
+              appletId,
+              eventId,
+              entityId,
+              targetSubjectId,
+              endAt: evaluatedEndAt,
+            }),
+          );
+
+          await this.persistor.flush();
+
+          // Queue an empty completion to notify backend
+          // This ensures backend knows the flow is completed even though we have no answers
+          const { appletEncryption } = this.getAppletProperties(appletId);
+
+          this.validateEncryption(appletEncryption);
+
+          const scheduledEvent = this.queryDataUtils.getEventDto(
+            appletId,
+            eventId,
+          );
+
+          const appletDto = this.queryDataUtils.getAppletDto(appletId);
+
+          if (!appletDto) {
+            this.logger.warn(
+              '[ConstructCompletionsService.constructForFinish] AppletDto not found, cannot queue completion',
+            );
+            return;
+          }
+
+          this.logger.log(
+            '[ConstructCompletionsService.constructForFinish] Queueing empty completion for backend',
+          );
+
+          this.pushToQueueService.push({
+            appletId,
+            version: appletDto.version,
+            createdAt: evaluatedEndAt,
+            appletEncryption: appletEncryption as AppletEncryptionDTO,
+            activityId,
+            activityName,
+            flowId: flowId as string, // Already checked flowId is not undefined
+            answers: [],
+            itemIds: [],
+            userActions: [],
+            userIdentifier: undefined, // No items/answers available for auto-completion
+            startTime: evaluatedEndAt - 1000, // 1 second before end
+            endTime: evaluatedEndAt,
+            scheduledTime: null, // No flow record available for auto-completion
+            logCompletedAt: getNow().toUTCString(),
+            client: getClientInformation(),
+            alerts: [],
+            eventId,
+            targetSubjectId,
+            isFlowCompleted: true,
+            tzOffset: getTimezoneOffset(),
+            eventVersion: scheduledEvent?.version,
+            submitId: progression.submitId,
+          });
+
+          this.logger.log(
+            '[ConstructCompletionsService.constructForFinish] Flow marked as completed locally and queued for backend'
+          );
+        } else {
+          this.logger.warn(
+            '[ConstructCompletionsService.constructForFinish] No progression found, cannot mark as completed'
+          );
+        }
+      }
       return;
     }
 
