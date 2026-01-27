@@ -20,7 +20,10 @@ import { useMfaAttemptsTracker } from '@app/features/mfa-verification/lib/useMfa
 import { MfaVerificationForm } from '@app/features/mfa-verification/ui/MfaVerificationForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
-import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
+import {
+  MixEvents,
+  MixProperties,
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
@@ -100,7 +103,11 @@ export const MfaVerificationScreen: FC = () => {
       getDefaultAnalyticsService()
         .login(user.id)
         .then(() => {
-          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful);
+          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful, {
+            [MixProperties.MFAUsed]: true,
+            [MixProperties.MFAMethodUsed]: 'Authenticator App',
+            [MixProperties.UserId]: user.id,
+          });
         })
         .catch(console.error);
 
@@ -151,6 +158,13 @@ export const MfaVerificationScreen: FC = () => {
             metadata?.global_attempts_remaining ??
             metadata?.session_attempts_remaining,
           attemptType,
+        });
+
+        // Track Login Failed event
+        getDefaultAnalyticsService().track(MixEvents.LoginFailed, {
+          [MixProperties.FailureStage]: 'MFA',
+          [MixProperties.MFARequired]: true,
+          [MixProperties.MFAMethodUsed]: 'Authenticator App',
         });
       }
     },

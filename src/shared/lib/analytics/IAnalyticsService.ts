@@ -14,6 +14,14 @@ export const MixProperties = {
   MFAAttemptsRemaining: 'MFA Attempts Remaining',
   MFAAttemptType: 'MFA Attempt Type',
   MFAIsAutoSubmit: 'MFA Is Auto Submit',
+
+  // Login Properties
+  MFARequired: 'MFA Required',
+  AuthMethod: 'Auth Method',
+  MFAUsed: 'MFA Used',
+  MFAMethodUsed: 'MFA Method Used',
+  UserId: 'User ID',
+  FailureStage: 'Failure Stage',
 };
 
 export enum MixpanelFeature {
@@ -40,7 +48,9 @@ export const MixEvents = {
   EHRProviderShareSuccess: 'EHR Provider Share Success',
   DataView: 'Data View',
   HomeView: 'Home Page View',
+  LoginBtnClick: 'Login Button Click',
   LoginSuccessful: 'Login Successful',
+  LoginFailed: 'Login Failed',
   NotificationTap: 'Notification tap',
   RetryButtonPressed: 'Retry button pressed',
   ReturnToActivitiesPressed: 'Return to Activities pressed',
