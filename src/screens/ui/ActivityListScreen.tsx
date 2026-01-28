@@ -59,10 +59,6 @@ export const ActivityListScreen: FC<Props> = props => {
       entityName: string,
       { eventId, entityId, entityType, targetSubjectId }: EntityPath,
     ) => {
-      getDefaultLogger().log(
-        `[ActivityListScreen.checkAvailability] Checking entity: ${entityName}, entityId=${entityId}, eventId=${eventId}`
-      );
-      
       const isSuccess = await checkEntityAvailability({
         entityName,
         identifiers: {
@@ -76,14 +72,7 @@ export const ActivityListScreen: FC<Props> = props => {
         entityProgressions,
       });
 
-      getDefaultLogger().log(
-        `[ActivityListScreen.checkAvailability] Result: ${isSuccess}`
-      );
-
       if (!isSuccess) {
-        getDefaultLogger().log(
-          '[ActivityListScreen.checkAvailability] Triggering auto-completion via autocomplete event'
-        );
         Emitter.emit<AutocompletionEventOptions>('autocomplete', {
           checksToExclude: ['start-entity'],
           logTrigger: 'check-availability',

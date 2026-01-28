@@ -18,7 +18,8 @@ export const useRefreshMutation = (onSuccess?: () => void | Promise<void>) => {
   const queryClient = useQueryClient();
 
   const progressSyncService = useMemo(
-    () => new ProgressSyncService(state, dispatch, getDefaultLogger(), queryClient),
+    () =>
+      new ProgressSyncService(state, dispatch, getDefaultLogger(), queryClient),
     [dispatch, state, queryClient],
   );
 

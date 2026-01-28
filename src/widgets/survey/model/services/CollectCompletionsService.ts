@@ -136,7 +136,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
       // since auto-completion needs to work even when user hasn't answered
       if (isEntityExpired(progression.availableUntilTimestamp)) {
         this.logger.log(
-          `[CollectCompletionsService.hasExpiredEntity] Found expired entity - entityId=${incompleteEntity.entityId}, availableUntil=${new Date(progression.availableUntilTimestamp).toISOString()}`,
+          `[CollectCompletionsService.hasExpiredEntity] Found expired entity - entityId=${incompleteEntity.entityId}, availableUntil=${progression.availableUntilTimestamp ? new Date(progression.availableUntilTimestamp).toISOString() : 'null'}`,
         );
         return true;
       }

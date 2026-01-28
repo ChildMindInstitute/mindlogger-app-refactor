@@ -442,18 +442,9 @@ export class ConstructCompletionsService {
     )!;
 
     if (!this.isRecordExist(activityStorageRecord)) {
-      this.logger.warn(
-        '[ConstructCompletionsService.constructForFinish] activityStorageRecord does not exist - ' +
-        `flowId=${flowId}, isAutocompletion=${isAutocompletion}`
-      );
-      
       // No local storage exists (activities completed on another device)
       // For auto-completion of flows (finish type), mark as completed locally AND send to backend
       if (isAutocompletion && flowId) {
-        this.logger.log(
-          '[ConstructCompletionsService.constructForFinish] Marking flow as completed (no storage case) - will submit empty completion to backend'
-        );
-        
         const progression = getEntityProgression(
           appletId,
           entityId,
@@ -462,24 +453,11 @@ export class ConstructCompletionsService {
           this.entityProgressions,
         ) as EntityProgressionInProgress | null;
 
-        this.logger.log(
-          '[ConstructCompletionsService.constructForFinish] Found progression: ' +
-          JSON.stringify(progression ? {
-            status: progression.status,
-            availableUntilTimestamp: progression.availableUntilTimestamp,
-            entityId: progression.entityId
-          } : null)
-        );
-
         if (progression) {
           const evaluatedEndAt = this.evaluateEndAt(
             'finish',
             progression.availableUntilTimestamp,
             isAutocompletion,
-          );
-
-          this.logger.log(
-            `[ConstructCompletionsService.constructForFinish] Dispatching completeEntity with endAt=${evaluatedEndAt}`
           );
 
           this.dispatch(
@@ -514,10 +492,6 @@ export class ConstructCompletionsService {
             return;
           }
 
-          this.logger.log(
-            '[ConstructCompletionsService.constructForFinish] Queueing empty completion for backend',
-          );
-
           this.pushToQueueService.push({
             appletId,
             version: appletDto.version,
@@ -525,7 +499,7 @@ export class ConstructCompletionsService {
             appletEncryption: appletEncryption as AppletEncryptionDTO,
             activityId,
             activityName,
-            flowId: flowId as string, // Already checked flowId is not undefined
+            flowId: flowId, // Already checked flowId is not undefined
             answers: [],
             itemIds: [],
             userActions: [],
@@ -543,13 +517,9 @@ export class ConstructCompletionsService {
             eventVersion: scheduledEvent?.version,
             submitId: progression.submitId,
           });
-
-          this.logger.log(
-            '[ConstructCompletionsService.constructForFinish] Flow marked as completed locally and queued for backend'
-          );
         } else {
           this.logger.warn(
-            '[ConstructCompletionsService.constructForFinish] No progression found, cannot mark as completed'
+            '[ConstructCompletionsService.constructForFinish] No progression found for auto-completion',
           );
         }
       }

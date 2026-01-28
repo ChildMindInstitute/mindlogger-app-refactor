@@ -39,7 +39,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     this.queryClient = queryClient;
   }
 
-  private syncWithAppletDto(
+  private async syncWithAppletDto(
     appletDto: AppletDetailsDto,
     appletCompletions: EntitiesCompletionsDto,
   ) {
@@ -347,7 +347,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     appletCompletions: EntitiesCompletionsDto,
   ): Promise<void> {
     try {
-      this.syncWithAppletDto(appletDto, appletCompletions);
+      await this.syncWithAppletDto(appletDto, appletCompletions);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);

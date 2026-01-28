@@ -176,16 +176,16 @@ const checkEntityAvailabilityInternal = ({
     // Additional safety check: Verify the event window is currently active
     // Don't allow resuming in-progress flows from expired schedule windows
     const eventDto = queryUtils.getEventDto(appletId, eventId);
-    
+
     if (eventDto) {
       const event = mapEventFromDto(eventDto);
       event.scheduledAt = getDefaultScheduledDateCalculator().calculate(event);
-      
+
       const isEventCurrentlyAvailable = new AvailableGroupEvaluator(
         appletId,
         freshProgressions,
       ).isEventInGroup(event, targetSubjectId);
-      
+
       if (!isEventCurrentlyAvailable) {
         logger.log(
           '[checkEntityAvailability] Check done: false (in-progress but event window not currently active)',
@@ -195,7 +195,7 @@ const checkEntityAvailabilityInternal = ({
         return;
       }
     }
-    
+
     logger.log('[checkEntityAvailability] Check done: true (in-progress)');
 
     callback(true);
