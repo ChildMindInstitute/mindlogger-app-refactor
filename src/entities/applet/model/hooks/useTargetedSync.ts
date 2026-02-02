@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -21,6 +21,7 @@ export const useTargetedSync = () => {
   );
 
   const isSyncing = useRef(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const syncApplet = useCallback(
     async (appletId: string): Promise<void> => {
@@ -31,9 +32,11 @@ export const useTargetedSync = () => {
 
       try {
         isSyncing.current = true;
+        setIsRefreshing(true);
         await syncService.syncAppletProgress(appletId);
       } finally {
         isSyncing.current = false;
+        setIsRefreshing(false);
       }
     },
     [syncService, logger],
@@ -41,5 +44,6 @@ export const useTargetedSync = () => {
 
   return {
     syncApplet,
+    isRefreshing,
   };
 };

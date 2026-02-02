@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
-import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
+import { useTargetedSync } from '@app/entities/applet/model/hooks/useTargetedSync';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
@@ -27,12 +27,15 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
 
   useUpcomingNotificationsObserver(eventId, entityId, targetSubjectId);
 
-  const { mutateAsync: refreshMutation, isLoading: isRefreshing } =
-    useRefreshMutation();
+  const { syncApplet, isRefreshing } = useTargetedSync();
 
-  // Refresh when screen mounts/focuses
+  // Sync when screen mounts/focuses
   useOnFocus(() => {
-    refreshMutation().catch(err => getDefaultLogger().error(err as never));
+    syncApplet(appletId).catch(err =>
+      getDefaultLogger().error(
+        `[InProgressActivityScreen] Sync failed: ${err}`,
+      ),
+    );
   });
 
   const { data, isLoading } = useBaseInfo(appletId);
