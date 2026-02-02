@@ -73,6 +73,12 @@ export type CompletedEntitiesRequest = {
   includeInProgress?: boolean;
 };
 
+export type AppletCompletedEntitiesRequest = {
+  appletId: string;
+  fromDate: string; // YYYY-MM-DD
+  includeInProgress?: boolean;
+};
+
 export type AppletCompletedEntitiesResponse = SuccessfulResponse<{
   id: string;
   version: string;
@@ -97,4 +103,8 @@ export type IEventsService = {
   getAllCompletedEntities: (
     request: CompletedEntitiesRequest,
   ) => Promise<AxiosResponse<CompletedEntitiesResponse>>;
+
+  getAppletCompletedEntities: (
+    request: AppletCompletedEntitiesRequest,
+  ) => Promise<AxiosResponse<AppletCompletedEntitiesResponse>>;
 };
