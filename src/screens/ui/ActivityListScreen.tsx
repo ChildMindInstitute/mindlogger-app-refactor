@@ -21,7 +21,6 @@ import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box } from '@app/shared/ui/base';
 import { HorizontalCalendar } from '@app/shared/ui/HorizontalCalendar';
-import { Spinner } from '@app/shared/ui/Spinner';
 import { ActivityGroups } from '@app/widgets/activity-group/ui/ActivityGroups';
 import { useAutoCompletion } from '@app/widgets/survey/model/hooks/useAutoCompletion';
 import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
@@ -44,16 +43,16 @@ export const ActivityListScreen: FC<Props> = props => {
 
   const { syncApplet } = useTargetedSync();
 
+  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
+
+  const queryClient = useQueryClient();
+
   // Sync when screen becomes focused
   useOnFocus(() => {
     syncApplet(appletId).catch(err =>
       getDefaultLogger().error(`[ActivityListScreen] Sync failed: ${err}`),
     );
   });
-
-  const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
-
-  const queryClient = useQueryClient();
 
   const checkAvailability = useCallback(
     async (
@@ -98,7 +97,7 @@ export const ActivityListScreen: FC<Props> = props => {
           appletId={appletId}
           completeEntity={completeEntityIntoUploadToQueue}
           checkAvailability={checkAvailability}
-          refreshControl={<AppletsRefresh />}
+          refreshControl={<AppletsRefresh appletId={appletId} />}
         />
       )}
     </Box>

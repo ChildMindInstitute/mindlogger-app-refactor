@@ -54,10 +54,15 @@ export class TargetedProgressSyncService
           includeInProgress: true,
         });
 
+      const inProgressFlows = response.data.result.activityFlows.filter(
+        f => f.isFlowCompleted === false,
+      );
+
       this.logger.log(
         `${methodName}: Fetched completions for ${appletId} - ` +
           `${response.data.result.activities.length} activities, ` +
-          `${response.data.result.activityFlows.length} flows`,
+          `${response.data.result.activityFlows.length} flows, ` +
+          `${inProgressFlows.length} in-progress`,
       );
 
       // Get applet details from cache

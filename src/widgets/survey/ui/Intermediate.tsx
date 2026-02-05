@@ -16,6 +16,7 @@ import { getDefaultInterimSubmitMutex } from '@app/shared/lib/mutexes/interimSub
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getAppletCompletedEntitiesKey } from '@app/shared/lib/utils/reactQueryHelpers';
 import { StepperPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
 
 import { SubScreenContainer } from './completion/containers';
@@ -206,7 +207,9 @@ export function Intermediate({
     if (!success) {
       openRetryAlert();
     } else {
+      // Invalidate queries to update the activity list with new in-progress state
       queryClient.invalidateQueries(['activity_analytics']);
+      queryClient.invalidateQueries(getAppletCompletedEntitiesKey(appletId));
       changeActivity();
       onFinish();
     }
