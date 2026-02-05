@@ -15,6 +15,7 @@ export const appletDetailsResponse: AppletDetailsResponse = {
   // @ts-ignore
   result: undefined,
   respondentMeta: {
+    subjectId: 'mock-subject-id',
     nickname: 'Some nick',
   },
 };

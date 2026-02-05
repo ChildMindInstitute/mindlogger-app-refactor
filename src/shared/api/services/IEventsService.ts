@@ -59,7 +59,7 @@ export type CompletedEntityDto = {
   answerId: string;
   submitId: string;
   scheduledEventId: string;
-  targetSubjectId: string;
+  targetSubjectId: string | null;
   localEndDate: string | null; // YYYY-MM-DD - null for in-progress flows
   localEndTime: string | null; // hh:mm:ss - null for in-progress flows
   startTime: number; // millisecond timestamp when activity/flow started

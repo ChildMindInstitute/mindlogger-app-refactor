@@ -21,6 +21,7 @@ import { ActivityListItem } from '@app/entities/activity/lib/types/activityListI
 import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
 import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
 import { ActivityCard } from '@app/entities/activity/ui/ActivityCard';
+import { onFlowCompletedElsewhere } from '@app/entities/applet/lib/alerts';
 import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
@@ -150,19 +151,9 @@ export function ActivitySectionList({
       );
 
       if (result.failReason === 'completed-elsewhere') {
-        Alert.alert(
-          t('activity:flow_completed'),
-          t('activity:flow_completed_elsewhere_message'),
-          [
-            {
-              text: t('additional:ok'),
-              onPress: () => {
-                triggerRefresh();
-              },
-            },
-          ],
-          { cancelable: false },
-        );
+        onFlowCompletedElsewhere(() => {
+          triggerRefresh();
+        });
         return;
       }
 

@@ -1,7 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
-import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
+import {
+  AppletDetailsDto,
+  AppletRespondentMetaDto,
+} from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
   EntitiesCompletionsDto,
@@ -45,11 +48,25 @@ export class ProgressSyncService implements IAppletProgressSyncService {
   ) {
     const appletDetails = mapAppletDetailsFromDto(appletDto);
 
+    // Get respondentSubjectId from cache for normalization
+    const queryDataUtils = new QueryDataUtils(this.queryClient);
+    const respondentMeta = queryDataUtils.getRespondentMeta(appletDetails.id);
+    const respondentSubjectId = respondentMeta?.subjectId ?? null;
+
     try {
       const { activities, activityFlows } = appletCompletions;
 
       [...activities, ...activityFlows].forEach(completionDto => {
-        this.upsertEntityProgression(appletDetails, completionDto);
+        // Normalize targetSubjectId to null for self-reports (matching web's approach)
+        const normalizedTargetSubjectId =
+          completionDto.targetSubjectId === respondentSubjectId
+            ? null
+            : completionDto.targetSubjectId;
+
+        this.upsertEntityProgression(appletDetails, {
+          ...completionDto,
+          targetSubjectId: normalizedTargetSubjectId,
+        });
       });
     } catch (error) {
       const errorMessage =
@@ -225,7 +242,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       return null;
     }
 
-    // activityFlowOrder is 0-indexed, use directly
+    // activityFlowOrder is 1-indexed, so it equals the 0-indexed position of the NEXT activity to complete
     const activityIndex = activityFlowOrder;
 
     if (activityIndex >= flow.activityIds.length) {

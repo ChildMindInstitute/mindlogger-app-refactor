@@ -534,9 +534,8 @@ export function useStartEntity({
                 flowState = JSON.parse(storedValue) as FlowState;
               }
             } catch (error) {
-              console.error(
-                '[useStartEntity.onResume] Failed to parse flow state:',
-                error,
+              logger.error(
+                `[useStartEntity.onResume] Failed to parse flow state: ${error}`,
               );
             }
 
@@ -545,7 +544,7 @@ export function useStartEntity({
               !flowState.pipeline ||
               flowState.pipeline.length === 0
             ) {
-              console.warn(
+              logger.warn(
                 '[useStartEntity.onResume] No valid flow state found, starting from scratch',
               );
               return resolve({ fromScratch: true });
