@@ -30,9 +30,10 @@ export const AppletsRefresh: FC<Props> = ({ appletId, ...props }) => {
 
   const { refresh, isRefreshing } = useRefresh(async () => {
     // If appletId is provided and cross-device sync is enabled, sync that specific applet first
-    const isCrossDeviceSyncEnabled = getDefaultFeatureFlagsService().evaluateFlag(
-      FeatureFlagsKeys.enableCrossDeviceFlowSync,
-    );
+    const isCrossDeviceSyncEnabled =
+      getDefaultFeatureFlagsService().evaluateFlag(
+        FeatureFlagsKeys.enableCrossDeviceFlowSync,
+      );
 
     if (appletId && isCrossDeviceSyncEnabled) {
       const syncService = new TargetedProgressSyncService(

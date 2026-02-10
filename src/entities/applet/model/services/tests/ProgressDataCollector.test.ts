@@ -1,5 +1,6 @@
 import { getDefaultEventsService } from '@app/shared/api/services/eventsServiceInstance';
 import { EntitiesCompletionsDto } from '@app/shared/api/services/IEventsService';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 
 import { ProgressDataCollector } from '../ProgressDataCollector';
@@ -25,6 +26,10 @@ describe('Test ProgressDataCollector', () => {
       .mockImplementation(() => {
         return getAllCompletedEntitiesMock() as never;
       });
+
+    jest
+      .spyOn(getDefaultFeatureFlagsService(), 'evaluateFlag')
+      .mockReturnValue(true);
   });
 
   it('Should return 2 completions when api response is fulfilled with 2 items', async () => {

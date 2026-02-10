@@ -41,9 +41,10 @@ export class AvailableGroupEvaluator
     //
     // When cross-device sync is disabled (normal behavior):
     // If ANY progression record exists for a one-time completion activity, it's not available
-    const isCrossDeviceSyncEnabled = getDefaultFeatureFlagsService().evaluateFlag(
-      FeatureFlagsKeys.enableCrossDeviceFlowSync,
-    );
+    const isCrossDeviceSyncEnabled =
+      getDefaultFeatureFlagsService().evaluateFlag(
+        FeatureFlagsKeys.enableCrossDeviceFlowSync,
+      );
 
     const isNeverCompleted = isCrossDeviceSyncEnabled
       ? !progressionRecord || progressionRecord.status !== 'completed'

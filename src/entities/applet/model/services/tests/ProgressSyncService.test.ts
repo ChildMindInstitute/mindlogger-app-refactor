@@ -6,6 +6,7 @@ import {
   ActivityFlowRecordDto,
 } from '@app/shared/api/services/IAppletService';
 import { EntitiesCompletionsDto } from '@app/shared/api/services/IEventsService';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 
@@ -108,6 +109,10 @@ describe('ProgressSyncService - Cross-device flow sync', () => {
     jest
       .spyOn(getDefaultStorageInstanceManager(), 'getFlowProgressStorage')
       .mockReturnValue(mockFlowStorage);
+
+    jest
+      .spyOn(getDefaultFeatureFlagsService(), 'evaluateFlag')
+      .mockReturnValue(true);
   });
 
   describe('Flow state reconstruction for in-progress flows', () => {

@@ -447,9 +447,10 @@ export class ConstructCompletionsService {
       // No local storage exists (activities completed on another device)
       // For auto-completion of flows (finish type), mark as completed locally AND send to backend
       // Only when cross-device sync is enabled
-      const isCrossDeviceSyncEnabled = getDefaultFeatureFlagsService().evaluateFlag(
-        FeatureFlagsKeys.enableCrossDeviceFlowSync,
-      );
+      const isCrossDeviceSyncEnabled =
+        getDefaultFeatureFlagsService().evaluateFlag(
+          FeatureFlagsKeys.enableCrossDeviceFlowSync,
+        );
 
       if (isCrossDeviceSyncEnabled && isAutocompletion && flowId) {
         const progression = getEntityProgression(

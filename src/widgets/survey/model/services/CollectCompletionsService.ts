@@ -143,9 +143,10 @@ export class CollectCompletionsService implements ICollectCompletionsService {
 
       const flowId = entityType === 'activityFlow' ? entityId : undefined;
 
-      const isCrossDeviceSyncEnabled = getDefaultFeatureFlagsService().evaluateFlag(
-        FeatureFlagsKeys.enableCrossDeviceFlowSync,
-      );
+      const isCrossDeviceSyncEnabled =
+        getDefaultFeatureFlagsService().evaluateFlag(
+          FeatureFlagsKeys.enableCrossDeviceFlowSync,
+        );
 
       // When cross-device sync is enabled:
       // Check only if entity is expired - don't check for activity records
@@ -164,7 +165,12 @@ export class CollectCompletionsService implements ICollectCompletionsService {
         // Normal behavior: require activity records to exist
         if (
           isEntityExpired(progression.availableUntilTimestamp) &&
-          isCurrentActivityRecordExist(flowId, appletId, eventId, targetSubjectId)
+          isCurrentActivityRecordExist(
+            flowId,
+            appletId,
+            eventId,
+            targetSubjectId,
+          )
         ) {
           return true;
         }
