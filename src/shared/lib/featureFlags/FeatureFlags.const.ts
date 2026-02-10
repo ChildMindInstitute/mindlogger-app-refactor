@@ -11,4 +11,5 @@ export const FeatureFlagKeyDefaults: Record<
 > = {
   'enable-loris-integration': false,
   'enable-better-drawing-image-sizing': true,
+  'enable-cross-device-flow-sync': false,
 };
