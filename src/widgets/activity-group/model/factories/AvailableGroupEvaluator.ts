@@ -5,6 +5,8 @@ import {
 } from '@app/abstract/lib/types/entityProgress';
 import { AvailabilityType } from '@app/abstract/lib/types/event';
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
+import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import {
   isTimeInInterval,
   getHourMinute,
@@ -33,10 +35,19 @@ export class AvailableGroupEvaluator
       targetSubjectId,
     );
 
+    // When cross-device sync is enabled:
     // For one-time completion, check if it's actually completed, not just if a record exists
     // In-progress flows should still be available/resumable
-    const isNeverCompleted =
-      !progressionRecord || progressionRecord.status !== 'completed';
+    //
+    // When cross-device sync is disabled (normal behavior):
+    // If ANY progression record exists for a one-time completion activity, it's not available
+    const isCrossDeviceSyncEnabled = getDefaultFeatureFlagsService().evaluateFlag(
+      FeatureFlagsKeys.enableCrossDeviceFlowSync,
+    );
+
+    const isNeverCompleted = isCrossDeviceSyncEnabled
+      ? !progressionRecord || progressionRecord.status !== 'completed'
+      : !progressionRecord;
 
     return (isOneTimeCompletion && isNeverCompleted) || !isOneTimeCompletion;
   }
