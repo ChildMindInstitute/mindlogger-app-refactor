@@ -95,7 +95,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       entityId: completedEntityDto.id,
       eventId: completedEntityDto.scheduledEventId,
       targetSubjectId: completedEntityDto.targetSubjectId,
-      endAt: completedEntityDto.endTime, // Use real timestamp from backend
+      endAt: completedEntityDto.endTime ?? Date.now(), // Use real timestamp from backend, fallback to now
       submitId: completedEntityDto.submitId,
     };
 
@@ -159,7 +159,10 @@ export class ProgressSyncService implements IAppletProgressSyncService {
 
       // Only clean up if server completion is NOT older than local start
       // (i.e., skip cleanup if flow was restarted locally after this server completion)
-      if (!localStartTime || serverCompletionTime >= localStartTime) {
+      if (
+        !localStartTime ||
+        (serverCompletionTime && serverCompletionTime >= localStartTime)
+      ) {
         const key = getFlowRecordKey(
           completedEntityDto.id,
           appletDetails.id,
@@ -348,6 +351,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       }
       if (
         existingProgression?.status === 'completed' &&
+        serverEndAt &&
         localEndAt >= serverEndAt
       ) {
         this.logger.log(
