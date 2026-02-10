@@ -484,6 +484,19 @@ export function useStartEntity({
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
 
+            // Clear FlowState to ensure clean restart
+            const flowStateKey = getFlowRecordKey(
+              flowId,
+              appletId,
+              eventId,
+              targetSubjectId,
+            );
+            const flowStorage =
+              getDefaultStorageInstanceManager().getFlowProgressStorage();
+            flowStorage.delete(flowStateKey);
+
+            logger.log(`[useStartEntity.onRestart] Cleared FlowState`);
+
             for (let i = 0; i < flowActivities.length; i++) {
               // TODO: it should be based on progress record
               cleanUpMediaFiles({

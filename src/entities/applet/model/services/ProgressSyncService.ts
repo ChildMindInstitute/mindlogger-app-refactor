@@ -1,10 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
-import {
-  AppletDetailsDto,
-  AppletRespondentMetaDto,
-} from '@app/shared/api/services/IAppletService';
+import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
   EntitiesCompletionsDto,
@@ -273,8 +270,8 @@ export class ProgressSyncService implements IAppletProgressSyncService {
   }
 
   /**
-   * Reconstructs FlowState from server data and saves to storage
-   * so the flow can be resumed from the correct activity.
+   * Reconstructs FlowState from server data for resuming in-progress flows.
+   * Skips reconstruction if local has different submitId (local restart).
    */
   private reconstructFlowState(
     appletDetails: AppletDetails,
@@ -292,6 +289,27 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     if (!flow) {
       this.logger.warn(
         `[ProgressSyncService.reconstructFlowState] Flow ${flowId} not found`,
+      );
+      return;
+    }
+
+    // Don't overwrite if local has different submitId (user restarted locally)
+    const existingProgression = this.state.applets.entityProgressions?.find(
+      p =>
+        p.appletId === appletDetails.id &&
+        p.entityType === 'activityFlow' &&
+        p.entityId === completedEntityDto.id &&
+        p.eventId === completedEntityDto.scheduledEventId &&
+        p.targetSubjectId === completedEntityDto.targetSubjectId,
+    );
+
+    if (
+      existingProgression &&
+      existingProgression.status === 'in-progress' &&
+      existingProgression.submitId !== completedEntityDto.submitId
+    ) {
+      this.logger.log(
+        `[ProgressSyncService.reconstructFlowState] Skipping - different submitId`,
       );
       return;
     }

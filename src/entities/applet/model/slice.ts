@@ -296,28 +296,44 @@ const slice = createSlice({
         }),
       );
 
-      // Handle in-progress flows from server
+      // Handle in-progress flows from server (matches web's useEntitiesSync)
       if (payload.isInProgress && payload.entityType === 'activityFlow') {
         const serverPipelineActivityOrder = payload.activityFlowOrder ?? 0;
         const localPipelineActivityOrder =
           (existingProgression as EntityProgressionInProgressActivityFlow)
             ?.pipelineActivityOrder ?? 0;
 
-        // Use Math.max to prefer furthest progress across devices
-        const pipelineActivityOrder = Math.max(
-          serverPipelineActivityOrder,
-          localPipelineActivityOrder,
-        );
+        const serverSubmitId = payload.submitId;
+        const localSubmitId = existingProgression?.submitId;
 
-        // Skip if local is already at or ahead of server
-        if (
-          existingProgression &&
-          existingProgression.status === 'in-progress' &&
-          localPipelineActivityOrder >= serverPipelineActivityOrder &&
-          existingProgression.startedAtTimestamp
-        ) {
-          return;
+        // Same submitId: keep furthest progress
+        if (localSubmitId === serverSubmitId) {
+          if (localPipelineActivityOrder >= serverPipelineActivityOrder) {
+            return;
+          }
+        } else {
+          // Different submitIds: local in-progress or completed takes precedence
+          if (
+            existingProgression &&
+            existingProgression.status === 'in-progress' &&
+            localPipelineActivityOrder >= serverPipelineActivityOrder
+          ) {
+            return;
+          }
+          if (
+            existingProgression &&
+            existingProgression.status === 'completed'
+          ) {
+            const localEndAt =
+              (existingProgression as EntityProgressionCompleted)
+                .endedAtTimestamp ?? 0;
+            if (localEndAt >= payload.endAt) {
+              return;
+            }
+          }
         }
+
+        const pipelineActivityOrder = serverPipelineActivityOrder;
 
         // Create or update in-progress flow with furthest progress
         const inProgressFlow: EntityProgressionInProgressActivityFlow = {
