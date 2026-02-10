@@ -62,8 +62,8 @@ export type CompletedEntityDto = {
   targetSubjectId: string | null;
   localEndDate: string | null; // YYYY-MM-DD - null for in-progress flows
   localEndTime: string | null; // hh:mm:ss - null for in-progress flows
-  startTime: number; // millisecond timestamp when activity/flow started
-  endTime: number; // millisecond timestamp when activity/flow ended
+  startTime?: number; // millisecond timestamp when activity/flow started
+  endTime?: number; // millisecond timestamp when activity/flow ended
   isFlowCompleted?: boolean | null; // true=completed, false=in-progress, null=standalone activity
   activityFlowOrder?: number | null; // 0-indexed position of NEXT activity to complete (for in-progress flows)
 };
