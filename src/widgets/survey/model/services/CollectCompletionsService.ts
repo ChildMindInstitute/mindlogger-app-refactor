@@ -5,6 +5,8 @@ import {
   EntityProgressionInProgressActivityFlow,
 } from '@app/abstract/lib/types/entityProgress';
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
+import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 import { FinishPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
@@ -130,15 +132,42 @@ export class CollectCompletionsService implements ICollectCompletionsService {
     });
 
     for (const incompleteEntity of filtered) {
-      const { progression } = incompleteEntity;
+      const {
+        entityType,
+        appletId,
+        entityId,
+        eventId,
+        targetSubjectId,
+        progression,
+      } = incompleteEntity;
 
+      const flowId = entityType === 'activityFlow' ? entityId : undefined;
+
+      const isCrossDeviceSyncEnabled = getDefaultFeatureFlagsService().evaluateFlag(
+        FeatureFlagsKeys.enableCrossDeviceFlowSync,
+      );
+
+      // When cross-device sync is enabled:
       // Check only if entity is expired - don't check for activity records
       // since auto-completion needs to work even when user hasn't answered
-      if (isEntityExpired(progression.availableUntilTimestamp)) {
-        this.logger.log(
-          `[CollectCompletionsService.hasExpiredEntity] Found expired entity - entityId=${incompleteEntity.entityId}, availableUntil=${progression.availableUntilTimestamp ? new Date(progression.availableUntilTimestamp).toISOString() : 'null'}`,
-        );
-        return true;
+      //
+      // When cross-device sync is disabled (normal behavior):
+      // Only consider expired if there ARE local activity records
+      if (isCrossDeviceSyncEnabled) {
+        if (isEntityExpired(progression.availableUntilTimestamp)) {
+          this.logger.log(
+            `[CollectCompletionsService.hasExpiredEntity] Found expired entity - entityId=${incompleteEntity.entityId}, availableUntil=${progression.availableUntilTimestamp ? new Date(progression.availableUntilTimestamp).toISOString() : 'null'}`,
+          );
+          return true;
+        }
+      } else {
+        // Normal behavior: require activity records to exist
+        if (
+          isEntityExpired(progression.availableUntilTimestamp) &&
+          isCurrentActivityRecordExist(flowId, appletId, eventId, targetSubjectId)
+        ) {
+          return true;
+        }
       }
     }
 
