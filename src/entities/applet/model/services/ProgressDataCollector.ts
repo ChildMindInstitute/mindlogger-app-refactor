@@ -1,4 +1,6 @@
 import { getDefaultEventsService } from '@app/shared/api/services/eventsServiceInstance';
+import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { getMonthAgoDate } from '@app/shared/lib/utils/dateTime';
 import {
@@ -17,9 +19,14 @@ export class ProgressDataCollector implements IProgressDataCollector {
   private async collectAllCompletions(): Promise<CollectForAppletResult> {
     const fromDate = getMonthAgoDate();
 
+    // Only include in-progress flows when feature flag is enabled
+    const includeInProgress = getDefaultFeatureFlagsService().evaluateFlag(
+      FeatureFlagsKeys.enableCrossDeviceFlowSync,
+    );
+
     return await getDefaultEventsService().getAllCompletedEntities({
       fromDate,
-      includeInProgress: true,
+      includeInProgress,
     });
   }
 
