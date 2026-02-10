@@ -11,8 +11,11 @@ import {
   EntitiesCompletionsDto,
 } from '@app/shared/api/services/IEventsService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
+import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
 import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
 import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
@@ -43,31 +46,42 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     this.queryClient = queryClient;
   }
 
+  private isCrossDeviceSyncEnabled(): boolean {
+    return getDefaultFeatureFlagsService().evaluateFlag(
+      FeatureFlagsKeys.enableCrossDeviceFlowSync,
+    );
+  }
+
   private async syncWithAppletDto(
     appletDto: AppletDetailsDto,
     appletCompletions: EntitiesCompletionsDto,
   ) {
     const appletDetails = mapAppletDetailsFromDto(appletDto);
+    const isCrossDeviceSyncEnabled = this.isCrossDeviceSyncEnabled();
 
-    // Get respondentSubjectId from cache for normalization
-    const queryDataUtils = new QueryDataUtils(this.queryClient);
-    const respondentMeta = queryDataUtils.getRespondentMeta(appletDetails.id);
-    const respondentSubjectId = respondentMeta?.subjectId ?? null;
+    // Only get respondentSubjectId when feature is enabled (for normalization)
+    let respondentSubjectId: string | null = null;
+    if (isCrossDeviceSyncEnabled) {
+      const queryDataUtils = new QueryDataUtils(this.queryClient);
+      const respondentMeta = queryDataUtils.getRespondentMeta(appletDetails.id);
+      respondentSubjectId = respondentMeta?.subjectId ?? null;
+    }
 
     try {
       const { activities, activityFlows } = appletCompletions;
 
       [...activities, ...activityFlows].forEach(completionDto => {
-        // Normalize targetSubjectId to null for self-reports (matching web's approach)
-        const normalizedTargetSubjectId =
-          completionDto.targetSubjectId === respondentSubjectId
-            ? null
-            : completionDto.targetSubjectId;
+        let normalizedDto = completionDto;
 
-        this.upsertEntityProgression(appletDetails, {
-          ...completionDto,
-          targetSubjectId: normalizedTargetSubjectId,
-        });
+        // Normalize targetSubjectId to null for self-reports ONLY when feature is enabled
+        if (
+          isCrossDeviceSyncEnabled &&
+          completionDto.targetSubjectId === respondentSubjectId
+        ) {
+          normalizedDto = { ...completionDto, targetSubjectId: null };
+        }
+
+        this.upsertEntityProgression(appletDetails, normalizedDto);
       });
     } catch (error) {
       const errorMessage =
@@ -87,20 +101,43 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       flow => flow.id === completedEntityDto.id,
     );
 
-    // Backend provides accurate startTime and endTime timestamps
-    // For in-progress flows, endTime reflects when the flow was last updated
+    const isCrossDeviceSyncEnabled = this.isCrossDeviceSyncEnabled();
+
+    // Calculate endAt based on feature flag and data availability
+    // Flag ON + endTime available: use timestamp from backend
+    // Flag OFF or endTime unavailable: use legacy localEndDate/localEndTime
+    let endAt: Date | number;
+    if (isCrossDeviceSyncEnabled && completedEntityDto.endTime !== undefined) {
+      endAt = completedEntityDto.endTime;
+    } else if (
+      completedEntityDto.localEndDate &&
+      completedEntityDto.localEndTime
+    ) {
+      endAt = buildDateTimeFromDto(
+        completedEntityDto.localEndDate,
+        completedEntityDto.localEndTime,
+      );
+    } else {
+      // Fallback to current time if neither endTime nor localEndDate/Time available
+      endAt = new Date();
+    }
+
     const payload: UpsertEntityProgressionPayload = {
       appletId: appletDetails.id,
       entityType: isFlow ? 'activityFlow' : 'activity',
       entityId: completedEntityDto.id,
       eventId: completedEntityDto.scheduledEventId,
       targetSubjectId: completedEntityDto.targetSubjectId,
-      endAt: completedEntityDto.endTime ?? Date.now(), // Use real timestamp from backend, fallback to now
+      endAt,
       submitId: completedEntityDto.submitId,
     };
 
-    // Handle in-progress flows
-    if (isFlow && completedEntityDto.isFlowCompleted === false) {
+    // Handle in-progress flows ONLY when feature flag is enabled
+    if (
+      isCrossDeviceSyncEnabled &&
+      isFlow &&
+      completedEntityDto.isFlowCompleted === false
+    ) {
       const flowDetails = this.getFlowDetailsForInProgress(
         completedEntityDto,
         completedEntityDto.id,
@@ -142,9 +179,14 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         );
         return;
       }
-    } else if (isFlow && completedEntityDto.isFlowCompleted === true) {
+    } else if (
+      isCrossDeviceSyncEnabled &&
+      isFlow &&
+      completedEntityDto.isFlowCompleted === true
+    ) {
       // Flow is completed - check if we should clean up local FlowState storage
       // Don't clean up if user has restarted the flow locally (local start is AFTER server completion)
+      // Only perform this cleanup when feature flag is enabled
       const existingProgression = this.state.applets.entityProgressions?.find(
         p =>
           p.appletId === appletDetails.id &&
@@ -154,7 +196,9 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           p.targetSubjectId === completedEntityDto.targetSubjectId,
       );
 
-      const serverCompletionTime = completedEntityDto.endTime;
+      const serverCompletionTime =
+        completedEntityDto.endTime ??
+        (typeof endAt === 'number' ? endAt : endAt.getTime());
       const localStartTime = existingProgression?.startedAtTimestamp;
 
       // Only clean up if server completion is NOT older than local start
