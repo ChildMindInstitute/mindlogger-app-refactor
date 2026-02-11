@@ -19,10 +19,13 @@ export class ProgressDataCollector implements IProgressDataCollector {
   private async collectAllCompletions(): Promise<CollectForAppletResult> {
     const fromDate = getMonthAgoDate();
 
-    // Only include in-progress flows when feature flag is enabled
-    const includeInProgress = getDefaultFeatureFlagsService().evaluateFlag(
+    // Include in-progress flows when feature flag has any applets enabled
+    // (either '*' for all applets or specific applet IDs)
+    // Per-applet filtering happens later in ProgressSyncService
+    const flagValue = getDefaultFeatureFlagsService().evaluateFlagArray(
       FeatureFlagsKeys.enableCrossDeviceFlowSync,
     );
+    const includeInProgress = flagValue.length > 0;
 
     return await getDefaultEventsService().getAllCompletedEntities({
       fromDate,

@@ -5,8 +5,7 @@ import {
   EntityProgressionInProgressActivityFlow,
 } from '@app/abstract/lib/types/entityProgress';
 import { IncompleteEntity } from '@app/entities/applet/model/selectors';
-import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
-import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { isEntityExpired } from '@app/shared/lib/utils/survey/survey';
 import { FinishPipelineItem } from '@widgets/survey/model/IPipelineBuilder';
@@ -143,10 +142,7 @@ export class CollectCompletionsService implements ICollectCompletionsService {
 
       const flowId = entityType === 'activityFlow' ? entityId : undefined;
 
-      const isCrossDeviceSyncEnabled =
-        getDefaultFeatureFlagsService().evaluateFlag(
-          FeatureFlagsKeys.enableCrossDeviceFlowSync,
-        );
+      const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletId);
 
       // When cross-device sync is enabled:
       // Check only if entity is expired - don't check for activity records

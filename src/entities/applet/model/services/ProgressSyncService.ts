@@ -11,8 +11,7 @@ import {
   EntitiesCompletionsDto,
 } from '@app/shared/api/services/IEventsService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
-import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
-import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
@@ -46,18 +45,12 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     this.queryClient = queryClient;
   }
 
-  private isCrossDeviceSyncEnabled(): boolean {
-    return getDefaultFeatureFlagsService().evaluateFlag(
-      FeatureFlagsKeys.enableCrossDeviceFlowSync,
-    );
-  }
-
   private async syncWithAppletDto(
     appletDto: AppletDetailsDto,
     appletCompletions: EntitiesCompletionsDto,
   ) {
     const appletDetails = mapAppletDetailsFromDto(appletDto);
-    const isCrossDeviceSyncEnabled = this.isCrossDeviceSyncEnabled();
+    const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletDetails.id);
 
     // Only get respondentSubjectId when feature is enabled (for normalization)
     let respondentSubjectId: string | null = null;
@@ -101,7 +94,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       flow => flow.id === completedEntityDto.id,
     );
 
-    const isCrossDeviceSyncEnabled = this.isCrossDeviceSyncEnabled();
+    const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletDetails.id);
 
     // Calculate endAt based on feature flag and data availability
     // Flag ON + endTime available: use timestamp from backend

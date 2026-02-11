@@ -5,8 +5,7 @@ import {
 } from '@app/abstract/lib/types/entityProgress';
 import { AvailabilityType } from '@app/abstract/lib/types/event';
 import { ScheduleEvent } from '@app/entities/event/lib/types/event';
-import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
-import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import {
   isTimeInInterval,
   getHourMinute,
@@ -19,8 +18,10 @@ export class AvailableGroupEvaluator
   implements IEvaluator<EventEntity, ScheduleEvent>
 {
   private utility: GroupUtility;
+  private appletId: string;
 
   constructor(appletId: string, entityProgressions: EntityProgression[]) {
+    this.appletId = appletId;
     this.utility = new GroupUtility(appletId, entityProgressions);
   }
 
@@ -41,10 +42,7 @@ export class AvailableGroupEvaluator
     //
     // When cross-device sync is disabled (normal behavior):
     // If ANY progression record exists for a one-time completion activity, it's not available
-    const isCrossDeviceSyncEnabled =
-      getDefaultFeatureFlagsService().evaluateFlag(
-        FeatureFlagsKeys.enableCrossDeviceFlowSync,
-      );
+    const isCrossDeviceSyncEnabled = isFlowResumeEnabled(this.appletId);
 
     const isNeverCompleted = isCrossDeviceSyncEnabled
       ? !progressionRecord || progressionRecord.status !== 'completed'

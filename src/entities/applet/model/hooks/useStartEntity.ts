@@ -21,8 +21,7 @@ import {
   ActivityRecordDto,
   AppletDetailsResponse,
 } from '@app/shared/api/services/IAppletService';
-import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
-import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppletInfo } from '@app/shared/lib/hooks/useAppletInfo';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -614,10 +613,7 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
-      const isCrossDeviceSyncEnabled =
-        getDefaultFeatureFlagsService().evaluateFlag(
-          FeatureFlagsKeys.enableCrossDeviceFlowSync,
-        );
+      const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletId);
 
       // Only perform cross-device completion detection when feature flag is enabled
       let wasInProgress = false;

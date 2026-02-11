@@ -3,8 +3,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { getDefaultEventsService } from '@app/shared/api/services/eventsServiceInstance';
 import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
-import { FeatureFlagsKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
-import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { getMonthAgoDate } from '@app/shared/lib/utils/dateTime';
 import { getAppletCompletedEntitiesKey } from '@app/shared/lib/utils/reactQueryHelpers';
@@ -41,15 +40,9 @@ export class TargetedProgressSyncService
     );
   }
 
-  private isCrossDeviceSyncEnabled(): boolean {
-    return getDefaultFeatureFlagsService().evaluateFlag(
-      FeatureFlagsKeys.enableCrossDeviceFlowSync,
-    );
-  }
-
   async syncAppletProgress(appletId: string): Promise<void> {
     const methodName = '[TargetedProgressSyncService.syncAppletProgress]';
-    const isCrossDeviceSyncEnabled = this.isCrossDeviceSyncEnabled();
+    const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletId);
 
     try {
       this.logger.log(`${methodName}: Starting sync for ${appletId}`);
