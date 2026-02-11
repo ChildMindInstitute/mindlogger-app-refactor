@@ -14,7 +14,6 @@ import {
 } from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
 import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
-import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import {
   ActivityFlowRecordDto,
@@ -61,6 +60,7 @@ import {
   onMigrationsNotApplied,
 } from '../../lib/alerts';
 import { selectAppletsEntityProgressions } from '../selectors';
+import { TargetedProgressSyncService } from '../services/TargetedProgressSyncService';
 import { appletActions } from '../slice';
 
 type FailReason =
@@ -118,9 +118,28 @@ export function useStartEntity({
 
   const { getName: getAppletDisplayName } = useAppletInfo();
 
-  const { mutateAsync: refresh } = useRefreshMutation();
-
   const logger: ILogger = getDefaultLogger();
+
+  // Syncs progress for a single applet using targeted sync if the feature flag is enabled
+  async function syncAppletProgress(appletId: string): Promise<void> {
+    if (!isFlowResumeEnabled(appletId)) {
+      logger.log(
+        `[useStartEntity.syncAppletProgress] Flag disabled for ${appletId}, skipping sync (original behavior)`,
+      );
+      return;
+    }
+
+    logger.log(
+      `[useStartEntity.syncAppletProgress] Using targeted sync for ${appletId}`,
+    );
+    const syncService = new TargetedProgressSyncService(
+      reduxStore.getState(),
+      dispatch,
+      logger,
+      queryClient,
+    );
+    await syncService.syncAppletProgress(appletId);
+  }
 
   function activityStart(
     appletId: string,
@@ -358,7 +377,7 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
-      await refresh();
+      await syncAppletProgress(appletId);
 
       if (
         !(await checkAvailability(entityName, {
@@ -636,7 +655,7 @@ export function useStartEntity({
           : null;
       }
 
-      await refresh();
+      await syncAppletProgress(appletId);
 
       // Check if the flow we started was completed on another device
       // Only when feature flag is enabled

@@ -177,10 +177,13 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       isFlow &&
       completedEntityDto.isFlowCompleted === true
     ) {
-      // Flow is completed - check if we should clean up local FlowState storage
+      // Flow is completed - mark it as NOT in-progress to trigger conversion in Redux slice
+      payload.isInProgress = false;
+
+      // Check if we should clean up local FlowState storage
       // Don't clean up if user has restarted the flow locally (local start is AFTER server completion)
       // Only perform this cleanup when feature flag is enabled
-      const existingProgression = this.state.applets.entityProgressions?.find(
+      const existingProgression = this.state.applets?.entityProgressions?.find(
         p =>
           p.appletId === appletDetails.id &&
           p.entityType === 'activityFlow' &&
