@@ -111,8 +111,8 @@ describe('ProgressSyncService - Cross-device flow sync', () => {
       .mockReturnValue(mockFlowStorage);
 
     jest
-      .spyOn(getDefaultFeatureFlagsService(), 'evaluateFlag')
-      .mockReturnValue(true);
+      .spyOn(getDefaultFeatureFlagsService(), 'evaluateFlagArray')
+      .mockReturnValue(['*']); // '*' = enabled for all applets
   });
 
   describe('Flow state reconstruction for in-progress flows', () => {

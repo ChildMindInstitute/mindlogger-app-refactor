@@ -28,8 +28,8 @@ describe('Test ProgressDataCollector', () => {
       });
 
     jest
-      .spyOn(getDefaultFeatureFlagsService(), 'evaluateFlag')
-      .mockReturnValue(true);
+      .spyOn(getDefaultFeatureFlagsService(), 'evaluateFlagArray')
+      .mockReturnValue(['*']); // '*' = enabled for all applets
   });
 
   it('Should return 2 completions when api response is fulfilled with 2 items', async () => {

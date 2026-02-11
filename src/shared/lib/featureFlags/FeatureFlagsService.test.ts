@@ -18,6 +18,7 @@ class TestLaunchDarklyClient {
   init() {}
   identify() {}
   boolVariation() {}
+  jsonVariation() {}
   on() {}
 }
 
@@ -98,6 +99,19 @@ describe('Test FeatureFlagsService', () => {
 
     expect(boolVariationSpy).toHaveBeenCalledTimes(1);
     expect(boolVariationSpy).toHaveBeenCalledWith('my-flag', false);
+  });
+
+  it('Should resolve array', () => {
+    const jsonVariationSpy = jest
+      .spyOn(service.client, 'jsonVariation')
+      .mockReturnValue(['applet-1', 'applet-2']);
+
+    const flagValue = service.evaluateFlagArray('my-array-flag');
+
+    expect(flagValue).toEqual(['applet-1', 'applet-2']);
+
+    expect(jsonVariationSpy).toHaveBeenCalledTimes(1);
+    expect(jsonVariationSpy).toHaveBeenCalledWith('my-array-flag', []);
   });
 
   it('Should set onChange handler', () => {
