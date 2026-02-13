@@ -1,6 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
+import {
+  EntityProgressionCompleted,
+  EntityProgressionInProgressActivityFlow,
+} from '@app/abstract/lib/types/entityProgress';
 import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
@@ -271,6 +275,7 @@ export class ProgressSyncService implements IAppletProgressSyncService {
 
   /**
    * Reconstructs FlowState from server data for resuming in-progress flows.
+   * Uses same skip logic as slice.ts to keep Redux and FlowState in sync.
    */
   private reconstructFlowState(
     appletDetails: AppletDetails,
@@ -294,6 +299,63 @@ export class ProgressSyncService implements IAppletProgressSyncService {
 
     const activityFlowOrder =
       (completedEntityDto.activityFlowOrder as number) ?? 0;
+
+    // Apply same skip logic as slice.ts to avoid Redux/FlowState mismatch
+    const existingProgression = this.state.applets?.entityProgressions?.find(
+      p =>
+        p.appletId === appletDetails.id &&
+        p.entityType === 'activityFlow' &&
+        p.entityId === completedEntityDto.id &&
+        p.eventId === completedEntityDto.scheduledEventId &&
+        p.targetSubjectId === completedEntityDto.targetSubjectId,
+    );
+
+    const serverSubmitId = completedEntityDto.submitId;
+    const localSubmitId = existingProgression?.submitId;
+    const serverEndAt = completedEntityDto.endTime;
+    const localEndAt =
+      existingProgression?.status === 'completed'
+        ? existingProgression.endedAtTimestamp ?? 0
+        : 0;
+    const localPipelineActivityOrder =
+      existingProgression?.status === 'in-progress' &&
+      existingProgression.entityType === 'activityFlow'
+        ? existingProgression.pipelineActivityOrder ?? 0
+        : 0;
+
+    // Match web's logic and slice.ts: Compare submitIds to decide skip behavior
+    if (localSubmitId === serverSubmitId) {
+      // Same submitId: Keep furthest progress in this submission
+      if (
+        existingProgression?.status === 'in-progress' &&
+        localPipelineActivityOrder >= activityFlowOrder
+      ) {
+        this.logger.log(
+          `[ProgressSyncService.reconstructFlowState] Skipping - same submitId, local at or ahead`,
+        );
+        return;
+      }
+    } else {
+      // Different submitId: Prefer furthest in-progress OR most recent completed
+      if (
+        existingProgression?.status === 'in-progress' &&
+        localPipelineActivityOrder >= activityFlowOrder
+      ) {
+        this.logger.log(
+          `[ProgressSyncService.reconstructFlowState] Skipping - different submitId, local in-progress ahead`,
+        );
+        return;
+      }
+      if (
+        existingProgression?.status === 'completed' &&
+        localEndAt >= serverEndAt
+      ) {
+        this.logger.log(
+          `[ProgressSyncService.reconstructFlowState] Skipping - different submitId, local completed more recent`,
+        );
+        return;
+      }
+    }
 
     // Build the full activities array for the flow
     const activities = flow.activityIds

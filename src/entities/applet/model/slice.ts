@@ -302,26 +302,35 @@ const slice = createSlice({
         const localPipelineActivityOrder =
           (existingProgression as EntityProgressionInProgressActivityFlow)
             ?.pipelineActivityOrder ?? 0;
-        const localEndAt =
-          existingProgression?.status === 'completed'
-            ? (existingProgression as EntityProgressionCompleted)
-                .endedAtTimestamp ?? 0
-            : 0;
 
-        // Skip if local is completed and as recent or more recent than server
-        if (
-          existingProgression?.status === 'completed' &&
-          localEndAt >= payload.endAt
-        ) {
-          return;
-        }
+        const serverSubmitId = payload.submitId;
+        const localSubmitId = existingProgression?.submitId;
 
-        // Skip if local is in-progress and at or ahead of server
-        if (
-          existingProgression?.status === 'in-progress' &&
-          localPipelineActivityOrder >= serverPipelineActivityOrder
-        ) {
-          return;
+        // Same submitId: keep furthest progress
+        if (localSubmitId === serverSubmitId) {
+          if (localPipelineActivityOrder >= serverPipelineActivityOrder) {
+            return;
+          }
+        } else {
+          // Different submitIds: local in-progress or completed takes precedence
+          if (
+            existingProgression &&
+            existingProgression.status === 'in-progress' &&
+            localPipelineActivityOrder >= serverPipelineActivityOrder
+          ) {
+            return;
+          }
+          if (
+            existingProgression &&
+            existingProgression.status === 'completed'
+          ) {
+            const localEndAt =
+              (existingProgression as EntityProgressionCompleted)
+                .endedAtTimestamp ?? 0;
+            if (localEndAt >= payload.endAt) {
+              return;
+            }
+          }
         }
 
         const pipelineActivityOrder = serverPipelineActivityOrder;
