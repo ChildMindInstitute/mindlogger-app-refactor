@@ -21,6 +21,7 @@ import {
   ActivityRecordDto,
   AppletDetailsResponse,
 } from '@app/shared/api/services/IAppletService';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppletInfo } from '@app/shared/lib/hooks/useAppletInfo';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -612,27 +613,34 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
-      // Capture pre-refresh state to detect cross-device completion
-      const preRefreshProgressions: EntityProgression[] =
-        selectAppletsEntityProgressions(reduxStore.getState());
-      const preRefreshProgression = getEntityProgression(
-        appletId,
-        flowId,
-        eventId,
-        targetSubjectId,
-        preRefreshProgressions,
-      );
-      const wasInProgress = isEntityProgressionInProgress(
-        preRefreshProgression,
-      );
-      const preRefreshSubmitId = wasInProgress
-        ? (preRefreshProgression as EntityProgressionInProgress).submitId
-        : null;
+      const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletId);
+
+      // Only perform cross-device completion detection when feature flag is enabled
+      let wasInProgress = false;
+      let preRefreshSubmitId: string | null = null;
+
+      if (isCrossDeviceSyncEnabled) {
+        // Capture pre-refresh state to detect cross-device completion
+        const preRefreshProgressions: EntityProgression[] =
+          selectAppletsEntityProgressions(reduxStore.getState());
+        const preRefreshProgression = getEntityProgression(
+          appletId,
+          flowId,
+          eventId,
+          targetSubjectId,
+          preRefreshProgressions,
+        );
+        wasInProgress = isEntityProgressionInProgress(preRefreshProgression);
+        preRefreshSubmitId = wasInProgress
+          ? (preRefreshProgression as EntityProgressionInProgress).submitId
+          : null;
+      }
 
       await refresh();
 
       // Check if the flow we started was completed on another device
-      if (wasInProgress && preRefreshSubmitId) {
+      // Only when feature flag is enabled
+      if (isCrossDeviceSyncEnabled && wasInProgress && preRefreshSubmitId) {
         const postRefreshProgressions: EntityProgression[] =
           selectAppletsEntityProgressions(reduxStore.getState());
         const postRefreshProgression = getEntityProgression(

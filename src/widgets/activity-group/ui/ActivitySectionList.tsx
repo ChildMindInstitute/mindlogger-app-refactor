@@ -1,6 +1,5 @@
 import { useMemo, PropsWithChildren } from 'react';
 import {
-  Alert,
   Linking,
   ScrollViewProps,
   SectionList,

@@ -3,6 +3,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { getDefaultEventsService } from '@app/shared/api/services/eventsServiceInstance';
 import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { getMonthAgoDate } from '@app/shared/lib/utils/dateTime';
 import { getAppletCompletedEntitiesKey } from '@app/shared/lib/utils/reactQueryHelpers';
@@ -41,17 +42,19 @@ export class TargetedProgressSyncService
 
   async syncAppletProgress(appletId: string): Promise<void> {
     const methodName = '[TargetedProgressSyncService.syncAppletProgress]';
+    const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletId);
 
     try {
       this.logger.log(`${methodName}: Starting sync for ${appletId}`);
 
       // Fetch completions for this applet only
+      // Only include in-progress flows when feature flag is enabled
       const fromDate = getMonthAgoDate();
       const response =
         await getDefaultEventsService().getAppletCompletedEntities({
           appletId,
           fromDate,
-          includeInProgress: true,
+          includeInProgress: isCrossDeviceSyncEnabled,
         });
 
       const inProgressFlows = response.data.result.activityFlows.filter(
@@ -62,7 +65,7 @@ export class TargetedProgressSyncService
         `${methodName}: Fetched completions for ${appletId} - ` +
           `${response.data.result.activities.length} activities, ` +
           `${response.data.result.activityFlows.length} flows, ` +
-          `${inProgressFlows.length} in-progress`,
+          `${inProgressFlows.length} in-progress (flag=${isCrossDeviceSyncEnabled})`,
       );
 
       // Get applet details from cache

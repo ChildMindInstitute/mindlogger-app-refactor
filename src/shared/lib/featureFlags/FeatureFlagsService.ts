@@ -65,11 +65,25 @@ export class FeatureFlagsService implements IFeatureFlagsService {
     const defaultValue = FeatureFlagKeyDefaults[flag] ?? false;
 
     if (!this.client) {
-      return defaultValue;
+      return defaultValue as boolean;
     }
 
     // Use LaunchDarkly value with our default as fallback
-    return this.client.boolVariation(flag, defaultValue);
+    return this.client.boolVariation(flag, defaultValue as boolean);
+  }
+
+  evaluateFlagArray(flag: string): string[] {
+    // Get default value for this flag (should be an array)
+    const defaultValue = FeatureFlagKeyDefaults[flag];
+    const defaultArray = Array.isArray(defaultValue) ? defaultValue : [];
+
+    if (!this.client) {
+      return defaultArray;
+    }
+
+    // Use LaunchDarkly jsonVariation for array-type flags
+    const value = this.client.jsonVariation(flag, defaultArray);
+    return Array.isArray(value) ? value : defaultArray;
   }
 
   setChangeHandler(fn: (ctx: LDContext, changedKeys: string[]) => void): void {
