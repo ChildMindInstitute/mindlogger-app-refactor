@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@app/entities/localization/ui/Localization
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
-import { selectUserId } from '@entities/identity/model/selectors.ts';
+import { selectUserId } from '@entities/identity/model/selectors';
 
 import { AnalyticsProvider } from './AnalyticsProvider';
 import { FeatureFlagsProvider } from './FeatureFlagsProvider';
