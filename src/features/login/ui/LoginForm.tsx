@@ -114,7 +114,7 @@ export const LoginForm: FC<Props> = props => {
         password: variables.password,
       };
 
-      await DdSdkReactNative.setUserInfo({ id: response.data.result.user.id });
+      await DdSdkReactNative.setUserInfo({ id: loginData.user.id });
 
       // If the previously logged-in user's ID is not the same as the just
       // logged-in user's ID, then clear previously stored data.
