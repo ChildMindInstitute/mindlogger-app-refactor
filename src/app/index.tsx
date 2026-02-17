@@ -16,7 +16,7 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import localization from '@jobs/localization';
 import {
   DATADOG_APPLICATION_ID,
-  DATDOG_CLIENT_TOKEN,
+  DATADOG_CLIENT_TOKEN,
   ENV,
   APP_VERSION,
 } from '@shared/lib/constants';
@@ -35,7 +35,7 @@ jobRunner.runAll([localization]).catch(console.error);
 getDefaultLogger().configure();
 
 const config = new DatadogProviderConfiguration(
-  DATDOG_CLIENT_TOKEN,
+  DATADOG_CLIENT_TOKEN,
   ENV as string,
   DATADOG_APPLICATION_ID,
   true, // track User interactions (e.g.: Tap on buttons. You can use 'accessibilityLabel' element property to give tap action the name, otherwise element type will be reported)
