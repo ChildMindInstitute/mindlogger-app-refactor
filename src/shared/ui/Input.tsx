@@ -50,10 +50,26 @@ export const InputFrame = styled(
             maxHeight: 100,
           },
         },
+        outlined: {
+          color: '$on_surface',
+          borderBottomWidth: 0,
+          borderWidth: 1,
+          borderColor: '$outline_variant',
+          borderRadius: 4,
+          px: 16,
+          py: 14,
+          focusStyle: {
+            borderColor: '$primary',
+          },
+        },
       },
       isInvalid: {
         true: {
+          borderColor: '$error',
           borderBottomColor: '$error',
+          focusStyle: {
+            borderColor: '$error',
+          },
         },
       },
     },

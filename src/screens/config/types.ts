@@ -9,6 +9,14 @@ import { EntityPath } from '@app/abstract/lib/types/entity';
 
 export type RootStackParamList = {
   Login: undefined;
+  MfaVerification: {
+    mfaToken: string;
+    userId: string;
+  };
+  MfaRecovery: {
+    mfaToken: string;
+    userId: string;
+  };
   PasswordRecovery: { email: string; key: string };
   SignUp: undefined;
   AboutApp: undefined;
@@ -26,6 +34,8 @@ export type RootStackParamList = {
 
 export type RootStackNavigationProps =
   | NativeStackNavigationProp<RootStackParamList, 'Login'>
+  | NativeStackNavigationProp<RootStackParamList, 'MfaVerification'>
+  | NativeStackNavigationProp<RootStackParamList, 'MfaRecovery'>
   | NativeStackNavigationProp<RootStackParamList, 'PasswordRecovery'>
   | NativeStackNavigationProp<RootStackParamList, 'SignUp'>
   | NativeStackNavigationProp<RootStackParamList, 'AboutApp'>

@@ -28,9 +28,32 @@ export const useRegistrationMutation = (
     error: loginError,
   } = useLoginMutation({
     onSuccess: (response, variables) => {
+      const data = response.data.result;
+
+      // Registration should not trigger MFA, but check just in case
+      const isMfaRequired =
+        ('mfa_required' in data && data.mfa_required) ||
+        ('mfaRequired' in data && data.mfaRequired);
+
+      if (isMfaRequired) {
+        console.error('Unexpected MFA required during registration');
+        return;
+      }
+
+      // Type assertion - we know it's a successful login response
+      const result = data as {
+        token: { accessToken: string; refreshToken: string; tokenType: string };
+        user: {
+          id: string;
+          email: string;
+          firstName: string;
+          lastName: string;
+        };
+      };
+
       const userParams = {
-        userId: response.data.result.user.id,
-        email: response.data.result.user.email,
+        userId: result.user.id,
+        email: result.user.email,
         password: variables.password,
       };
 
@@ -39,7 +62,7 @@ export const useRegistrationMutation = (
 
       getDefaultUserPrivateKeyRecord().set(userPrivateKey);
 
-      const { user, token: session } = response.data.result;
+      const { user, token: session } = result;
 
       dispatch(identityActions.onAuthSuccess(user));
 
