@@ -96,6 +96,18 @@ export class ProgressSyncService implements IAppletProgressSyncService {
 
     const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletDetails.id);
 
+    // When the feature flag is OFF for this applet, skip in-progress flows entirely.
+    // The API may return in-progress flows because includeInProgress is set globally
+    // (enabled for other applets), but we must not create progression records for them
+    // on applets where the flag is OFF — otherwise they get incorrectly marked as "completed".
+    if (
+      !isCrossDeviceSyncEnabled &&
+      isFlow &&
+      completedEntityDto.isFlowCompleted === false
+    ) {
+      return;
+    }
+
     // Calculate endAt based on feature flag and data availability
     // Flag ON + endTime available: use timestamp from backend
     // Flag OFF or endTime unavailable: use legacy localEndDate/localEndTime
