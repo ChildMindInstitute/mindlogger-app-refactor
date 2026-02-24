@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { FC } from 'react';
 
+import { DdSdkReactNative } from '@datadog/mobile-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -112,6 +113,8 @@ export const LoginForm: FC<Props> = props => {
         email: loginData.user.email,
         password: variables.password,
       };
+
+      await DdSdkReactNative.setUserInfo({ id: loginData.user.id });
 
       // If the previously logged-in user's ID is not the same as the just
       // logged-in user's ID, then clear previously stored data.

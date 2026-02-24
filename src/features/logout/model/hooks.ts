@@ -1,3 +1,4 @@
+import { DdSdkReactNative } from '@datadog/mobile-react-native';
 import { CacheManager } from '@georstat/react-native-image-cache';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -39,6 +40,7 @@ export function useLogout() {
     }
 
     getDefaultAnalyticsService().logout();
+    await DdSdkReactNative.setUser({});
 
     getDefaultFeatureFlagsService().logout();
 
