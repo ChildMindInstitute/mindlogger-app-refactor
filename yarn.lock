@@ -8323,7 +8323,7 @@ react-native-background-fetch@^4.2.5:
   resolved "https://registry.yarnpkg.com/react-native-background-fetch/-/react-native-background-fetch-4.3.0.tgz#0296719989090f04d087b1f2a25e3b99a645ef09"
   integrity sha512-ZeHI51pBeFEHGv+MTm+Ui8o75SvCLx3G6J4WVPH1LwAbS8TzWW1PBqa/3znHp2Ek0/yb2dYeKxE9X9rP7oiykA==
 
-react-native-config@<1.6.0:
+react-native-config@~1.5.10:
   version "1.5.10"
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.5.10.tgz#e2c632aa9e511227b9fffea684d7122006af988f"
   integrity sha512-4H2njyu5KAseqcYwiSqD5LZE84VN45M8FViou7LsOc2StzSLXQYMMNR51gfIRRPd0f1gPuVM/O16MEi2AZ4Htg==
@@ -8332,11 +8332,6 @@ react-native-config@<1.6.0:
     "@babel/preset-env" "^7.25.0"
     "@babel/preset-react" "^7.24.7"
     babel-jest "^29.7.0"
-
-react-native-config@^1.5.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.6.1.tgz#f8428829fda74384484d773fe36820159c559159"
-  integrity sha512-HvKtxr6/Tq3iMdFx5REYZsjCtPi0RxQOMCs15+DqrUPTNFtWHuEuh+zw7fJp+dmuO79YMfdtlsPWIGTHtaXwjg==
 
 react-native-device-info@^10.12.0:
   version "10.14.0"
