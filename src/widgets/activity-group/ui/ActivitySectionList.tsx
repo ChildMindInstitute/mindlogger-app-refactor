@@ -1,5 +1,10 @@
 import { useMemo, PropsWithChildren } from 'react';
-import { Linking, SectionList, StyleSheet } from 'react-native';
+import {
+  Linking,
+  ScrollViewProps,
+  SectionList,
+  StyleSheet,
+} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -42,6 +47,7 @@ type Props = {
   groups: Array<ActivityListGroup>;
   completeEntity: CompleteEntityIntoUploadToQueue;
   checkAvailability: CheckAvailability;
+  refreshControl: ScrollViewProps['refreshControl'];
 };
 
 export function ActivitySectionList({
@@ -50,6 +56,7 @@ export function ActivitySectionList({
   checkAvailability,
   completeEntity,
   groups,
+  refreshControl,
 }: Props) {
   const { t } = useTranslation();
 
@@ -182,6 +189,7 @@ export function ActivitySectionList({
     <>
       <SectionList
         sections={sections}
+        refreshControl={refreshControl}
         renderSectionHeader={({ section }) => (
           <SectionHeader>{t(section.name)}</SectionHeader>
         )}

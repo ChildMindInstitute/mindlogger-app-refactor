@@ -6,7 +6,9 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { AppletsRefresh } from '@app/features/applets-refresh/ui/AppletsRefresh';
 import { ConnectionStatusBar } from '@app/features/streaming/ui/ConnectionStatusBar';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
@@ -16,8 +18,10 @@ import {
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box } from '@app/shared/ui/base';
 import { HorizontalCalendar } from '@app/shared/ui/HorizontalCalendar';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { ActivityGroups } from '@app/widgets/activity-group/ui/ActivityGroups';
 import { useAutoCompletion } from '@app/widgets/survey/model/hooks/useAutoCompletion';
 import { UploadRetryBanner } from '@app/widgets/survey/ui/UploadRetryBanner';
@@ -36,6 +40,14 @@ export const ActivityListScreen: FC<Props> = props => {
     getDefaultAnalyticsService().track(MixEvents.AppletView, {
       [MixProperties.AppletId]: appletId,
     });
+  });
+
+  const { mutateAsync: refreshMutation, isLoading: isRefreshing } =
+    useRefreshMutation();
+
+  // Refresh when screen becomes focused
+  useOnFocus(() => {
+    refreshMutation().catch(err => getDefaultLogger().error(err as never));
   });
 
   const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
@@ -85,8 +97,11 @@ export const ActivityListScreen: FC<Props> = props => {
           appletId={appletId}
           completeEntity={completeEntityIntoUploadToQueue}
           checkAvailability={checkAvailability}
+          refreshControl={<AppletsRefresh />}
         />
       )}
+
+      <Spinner withOverlay isVisible={isRefreshing} />
     </Box>
   );
 };

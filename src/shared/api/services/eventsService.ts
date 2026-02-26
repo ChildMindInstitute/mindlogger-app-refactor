@@ -28,6 +28,7 @@ export function eventsService(): IEventsService {
           {
             params: {
               fromDate: request.fromDate,
+              includeInProgress: request.includeInProgress ?? false,
             },
           },
         );

@@ -127,6 +127,29 @@ describe('Test ProgressDataCollector', () => {
     expect(result).toEqual({ appletEntities: {} });
   });
 
+  it('Should pass includeInProgress: true to getAllCompletedEntities', async () => {
+    const collector = new ProgressDataCollector(loggerMock);
+
+    const mockedValue: MockedResponse = {
+      data: {
+        result: [],
+      },
+    };
+
+    getAllCompletedEntitiesMock.mockResolvedValue(mockedValue);
+
+    await collector.collect();
+
+    expect(
+      getDefaultEventsService().getAllCompletedEntities,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fromDate: expect.any(String) as string,
+        includeInProgress: true,
+      }),
+    );
+  });
+
   const negativeTests: Array<MockedResponse | null | undefined> = [
     null,
     undefined,
