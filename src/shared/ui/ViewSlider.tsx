@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  JSX,
   useImperativeHandle,
   PropsWithChildren,
   useCallback,
