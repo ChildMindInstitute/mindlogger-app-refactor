@@ -13,9 +13,10 @@ import {
 import { GroupUtility } from './GroupUtility';
 import { EventEntity } from '../../lib/types/activityGroupsBuilder';
 
-export class AvailableGroupEvaluator
-  implements IEvaluator<EventEntity, ScheduleEvent>
-{
+export class AvailableGroupEvaluator implements IEvaluator<
+  EventEntity,
+  ScheduleEvent
+> {
   private utility: GroupUtility;
 
   constructor(appletId: string, entityProgressions: EntityProgression[]) {
