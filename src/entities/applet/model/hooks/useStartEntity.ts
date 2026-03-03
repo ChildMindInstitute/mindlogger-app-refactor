@@ -39,7 +39,10 @@ import {
   isProgressionReadyForAutocompletion,
   isEntityExpired,
 } from '@app/shared/lib/utils/survey/survey';
-import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
+import {
+  clearActivityStorageRecord,
+  getFlowRecordKey,
+} from '@app/widgets/survey/lib/storageHelpers';
 import {
   TrackActivityActionParams,
   TrackFlowActionParams,
@@ -353,6 +356,18 @@ export function useStartEntity({
         });
       } else {
         trackStartActivity(logParams);
+
+        // Safety net: clear any stale activity record before fresh start
+        // This prevents old answers from leaking into a new session
+        // Matches web useStartSurvey safety net from eac9f0c0.
+        clearActivityStorageRecord(
+          appletId,
+          activityId,
+          eventId,
+          targetSubjectId,
+          0,
+        );
+
         activityStart(appletId, activityId, eventId, targetSubjectId);
         resolve({ fromScratch: true });
       }
@@ -596,6 +611,18 @@ export function useStartEntity({
           ...logParams,
           activityId: firstActivityId,
         });
+
+        // Safety net: clear any stale activity record for the first activity before fresh start
+        // This prevents old answers from leaking into a new flow session
+        // Matches web useStartSurvey safety net from eac9f0c0.
+        clearActivityStorageRecord(
+          appletId,
+          firstActivityId,
+          eventId,
+          targetSubjectId,
+          0,
+        );
+
         flowStarted({
           appletId,
           flowId,

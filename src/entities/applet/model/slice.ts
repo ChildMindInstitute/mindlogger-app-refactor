@@ -322,11 +322,15 @@ const slice = createSlice({
             return;
           }
         } else {
-          // Different submitIds: local in-progress or completed takes precedence
+          // Different submitIds: local in-progress takes precedence only if
+          // local is at or ahead AND was started more recently than server's
+          // endTime (meaning local is genuinely newer, not stale).
+          // Matches web useEntitiesSync logic from eac9f0c0.
           if (
             existingProgression &&
             existingProgression.status === 'in-progress' &&
-            localPipelineActivityOrder >= serverPipelineActivityOrder
+            localPipelineActivityOrder >= serverPipelineActivityOrder &&
+            (existingProgression.startedAtTimestamp ?? 0) > serverEndAt
           ) {
             return;
           }

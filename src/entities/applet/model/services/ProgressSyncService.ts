@@ -1,10 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
-import {
-  EntityProgressionCompleted,
-  EntityProgressionInProgressActivityFlow,
-} from '@app/abstract/lib/types/entityProgress';
 import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
@@ -16,7 +12,10 @@ import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/stora
 import { ILogger } from '@app/shared/lib/types/logger';
 import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
 import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
-import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
+import {
+  clearActivityStorageRecord,
+  getFlowRecordKey,
+} from '@app/widgets/survey/lib/storageHelpers';
 import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 import { buildActivityFlowPipeline } from '@app/widgets/survey/model/pipelineBuilder';
 import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService';
@@ -172,6 +171,39 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities}), availableUntil=${availableUntilTimestamp ? new Date(availableUntilTimestamp).toISOString() : 'null'}`,
         );
 
+        // When replacing local progress with a different execution (different submitId),
+        // clear stale activity records from the old execution to prevent them from being
+        // shown when the user resumes the new execution.
+        // Matches web useEntitiesSync logic from eac9f0c0.
+        const existingProgression =
+          this.state.applets?.entityProgressions?.find(
+            p =>
+              p.appletId === appletDetails.id &&
+              p.entityType === 'activityFlow' &&
+              p.entityId === completedEntityDto.id &&
+              p.eventId === completedEntityDto.scheduledEventId &&
+              p.targetSubjectId === completedEntityDto.targetSubjectId,
+          );
+
+        if (
+          existingProgression &&
+          existingProgression.submitId !== completedEntityDto.submitId &&
+          existingProgression.status === 'in-progress' &&
+          existingProgression.entityType === 'activityFlow'
+        ) {
+          const staleActivityId = existingProgression.currentActivityId;
+          const staleOrder = existingProgression.pipelineActivityOrder;
+          if (staleActivityId) {
+            clearActivityStorageRecord(
+              appletDetails.id,
+              staleActivityId,
+              completedEntityDto.scheduledEventId,
+              completedEntityDto.targetSubjectId,
+              staleOrder,
+            );
+          }
+        }
+
         // Reconstruct FlowState from server data so the flow can be resumed
         this.reconstructFlowState(
           appletDetails,
@@ -215,6 +247,26 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         !localStartTime ||
         (serverCompletionTime && serverCompletionTime >= localStartTime)
       ) {
+        // Clean up stale activity record if local was in-progress
+        // Matches web useEntitiesSync logic from eac9f0c0.
+        if (
+          existingProgression &&
+          existingProgression.status === 'in-progress' &&
+          existingProgression.entityType === 'activityFlow'
+        ) {
+          const staleActivityId = existingProgression.currentActivityId;
+          const staleOrder = existingProgression.pipelineActivityOrder;
+          if (staleActivityId) {
+            clearActivityStorageRecord(
+              appletDetails.id,
+              staleActivityId,
+              completedEntityDto.scheduledEventId,
+              completedEntityDto.targetSubjectId,
+              staleOrder,
+            );
+          }
+        }
+
         const key = getFlowRecordKey(
           completedEntityDto.id,
           appletDetails.id,
@@ -391,13 +443,17 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         return;
       }
     } else {
-      // Different submitId: Prefer furthest in-progress OR most recent completed
+      // Different submitId: Prefer furthest in-progress only if local was
+      // started more recently (meaning local is genuinely newer, not stale).
+      // Matches web useEntitiesSync logic from eac9f0c0.
+      const localStartedAt = existingProgression?.startedAtTimestamp ?? 0;
       if (
         existingProgression?.status === 'in-progress' &&
-        localPipelineActivityOrder >= activityFlowOrder
+        localPipelineActivityOrder >= activityFlowOrder &&
+        localStartedAt > (serverEndAt ?? 0)
       ) {
         this.logger.log(
-          `[ProgressSyncService.reconstructFlowState] Skipping - different submitId, local in-progress ahead`,
+          `[ProgressSyncService.reconstructFlowState] Skipping - different submitId, local in-progress ahead and genuinely newer`,
         );
         return;
       }
