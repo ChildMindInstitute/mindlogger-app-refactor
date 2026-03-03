@@ -1,20 +1,21 @@
 import { QueryClient } from '@tanstack/react-query';
 
 import { FlowProgressActivity } from '@app/abstract/lib/types/entity';
-import {
-  EntityProgressionCompleted,
-  EntityProgressionInProgressActivityFlow,
-} from '@app/abstract/lib/types/entityProgress';
 import { AppletDetailsDto } from '@app/shared/api/services/IAppletService';
 import {
   CompletedEntityDto,
   EntitiesCompletionsDto,
 } from '@app/shared/api/services/IEventsService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { buildDateTimeFromDto } from '@app/shared/lib/utils/dateTime';
 import { GroupUtility } from '@app/widgets/activity-group/model/factories/GroupUtility';
-import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
+import {
+  clearActivityStorageRecord,
+  getFlowRecordKey,
+} from '@app/widgets/survey/lib/storageHelpers';
 import { FlowState } from '@app/widgets/survey/lib/useFlowStorageRecord';
 import { buildActivityFlowPipeline } from '@app/widgets/survey/model/pipelineBuilder';
 import { IAppletProgressSyncService } from '@entities/applet/model/services/IAppletProgressSyncService';
@@ -48,26 +49,31 @@ export class ProgressSyncService implements IAppletProgressSyncService {
     appletCompletions: EntitiesCompletionsDto,
   ) {
     const appletDetails = mapAppletDetailsFromDto(appletDto);
+    const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletDetails.id);
 
-    // Get respondentSubjectId from cache for normalization
-    const queryDataUtils = new QueryDataUtils(this.queryClient);
-    const respondentMeta = queryDataUtils.getRespondentMeta(appletDetails.id);
-    const respondentSubjectId = respondentMeta?.subjectId ?? null;
+    // Only get respondentSubjectId when feature is enabled (for normalization)
+    let respondentSubjectId: string | null = null;
+    if (isCrossDeviceSyncEnabled) {
+      const queryDataUtils = new QueryDataUtils(this.queryClient);
+      const respondentMeta = queryDataUtils.getRespondentMeta(appletDetails.id);
+      respondentSubjectId = respondentMeta?.subjectId ?? null;
+    }
 
     try {
       const { activities, activityFlows } = appletCompletions;
 
       [...activities, ...activityFlows].forEach(completionDto => {
-        // Normalize targetSubjectId to null for self-reports (matching web's approach)
-        const normalizedTargetSubjectId =
-          completionDto.targetSubjectId === respondentSubjectId
-            ? null
-            : completionDto.targetSubjectId;
+        let normalizedDto = completionDto;
 
-        this.upsertEntityProgression(appletDetails, {
-          ...completionDto,
-          targetSubjectId: normalizedTargetSubjectId,
-        });
+        // Normalize targetSubjectId to null for self-reports ONLY when feature is enabled
+        if (
+          isCrossDeviceSyncEnabled &&
+          completionDto.targetSubjectId === respondentSubjectId
+        ) {
+          normalizedDto = { ...completionDto, targetSubjectId: null };
+        }
+
+        this.upsertEntityProgression(appletDetails, normalizedDto);
       });
     } catch (error) {
       const errorMessage =
@@ -87,20 +93,55 @@ export class ProgressSyncService implements IAppletProgressSyncService {
       flow => flow.id === completedEntityDto.id,
     );
 
-    // Backend provides accurate startTime and endTime timestamps
-    // For in-progress flows, endTime reflects when the flow was last updated
+    const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletDetails.id);
+
+    // When the feature flag is OFF for this applet, skip in-progress flows entirely.
+    // The API may return in-progress flows because includeInProgress is set globally
+    // (enabled for other applets), but we must not create progression records for them
+    // on applets where the flag is OFF — otherwise they get incorrectly marked as "completed".
+    if (
+      !isCrossDeviceSyncEnabled &&
+      isFlow &&
+      completedEntityDto.isFlowCompleted === false
+    ) {
+      return;
+    }
+
+    // Calculate endAt based on feature flag and data availability
+    // Flag ON + endTime available: use timestamp from backend
+    // Flag OFF or endTime unavailable: use legacy localEndDate/localEndTime
+    let endAt: Date | number;
+    if (isCrossDeviceSyncEnabled && completedEntityDto.endTime !== undefined) {
+      endAt = completedEntityDto.endTime;
+    } else if (
+      completedEntityDto.localEndDate &&
+      completedEntityDto.localEndTime
+    ) {
+      endAt = buildDateTimeFromDto(
+        completedEntityDto.localEndDate,
+        completedEntityDto.localEndTime,
+      );
+    } else {
+      // Fallback to current time if neither endTime nor localEndDate/Time available
+      endAt = new Date();
+    }
+
     const payload: UpsertEntityProgressionPayload = {
       appletId: appletDetails.id,
       entityType: isFlow ? 'activityFlow' : 'activity',
       entityId: completedEntityDto.id,
       eventId: completedEntityDto.scheduledEventId,
       targetSubjectId: completedEntityDto.targetSubjectId,
-      endAt: completedEntityDto.endTime, // Use real timestamp from backend
+      endAt,
       submitId: completedEntityDto.submitId,
     };
 
-    // Handle in-progress flows
-    if (isFlow && completedEntityDto.isFlowCompleted === false) {
+    // Handle in-progress flows ONLY when feature flag is enabled
+    if (
+      isCrossDeviceSyncEnabled &&
+      isFlow &&
+      completedEntityDto.isFlowCompleted === false
+    ) {
       const flowDetails = this.getFlowDetailsForInProgress(
         completedEntityDto,
         completedEntityDto.id,
@@ -130,6 +171,39 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           `[ProgressSyncService.upsertEntityProgression]: In-progress flow detected - ${flowDetails.currentActivityName} (${(payload.activityFlowOrder ?? 0) + 1}/${flowDetails.totalActivities}), availableUntil=${availableUntilTimestamp ? new Date(availableUntilTimestamp).toISOString() : 'null'}`,
         );
 
+        // When replacing local progress with a different execution (different submitId),
+        // clear stale activity records from the old execution to prevent them from being
+        // shown when the user resumes the new execution.
+        // Matches web useEntitiesSync logic from eac9f0c0.
+        const existingProgression =
+          this.state.applets?.entityProgressions?.find(
+            p =>
+              p.appletId === appletDetails.id &&
+              p.entityType === 'activityFlow' &&
+              p.entityId === completedEntityDto.id &&
+              p.eventId === completedEntityDto.scheduledEventId &&
+              p.targetSubjectId === completedEntityDto.targetSubjectId,
+          );
+
+        if (
+          existingProgression &&
+          existingProgression.submitId !== completedEntityDto.submitId &&
+          existingProgression.status === 'in-progress' &&
+          existingProgression.entityType === 'activityFlow'
+        ) {
+          const staleActivityId = existingProgression.currentActivityId;
+          const staleOrder = existingProgression.pipelineActivityOrder;
+          if (staleActivityId) {
+            clearActivityStorageRecord(
+              appletDetails.id,
+              staleActivityId,
+              completedEntityDto.scheduledEventId,
+              completedEntityDto.targetSubjectId,
+              staleOrder,
+            );
+          }
+        }
+
         // Reconstruct FlowState from server data so the flow can be resumed
         this.reconstructFlowState(
           appletDetails,
@@ -142,10 +216,18 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         );
         return;
       }
-    } else if (isFlow && completedEntityDto.isFlowCompleted === true) {
-      // Flow is completed - check if we should clean up local FlowState storage
+    } else if (
+      isCrossDeviceSyncEnabled &&
+      isFlow &&
+      completedEntityDto.isFlowCompleted === true
+    ) {
+      // Flow is completed - mark it as NOT in-progress to trigger conversion in Redux slice
+      payload.isInProgress = false;
+
+      // Check if we should clean up local FlowState storage
       // Don't clean up if user has restarted the flow locally (local start is AFTER server completion)
-      const existingProgression = this.state.applets.entityProgressions?.find(
+      // Only perform this cleanup when feature flag is enabled
+      const existingProgression = this.state.applets?.entityProgressions?.find(
         p =>
           p.appletId === appletDetails.id &&
           p.entityType === 'activityFlow' &&
@@ -154,12 +236,37 @@ export class ProgressSyncService implements IAppletProgressSyncService {
           p.targetSubjectId === completedEntityDto.targetSubjectId,
       );
 
-      const serverCompletionTime = completedEntityDto.endTime;
+      const serverCompletionTime =
+        completedEntityDto.endTime ??
+        (typeof endAt === 'number' ? endAt : endAt.getTime());
       const localStartTime = existingProgression?.startedAtTimestamp;
 
       // Only clean up if server completion is NOT older than local start
       // (i.e., skip cleanup if flow was restarted locally after this server completion)
-      if (!localStartTime || serverCompletionTime >= localStartTime) {
+      if (
+        !localStartTime ||
+        (serverCompletionTime && serverCompletionTime >= localStartTime)
+      ) {
+        // Clean up stale activity record if local was in-progress
+        // Matches web useEntitiesSync logic from eac9f0c0.
+        if (
+          existingProgression &&
+          existingProgression.status === 'in-progress' &&
+          existingProgression.entityType === 'activityFlow'
+        ) {
+          const staleActivityId = existingProgression.currentActivityId;
+          const staleOrder = existingProgression.pipelineActivityOrder;
+          if (staleActivityId) {
+            clearActivityStorageRecord(
+              appletDetails.id,
+              staleActivityId,
+              completedEntityDto.scheduledEventId,
+              completedEntityDto.targetSubjectId,
+              staleOrder,
+            );
+          }
+        }
+
         const key = getFlowRecordKey(
           completedEntityDto.id,
           appletDetails.id,
@@ -336,18 +443,23 @@ export class ProgressSyncService implements IAppletProgressSyncService {
         return;
       }
     } else {
-      // Different submitId: Prefer furthest in-progress OR most recent completed
+      // Different submitId: Prefer furthest in-progress only if local was
+      // started more recently (meaning local is genuinely newer, not stale).
+      // Matches web useEntitiesSync logic from eac9f0c0.
+      const localStartedAt = existingProgression?.startedAtTimestamp ?? 0;
       if (
         existingProgression?.status === 'in-progress' &&
-        localPipelineActivityOrder >= activityFlowOrder
+        localPipelineActivityOrder >= activityFlowOrder &&
+        localStartedAt > (serverEndAt ?? 0)
       ) {
         this.logger.log(
-          `[ProgressSyncService.reconstructFlowState] Skipping - different submitId, local in-progress ahead`,
+          `[ProgressSyncService.reconstructFlowState] Skipping - different submitId, local in-progress ahead and genuinely newer`,
         );
         return;
       }
       if (
         existingProgression?.status === 'completed' &&
+        serverEndAt &&
         localEndAt >= serverEndAt
       ) {
         this.logger.log(

@@ -20,6 +20,7 @@ import { IScoresExtractor } from '@app/features/pass-survey/model/IScoresExtract
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { AppletEncryptionDTO } from '@app/shared/api/services/IAppletService';
 import { QueryDataUtils } from '@app/shared/api/services/QueryDataUtils';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { wait } from '@app/shared/lib/utils/common';
 import { getNow, getTimezoneOffset } from '@app/shared/lib/utils/dateTime';
@@ -444,7 +445,10 @@ export class ConstructCompletionsService {
     if (!this.isRecordExist(activityStorageRecord)) {
       // No local storage exists (activities completed on another device)
       // For auto-completion of flows (finish type), mark as completed locally AND send to backend
-      if (isAutocompletion && flowId) {
+      // Only when cross-device sync is enabled
+      const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletId);
+
+      if (isCrossDeviceSyncEnabled && isAutocompletion && flowId) {
         const progression = getEntityProgression(
           appletId,
           entityId,

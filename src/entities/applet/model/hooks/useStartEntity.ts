@@ -14,13 +14,13 @@ import {
 } from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
 import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
-import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import {
   ActivityFlowRecordDto,
   ActivityRecordDto,
   AppletDetailsResponse,
 } from '@app/shared/api/services/IAppletService';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppletInfo } from '@app/shared/lib/hooks/useAppletInfo';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -39,7 +39,10 @@ import {
   isProgressionReadyForAutocompletion,
   isEntityExpired,
 } from '@app/shared/lib/utils/survey/survey';
-import { getFlowRecordKey } from '@app/widgets/survey/lib/storageHelpers';
+import {
+  clearActivityStorageRecord,
+  getFlowRecordKey,
+} from '@app/widgets/survey/lib/storageHelpers';
 import {
   TrackActivityActionParams,
   TrackFlowActionParams,
@@ -60,6 +63,7 @@ import {
   onMigrationsNotApplied,
 } from '../../lib/alerts';
 import { selectAppletsEntityProgressions } from '../selectors';
+import { TargetedProgressSyncService } from '../services/TargetedProgressSyncService';
 import { appletActions } from '../slice';
 
 type FailReason =
@@ -117,9 +121,28 @@ export function useStartEntity({
 
   const { getName: getAppletDisplayName } = useAppletInfo();
 
-  const { mutateAsync: refresh } = useRefreshMutation();
-
   const logger: ILogger = getDefaultLogger();
+
+  // Syncs progress for a single applet using targeted sync if the feature flag is enabled
+  async function syncAppletProgress(appletId: string): Promise<void> {
+    if (!isFlowResumeEnabled(appletId)) {
+      logger.log(
+        `[useStartEntity.syncAppletProgress] Flag disabled for ${appletId}, skipping sync (original behavior)`,
+      );
+      return;
+    }
+
+    logger.log(
+      `[useStartEntity.syncAppletProgress] Using targeted sync for ${appletId}`,
+    );
+    const syncService = new TargetedProgressSyncService(
+      reduxStore.getState(),
+      dispatch,
+      logger,
+      queryClient,
+    );
+    await syncService.syncAppletProgress(appletId);
+  }
 
   function activityStart(
     appletId: string,
@@ -333,6 +356,18 @@ export function useStartEntity({
         });
       } else {
         trackStartActivity(logParams);
+
+        // Safety net: clear any stale activity record before fresh start
+        // This prevents old answers from leaking into a new session
+        // Matches web useStartSurvey safety net from eac9f0c0.
+        clearActivityStorageRecord(
+          appletId,
+          activityId,
+          eventId,
+          targetSubjectId,
+          0,
+        );
+
         activityStart(appletId, activityId, eventId, targetSubjectId);
         resolve({ fromScratch: true });
       }
@@ -357,7 +392,7 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
-      await refresh();
+      await syncAppletProgress(appletId);
 
       if (
         !(await checkAvailability(entityName, {
@@ -576,6 +611,18 @@ export function useStartEntity({
           ...logParams,
           activityId: firstActivityId,
         });
+
+        // Safety net: clear any stale activity record for the first activity before fresh start
+        // This prevents old answers from leaking into a new flow session
+        // Matches web useStartSurvey safety net from eac9f0c0.
+        clearActivityStorageRecord(
+          appletId,
+          firstActivityId,
+          eventId,
+          targetSubjectId,
+          0,
+        );
+
         flowStarted({
           appletId,
           flowId,
@@ -612,27 +659,34 @@ export function useStartEntity({
     try {
       mutex.setBusy();
 
-      // Capture pre-refresh state to detect cross-device completion
-      const preRefreshProgressions: EntityProgression[] =
-        selectAppletsEntityProgressions(reduxStore.getState());
-      const preRefreshProgression = getEntityProgression(
-        appletId,
-        flowId,
-        eventId,
-        targetSubjectId,
-        preRefreshProgressions,
-      );
-      const wasInProgress = isEntityProgressionInProgress(
-        preRefreshProgression,
-      );
-      const preRefreshSubmitId = wasInProgress
-        ? (preRefreshProgression as EntityProgressionInProgress).submitId
-        : null;
+      const isCrossDeviceSyncEnabled = isFlowResumeEnabled(appletId);
 
-      await refresh();
+      // Only perform cross-device completion detection when feature flag is enabled
+      let wasInProgress = false;
+      let preRefreshSubmitId: string | null = null;
+
+      if (isCrossDeviceSyncEnabled) {
+        // Capture pre-refresh state to detect cross-device completion
+        const preRefreshProgressions: EntityProgression[] =
+          selectAppletsEntityProgressions(reduxStore.getState());
+        const preRefreshProgression = getEntityProgression(
+          appletId,
+          flowId,
+          eventId,
+          targetSubjectId,
+          preRefreshProgressions,
+        );
+        wasInProgress = isEntityProgressionInProgress(preRefreshProgression);
+        preRefreshSubmitId = wasInProgress
+          ? (preRefreshProgression as EntityProgressionInProgress).submitId
+          : null;
+      }
+
+      await syncAppletProgress(appletId);
 
       // Check if the flow we started was completed on another device
-      if (wasInProgress && preRefreshSubmitId) {
+      // Only when feature flag is enabled
+      if (isCrossDeviceSyncEnabled && wasInProgress && preRefreshSubmitId) {
         const postRefreshProgressions: EntityProgression[] =
           selectAppletsEntityProgressions(reduxStore.getState());
         const postRefreshProgression = getEntityProgression(

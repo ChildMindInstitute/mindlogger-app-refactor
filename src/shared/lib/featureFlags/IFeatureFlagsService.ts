@@ -8,6 +8,7 @@ export interface IFeatureFlagsService {
   login(userId: string): Promise<void>;
   logout(): Promise<void>;
   evaluateFlag(flag: string): boolean;
+  evaluateFlagArray(flag: string): string[];
   setChangeHandler(fn: (ctx: LDContext, changedKeys: string[]) => void): void;
   removeChangeHandler(fn: Function): void;
 }

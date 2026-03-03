@@ -10,6 +10,7 @@ import {
 import { TargetedProgressSyncService } from '@app/entities/applet/model/services/TargetedProgressSyncService';
 import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
@@ -27,8 +28,8 @@ export const AppletsRefresh: FC<Props> = ({ appletId, ...props }) => {
   const responseTimes = useAppSelector(selectEntityResponseTimes);
 
   const { refresh, isRefreshing } = useRefresh(async () => {
-    // If appletId is provided, sync that specific applet first
-    if (appletId) {
+    // If appletId is provided and cross-device sync is enabled for this applet, sync it first
+    if (appletId && isFlowResumeEnabled(appletId)) {
       const syncService = new TargetedProgressSyncService(
         {} as any, // state not needed for sync
         (() => {}) as any, // dispatch not needed for sync

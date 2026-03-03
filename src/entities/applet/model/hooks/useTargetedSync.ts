@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 
+import { isFlowResumeEnabled } from '@app/shared/lib/featureFlags/isFlowResumeEnabled';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
@@ -25,6 +26,14 @@ export const useTargetedSync = () => {
 
   const syncApplet = useCallback(
     async (appletId: string): Promise<void> => {
+      // Skip targeted sync when cross-device flow sync is disabled for this applet
+      if (!isFlowResumeEnabled(appletId)) {
+        logger.log(
+          `[useTargetedSync]: Cross-device sync disabled for applet ${appletId}, skipping`,
+        );
+        return;
+      }
+
       if (isSyncing.current) {
         logger.log('[useTargetedSync]: Sync already in progress, skipping');
         return;
