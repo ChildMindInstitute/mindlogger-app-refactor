@@ -1,9 +1,5 @@
 import { toNestErrors, validateFieldsNatively } from '@hookform/resolvers';
-import {
-  appendErrors,
-  FieldError as BaseFieldError,
-  FieldErrors,
-} from 'react-hook-form';
+import { appendErrors, FieldError as BaseFieldError } from 'react-hook-form';
 import { z } from 'zod';
 
 import type { Resolver } from './types';
@@ -79,7 +75,7 @@ export const zodResolver: Resolver = (
       options.shouldUseNativeValidation && validateFieldsNatively({}, options);
 
       return {
-        errors: {} as FieldErrors,
+        errors: {},
         values: resolverOptions.rawValues ? values : data,
       };
     } catch (error: any) {

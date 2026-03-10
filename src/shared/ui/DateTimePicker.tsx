@@ -1,4 +1,4 @@
-import { useState, FC } from 'react';
+import { useState, FC, JSX } from 'react';
 import { AccessibilityProps } from 'react-native';
 
 import { Button } from '@tamagui/button';
