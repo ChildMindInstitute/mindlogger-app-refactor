@@ -43,23 +43,18 @@ export const UnityView: FC<Props> = props => {
   logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
 
   const handleUnityReady = useCallback(async () => {
-    // TODO: Look into why this is happening.
-    // We ave to wait until the loading screen appears before sending in the
-    // config JSON. But for some reasons the `UnityStart` message never arrives
-    // and the "backup" check below resolves too soon. So for now, to continue
-    // testing we have to wait like 5 seconds for the loading screen to show.
-    logger.log('!!! Waiting before sending LoadConfigFile message ...');
-    setTimeout(() => {
-      sendMessageToUnity({
-        m_sId: uuidv4(),
-        m_sKey: 'LoadConfigFile',
-        m_sAdditionalInfo: props.payload.file ?? undefined,
+    logger.log('[UnityView] handleUnityReady — sending LoadConfigFile immediately');
+    sendMessageToUnity({
+      m_sId: uuidv4(),
+      m_sKey: 'LoadConfigFile',
+      m_sAdditionalInfo: props.payload.file ?? undefined,
+    })
+      .then(resp => {
+        logger.log(`[UnityView] LoadConfigFile response: ${JSON.stringify(resp)}`);
       })
-        .then(resp => {
-          logger.log(`!!! LoadConfigFile resp: ${JSON.stringify(resp)}`);
-        })
-        .catch(logger.error);
-    }, 5000);
+      .catch(err => {
+        logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
+      });
   }, [props.payload.file, logger, sendMessageToUnity]);
 
   // Register Unity ready handler via the `UnityStarted` event.
