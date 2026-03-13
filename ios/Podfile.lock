@@ -2667,7 +2667,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 37b720094bcaa36abcd593e08f2ad16507a94769
   react-native-skia: c80f1d06c9133aa084c979fa2c77ae3c11e45401
   react-native-tcp-socket: c9290d77fea17ee75bee93e599b604bae63166f0
-  react-native-unity: 91a74c36d654fb7a7b8eff818435c28bdfdfcb24
+  react-native-unity: ac42fbcf438c845877ff88eea234b68631d4e58a
   react-native-vector-icons-entypo: 9b3015a5b28f681c668cb3c4c7b4e18ddfac63a3
   react-native-vector-icons-feather: b669f5bc4981f53aaa25d0e0135ae9a7d5c1bbd5
   react-native-vector-icons-fontawesome6: 7464629872b702957385275b62cff2f6c28199cc
