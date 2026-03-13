@@ -6,7 +6,6 @@ import * as mime from 'react-native-mime-types';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
-import { usePreviousValue } from '@app/shared/lib/hooks/usePreviousValue';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { Text } from '@app/shared/ui/Text';
@@ -16,7 +15,6 @@ import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 import {
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
-  newEchoMessage,
 } from '../lib/hook/useRNUnityCommBridge';
 import {
   UnityEventEndUnity,
@@ -38,7 +36,6 @@ export const UnityView: FC<Props> = props => {
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const unityReadyHandled = useRef<boolean>(false);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
-  const unityViewKeyWas = usePreviousValue(unityViewKey);
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
   const unityPaths = useRef<Array<string>>([]);
@@ -134,32 +131,6 @@ export const UnityView: FC<Props> = props => {
   useEffect(() => {
     registerEventHandler('DataExport', handleDataExport);
   }, [handleDataExport, registerEventHandler]);
-
-  // Register a backup Unity ready handler via a `Echo` message.
-  useEffect(() => {
-    if (!!unityViewKey && !unityViewKeyWas) {
-      const backupCheckPayload = `BackupUnityStartedCheck:${uuidv4()}`;
-      sendMessageToUnity(newEchoMessage(backupCheckPayload))
-        .then(resp => {
-          if (resp?.m_sAdditionalInfo === backupCheckPayload) {
-            if (!unityReadyHandled.current) {
-              unityReadyHandled.current = true;
-              logger.log('[UnityView] Handling Unity ready backup check');
-              handleUnityReady().catch(logger.error);
-            } else {
-              logger.log('[UnityView] Ignoring Unity ready backup check');
-            }
-          }
-        })
-        .catch(logger.error);
-    }
-  }, [
-    sendMessageToUnity,
-    handleUnityReady,
-    logger,
-    unityViewKey,
-    unityViewKeyWas,
-  ]);
 
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {
