@@ -14,7 +14,10 @@ import { identityActions } from '@app/entities/identity/model/slice';
 import { storeSession } from '@app/entities/session/model/operations';
 import { UserDto } from '@app/shared/api/services/IIdentityService';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
-import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
+import {
+  MixEvents,
+  MixProperties,
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
 import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
@@ -54,11 +57,28 @@ export const LoginForm: FC<Props> = props => {
     isLoading,
     reset,
   } = useLoginMutation({
+    onError: err => {
+      // Track login failed at credentials stage
+      getDefaultAnalyticsService().track(MixEvents.LoginFailed, {
+        [MixProperties.FailureStage]: 'Credentials',
+        [MixProperties.MFARequired]: false,
+        [MixProperties.MFAMethodUsed]: null,
+      });
+    },
     onSuccess: async (response, variables) => {
       const data = response.data.result;
 
       // MFA required
       if ('mfaRequired' in data && data.mfaRequired) {
+        // Track Login Button Click with MFA required
+        getDefaultAnalyticsService().track(MixEvents.LoginBtnClick, {
+          [MixProperties.MFARequired]: true,
+          [MixProperties.AuthMethod]: 'Password',
+        });
+
+        // Track MFA Required event
+        getDefaultAnalyticsService().track(MixEvents.MFARequired);
+
         const mfaToken = data.mfaToken;
         const userIdFromMfa = data.userId;
         const userEmailFromMfa = data.userEmail;
@@ -108,6 +128,12 @@ export const LoginForm: FC<Props> = props => {
         user: UserDto;
       };
 
+      // Track Login Button Click without MFA
+      getDefaultAnalyticsService().track(MixEvents.LoginBtnClick, {
+        [MixProperties.MFARequired]: false,
+        [MixProperties.AuthMethod]: 'Password',
+      });
+
       const userParams = {
         userId: loginData.user.id,
         email: loginData.user.email,
@@ -142,7 +168,11 @@ export const LoginForm: FC<Props> = props => {
       getDefaultAnalyticsService()
         .login(user.id)
         .then(() => {
-          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful);
+          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful, {
+            [MixProperties.MFAUsed]: false,
+            [MixProperties.MFAMethodUsed]: null,
+            [MixProperties.UserId]: user.id,
+          });
         })
         .catch(console.error);
 

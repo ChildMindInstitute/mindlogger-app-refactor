@@ -12,12 +12,18 @@ import { storeSession } from '@app/entities/session/model/operations';
 import { MfaRecoveryForm } from '@app/features/mfa-recovery/ui/MfaRecoveryForm';
 import {
   getMfaErrorMessage,
+  getMfaErrorCode,
+  extractMfaErrorMetadata,
   shouldNavigateToLogin,
 } from '@app/features/mfa-verification/lib/mfaErrorHandler';
+import { useMfaAnalytics } from '@app/features/mfa-verification/lib/useMfaAnalytics';
 import { useMfaAttemptsTracker } from '@app/features/mfa-verification/lib/useMfaAttemptsTracker';
 import { openUrl } from '@app/screens/lib/utils/helpers';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
-import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
+import {
+  MixEvents,
+  MixProperties,
+} from '@app/shared/lib/analytics/IAnalyticsService';
 import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
@@ -39,6 +45,15 @@ export const MfaRecoveryScreen: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [sessionExpired, setSessionExpired] = useState(false);
   const navigationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const {
+    trackCodeSubmitted,
+    trackVerificationSuccess,
+    trackVerificationFailed,
+    trackSessionExpired,
+    trackSwitchToTOTP,
+    trackBackToLogin,
+  } = useMfaAnalytics({ type: 'recovery' });
 
   const {
     updateFromApiError,
@@ -82,10 +97,17 @@ export const MfaRecoveryScreen: FC = () => {
         tokenType,
       });
 
+      // Track MFA recovery verification success before login analytics
+      trackVerificationSuccess();
+
       getDefaultAnalyticsService()
         .login(user.id)
         .then(() => {
-          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful);
+          getDefaultAnalyticsService().track(MixEvents.LoginSuccessful, {
+            [MixProperties.MFAUsed]: true,
+            [MixProperties.MFAMethodUsed]: 'Backup Codes',
+            [MixProperties.UserId]: user.id,
+          });
         })
         .catch(console.error);
 
@@ -101,7 +123,13 @@ export const MfaRecoveryScreen: FC = () => {
       const errorKey = getMfaErrorMessage(err, 'mfa_recovery');
       setErrorMessage(t(errorKey));
 
+      const errorCode = getMfaErrorCode(err);
+
       if (shouldNavigateToLogin(err)) {
+        // Track session expired event
+        trackSessionExpired(errorCode);
+        trackBackToLogin();
+
         setSessionExpired(true);
 
         // Longer delay for lockout errors
@@ -112,6 +140,32 @@ export const MfaRecoveryScreen: FC = () => {
         navigationTimeoutRef.current = setTimeout(() => {
           navigate('Login');
         }, delay);
+      } else {
+        // Track verification failed event
+        const metadata = extractMfaErrorMetadata(err);
+
+        // Determine attempt type based on which attempts remaining field is present
+        let attemptType: 'global' | 'session' | null = null;
+        if (metadata?.global_attempts_remaining !== undefined) {
+          attemptType = 'global';
+        } else if (metadata?.session_attempts_remaining !== undefined) {
+          attemptType = 'session';
+        }
+
+        trackVerificationFailed({
+          errorCode,
+          attemptsRemaining:
+            metadata?.global_attempts_remaining ??
+            metadata?.session_attempts_remaining,
+          attemptType,
+        });
+
+        // Track Login Failed event
+        getDefaultAnalyticsService().track(MixEvents.LoginFailed, {
+          [MixProperties.FailureStage]: 'MFA',
+          [MixProperties.MFARequired]: true,
+          [MixProperties.MFAMethodUsed]: 'Backup Codes',
+        });
       }
     },
   });
@@ -123,6 +177,9 @@ export const MfaRecoveryScreen: FC = () => {
   };
 
   const handleRecoverySuccess = (recoveryCode: string) => {
+    // Track code submitted event (recovery codes are never auto-submitted)
+    trackCodeSubmitted(false);
+
     executeIfOnline(() => {
       verifyRecoveryCode({
         mfaToken: mfaToken,
@@ -133,6 +190,9 @@ export const MfaRecoveryScreen: FC = () => {
   };
 
   const handleBack = () => {
+    // Track switch back to TOTP event
+    trackSwitchToTOTP();
+
     navigate('MfaVerification', {
       mfaToken,
       userId,
