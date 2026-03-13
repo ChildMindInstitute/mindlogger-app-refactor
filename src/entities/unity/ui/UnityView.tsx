@@ -15,6 +15,7 @@ import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 import {
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
+  newEchoMessage,
 } from '../lib/hook/useRNUnityCommBridge';
 import {
   UnityEventEndUnity,
@@ -35,6 +36,7 @@ export const UnityView: FC<Props> = props => {
 
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const unityReadyHandled = useRef<boolean>(false);
+  const heartbeatIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
@@ -57,6 +59,37 @@ export const UnityView: FC<Props> = props => {
       });
   }, [props.payload.file, logger, sendMessageToUnity]);
 
+  const HEARTBEAT_INTERVAL_MS = 5000;
+  const HEARTBEAT_TIMEOUT_MS = 3000;
+
+  const startHeartbeat = useCallback(() => {
+    if (heartbeatIntervalRef.current) {
+      clearInterval(heartbeatIntervalRef.current);
+    }
+
+    logger.log('[UnityView] Starting periodic heartbeat');
+
+    heartbeatIntervalRef.current = setInterval(() => {
+      const echoPayload = `heartbeat-${Date.now()}`;
+      const echoMsg = newEchoMessage(echoPayload);
+
+      const timeoutId = setTimeout(() => {
+        logger.warn(
+          `[UnityView] Heartbeat Echo timed out after ${HEARTBEAT_TIMEOUT_MS}ms — Unity may be unresponsive`,
+        );
+      }, HEARTBEAT_TIMEOUT_MS);
+
+      sendMessageToUnity(echoMsg)
+        .then(() => {
+          clearTimeout(timeoutId);
+        })
+        .catch(err => {
+          clearTimeout(timeoutId);
+          logger.warn(`[UnityView] Heartbeat Echo failed: ${err}`);
+        });
+    }, HEARTBEAT_INTERVAL_MS);
+  }, [logger, sendMessageToUnity]);
+
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
@@ -64,10 +97,11 @@ export const UnityView: FC<Props> = props => {
         unityReadyHandled.current = true;
         logger.log('[UnityView] Handling Unity ready event');
         await handleUnityReady();
+        startHeartbeat();
       } else {
         logger.log('[UnityView] Ignoring Unity ready event');
       }
-    }, [logger, handleUnityReady]);
+    }, [logger, handleUnityReady, startHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
@@ -133,6 +167,13 @@ export const UnityView: FC<Props> = props => {
     // reinitialized when this container view is rendered for the first time.
     // This ensure we can consistently get a Unity startup message.
     setUnityViewKey(uuidv4());
+
+    return () => {
+      if (heartbeatIntervalRef.current) {
+        clearInterval(heartbeatIntervalRef.current);
+        heartbeatIntervalRef.current = null;
+      }
+    };
   }, []);
 
   if (!compiledWithRNUnityView) {
