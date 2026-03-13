@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { JSX, useContext } from 'react';
 
 import { ValuesContext, RefContext } from './contexts';
 import { ViewSlider } from '../ViewSlider';

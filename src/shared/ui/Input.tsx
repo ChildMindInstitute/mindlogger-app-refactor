@@ -1,3 +1,4 @@
+import { MutableRefObject } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 
 import { GetProps, styled } from '@tamagui/core';
@@ -50,10 +51,26 @@ export const InputFrame = styled(
             maxHeight: 100,
           },
         },
+        outlined: {
+          color: '$on_surface',
+          borderBottomWidth: 0,
+          borderWidth: 1,
+          borderColor: '$outline_variant',
+          borderRadius: 4,
+          px: 16,
+          py: 14,
+          focusStyle: {
+            borderColor: '$primary',
+          },
+        },
       },
       isInvalid: {
         true: {
+          borderColor: '$error',
           borderBottomColor: '$error',
+          focusStyle: {
+            borderColor: '$error',
+          },
         },
       },
     },
@@ -70,15 +87,12 @@ export const InputFrame = styled(
 export type InputProps = GetProps<typeof InputFrame>;
 
 // This is a direct port of the focusableInputHOC Tamagui function that we used to use here.
-// That function no longer exists, and it seems the signature of Component.styleable has changed as well. However,
-// this seems to still work as expected. Therefore, I'm ignoring the TypeScript error for now.
 // See https://github.com/tamagui/tamagui/blob/d425febf0a2577e7fc621a48d2315d804f7c4341/code/ui/focusable/src/focusableInputHOC.tsx#L64
 // See https://github.com/tamagui/tamagui/commit/3bce1c316797d55d5675afe3dbd9f18d55ef8ff7
-// @ts-ignore
-export const Input = InputFrame.styleable((props: InputProps, ref) => {
+export const Input = InputFrame.styleable(((props: InputProps, ref: any) => {
   const isInput = InputFrame.staticConfig?.isInput;
   const { ref: combinedRef, onChangeText } = useFocusable({
-    ref,
+    ref: ref as MutableRefObject<any>,
     props,
     isInput,
   });
@@ -90,4 +104,4 @@ export const Input = InputFrame.styleable((props: InputProps, ref) => {
     : props;
 
   return <InputFrame ref={combinedRef} {...finalProps} />;
-});
+}) as any);

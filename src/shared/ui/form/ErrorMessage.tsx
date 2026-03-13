@@ -22,7 +22,9 @@ export const ErrorMessage: FC<PropsWithChildren<Props>> = ({
       {!!error?.message && (
         <Text
           color={mode === 'light' ? '$error' : '$error80'}
-          fontSize={12}
+          fontSize={14}
+          lineHeight={20}
+          letterSpacing={0.25}
           {...props}
         >
           {/* @ts-ignore */}

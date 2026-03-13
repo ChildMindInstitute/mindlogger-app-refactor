@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, useCallback } from 'react';
 import { Linking } from 'react-native';
 
+import { DdRumReactNavigationTracking } from '@datadog/mobile-react-navigation';
 import {
   NavigationContainer,
   DefaultTheme,
@@ -9,6 +10,7 @@ import {
   NavigationState,
   PartialState,
   NavigationContainerProps,
+  createNavigationContainerRef,
 } from '@react-navigation/native';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
@@ -111,6 +113,10 @@ export const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
   const { isReady, initialNavigationState, onNavigationStateChanged } =
     useInitialNavigationState();
 
+  // const navigationRef = React.useRef(null);
+  // const navigationRef = React.createRef();
+  const navigationRef = createNavigationContainerRef();
+
   const handleStateChange = useCallback(
     (state?: NavigationState<RootStackParamList>) => {
       if (!state) return;
@@ -140,6 +146,10 @@ export const NavigationProvider: FC<PropsWithChildren> = ({ children }) => {
       onStateChange={handleStateChange}
       initialState={initialNavigationState}
       navigationInChildEnabled={true}
+      ref={navigationRef}
+      onReady={() => {
+        DdRumReactNavigationTracking.startTrackingViews(navigationRef);
+      }}
     >
       {children}
     </NavigationContainer>

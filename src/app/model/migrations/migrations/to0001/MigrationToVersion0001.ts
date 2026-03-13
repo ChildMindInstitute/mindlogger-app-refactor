@@ -34,9 +34,10 @@ import {
 } from '../../types';
 import { getStorageRecord, upsertStorageRecord } from '../../utils';
 
-export class MigrationToVersion0001
-  implements IMigration<RootStateFrom, RootStateTo>
-{
+export class MigrationToVersion0001 implements IMigration<
+  RootStateFrom,
+  RootStateTo
+> {
   private queryDataUtils: QueryDataUtils;
 
   constructor(queryClient: QueryClient) {

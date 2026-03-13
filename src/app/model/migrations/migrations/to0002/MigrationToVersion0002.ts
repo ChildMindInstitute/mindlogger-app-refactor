@@ -10,9 +10,10 @@ import {
 } from './MigrationUtils0002';
 import { IMigration, MigrationInput, MigrationOutput } from '../../types';
 
-export class MigrationToVersion0002
-  implements IMigration<RootStateFrom, RootStateTo>
-{
+export class MigrationToVersion0002 implements IMigration<
+  RootStateFrom,
+  RootStateTo
+> {
   private queryDataUtils: QueryDataUtils;
 
   constructor(queryClient: QueryClient) {

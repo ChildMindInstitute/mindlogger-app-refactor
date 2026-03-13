@@ -21,6 +21,7 @@ export class StorageInstanceManager implements IStorageInstanceManager {
   public getActivityProgressStorage: () => MMKV;
   public getUserInfoStorage: () => MMKV;
   public getUserPrivateKeyStorage: () => MMKV;
+  public getMfaTokenStorage: () => MMKV;
 
   constructor() {
     this.instances = {};
@@ -40,6 +41,7 @@ export class StorageInstanceManager implements IStorageInstanceManager {
     );
     this.getUserInfoStorage = this.securedGetter('user-info');
     this.getUserPrivateKeyStorage = this.securedGetter('user-private-key');
+    this.getMfaTokenStorage = this.securedGetter('mfa-token-storage');
   }
 
   private getter(storageName: string) {

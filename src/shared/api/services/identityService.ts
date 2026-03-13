@@ -9,6 +9,10 @@ import {
   LoginResponse,
   LogoutRequest,
   LogoutResponse,
+  MfaRecoveryRequest,
+  MfaRecoveryResponse,
+  MfaVerifyRequest,
+  MfaVerifyResponse,
   PasswordRecoveryHealthCheckRequest,
   PasswordRecoveryHealthCheckResponse,
   PasswordRecoveryRequest,
@@ -59,6 +63,18 @@ export function IdentityService(): IIdentityService {
     changePassword(request: ChangePasswordRequest) {
       return httpService.put<ChangePasswordResponse>(
         '/users/me/password',
+        request,
+      );
+    },
+    mfaVerify(request: MfaVerifyRequest) {
+      return httpService.post<MfaVerifyResponse>(
+        '/auth/mfa/totp/verify',
+        request,
+      );
+    },
+    mfaRecovery(request: MfaRecoveryRequest) {
+      return httpService.post<MfaRecoveryResponse>(
+        '/auth/mfa/recovery-codes/verify',
         request,
       );
     },
