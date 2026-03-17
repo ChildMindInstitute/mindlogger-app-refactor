@@ -32,7 +32,7 @@ export const useRNUnityCommBridge = ({
   const logger: ILogger = getDefaultLogger();
 
   const eventHandlersRef = useRef<
-    Partial<Record<UnityEvent, RNUnityCommBridgeUnityEventHandler[]>>
+    Partial<Record<UnityEvent, RNUnityCommBridgeUnityEventHandler>>
   >({});
   const inFlightMessagesRef = useRef<
     Record<string, [(value: U2RNMessage | null) => void, (err: Error) => void]>
@@ -96,7 +96,7 @@ export const useRNUnityCommBridge = ({
 
   const registerEventHandler = useCallback(
     (evtType: UnityEvent, handler: RNUnityCommBridgeUnityEventHandler) => {
-      eventHandlersRef.current[evtType] = [handler];
+      eventHandlersRef.current[evtType] = handler;
     },
     [],
   );
@@ -118,8 +118,8 @@ export const useRNUnityCommBridge = ({
       }
       if (message) {
         // Call registered handler before resolving promises.
-        const handlers = eventHandlersRef.current[message.m_sKey] || [];
-        for (const handler of handlers) {
+        const handler = eventHandlersRef.current[message.m_sKey];
+        if (handler) {
           handler(message);
         }
 
