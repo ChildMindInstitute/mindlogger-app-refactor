@@ -17,6 +17,7 @@ import {
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
 } from '../lib/hook/useRNUnityCommBridge';
+import { useUnityFailureHandler } from '../lib/hook/useUnityFailureHandler';
 import { useUnityHeartbeat } from '../lib/hook/useUnityHeartbeat';
 import {
   UnityEventEndUnity,
@@ -40,59 +41,34 @@ export const UnityView: FC<Props> = props => {
 
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const unityReadyHandled = useRef<boolean>(false);
-  const errorHandledRef = useRef<boolean>(false);
-  const [showErrorModal, setShowErrorModal] = useState(false);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
   const unityPaths = useRef<Array<string>>([]);
 
-  const handleUnityFailureRef = useRef<() => void>(() => {});
+  const triggerFailureRef = useRef<() => void>(() => {});
 
   const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({
     sendMessageToUnity,
-    onMaxFailuresReached: () => handleUnityFailureRef.current(),
+    onMaxFailuresReached: () => triggerFailureRef.current(),
   });
 
-  const handleUnityFailure = useCallback(() => {
-    if (errorHandledRef.current) {
-      return;
-    }
-    errorHandledRef.current = true;
-
-    const isFlow = !!flowId;
-    logger.warn(
-      `[UnityView] Unity failure detected — isFlow=${isFlow}`,
-    );
-
-    stopHeartbeat();
-    setShowErrorModal(true);
-  }, [flowId, logger, stopHeartbeat]);
+  const {
+    showErrorModal,
+    triggerFailure,
+    handleErrorModalDismiss,
+    suppressErrors,
+  } = useUnityFailureHandler({
+    flowId,
+    stopHeartbeat,
+    onResponse: props.onResponse,
+    onError: props.onError,
+  });
 
   // Keep the ref in sync so the heartbeat callback always calls the latest version
   useEffect(() => {
-    handleUnityFailureRef.current = handleUnityFailure;
-  }, [handleUnityFailure]);
-
-  const handleErrorModalDismiss = useCallback(() => {
-    setShowErrorModal(false);
-
-    if (flowId) {
-      logger.log(
-        '[UnityView] Flow mode — submitting empty result to advance',
-      );
-      props.onResponse?.({
-        responseType: 'unity',
-        startTime: 0,
-        taskData: [],
-      });
-    } else {
-      logger.log(
-        '[UnityView] Standalone mode — calling onError to navigate back',
-      );
-      props.onError?.();
-    }
-  }, [flowId, logger, props]);
+    triggerFailureRef.current = triggerFailure;
+  }, [triggerFailure]);
 
   logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
 
@@ -108,9 +84,9 @@ export const UnityView: FC<Props> = props => {
       })
       .catch(err => {
         logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
-        handleUnityFailure();
+        triggerFailure();
       });
-  }, [props.payload.file, logger, sendMessageToUnity, handleUnityFailure]);
+  }, [props.payload.file, logger, sendMessageToUnity, triggerFailure]);
 
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
@@ -192,8 +168,7 @@ export const UnityView: FC<Props> = props => {
     setUnityViewKey(uuidv4());
 
     return () => {
-      logger.log('[UnityView] Unmounting — suppressing future error handling');
-      errorHandledRef.current = true;
+      suppressErrors();
       stopHeartbeat();
     };
   }, []);
