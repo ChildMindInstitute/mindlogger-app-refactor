@@ -64,6 +64,7 @@ type Props = ActivityItemProps &
     textVariableReplacer: (markdown: string) => string;
     onContextChange: (contextKey: string, contextValue: unknown) => void;
     context: Record<string, unknown>;
+    onUnityError?: () => void;
   };
 
 export function ActivityItem({
@@ -75,6 +76,7 @@ export function ActivityItem({
   textVariableReplacer,
   onContextChange,
   context,
+  onUnityError,
 }: Props) {
   const { appletId, activityId, flowId, targetSubjectId } = useContext(
     ActivityIdentityContext,
@@ -459,6 +461,7 @@ export function ActivityItem({
               <UnityView
                 payload={pipelineItem.payload}
                 onResponse={handleUnityComplete}
+                onError={onUnityError}
               />
             </Box>
           ),
@@ -475,8 +478,10 @@ export function ActivityItem({
     handleFlankerResult,
     handleRadioChange,
     handleStabilityTrackerComplete,
+    handleUnityComplete,
     onContextChange,
     onResponse,
+    onUnityError,
     pipelineItem,
     processLiveEvent,
     type,

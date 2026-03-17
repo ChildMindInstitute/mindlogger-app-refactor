@@ -321,6 +321,10 @@ export function ActivityStepper({
     onFinish('regular');
   };
 
+  const handleUnityError = () => {
+    onClose('regular');
+  };
+
   if (!activityStorageRecord) {
     return <Spinner withOverlay />;
   }
@@ -426,6 +430,7 @@ export function ActivityStepper({
                           textVariableReplacer={replaceTextVariables}
                           onContextChange={setContext}
                           context={activityStorageRecord?.context}
+                          onUnityError={handleUnityError}
                         />
                       )}
                     </>
