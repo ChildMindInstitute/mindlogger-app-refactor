@@ -6,12 +6,14 @@ import { ILogger } from '@app/shared/lib/types/logger';
 import {
   HEARTBEAT_INTERVAL_MS,
   HEARTBEAT_TIMEOUT_MS,
+  MAX_HEARTBEAT_FAILURES,
 } from '../constants';
 import { newEchoMessage } from './useRNUnityCommBridge';
 import { RN2UMessage, U2RNMessage } from '../types/unityMessage';
 
 type UseUnityHeartbeatOptions = {
   sendMessageToUnity: (message: RN2UMessage) => Promise<U2RNMessage | null>;
+  onMaxFailuresReached?: () => void;
 };
 
 
@@ -19,9 +21,12 @@ type UseUnityHeartbeatOptions = {
 // Call startHeartbeat after Unity is ready; stopHeartbeat on unmount or activity end.
 export const useUnityHeartbeat = ({
   sendMessageToUnity,
+  onMaxFailuresReached,
 }: UseUnityHeartbeatOptions) => {
   const logger: ILogger = getDefaultLogger();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const failureCountRef = useRef<number>(0);
+  const firedRef = useRef<boolean>(false);
 
   const stopHeartbeat = useCallback(() => {
     if (intervalRef.current) {
@@ -33,29 +38,51 @@ export const useUnityHeartbeat = ({
   const startHeartbeat = useCallback(() => {
     // Clear any existing heartbeat before starting a new one
     stopHeartbeat();
+    failureCountRef.current = 0;
+    firedRef.current = false;
 
     logger.log('[UnityView] Starting periodic heartbeat');
+
+    const handleFailure = (reason: string) => {
+      failureCountRef.current += 1;
+      logger.warn(
+        `[UnityView] Heartbeat failure ${failureCountRef.current}/${MAX_HEARTBEAT_FAILURES}: ${reason}`,
+      );
+
+      if (
+        failureCountRef.current >= MAX_HEARTBEAT_FAILURES &&
+        !firedRef.current
+      ) {
+        firedRef.current = true;
+        logger.warn(
+          '[UnityView] Max heartbeat failures reached — triggering error flow',
+        );
+        stopHeartbeat();
+        onMaxFailuresReached?.();
+      }
+    };
 
     intervalRef.current = setInterval(() => {
       const echoPayload = `heartbeat-${Date.now()}`;
       const echoMsg = newEchoMessage(echoPayload);
 
       const timeoutId = setTimeout(() => {
-        logger.warn(
-          `[UnityView] Heartbeat Echo timed out after ${HEARTBEAT_TIMEOUT_MS}ms — Unity may be unresponsive`,
+        handleFailure(
+          `Echo timed out after ${HEARTBEAT_TIMEOUT_MS}ms`,
         );
       }, HEARTBEAT_TIMEOUT_MS);
 
       sendMessageToUnity(echoMsg)
         .then(() => {
           clearTimeout(timeoutId);
+          failureCountRef.current = 0;
         })
         .catch(err => {
           clearTimeout(timeoutId);
-          logger.warn(`[UnityView] Heartbeat Echo failed: ${err}`);
+          handleFailure(`Echo send failed: ${err}`);
         });
     }, HEARTBEAT_INTERVAL_MS);
-  }, [logger, sendMessageToUnity, stopHeartbeat]);
+  }, [logger, sendMessageToUnity, stopHeartbeat, onMaxFailuresReached]);
 
   return { startHeartbeat, stopHeartbeat };
 };
