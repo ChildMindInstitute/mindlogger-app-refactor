@@ -30,10 +30,11 @@ export const useUnityHeartbeat = ({
 
   const stopHeartbeat = useCallback(() => {
     if (intervalRef.current) {
+      logger.log('[UnityView] Stopping heartbeat');
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  }, []);
+  }, [logger]);
 
   const startHeartbeat = useCallback(() => {
     // Clear any existing heartbeat before starting a new one

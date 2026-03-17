@@ -131,6 +131,7 @@ export const UnityView: FC<Props> = props => {
   const handleEndUnity =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       logger.log('[UnityView] Handling EndUnity event');
+      stopHeartbeat();
       logger.log(
         `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
       );
@@ -162,7 +163,7 @@ export const UnityView: FC<Props> = props => {
       });
 
       logger.log('[UnityView] Sent Reset message');
-    }, [logger, props, sendMessageToUnity]);
+    }, [logger, props, sendMessageToUnity, stopHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
@@ -191,6 +192,7 @@ export const UnityView: FC<Props> = props => {
     setUnityViewKey(uuidv4());
 
     return () => {
+      logger.log('[UnityView] Unmounting — suppressing future error handling');
       errorHandledRef.current = true;
       stopHeartbeat();
     };

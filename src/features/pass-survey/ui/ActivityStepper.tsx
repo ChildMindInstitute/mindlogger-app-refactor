@@ -9,6 +9,7 @@ import {
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Spinner } from '@app/shared/ui/Spinner';
@@ -55,6 +56,7 @@ export function ActivityStepper({
 }: Props) {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
+  const logger = getDefaultLogger();
 
   const [timerHeight, setTimerHeight] = useState(0);
   const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
@@ -322,6 +324,7 @@ export function ActivityStepper({
   };
 
   const handleUnityError = () => {
+    logger.warn('[ActivityStepper] Unity error — navigating back to activity list');
     onClose('regular');
   };
 
