@@ -1,10 +1,11 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 import * as mime from 'react-native-mime-types';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
@@ -21,10 +22,12 @@ import {
   UnityEventEndUnity,
   UnityEventUnityStarted,
 } from '../lib/types/unityMessage';
+import { UnityErrorModal } from './UnityErrorModal';
 
 type Props = {
   payload: UnityPipelineItem['payload'];
   onResponse?: (response: UnityResult) => void;
+  onError?: () => void;
 };
 
 export const UnityView: FC<Props> = props => {
@@ -33,14 +36,63 @@ export const UnityView: FC<Props> = props => {
   ).RNUnityView;
 
   const logger: ILogger = getDefaultLogger();
+  const { flowId } = useContext(ActivityIdentityContext);
 
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const unityReadyHandled = useRef<boolean>(false);
+  const errorHandledRef = useRef<boolean>(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
-  const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({ sendMessageToUnity });
   const unityPaths = useRef<Array<string>>([]);
+
+  const handleUnityFailureRef = useRef<() => void>(() => {});
+
+  const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({
+    sendMessageToUnity,
+    onMaxFailuresReached: () => handleUnityFailureRef.current(),
+  });
+
+  const handleUnityFailure = useCallback(() => {
+    if (errorHandledRef.current) {
+      return;
+    }
+    errorHandledRef.current = true;
+
+    const isFlow = !!flowId;
+    logger.warn(
+      `[UnityView] Unity failure detected — isFlow=${isFlow}`,
+    );
+
+    stopHeartbeat();
+    setShowErrorModal(true);
+  }, [flowId, logger, stopHeartbeat]);
+
+  // Keep the ref in sync so the heartbeat callback always calls the latest version
+  useEffect(() => {
+    handleUnityFailureRef.current = handleUnityFailure;
+  }, [handleUnityFailure]);
+
+  const handleErrorModalDismiss = useCallback(() => {
+    setShowErrorModal(false);
+
+    if (flowId) {
+      logger.log(
+        '[UnityView] Flow mode — submitting empty result to advance',
+      );
+      props.onResponse?.({
+        responseType: 'unity',
+        startTime: 0,
+        taskData: [],
+      });
+    } else {
+      logger.log(
+        '[UnityView] Standalone mode — calling onError to navigate back',
+      );
+      props.onError?.();
+    }
+  }, [flowId, logger, props]);
 
   logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
 
@@ -56,8 +108,9 @@ export const UnityView: FC<Props> = props => {
       })
       .catch(err => {
         logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
+        handleUnityFailure();
       });
-  }, [props.payload.file, logger, sendMessageToUnity]);
+  }, [props.payload.file, logger, sendMessageToUnity, handleUnityFailure]);
 
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
@@ -138,6 +191,7 @@ export const UnityView: FC<Props> = props => {
     setUnityViewKey(uuidv4());
 
     return () => {
+      errorHandledRef.current = true;
       stopHeartbeat();
     };
   }, []);
@@ -145,24 +199,41 @@ export const UnityView: FC<Props> = props => {
   if (!compiledWithRNUnityView) {
     // TODO: Render some dummy/placeholder UI to bypass the activity
     return (
-      <Text fontSize={16} lineHeight={24}>
-        RNUnityView missing from compiled binary!
-      </Text>
+      <>
+        <Text fontSize={16} lineHeight={24}>
+          RNUnityView missing from compiled binary!
+        </Text>
+        <UnityErrorModal
+          visible={showErrorModal}
+          onDismiss={handleErrorModalDismiss}
+        />
+      </>
     );
   } else {
     if (!unityViewKey) {
-      return null;
+      return (
+        <UnityErrorModal
+          visible={showErrorModal}
+          onDismiss={handleErrorModalDismiss}
+        />
+      );
     } else {
       return (
-        <RNUnityView
-          key={unityViewKey}
-          ref={rnUnityViewRef}
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{ flex: 1 }}
-          onUnityMessage={result => {
-            handleMessageFromUnity(result.nativeEvent.message);
-          }}
-        />
+        <>
+          <RNUnityView
+            key={unityViewKey}
+            ref={rnUnityViewRef}
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{ flex: 1 }}
+            onUnityMessage={result => {
+              handleMessageFromUnity(result.nativeEvent.message);
+            }}
+          />
+          <UnityErrorModal
+            visible={showErrorModal}
+            onDismiss={handleErrorModalDismiss}
+          />
+        </>
       );
     }
   }
