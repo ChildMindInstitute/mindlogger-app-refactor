@@ -1,0 +1,3765 @@
+---
+format_version: '11'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: react-native
+workflows:
+  dev_android:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - cache-pull@2: {}
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.dev file
+            echo "Creating .env.dev file"
+            cat > ./.env.dev <<EOL
+            API_URL=${API_URL_DEV}
+            ENV=${ENV_DEV}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_DEV}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.dev
+        title: Create .env file
+    - file-downloader@1:
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 27.3.13750724
+    - gradle-runner@2:
+        inputs:
+        - cache_level: none
+        - apk_file_include_filter: "*.aab"
+        - gradle_task: "$GRADLE_TASK_DEV"
+    - sign-apk@1:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - bitrise-step-export-universal-apk@0: {}
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME_DEV"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        - retry_without_sending_to_review: 'true'
+        is_always_run: true
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: Android Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: Android Build Failed!*"
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Build|${BITRISE_BUILD_URL}
+            Install Page|${BITRISE_PUBLIC_INSTALL_PAGE_URL}
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_DEV: https://api-dev.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_DEV: DEV
+    - opts:
+        is_expand: false
+      GRADLE_TASK_DEV: bundleDevRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME_DEV: lab.childmindinstitute.data.dev
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_DEV: '"357638792F423F4528482B4D62516599"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+    - ONEUP_HEALTH_CLIENT_ID: cd0453c848216420010eb5f0004f4cb9
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+  dev_ios:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - certificate-and-profile-installer@1: {}
+    - cache-pull@2: {}
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        title: pod install --repo-update
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            cd ios
+            rm -rf Pods build
+            git status
+            gem install cocoapods --no-document -v 1.14.3
+            asdf reshim ruby
+            RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+    - cocoapods-install@2:
+        run_if: false
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.dev file
+            echo "Creating .env.dev file"
+            cat > ./.env.dev <<EOL
+            API_URL=${API_URL_DEV}
+            ENV=${ENV_DEV}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_DEV}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.dev
+        title: Create .env file
+    - xcode-archive@5.1:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME_DEV"
+        - configuration: Release
+        - distribution_method: app-store
+        - export_development_team: 8RHKE85KB6
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_logging: 'yes'
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+        - fdu_google_services_location: "./ios/GoogleServices/dev/GoogleService-Info.plist"
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - password: "$BEN_APPLE_ID_PASS"
+        - itunescon_user: "$BEN_APPLE_ID"
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: iOS Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: iOS Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Build|${BITRISE_BUILD_URL}
+            Install Page|${BITRISE_PUBLIC_INSTALL_PAGE_URL}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_DEV: https://api-dev.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_DEV: DEV
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME_DEV: MindloggerMobileDev
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_DEV: '"357638792F423F4528482B4D62516599"'
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+    - ONEUP_HEALTH_CLIENT_ID: cd0453c848216420010eb5f0004f4cb9
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.2.x
+  prod_android:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - bundle::GetVersion: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # The provided tag
+            provided_tag=$BITRISE_GIT_TAG
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Description: Get a list of all tags containing "-rc"
+            tags=$(git tag -l "20*-rc*")
+
+            # Description: Remove "-rc" and any characters after it from each tag, then sort and remove duplicates
+            tags_without_rc=$(echo "$tags" | sed 's/-rc[0-9]*//g' | sort -u)
+
+            # Description: Process the provided tag to remove "-rc" and any characters after it
+            provided_tag_without_rc=$(echo "$provided_tag" | sed 's/-rc[0-9]*//g')
+
+            # Description: Find the previous tags
+            previous_tags=$(echo "$tags_without_rc" | awk -v provided_tag="$provided_tag_without_rc" '$0 < provided_tag {max=max>$0?max:$0} END {print max}')
+
+            # Description: Find the last tag containing the previous tag number
+            previous_tag=$(echo "$tags" | grep -F "$previous_tags" | tail -n 1)
+
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value $task_urls
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+        title: Collect task numbers
+    - cache-pull@2: {}
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.production file
+            echo "Creating .env.production file"
+            cat > ./.env.production <<EOL
+            API_URL=${API_URL_PROD}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_PROD}
+            MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.production
+        title: Create .env file
+    - file-downloader@1:
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 27.3.13750724
+    - change-android-versioncode-and-versionname@1:
+        inputs:
+        - build_gradle_path: android/app/build.gradle
+        - new_version_name: "$APP_VERSION"
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sed -i.bak "s/\"version\": *\"[^\"]*\"/\"version\": \"${FULL_APP_VERSION}\"/" package.json
+        title: Update package.json version
+    - gradle-runner@2:
+        inputs:
+        - cache_level: none
+        - apk_file_include_filter: "*.aab"
+        - gradle_task: "$GRADLE_TASK_PROD"
+    - sign-apk@1:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME_PROD"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - expansionfile_path:
+        - retry_without_sending_to_review: 'true'
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        is_always_run: true
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: Android Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: Android Build Failed!*"
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any commands fail
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Debug log
+            set -x
+
+            # Extract version information
+            versionCode=$(grep 'versionCode' android/app/build.gradle | awk '{print $2}')
+            versionName=$(grep 'versionName' android/app/build.gradle | awk -F '"' '{print $2}')
+
+            echo "Version Code: $versionCode"
+            echo "Version Name: $versionName"
+
+            # Check if task_numbers is set and not empty
+            if [[ -n "$task_numbers" ]]; then
+                # Loop through each task number and execute curl command
+                while IFS= read -r task_number; do
+                    curl -s -u "andrew.weiland@childmind.org:$JIRA_PAT_TOKEN" \
+                         -X POST \
+                         --data "{\"body\": \"ENV: Test\nPlatform: Android\nVersion: $versionName ($versionCode)\nTag: $BITRISE_GIT_TAG\nBranch: $BITRISE_GIT_BRANCH\"}" \
+                         -H "Content-Type: application/json" \
+                         "https://mindlogger.atlassian.net/rest/api/2/issue/$task_number/comment"
+                done <<< "$task_numbers"
+            else
+                echo "No task numbers provided. Exiting script successfully."
+            fi
+        title: Add comment in Jira
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_PROD: https://api-v2.mindlogger.org
+    - opts:
+        is_expand: false
+      GRADLE_TASK_PROD: bundleProductionRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME_PROD: lab.childmindinstitute.data
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_PROD: '"28F983671FD4934275A35E7D3DBAA"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      MIXPANEL_TOKEN: 075d1512e69a60bfcd9f7352b21cc4a2
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web.gettingcurious.com,https://web.mindlogger.org
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-8875f0c6-4a73-4f61-99fa-c8450911a089
+    - ONEUP_HEALTH_CLIENT_ID: be72bc9949cfc13ac1afe0540180c42f
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+  prod_ios:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - bundle::GetVersion: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # The provided tag
+            provided_tag=$BITRISE_GIT_TAG
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Description: Get a list of all tags containing "-rc"
+            tags=$(git tag -l "20*-rc*")
+
+            # Description: Remove "-rc" and any characters after it from each tag, then sort and remove duplicates
+            tags_without_rc=$(echo "$tags" | sed 's/-rc[0-9]*//g' | sort -u)
+
+            # Description: Process the provided tag to remove "-rc" and any characters after it
+            provided_tag_without_rc=$(echo "$provided_tag" | sed 's/-rc[0-9]*//g')
+
+            # Description: Find the previous tags
+            previous_tags=$(echo "$tags_without_rc" | awk -v provided_tag="$provided_tag_without_rc" '$0 < provided_tag {max=max>$0?max:$0} END {print max}')
+
+            # Description: Find the last tag containing the previous tag number
+            previous_tag=$(echo "$tags" | grep -F "$previous_tags" | tail -n 1)
+
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value $task_urls
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+        title: Collect task numbers
+    - certificate-and-profile-installer@1: {}
+    - cache-pull@2: {}
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            cd ios
+            rm -rf Pods build
+            git status
+            gem install cocoapods --no-document -v 1.14.3
+            asdf reshim ruby
+            RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+        title: pod install --repo-update
+    - cocoapods-install@2:
+        run_if: false
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.production file
+            echo "Creating .env.production file"
+            cat > ./.env.production <<EOL
+            API_URL=${API_URL_PROD}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_PROD}
+            MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.production
+        title: Create .env file
+    - set-xcode-build-number@2:
+        inputs:
+        - project_path: ios/MindloggerMobile.xcodeproj
+        - scheme: "$BITRISE_SCHEME_PROD"
+        - build_short_version_string: "$APP_VERSION"
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sed -i.bak "s/\"version\": *\"[^\"]*\"/\"version\": \"${FULL_APP_VERSION}\"/" package.json
+        title: Update package.json version
+    - xcode-archive@5.1:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME_PROD"
+        - configuration: Release
+        - distribution_method: app-store
+        - export_development_team: 8RHKE85KB6
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_google_services_location: "./ios/GoogleServices/GoogleService-Info.plist"
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - password: "$BEN_APPLE_ID_PASS"
+        - itunescon_user: "$BEN_APPLE_ID"
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: iOS Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: iOS Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    - script@1:
+        title: Add comment in Jira
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any commands fail
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Debug log
+            set -x
+
+            # Extract version information
+            versionCode=$(grep 'versionCode' android/app/build.gradle | awk '{print $2}')
+            versionName=$(grep 'versionName' android/app/build.gradle | awk -F '"' '{print $2}')
+
+            echo "Version Code: $versionCode"
+            echo "Version Name: $versionName"
+
+            # Check if task_numbers is set and not empty
+            if [[ -n "$task_numbers" ]]; then
+                # Loop through each task number and execute curl command
+                while IFS= read -r task_number; do
+                    curl -s -u "andrew.weiland@childmind.org:$JIRA_PAT_TOKEN" \
+                         -X POST \
+                         --data "{\"body\": \"ENV: Test\nPlatform: iOS\nVersion: $versionName ($versionCode)\nTag: $BITRISE_GIT_TAG\nBranch: $BITRISE_GIT_BRANCH\"}" \
+                         -H "Content-Type: application/json" \
+                         "https://mindlogger.atlassian.net/rest/api/2/issue/$task_number/comment"
+                done <<< "$task_numbers"
+            else
+                echo "No task numbers provided. Exiting script successfully."
+            fi
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_PROD: https://api-v2.mindlogger.org
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME_PROD: MindloggerMobile
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_PROD: 28F983671FD4934275A35E7D3DBAA
+    - opts:
+        is_expand: false
+      MIXPANEL_TOKEN: 075d1512e69a60bfcd9f7352b21cc4a2
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web.gettingcurious.com,https://web.mindlogger.org
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-8875f0c6-4a73-4f61-99fa-c8450911a089
+    - ONEUP_HEALTH_CLIENT_ID: be72bc9949cfc13ac1afe0540180c42f
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.2.x
+  qa_android:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # Retrieve release candidate tags and sort them
+            tags=$(git tag -l "20*-rc*" | sort -V)
+
+            # Get the provided tag from environment variable
+            provided_tag="$BITRISE_GIT_TAG"
+
+            # Get the previous release candidate tag
+            previous_tag=$(echo "$tags" | tail -n 2 | head -n 1)
+
+            # Check if previous_tag is the same as provided_tag
+            if [ "$previous_tag" = "$provided_tag" ]; then
+                # If they are the same, get the tag before previous_tag
+                previous_tag=$(echo "$tags" | tail -n 3 | head -n 1)
+            fi
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value "$task_urls"
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+        title: Collect task numbers
+    - cache-pull@2: {}
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.qa file
+            echo "Creating .env.qa file"
+            cat > ./.env.qa <<EOL
+            API_URL=${API_URL_QA}
+            ENV=${ENV_QA}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_QA}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.qa
+        title: Create .env file
+    - file-downloader@1:
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 27.3.13750724
+    - gradle-runner@2:
+        inputs:
+        - cache_level: none
+        - apk_file_include_filter: "*.aab"
+        - gradle_task: "$GRADLE_TASK_QA"
+    - sign-apk@1:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME_QA"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        is_always_run: true
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: Android Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: Android Build Failed!*"
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - message_on_error:
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any commands fail
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Debug log
+            set -x
+
+            # Extract version information
+            versionCode=$(grep 'versionCode' android/app/build.gradle | awk '{print $2}')
+            versionName=$(grep 'versionName' android/app/build.gradle | awk -F '"' '{print $2}')
+
+            echo "Version Code: $versionCode"
+            echo "Version Name: $versionName"
+
+            # Check if task_numbers is set and not empty
+            if [[ -n "$TASKS_NUMBERS" ]]; then
+                # Loop through each task number and execute curl command
+                while IFS= read -r task_number; do
+                    curl -s -u "mbarsukou@scnsoft.com:$JIRA_PAT_TOKEN" \
+                         -X POST \
+                         --data "{\"body\": \"ENV: Test\nPlatform: Android\nVersion: $versionName ($versionCode)\nTag: $BITRISE_GIT_TAG\nBranch: $BITRISE_GIT_BRANCH\"}" \
+                         -H "Content-Type: application/json" \
+                         "https://mindlogger.atlassian.net/rest/api/2/issue/$task_number/comment"
+                done <<< "$TASKS_NUMBERS"
+            else
+                echo "No task numbers provided. Exiting script successfully."
+            fi
+        title: Add comment in Jira
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_QA: https://api-test.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_QA: QA
+    - opts:
+        is_expand: false
+      GRADLE_TASK_QA: bundleQaRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME_QA: lab.childmindinstitute.data.qa
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_QA: '"357638792F423F4528482B4D62516554"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-test.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+    - ONEUP_HEALTH_CLIENT_ID: 4c73a30e83d8d8c89de04b0f30b06916
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+  qa_android_dr:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - cache-pull@2: {}
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.qa file
+            echo "Creating .env.qa file"
+            cat > ./.env.qa <<EOL
+            API_URL=${API_URL_QA}
+            ENV=${ENV_QA}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_QA}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.qa
+        title: Create .env file
+    - file-downloader@1:
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 21.4.7075529
+    - gradle-runner@2:
+        inputs:
+        - cache_level: none
+        - apk_file_include_filter: "*.aab"
+        - gradle_task: "$GRADLE_TASK_QA"
+    - sign-apk@1:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME_QA"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        is_always_run: true
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: Android Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: Android Build Failed!*"
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - message_on_error:
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_QA: https://api-dr.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_QA: QA
+    - opts:
+        is_expand: false
+      GRADLE_TASK_QA: bundleQaRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME_QA: lab.childmindinstitute.data.qa
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_QA: '"357638792F423F4528482B4D62516554"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dr.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+    - ONEUP_HEALTH_CLIENT_ID: 4c73a30e83d8d8c89de04b0f30b06916
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+  qa_ios:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # Retrieve release candidate tags and sort them
+            tags=$(git tag -l "20*-rc*" | sort -V)
+
+            # Get the provided tag from environment variable
+            provided_tag="$BITRISE_GIT_TAG"
+
+            # Get the previous release candidate tag
+            previous_tag=$(echo "$tags" | tail -n 2 | head -n 1)
+
+            # Check if previous_tag is the same as provided_tag
+            if [ "$previous_tag" = "$provided_tag" ]; then
+                # If they are the same, get the tag before previous_tag
+                previous_tag=$(echo "$tags" | tail -n 3 | head -n 1)
+            fi
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value "$task_urls"
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+        title: Collect task numbers
+    - certificate-and-profile-installer@1: {}
+    - cache-pull@2: {}
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        title: pod install --repo-update
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            cd ios
+            rm -rf Pods build
+            git status
+            gem install cocoapods --no-document -v 1.14.3
+            asdf reshim ruby
+            RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+    - cocoapods-install@2:
+        run_if: false
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.qa file
+            echo "Creating .env.qa file"
+            cat > ./.env.qa <<EOL
+            API_URL=${API_URL_QA}
+            ENV=${ENV_QA}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_QA}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            DATADOG_APPLICATION_ID=${DATADOG_APPLICATION_ID}
+            DATDOG_CLIENT_TOKEN=${DATDOG_CLIENT_TOKEN}
+            EOL
+            cat ./.env.qa
+        title: Create .env file
+    - xcode-archive@5:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME_QA"
+        - configuration: Release
+        - distribution_method: app-store
+        - export_development_team: 8RHKE85KB6
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_google_services_location: "./ios/GoogleServices/qa/GoogleService-Info.plist"
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - password: "$BEN_APPLE_ID_PASS"
+        - itunescon_user: "$BEN_APPLE_ID"
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: iOS Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: iOS Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - message_on_error:
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any commands fail
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Debug log
+            set -x
+
+            # Extract version information
+            versionCode=$(grep 'versionCode' android/app/build.gradle | awk '{print $2}')
+            versionName=$(grep 'versionName' android/app/build.gradle | awk -F '"' '{print $2}')
+
+            echo "Version Code: $versionCode"
+            echo "Version Name: $versionName"
+
+            # Check if task_numbers is set and not empty
+            if [[ -n "$TASKS_NUMBERS" ]]; then
+                # Loop through each task number and execute curl command
+                while IFS= read -r task_number; do
+                    curl -s -u "mbarsukou@scnsoft.com:$JIRA_PAT_TOKEN" \
+                         -X POST \
+                         --data "{\"body\": \"ENV: Test\nPlatform: iOS\nVersion: $versionName ($versionCode)\nTag: $BITRISE_GIT_TAG\nBranch: $BITRISE_GIT_BRANCH\"}" \
+                         -H "Content-Type: application/json" \
+                         "https://mindlogger.atlassian.net/rest/api/2/issue/$task_number/comment"
+                done <<< "$TASKS_NUMBERS"
+            else
+                echo "No task numbers provided. Exiting script successfully."
+            fi
+        title: Add comment in Jira
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_QA: https://api-test.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_QA: QA
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME_QA: MindloggerMobileQA
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_QA: 357638792F423F4528482B4D62516554
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-test.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+    - ONEUP_HEALTH_CLIENT_ID: 4c73a30e83d8d8c89de04b0f30b06916
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.4.x
+        machine_type_id: g2.mac.large
+  qa_ios_dr:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - certificate-and-profile-installer@1: {}
+    - cache-pull@2: {}
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            cd ios
+            rm -rf Pods build
+            git status
+            gem install cocoapods --no-document -v 1.14.3
+            asdf reshim ruby
+            RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+        title: pod install --repo-update
+    - cocoapods-install@2:
+        run_if: false
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.qa file
+            echo "Creating .env.qa file"
+            cat > ./.env.qa <<EOL
+            API_URL=${API_URL_QA}
+            ENV=${ENV_QA}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_QA}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.qa
+        title: Create .env file
+    - xcode-archive@5.1:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME_QA"
+        - configuration: Release
+        - distribution_method: app-store
+        - export_development_team: 8RHKE85KB6
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_google_services_location: "./ios/GoogleServices/qa/GoogleService-Info.plist"
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - password: "$BEN_APPLE_ID_PASS"
+        - itunescon_user: "$BEN_APPLE_ID"
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: iOS Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: iOS Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - message_on_error:
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_QA: https://api-dr.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_QA: QA
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME_QA: MindloggerMobileQA
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_QA: 357638792F423F4528482B4D62516554
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dr.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+    - ONEUP_HEALTH_CLIENT_ID: 4c73a30e83d8d8c89de04b0f30b06916
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+  staging_android:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # The provided tag
+            provided_tag=$BITRISE_GIT_TAG
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Description: Get a list of all tags containing "-rc"
+            tags=$(git tag -l "20*-rc*")
+
+            # Description: Remove "-rc" and any characters after it from each tag, then sort and remove duplicates
+            tags_without_rc=$(echo "$tags" | sed 's/-rc[0-9]*//g' | sort -u)
+
+            # Description: Process the provided tag to remove "-rc" and any characters after it
+            provided_tag_without_rc=$(echo "$provided_tag" | sed 's/-rc[0-9]*//g')
+
+            # Description: Find the previous tags
+            previous_tags=$(echo "$tags_without_rc" | awk -v provided_tag="$provided_tag_without_rc" '$0 < provided_tag {max=max>$0?max:$0} END {print max}')
+
+            # Description: Find the last tag containing the previous tag number
+            previous_tag=$(echo "$tags" | grep -F "$previous_tags" | tail -n 1)
+
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value $task_urls
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+        title: Collect task numbers
+    - cache-pull@2: {}
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.staging file
+            echo "Creating .env.staging file"
+            cat > ./.env.staging <<EOL
+            API_URL=${API_URL_STAGING}
+            ENV=${ENV_STAGING}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_STAGING}
+            MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            EOL
+            cat ./.env.staging
+        title: Create .env file
+    - file-downloader@1:
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 21.4.7075529
+    - gradle-runner@2:
+        inputs:
+        - cache_level: none
+        - apk_file_include_filter: "*.aab"
+        - gradle_task: "$GRADLE_TASK_STAGING"
+    - sign-apk@1:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME_STAGING"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        is_always_run: true
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: Android Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: Android Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_STAGING: https://api-stage.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_STAGING: STAGING
+    - opts:
+        is_expand: false
+      GRADLE_TASK_STAGING: bundleStagingRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME_STAGING: lab.childmindinstitute.data.staging
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_STAGING: '"34743777397A24432646294A404E6352"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-stage.cmiml.net
+    meta:
+      bitrise.io:
+        stack: osx-xcode-15.2.x
+        machine_type_id: g2-m1.4core
+  staging_ios:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # The provided tag
+            provided_tag=$BITRISE_GIT_TAG
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Description: Get a list of all tags containing "-rc"
+            tags=$(git tag -l "20*-rc*")
+
+            # Description: Remove "-rc" and any characters after it from each tag, then sort and remove duplicates
+            tags_without_rc=$(echo "$tags" | sed 's/-rc[0-9]*//g' | sort -u)
+
+            # Description: Process the provided tag to remove "-rc" and any characters after it
+            provided_tag_without_rc=$(echo "$provided_tag" | sed 's/-rc[0-9]*//g')
+
+            # Description: Find the previous tags
+            previous_tags=$(echo "$tags_without_rc" | awk -v provided_tag="$provided_tag_without_rc" '$0 < provided_tag {max=max>$0?max:$0} END {print max}')
+
+            # Description: Find the last tag containing the previous tag number
+            previous_tag=$(echo "$tags" | grep -F "$previous_tags" | tail -n 1)
+
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value $task_urls
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+        title: Collect task numbers
+    - certificate-and-profile-installer@1: {}
+    - cache-pull@2: {}
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        title: pod install --repo-update
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            cd ios
+            rm -rf Pods build
+            git status
+            gem install cocoapods --no-document -v 1.14.3
+            asdf reshim ruby
+            RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+    - cocoapods-install@2:
+        run_if: false
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.staging file
+            echo "Creating .env.staging file"
+            cat > ./.env.staging <<EOL
+            API_URL=${API_URL_STAGING}
+            ENV=${ENV_STAGING}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_STAGING}
+            MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            EOL
+            cat ./.env.staging
+        title: Create .env file
+    - xcode-archive@5.1:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME_STAGING"
+        - configuration: Release
+        - distribution_method: app-store
+        - export_development_team: 8RHKE85KB6
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_google_services_location: "./ios/GoogleServices/staging/GoogleService-Info.plist"
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - password: "$BEN_APPLE_ID_PASS"
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - itunescon_user: "$BEN_APPLE_ID"
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: iOS Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: iOS Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_STAGING: https://api-stage.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_STAGING: STAGING
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME_STAGING: MindloggerMobileStaging
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_STAGING: 34743777397A24432646294A404E6352
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-stage.cmiml.net
+    meta:
+      bitrise.io:
+        stack: osx-xcode-15.2.x
+        machine_type_id: g2-m1.4core
+  start_dev:
+    steps:
+    - build-router-start@0:
+        inputs:
+        - workflows: |-
+            dev_ios
+            dev_android
+        - access_token: "$ACCESS_TOKEN"
+  start_prod:
+    steps:
+    - build-router-start@0:
+        inputs:
+        - workflows: |-
+            prod_ios
+            prod_android
+        - access_token: "$ACCESS_TOKEN"
+  start_qa:
+    steps:
+    - build-router-start@0:
+        inputs:
+        - workflows: |-
+            qa_ios
+            qa_android
+        - access_token: "$ACCESS_TOKEN"
+  start_qa_dr:
+    steps:
+    - build-router-start@0:
+        inputs:
+        - workflows: |-
+            qa_ios_dr
+            qa_android_dr
+        - access_token: "$ACCESS_TOKEN"
+  start_staging:
+    steps:
+    - build-router-start@0:
+        inputs:
+        - workflows: |-
+            staging_ios
+            staging_android
+        - access_token: "$ACCESS_TOKEN"
+    meta:
+      bitrise.io:
+        stack: osx-xcode-15.2.x
+        machine_type_id: g2-m1.4core
+  start_uat:
+    steps:
+    - build-router-start@0:
+        inputs:
+        - workflows: |-
+            uat_ios
+            uat_android
+        - access_token: "$ACCESS_TOKEN"
+  test:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - clone_depth: "-1"
+        - fetch_tags: 'yes'
+    - script@1:
+        inputs:
+        - is_debug: 'yes'
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            #set -e
+            # make pipelines' return status equal the last command to exit with a non-zero #status, or zero if all commands exit successfully
+            #set -o pipefail
+            # debug log
+            #set -x
+            #pwd
+            #cat /Users/vagrant/.tool-versions
+            #asdf local nodejs 16.19.1
+            #yarn "--version"
+            #git log -n1  HEAD qa
+            #git show -s --format=%s
+
+
+            #tags=$(git tag -l "*-rc*" | sort -V)
+            #tags=$(git tag -l | grep -v "\-rc" | sort -V)
+
+
+            # Get the last and second last release candidate tags
+            #last_tag=$(echo "$tags" | tail -n 1)
+            #last_tag=$BITRISE_GIT_TAG
+
+            #second_last_tag=$(git describe --abbrev=0 --tags "$last_tag"^)
+            #second_last_tag=$(echo "$tags" | tail -n 2 | head -n 1)
+
+            # Construct the URL for the release page corresponding to the last tag in the repository
+            #release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$last_tag"
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            #commit_list=$(git log --pretty=format:%s "$second_last_tag".."$last_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            #task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort | uniq)
+
+            # Initialize variable to store task URLs
+            #task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            #while read -r task_number; do
+             #   task_urls+="https://mindlogger.atlassian.net/browse/$task_number"$'\n'
+            #done <<< "$task_numbers"
+
+            # Add Jira task URLs to Bitrise environment variable
+            #envman add --key JIRA_TASKS_NUMBERS --value "$task_urls"
+            #envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+        is_always_run: true
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            #set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            #set -o pipefail
+            # Enable debug log
+            #set -x
+
+            # The provided tag
+            #provided_tag=$BITRISE_GIT_TAG
+
+            # Construct the URL for the release page corresponding to the provided tag
+            #release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Description: Get a list of all tags containing "-rc"
+            #tags=$(git tag -l "*-rc*")
+
+            # Description: Remove "-rc" and any characters after it from each tag, then sort and remove duplicates
+            #tags_without_rc=$(echo "$tags" | sed 's/-rc[0-9]*//g' | sort -u)
+
+            # Description: Process the provided tag to remove "-rc" and any characters after it
+            #provided_tag_without_rc=$(echo "$provided_tag" | sed 's/-rc[0-9]*//g')
+
+            # Description: Find the previous tags
+            #previous_tags=$(echo "$tags_without_rc" | awk -v #provided_tag="$provided_tag_without_rc" '$0 < provided_tag {max=max>$0?max:$0} END {print max}')
+
+            # Description: Find the last tag containing the previous tag number
+            #previous_tag=$(echo "$tags" | grep -F "$previous_tags" | tail -n 1)
+
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            #commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            #task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort | uniq)
+
+            # Initialize variable to store task URLs
+            #task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            #while read -r task_number; do
+            #    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+            #done <<< "$task_numbers"
+
+
+            # Add Jira task URLs to Bitrise environment variable
+            #envman add --key JIRA_TASKS_NUMBERS --value $task_urls
+            #envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+        title: stage/prod
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |+
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # Retrieve release candidate tags and sort them
+            tags=$(git tag -l "*-rc*" | sort -V)
+
+            # Get the provided tag from environment variable
+            provided_tag="$BITRISE_GIT_TAG"
+
+            # Get the previous release candidate tag
+            previous_tag=$(echo "$tags" | tail -n 2 | head -n 1)
+
+            # Check if previous_tag is the same as provided_tag
+            if [ "$previous_tag" = "$provided_tag" ]; then
+                # If they are the same, get the tag before previous_tag
+                previous_tag=$(echo "$tags" | tail -n 3 | head -n 1)
+            fi
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value "$task_urls"
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+
+        title: qa/uat
+    - slack@4:
+        inputs:
+        - channel: "#test-devops-notifications"
+        - from_username: Bitrise Mobile Builder
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - channel_on_error: "#test-devops-notifications"
+        - message:
+        - title:
+        - author_name:
+        - webhook_url: "$TEST_SLACK_WEBHOOK"
+    - script@1:
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any commands fail
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Debug log
+            set -x
+
+            # Extract version information
+            versionCode=$(grep 'versionCode' android/app/build.gradle | awk '{print $2}')
+            versionName=$(grep 'versionName' android/app/build.gradle | awk -F '"' '{print $2}')
+
+            echo "Version Code: $versionCode"
+            echo "Version Name: $versionName"
+
+            # Example task_numbers variable
+
+            # Check if TASKS_NUMBERS is set and not empty
+            if [[ -n "$TASKS_NUMBERS" ]]; then
+                # Loop through each task number and execute a command (e.g., curl)
+                while IFS= read -r task_number; do
+                    echo "$task_number" # Example placeholder command
+                done <<< "$TASKS_NUMBERS"
+            else
+                echo "No task numbers provided. Exiting script successfully."
+            fi
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_QA: https://api-test.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_QA: QA
+    - opts:
+        is_expand: false
+      GRADLE_TASK_QA: bundleQaRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME_QA: lab.childmindinstitute.data.qa
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_QA: '"357638792F423F4528482B4D62516554"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-test.cmiml.net
+  uat_android:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - bundle::GetVersion: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # Retrieve release candidate tags and sort them
+            tags=$(git tag -l "20*-rc*" | sort -V)
+
+            # Get the provided tag from environment variable
+            provided_tag="$BITRISE_GIT_TAG"
+
+            # Get the previous release candidate tag
+            previous_tag=$(echo "$tags" | tail -n 2 | head -n 1)
+
+            # Check if previous_tag is the same as provided_tag
+            if [ "$previous_tag" = "$provided_tag" ]; then
+                # If they are the same, get the tag before previous_tag
+                previous_tag=$(echo "$tags" | tail -n 3 | head -n 1)
+            fi
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value "$task_urls"
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+        title: Collect task numbers
+    - cache-pull@2: {}
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.uat file
+            echo "Creating .env.uat file"
+            cat > ./.env.uat <<EOL
+            API_URL=${API_URL_UAT}
+            ENV=${ENV_UAT}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_UAT}
+            MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.uat
+        title: Create .env file
+    - file-downloader@1:
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 27.3.13750724
+    - change-android-versioncode-and-versionname@1:
+        inputs:
+        - new_version_name: "$APP_VERSION"
+        - build_gradle_path: android/app/build.gradle
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sed -i.bak "s/\"version\": *\"[^\"]*\"/\"version\": \"${FULL_APP_VERSION}\"/" package.json
+        title: Update package.json version
+    - gradle-runner@2:
+        inputs:
+        - cache_level: none
+        - apk_file_include_filter: "*.aab"
+        - gradle_task: "$GRADLE_TASK_UAT"
+        title: Gradle Build
+    - sign-apk@1:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - bitrise-step-export-universal-apk@0: {}
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME_UAT"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        is_always_run: true
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: Android Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: Android Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    - script@1:
+        title: Add comment in Jira
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any commands fail
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Debug log
+            set -x
+
+            # Extract version information
+            versionCode=$(grep 'versionCode' android/app/build.gradle | awk '{print $2}')
+            versionName=$(grep 'versionName' android/app/build.gradle | awk -F '"' '{print $2}')
+
+            echo "Version Code: $versionCode"
+            echo "Version Name: $versionName"
+
+            # Check if task_numbers is set and not empty
+            if [[ -n "$TASKS_NUMBERS" ]]; then
+                # Loop through each task number and execute curl command
+                while IFS= read -r task_number; do
+                    curl -s -u "mbarsukou@scnsoft.com:$JIRA_PAT_TOKEN" \
+                         -X POST \
+                         --data "{\"body\": \"ENV: Uat\nPlatform: Android\nVersion: $versionName ($versionCode)\nTag: $BITRISE_GIT_TAG\nBranch: $BITRISE_GIT_BRANCH\"}" \
+                         -H "Content-Type: application/json" \
+                         "https://mindlogger.atlassian.net/rest/api/2/issue/$task_number/comment"
+                done <<< "$TASKS_NUMBERS"
+            else
+                echo "No task numbers provided. Exiting script successfully."
+            fi
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_UAT: https://api-uat.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_UAT: UAT
+    - opts:
+        is_expand: false
+      GRADLE_TASK_UAT: bundleUatRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME_UAT: lab.childmindinstitute.data.uat
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_UAT: '"n3RPI1uqMo8e5dHKqZByprLkRTVTEnDI"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      MIXPANEL_TOKEN: 1522a3b50923c22c1cd82f058b5f3df9
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-uat.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+    - ONEUP_HEALTH_CLIENT_ID: cc8cd0d3b40a38f1bcf0c8d5dc719d1a
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+  uat_ios:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8.2:
+        inputs:
+        - sparse_directories:
+        - fetch_tags: 'yes'
+        - clone_depth: "-1"
+    - bundle::GetVersion: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # Retrieve release candidate tags and sort them
+            tags=$(git tag -l "20*-rc*" | sort -V)
+
+            # Get the provided tag from environment variable
+            provided_tag="$BITRISE_GIT_TAG"
+
+            # Get the previous release candidate tag
+            previous_tag=$(echo "$tags" | tail -n 2 | head -n 1)
+
+            # Check if previous_tag is the same as provided_tag
+            if [ "$previous_tag" = "$provided_tag" ]; then
+                # If they are the same, get the tag before previous_tag
+                previous_tag=$(echo "$tags" | tail -n 3 | head -n 1)
+            fi
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --pretty=format:%s "$previous_tag".."$provided_tag" --reverse)
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value "$task_urls"
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+        title: Collect task numbers
+    - certificate-and-profile-installer@1: {}
+    - cache-pull@2: {}
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - workdir: "$WORKDIR"
+        - command: install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            cd ios
+            rm -rf Pods build
+            git status
+            gem install cocoapods --no-document -v 1.14.3
+            asdf reshim ruby
+            RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+        - is_debug: 'yes'
+        title: pod install --repo-update
+    - cocoapods-install@2:
+        run_if: false
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            #Create env.uat file
+            echo "Creating .env.uat file"
+            cat > ./.env.uat <<EOL
+            API_URL=${API_URL_UAT}
+            ENV=${ENV_UAT}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY_UAT}
+            MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            EOL
+            cat ./.env.uat
+        title: Create .env file
+    - set-xcode-build-number@2:
+        inputs:
+        - project_path: ios/MindloggerMobile.xcodeproj
+        - build_short_version_string: "$APP_VERSION"
+        - scheme: "$BITRISE_SCHEME_UAT"
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sed -i.bak "s/\"version\": *\"[^\"]*\"/\"version\": \"${FULL_APP_VERSION}\"/" package.json
+        title: Update package.json version
+    - xcode-archive@5.1:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME_UAT"
+        - configuration: Release
+        - distribution_method: app-store
+        - export_development_team: 8RHKE85KB6
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: true
+    - cache-push@2: {}
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_google_services_location: "./ios/GoogleServices/uat/GoogleService-Info.plist"
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+    - deploy-to-itunesconnect-application-loader@1:
+        inputs:
+        - password: "$BEN_APPLE_ID_PASS"
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - itunescon_user: "$BEN_APPLE_ID"
+    - slack@4.1:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: iOS Build Succeeded!*"
+        - channel_on_error: "#mindlogger-app-refactor"
+        - pretext_on_error: "*:broken_heart: iOS Build Failed!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash
+
+            # fail if any commands fails
+
+            set -e
+
+            # make pipelines' return status equal the last command to exit with
+            a non-zero status, or zero if all commands exit successfully
+
+            set -o pipefail
+
+            # debug log
+
+            set -x
+
+
+            BITRISE_API_TOKEN=\"${ACCESS_TOKEN}\"
+
+            APP_SLUG=\"${BITRISE_APP_SLUG}\"
+
+            BITRISE_API_BASE_URL=\"https://api.bitrise.io/v0.1\"
+
+            BASE_URL=\"${BITRISE_API_BASE_URL}/apps/${APP_SLUG}/builds\"
+
+            WORKFLOW_NAME=\"uat_ios\"
+
+
+            # Function to fetch the list of builds and get the second to last
+            build slug
+
+            fetch_previous_build_slug() {
+
+            \  local
+            URL=\"${BASE_URL}?workflow=${WORKFLOW_NAME}&limit=1&status=1\"
+
+            \  curl -s -H \"Authorization: token ${BITRISE_API_TOKEN}\"
+            \"${URL}\" | jq -r '.data[0].slug'
+
+            }
+
+
+            # Download the 'last_commit.txt' file and extract the commit hash
+
+            extract_commit_hash() {
+
+            \  local build_slug=$1
+
+            \  local ARTIFACTS_BASE_URL=\"${BASE_URL}/${build_slug}/artifacts\"
+
+            \  local artifact_slug
+
+            \  artifact_slug=$(curl -s -H \"Authorization: token
+            ${BITRISE_API_TOKEN}\" \"${ARTIFACTS_BASE_URL}\" | jq -r '.data[] |
+            select(.title == \"last_commit.txt\") | .slug')
+
+
+            \  if [ -z \"${artifact_slug}\" ]; then
+
+            \    echo \"\"
+
+            \  else
+
+            \    local ARTIFACT_URL=\"${ARTIFACTS_BASE_URL}/${artifact_slug}\"
+
+            \    local download_url
+
+            \    download_url=$(curl -s -H \"Authorization: token
+            ${BITRISE_API_TOKEN}\" \"${ARTIFACT_URL}\" | jq -r
+            '.data.expiring_download_url')
+
+            \    curl -L \"${download_url}\" -o last_last_commit.txt
+
+
+            \    # Read the commit hash into a variable
+
+            \    cat last_last_commit.txt
+
+            \  fi
+
+            }
+
+
+            if [ -z \"${BITRISE_GIT_COMMIT}\" ]; then
+
+            \  BITRISE_GIT_COMMIT=$(git log -1 --format=%H)
+
+            fi
+
+
+            # Save the current commit hash to a file for future reference
+
+            echo \"${BITRISE_GIT_COMMIT}\" > last_commit.txt
+
+
+            # Main script execution
+
+            previous_build_slug=$(fetch_previous_build_slug)
+
+
+            if [ -z \"${previous_build_slug}\" ]; then
+
+            \    echo \"Previous build slug not found.\"
+
+            else
+
+            \    previous_commit_hash=$(extract_commit_hash
+            \"${previous_build_slug}\")
+
+            \    if [ -z \"${previous_commit_hash}\" ]; then
+
+            \        echo \"Previous commit hash not found. Using only the
+            current commit hash.\"
+
+            \        tickets=$(git log -1 --pretty=%B | grep -io 'M2-[0-9]\\+' |
+            tr '[:lower:]' '[:upper:]' | sort | uniq | tr '\\n' ' ') || true
+
+            \    else
+
+            \        echo \"Previous commit hash: ${previous_commit_hash}\"
+
+            \        tickets=$(git log --pretty=%B
+            \"${previous_commit_hash}..${BITRISE_GIT_COMMIT}\" | grep -io
+            'M2-[0-9]\\+' | tr '[:lower:]' '[:upper:]' | sort | uniq | tr '\\n'
+            ' ') || true
+
+            \    fi
+
+            \   \ 
+
+            \    if [ -z \"${tickets}\" ]; then
+
+            \        echo \"No JIRA tickets found in the commit messages.\"
+
+            \    else
+
+            \        echo \"JIRA tickets: ${tickets}\"
+
+            \        echo \"{ \\\"issues\\\": $(echo \"${tickets}\" | jq -R -s
+            -c 'split(\" \")[:-1]'), \\\"data\\\": { \\\"tag\\\":
+            \\\"${BITRISE_GIT_TAG}\\\", \\\"repository\\\":
+            \\\"${GIT_REPOSITORY_URL%.git}\\\" } }\" > jira-tickets.json
+
+            \        curl -X POST -H 'Content-Type: application/json' -H
+            \"X-Automation-Webhook-Token: ${JIRA_WEBHOOK_SECRET}\" -d
+            @./jira-tickets.json \"${JIRA_WEBHOOK_URL}\"
+
+            \    fi
+
+            fi\n"
+        title: Move Jira Tickets
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: last_commit.txt
+        title: Save last_commit.txt
+    - script@1:
+        title: Add comment in Jira
+        inputs:
+        - script_file_path:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any commands fail
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Debug log
+            set -x
+
+            # Extract version information
+            versionCode=$(grep 'versionCode' android/app/build.gradle | awk '{print $2}')
+            versionName=$(grep 'versionName' android/app/build.gradle | awk -F '"' '{print $2}')
+
+            echo "Version Code: $versionCode"
+            echo "Version Name: $versionName"
+
+            # Check if task_numbers is set and not empty
+            if [[ -n "$TASKS_NUMBERS" ]]; then
+                # Loop through each task number and execute curl command
+                while IFS= read -r task_number; do
+                    curl -s -u "mbarsukou@scnsoft.com:$JIRA_PAT_TOKEN" \
+                         -X POST \
+                         --data "{\"body\": \"ENV: Uat\nPlatform: iOS\nVersion: $versionName ($versionCode)\nTag: $BITRISE_GIT_TAG\nBranch: $BITRISE_GIT_BRANCH\"}" \
+                         -H "Content-Type: application/json" \
+                         "https://mindlogger.atlassian.net/rest/api/2/issue/$task_number/comment"
+                done <<< "$TASKS_NUMBERS"
+            else
+                echo "No task numbers provided. Exiting script successfully."
+            fi
+    envs:
+    - opts:
+        is_expand: false
+      API_URL_UAT: https://api-uat.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_UAT: UAT
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME_UAT: MindloggerMobileUAT
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY_UAT: 34743777397A24432646294A404E6352
+    - opts:
+        is_expand: false
+      MIXPANEL_TOKEN: 1522a3b50923c22c1cd82f058b5f3df9
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-uat.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+    - ONEUP_HEALTH_CLIENT_ID: cc8cd0d3b40a38f1bcf0c8d5dc719d1a
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        stack: osx-xcode-16.2.x
+  dev_ios_v2:
+    steps:
+    - bundle::BuildiOS:
+    envs:
+    - API_URL: https://api-dev.cmiml.net
+      opts:
+        is_expand: false
+    - ENV_NAME: dev
+      opts:
+        is_expand: false
+    - XCODE_BUILD_SCHEME: MindloggerMobileDev
+      opts:
+        is_expand: false
+    - STORE_ENCRYPTION_KEY: 357638792F423F4528482B4D62516599
+      opts:
+        is_expand: false
+    - DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+      opts:
+        is_expand: false
+    - LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_CLIENT_ID: cd0453c848216420010eb5f0004f4cb9
+      opts:
+        is_expand: false
+    - APPLE_APP_ID: '1668138273'
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.0.x
+  dev_android_v2:
+    steps:
+    - bundle::BuildAndroid: {}
+    envs:
+    - API_URL: https://api-dev.cmiml.net
+      opts:
+        is_expand: false
+    - ENV_NAME: dev
+      opts:
+        is_expand: false
+    - GRADLE_TASK: bundleDevRelease
+      opts:
+        is_expand: false
+    - STORE_ENCRYPTION_KEY: '"n3RPI1uqMo8e5dHKqZByprLkRTVTEnDI"'
+      opts:
+        is_expand: false
+    - DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+      opts:
+        is_expand: false
+    - LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_CLIENT_ID: cd0453c848216420010eb5f0004f4cb9
+      opts:
+        is_expand: false
+    - GOOGLE_PLAY_TRACK_PACKAGE_NAME: lab.childmindinstitute.data.dev
+      opts:
+        is_expand: false
+    - GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+      opts:
+        is_expand: false
+    - JAVA_OPTS: "-Xmx2048m -Xms256m"
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.0.x
+  uat_ios_v2:
+    steps:
+    - bundle::BuildiOS:
+    envs:
+    - API_URL: https://api-uat.cmiml.net
+      opts:
+        is_expand: false
+    - ENV_NAME: uat
+      opts:
+        is_expand: false
+    - XCODE_BUILD_SCHEME: MindloggerMobileUAT
+      opts:
+        is_expand: false
+    - STORE_ENCRYPTION_KEY: 34743777397A24432646294A404E6352
+      opts:
+        is_expand: false
+    - DEEP_LINK_PREFIXES: https://web-uat.cmiml.net
+      opts:
+        is_expand: false
+    - LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_CLIENT_ID: cc8cd0d3b40a38f1bcf0c8d5dc719d1a
+      opts:
+        is_expand: false
+    - MIXPANEL_TOKEN: 1522a3b50923c22c1cd82f058b5f3df9
+      opts:
+        is_expand: false
+    - APPLE_APP_ID: '6463172446'
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.0.x
+  uat_android_v2:
+    steps:
+    - bundle::BuildAndroid: {}
+    envs:
+    - API_URL: https://api-uat.cmiml.net
+      opts:
+        is_expand: false
+    - ENV_NAME: uat
+      opts:
+        is_expand: false
+    - GRADLE_TASK: bundleUatRelease
+      opts:
+        is_expand: false
+    - STORE_ENCRYPTION_KEY: '"n3RPI1uqMo8e5dHKqZByprLkRTVTEnDI"'
+      opts:
+        is_expand: false
+    - DEEP_LINK_PREFIXES: https://web-uat.cmiml.net
+      opts:
+        is_expand: false
+    - LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_CLIENT_ID: cc8cd0d3b40a38f1bcf0c8d5dc719d1a
+      opts:
+        is_expand: false
+    - GOOGLE_PLAY_TRACK_PACKAGE_NAME: lab.childmindinstitute.data.uat
+      opts:
+        is_expand: false
+    - GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+      opts:
+        is_expand: false
+    - JAVA_OPTS: "-Xmx2048m -Xms256m"
+      opts:
+        is_expand: false
+    - MIXPANEL_TOKEN: 1522a3b50923c22c1cd82f058b5f3df9
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.0.x
+  prod_ios_v2:
+    steps:
+    - bundle::BuildiOS:
+    envs:
+    - API_URL: https://api-v2.mindlogger.org
+      opts:
+        is_expand: false
+    - ENV_NAME: production
+      opts:
+        is_expand: false
+    - XCODE_BUILD_SCHEME: MindloggerMobile
+      opts:
+        is_expand: false
+    - STORE_ENCRYPTION_KEY: 28F983671FD4934275A35E7D3DBAA
+      opts:
+        is_expand: false
+    - DEEP_LINK_PREFIXES: https://web.gettingcurious.com,https://web.mindlogger.org
+      opts:
+        is_expand: false
+    - LAUNCHDARKLY_MOBILE_KEY: mob-8875f0c6-4a73-4f61-99fa-c8450911a089
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_CLIENT_ID: be72bc9949cfc13ac1afe0540180c42f
+      opts:
+        is_expand: false
+    - MIXPANEL_TOKEN: 075d1512e69a60bfcd9f7352b21cc4a2
+      opts:
+        is_expand: false
+    - APPLE_APP_ID: '1299242097'
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.0.x
+  prod_android_v2:
+    steps:
+    - bundle::BuildAndroid: {}
+    envs:
+    - API_URL: https://api-v2.mindlogger.org
+      opts:
+        is_expand: false
+    - ENV_NAME: production
+      opts:
+        is_expand: false
+    - GRADLE_TASK: bundleProductionRelease
+      opts:
+        is_expand: false
+    - STORE_ENCRYPTION_KEY: '"28F983671FD4934275A35E7D3DBAA"'
+      opts:
+        is_expand: false
+    - DEEP_LINK_PREFIXES: https://web.gettingcurious.com,https://web.mindlogger.org
+      opts:
+        is_expand: false
+    - LAUNCHDARKLY_MOBILE_KEY: mob-8875f0c6-4a73-4f61-99fa-c8450911a089
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_CLIENT_ID: be72bc9949cfc13ac1afe0540180c42f
+      opts:
+        is_expand: false
+    - GOOGLE_PLAY_TRACK_PACKAGE_NAME: lab.childmindinstitute.data
+      opts:
+        is_expand: false
+    - GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+      opts:
+        is_expand: false
+    - JAVA_OPTS: "-Xmx2048m -Xms256m"
+      opts:
+        is_expand: false
+    - MIXPANEL_TOKEN: 075d1512e69a60bfcd9f7352b21cc4a2
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.0.x
+  qa_android_merit:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - bundle::BuildAndroidUnity: {}
+    envs:
+    - opts:
+        is_expand: false
+      API_URL: https://api-dev.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_NAME: QA
+    - opts:
+        is_expand: false
+      GRADLE_TASK: bundleQaRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME: lab.childmindinstitute.data.qa
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY: '"357638792F423F4528482B4D62516554"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+    - ONEUP_HEALTH_CLIENT_ID: 4c73a30e83d8d8c89de04b0f30b06916
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    - BUILD_WITH_UNITY: true
+      opts:
+        is_expand: false
+    - UNITY_HASH: 44b8bf3a3225
+      opts:
+        is_expand: false
+    - UNITY_VERSION: 6000.0.58f1
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.1.x
+  qa_ios_merit:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    envs:
+    - opts:
+        is_expand: false
+      API_URL: https://api-dev.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_NAME: QA
+    - opts:
+        is_expand: false
+      GRADLE_TASK: bundleQaRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME: lab.childmindinstitute.data.qa
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY: '"357638792F423F4528482B4D62516554"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-27edf1aa-03d6-4a98-a351-7b936543bdc2
+    - ONEUP_HEALTH_CLIENT_ID: 4c73a30e83d8d8c89de04b0f30b06916
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    - BUILD_WITH_UNITY: true
+      opts:
+        is_expand: false
+    - XCODE_BUILD_SCHEME: MindloggerMobileQA
+      opts:
+        is_expand: false
+    - APPLE_APP_ID: '1668135891'
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.1.x
+    steps:
+    - bundle::BuildIosUnity: {}
+  dev_ios_merit:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    envs:
+    - opts:
+        is_expand: false
+      API_URL: https://api-dev.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_NAME: dev
+    - opts:
+        is_expand: false
+      GRADLE_TASK: bundleDevRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME: lab.childmindinstitute.data.dev
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY: '"357638792F423F4528482B4D62516599"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+    - ONEUP_HEALTH_CLIENT_ID: cd0453c848216420010eb5f0004f4cb9
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    - BUILD_WITH_UNITY: true
+      opts:
+        is_expand: false
+    - XCODE_BUILD_SCHEME: MindloggerMobileDev
+      opts:
+        is_expand: false
+    - APPLE_APP_ID: '1668138273'
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.1.x
+    steps:
+    - bundle::BuildIosUnity: {}
+  dev_android_merit:
+    description: |
+      Tests, builds and deploys the app using *Deploy to bitrise.io* Step.
+
+      Next steps:
+      - Set up an [Apple service with API key](https://devcenter.bitrise.io/en/accounts/connecting-to-services/connecting-to-an-apple-service-with-api-key.html).
+      - Check out [Getting started with React Native apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-react-native-apps.html).
+    steps:
+    - bundle::BuildAndroidUnity: {}
+    envs:
+    - opts:
+        is_expand: false
+      API_URL: https://api-dev.cmiml.net
+    - opts:
+        is_expand: false
+      ENV_NAME: dev
+    - opts:
+        is_expand: false
+      GRADLE_TASK: bundleDevRelease
+    - opts:
+        is_expand: false
+      GOOGLE_PLAY_TRACK_PACKAGE_NAME: lab.childmindinstitute.data.dev
+    - opts:
+        is_expand: false
+      STORE_ENCRYPTION_KEY: '"357638792F423F4528482B4D62516599"'
+    - opts:
+        is_expand: false
+      GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      JAVA_OPTS: "-Xmx2048m -Xms256m"
+    - opts:
+        is_expand: false
+      DEEP_LINK_PREFIXES: https://web-dev.cmiml.net
+    - opts:
+        is_expand: false
+      LAUNCHDARKLY_MOBILE_KEY: mob-af5cb59e-be88-4887-8c60-9fe5ad5af23d
+    - ONEUP_HEALTH_CLIENT_ID: cd0453c848216420010eb5f0004f4cb9
+      opts:
+        is_expand: false
+    - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+      opts:
+        is_expand: false
+    - BUILD_WITH_UNITY: true
+      opts:
+        is_expand: false
+    - UNITY_HASH: 44b8bf3a3225
+      opts:
+        is_expand: false
+    - UNITY_VERSION: 6000.0.58f1
+      opts:
+        is_expand: false
+    meta:
+      bitrise.io:
+        machine_type_id: g2.mac.large
+        stack: osx-xcode-26.1.x
+meta:
+  bitrise.io:
+    stack: osx-xcode-15.2.x
+    machine_type_id: g2-m1.4core
+app:
+  envs:
+  - opts:
+      is_expand: false
+    WORKDIR: "."
+  - opts:
+      is_expand: false
+    PROJECT_LOCATION: android
+  - opts:
+      is_expand: false
+    MODULE: app
+  - opts:
+      is_expand: false
+    VARIANT: Debug
+  - opts:
+      is_expand: false
+    BITRISE_PROJECT_PATH: ios/MindloggerMobile.xcworkspace
+  - opts:
+      is_expand: false
+    BITRISE_SCHEME: MindloggerMobile
+  - opts:
+      is_expand: false
+    BITRISE_DISTRIBUTION_METHOD: development
+  - opts:
+      is_expand: false
+    GRADLEW_PATH: android/gradlew
+  - opts:
+      is_expand: false
+    GRADLE_BUILD_FILE_PATH: android/build.gradle
+  - ONEUP_HEALTH_SYSTEM_SEARCH_API_URL: https://system-search.1up.health/api
+    opts:
+      is_expand: false
+step_bundles:
+  GetVersion:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # Default version to today's date
+            VERSION=$(date +"%Y.%m.%d")
+
+            # When not triggered by a tag $BITRISE_GIT_TAG has some whitespace in it
+            TAG=$(echo "$BITRISE_GIT_TAG" | xargs | tr -s ' ')
+            echo "Current tag is '$TAG'"
+
+            if [ ! -z "${TAG}" ]; then
+                echo "Git tag is set, processing $BITRISE_GIT_TAG"
+                # Remove -rc#, not valid for submitting to app store
+                VERSION=$(echo "${TAG}" | sed 's/-rc[0-9]\{1,\}$//')
+            else
+                # If not triggered by a tag, use the default for the full version
+                TAG=${VERSION}
+            fi
+
+            echo "Setting APP_VERSION to $VERSION"
+            echo "Setting FULL_APP_VERSION to $TAG"
+
+            envman add --key APP_VERSION --value "$VERSION"
+            envman add --key FULL_APP_VERSION --value "$TAG"
+        title: Parse Version
+  BuildiOS:
+    steps:
+    - bundle::BuildStart:
+    - script@1:
+        inputs:
+        - content: |+
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # cd ios
+            # rm -rf Pods build
+            # git status
+            # gem install cocoapods --no-document -v 1.14.3
+            # asdf reshim ruby
+            # RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+
+            bundle install
+            yarn pods:install
+
+
+        title: Cocoa pod actual install
+    - set-xcode-build-number@2:
+        inputs:
+        - project_path: ios/MindloggerMobile.xcodeproj
+        - scheme: "$XCODE_BUILD_SCHEME"
+        - build_short_version_string: "$APP_VERSION"
+    - xcode-archive@5:
+        inputs:
+        - scheme: "$XCODE_BUILD_SCHEME"
+        - distribution_method: app-store
+        - configuration: Release
+        - export_development_team: 8RHKE85KB6
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-itunesconnect-application-loader@2:
+        inputs:
+        - itunescon_user: "$BEN_APPLE_ID"
+        - password: "$BEN_APPLE_ID_PASS"
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - app_id: "$APPLE_APP_ID"
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+        - fdu_google_services_location: "./ios/GoogleServices/uat/GoogleService-Info.plist"
+    - bundle::BuildEnd:
+    inputs:
+    - APP_TYPE: iOS
+  BuildStart:
+    steps:
+    - activate-ssh-key@4: {}
+    - git-clone@8: {}
+    - certificate-and-profile-installer@1: {}
+    - bundle::GetVersion: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            # Make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # Enable debug log
+            set -x
+
+            # Retrieve release candidate tags and sort them
+            tags=$(git tag -l "20*-rc*" | sort -V)
+
+            # Get the provided tag from environment variable
+            provided_tag="$BITRISE_GIT_TAG"
+
+            # Get the previous release candidate tag
+            previous_tag=$(echo "$tags" | tail -n 2 | head -n 1)
+
+            # Check if previous_tag is the same as provided_tag
+            if [ "$previous_tag" = "$provided_tag" ]; then
+                # If they are the same, get the tag before previous_tag
+                previous_tag=$(echo "$tags" | tail -n 3 | head -n 1)
+            fi
+
+            # Construct the URL for the release page corresponding to the provided tag
+            release_page_url="https://github.com/ChildMindInstitute/mindlogger-app-refactor/releases/tag/$provided_tag"
+
+            # Retrieve commit messages between the second last and last release candidate tags in reverse order
+            commit_list=$(git log --reverse --pretty=format:%s "$previous_tag".."$provided_tag")
+
+            # Extract task numbers from commit messages and remove duplicates
+            task_numbers=$(echo "$commit_list" | grep -oE 'M2-[0-9]+' | sort -u || echo "")
+
+            # Initialize variable to store task URLs
+            task_urls=""
+
+            # Iterate over each unique task number to construct Jira task URLs
+            if [ -z "$task_numbers" ]; then
+                task_urls="No task numbers"
+            else
+                # Iterate over each unique task number to construct Jira task URLs
+                while read -r task_number; do
+                    task_urls+="https://mindlogger.atlassian.net/browse/$task_number\n"
+                done <<< "$task_numbers"
+            fi
+
+            # Add Jira task URLs to Bitrise environment variable
+            envman add --key JIRA_TASKS_NUMBERS --value "$task_urls"
+            envman add --key GITHUB_RELEASE_PAGE_URL --value "$release_page_url"
+            envman add --key TASKS_NUMBERS --value "$task_numbers"
+        title: Collect task numbers
+        run_if: '{{enveq "BITRISE_GIT_TAG" "" | not}}'
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # ENV=$(echo "${ENV_NAME}" | tr '[:lower:]' '[:upper:]')
+
+            # Create env file
+            echo "Creating .env.${ENV_NAME} file"
+            cat > ./.env.${ENV_NAME} <<EOL
+            API_URL=${API_URL}
+            STORE_ENCRYPTION_KEY=${STORE_ENCRYPTION_KEY}
+            MIXPANEL_TOKEN=${MIXPANEL_TOKEN}
+            DEEP_LINK_PREFIXES=${DEEP_LINK_PREFIXES}
+            LAUNCHDARKLY_MOBILE_KEY=${LAUNCHDARKLY_MOBILE_KEY}
+            ONEUP_HEALTH_CLIENT_ID=${ONEUP_HEALTH_CLIENT_ID}
+            ONEUP_HEALTH_SYSTEM_SEARCH_API_URL=${ONEUP_HEALTH_SYSTEM_SEARCH_API_URL}
+            DATADOG_APPLICATION_ID=${DATADOG_APPLICATION_ID}
+            DATDOG_CLIENT_TOKEN=${DATDOG_CLIENT_TOKEN}
+            EOL
+            cat ./.env.${ENV_NAME}
+        title: Create .env
+    - restore-npm-cache@2:
+        run_if: ''
+    - nvm@1: {}
+    - yarn@0:
+        inputs:
+        - command: install
+        - workdir: "$WORKDIR"
+        title: yarn install
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            sed -i.bak "s/\"version\": *\"[^\"]*\"/\"version\": \"${FULL_APP_VERSION}\"/" package.json
+        title: Update package.json verison
+    summary: Beginning steps of all mobile builds
+  BuildEnd:
+    steps:
+    - deploy-to-bitrise-io@2: {}
+    - save-npm-cache@1: {}
+    - slack@4:
+        inputs:
+        - channel: "#mindlogger-app-refactor"
+        - from_username: Bitrise Mobile Builder
+        - pretext: "*:green_heart: $APP_TYPE Build Succeeded!*"
+        - fields: |-
+            App|${BITRISE_APP_TITLE}
+            Version|${FULL_APP_VERSION}
+            Branch|${BITRISE_GIT_BRANCH}
+            Tag|${BITRISE_GIT_TAG}
+            Workflow|${BITRISE_TRIGGERED_WORKFLOW_ID}
+            Task Numbers|${JIRA_TASKS_NUMBERS}
+        - buttons: |-
+            View App|${BITRISE_APP_URL}
+            View Workflow Build|${BITRISE_BUILD_URL}
+            Release Page|${GITHUB_RELEASE_PAGE_URL}
+        - webhook_url: "$BITRISE_SLACK_WEBHOOK"
+    summary: End steps of all mobile builds
+  BuildAndroid:
+    steps:
+    - bundle::BuildStart:
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - file-downloader@1:
+        inputs:
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            rm -rf node_modules
+            yarn
+            # yarn clean
+            # yarn pods:reinstall
+
+
+            echo "sdk.dir=/usr/local/share/android-sdk" > /Users/vagrant/git/android/local.properties
+        title: Set SDK path
+    - restore-gradle-cache@2: {}
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 27.3.13750724
+    - change-android-versioncode-and-versionname@1:
+        inputs:
+        - new_version_name: "$APP_VERSION"
+        - build_gradle_path: android/app/build.gradle
+    - gradle-runner@4:
+        inputs:
+        - gradle_task: "$GRADLE_TASK"
+        - build_root_directory: "./android"
+    - sign-apk@2:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - bitrise-step-export-universal-apk@0: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        - retry_without_sending_to_review: true
+    - save-gradle-cache@1: {}
+    - bundle::BuildEnd:
+    inputs:
+    - APP_TYPE: Android
+  UnityAndroidSetup:
+    steps:
+    - restore-cache@2:
+        inputs:
+        - key: unity-installers-{{ getenv "UNITY_HASH" }}
+        title: Restore Unity Installers Cache
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            if [[ "$BITRISE_CACHE_HIT" == "exact" ]]; then
+                echo "✅ Cache restored successfully!"
+            else
+                echo "⚠️ No cache hit. Unity will be redownloaded."
+                #workaround for .NET issue https://github.com/dotnet/runtime/issues/64103
+                # export COMPlus_ReadyToRun=0
+                # envman add --key COMPlus_ReadyToRun --value 0
+
+                mkdir -p install
+
+                # Find downloads at https://unity.com/releases/editor/archive
+
+                #download unity pkg for Apple Silicon
+                curl -o ./install/unity.pkg https://download.unity3d.com/download_unity/$UNITY_HASH/MacEditorInstallerArm64/Unity-$UNITY_VERSION.pkg
+
+                #download android support platform
+                curl -o ./install/android.pkg https://download.unity3d.com/download_unity/$UNITY_HASH/MacEditorTargetInstaller/UnitySetup-Android-Support-for-Editor-$UNITY_VERSION.pkg
+
+                # curl -o ./install/macos.pkg https://download.unity3d.com/download_unity/$UNITY_HASH/MacEditorTargetInstaller/UnitySetup-Mac-IL2CPP-Support-for-Editor-$UNITY_VERSION.pkg
+
+                #download iOS support platform
+                curl -o ./install/ios.pkg https://download.unity3d.com/download_unity/$UNITY_HASH/MacEditorTargetInstaller/UnitySetup-iOS-Support-for-Editor-$UNITY_VERSION.pkg
+            fi
+
+            # curl -o ./install/unity.pkg https://download.unity3d.com/download_unity/$UNITY_HASH/MacEditorInstallerArm64/Unity-$UNITY_VERSION.pkg
+            # curl -o ./install/ios.pkg https://download.unity3d.com/download_unity/$UNITY_HASH/MacEditorTargetInstaller/UnitySetup-iOS-Support-for-Editor-$UNITY_VERSION.pkg
+
+            # These commands are not documented
+            sudo -S installer -package ./install/unity.pkg -target / -verbose
+            # sudo -S installer -package ./install/macos.pkg -target / -verbose
+            # sudo -S installer -package ./install/ios.pkg -target / -verbose
+            sudo -S installer -package ./install/android.pkg -target / -verbose
+        title: Install Unity
+    - save-cache@1:
+        inputs:
+        - key: unity-installers-{{ getenv "UNITY_HASH" }}
+        - paths: "./install"
+        title: Save Unity Installers Cache
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # This came from the Bitrise documentation
+
+            /Applications/Unity/Unity.app/Contents/MacOS/Unity -logfile &
+            sleep 15
+            sudo killall Unity
+        title: Install Unity Pem files
+    - restore-s3-cache@0:
+        inputs:
+        - key: unity-merit-android
+        - aws_bucket: cmiml-bitrise
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            rm -rf unity/builds/android 2>/dev/null && mkdir -p unity/builds/android && mv Builds/android unity/builds/
+
+            ls unity/builds
+            ls unity/builds/android
+        title: Move artifact into position
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            yarn unity:prebuild
+            yarn clean
+            yarn unity:relink
+
+            echo "sdk.dir=/usr/local/share/android-sdk" > /Users/vagrant/git/android/local.properties
+        title: Unity prebuild script
+  UnityIosSetup:
+    steps:
+    - restore-s3-cache@0:
+        inputs:
+        - key: unity-merit-ios
+        - aws_bucket: cmiml-bitrise
+        run_if: ''
+    - script@1:
+        title: Move artifact into build
+        inputs:
+        - content: |+
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+
+            mkdir -p unity/builds/ios
+            # From Bitrise S3 cache
+            rm -rf unity/builds/ios 2>/dev/null && mkdir -p unity/builds/ios && mv Builds/unity-ios/Release-iphoneos/* unity/builds/ios/
+
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # rm -rf ios/Pods && rm -f ios/Podfile.lock
+            # yarn clean
+            # yarn pods:reinstall
+
+            # ls node_modules/@azesmway/react-native-unity/ios
+
+            yarn unity:prebuild
+            yarn clean
+            yarn unity:relink
+            # rm -rf ios/Pods && rm -f ios/Podfile.lock
+            # yarn pods:reinstall
+        title: Unity Prebuild script
+  BuildIosUnity:
+    steps:
+    - bundle::BuildStart:
+    - bundle::UnityIosSetup:
+        run_if: '{{getenv "BUILD_WITH_UNITY" | ne ""}}'
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # cd ios
+            # rm -rf Pods build
+            # git status
+            # gem install cocoapods --no-document -v 1.14.3
+            # asdf reshim ruby
+            # RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+
+            # rm -rf node_modules
+            # yarn install
+
+            bundle install
+
+            yarn pods:reinstall
+
+            ls node_modules/@azesmway/react-native-unity/ios
+
+            # xcodebuild archive -workspace ios/MindloggerMobile.xcworkspace -configuration Debug -scheme MindloggerMobileDev -archivePath ./MindloggerMobileDev.xcarchive -destination "generic/platform=iOS" | xcpretty
+        title: Cocoa pod actual install
+    - set-xcode-build-number@2:
+        inputs:
+        - project_path: ios/MindloggerMobile.xcodeproj
+        - scheme: "$XCODE_BUILD_SCHEME"
+        - build_short_version_string: "$APP_VERSION"
+    - xcode-archive@5:
+        inputs:
+        - scheme: "$XCODE_BUILD_SCHEME"
+        - distribution_method: app-store
+        - configuration: Release
+        - export_development_team: 8RHKE85KB6
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-itunesconnect-application-loader@2:
+        inputs:
+        - itunescon_user: "$BEN_APPLE_ID"
+        - password: "$BEN_APPLE_ID_PASS"
+        - app_password: "$BITRISE_APP_SPECIFIC_PASSWORD"
+        - app_id: "$APPLE_APP_ID"
+    - firebase-dsym-upload@2:
+        inputs:
+        - fdu_fabric_location: "./ios/Pods/FirebaseCrashlytics/upload-symbols"
+        - fdu_google_services_location: "./ios/GoogleServices/uat/GoogleService-Info.plist"
+    - bundle::BuildEnd:
+  BuildAndroidUnity:
+    steps:
+    - bundle::BuildStart:
+    - restore-gradle-cache@2: {}
+    - install-missing-android-tools@3:
+        inputs:
+        - ndk_version: 27.3.13750724
+    - change-android-versioncode-and-versionname@1:
+        inputs:
+        - new_version_name: "$APP_VERSION"
+        - build_gradle_path: android/app/build.gradle
+    - script@1:
+        inputs:
+        - content: |+
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # cd ios
+            # rm -rf Pods build
+            # git status
+            # gem install cocoapods --no-document -v 1.14.3
+            # asdf reshim ruby
+            # RCT_NEW_ARCH_ENABLED=0 pod _1.14.3_ install --repo-update
+
+            bundle install
+            yarn pods:install
+
+        title: Pods
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '17'
+    - file-downloader@1:
+        inputs:
+        - destination: "$BITRISE_SOURCE_DIR/android/app/mdc_app_key.keystore"
+        - source: "$BITRISEIO_ANDROID_KEYSTORE_URL"
+    - bundle::UnityAndroidSetup:
+        run_if: '{{getenv "BUILD_WITH_UNITY" | ne ""}}'
+    - gradle-runner@4:
+        inputs:
+        - gradle_task: "$GRADLE_TASK"
+        - build_root_directory: android
+    - sign-apk@2:
+        inputs:
+        - android_app: "$BITRISE_AAB_PATH"
+    - bitrise-step-export-universal-apk@0: {}
+    - google-play-deploy@3:
+        inputs:
+        - package_name: "$GOOGLE_PLAY_TRACK_PACKAGE_NAME"
+        - app_path: "$BITRISE_SIGNED_AAB_PATH|$BITRISE_SIGNED_APK_PATH"
+        - track: internal
+        - service_account_json_key_path: "$BITRISEIO_SERVICE_ACCOUNT_JSON_KEY_V2_URL"
+        - retry_without_sending_to_review: true
+    - save-gradle-cache@1: {}
+    - bundle::BuildEnd:
+pipelines:
+  start_dev:
+    workflows:
+      dev_android_v2: {}
+      dev_ios_v2: {}
+  start_uat:
+    workflows:
+      uat_ios_v2: {}
+      uat_android_v2: {}
+  start_prod:
+    workflows:
+      prod_ios_v2: {}
+      prod_android_v2: {}
+...
