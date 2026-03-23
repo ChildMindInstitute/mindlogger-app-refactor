@@ -8,7 +8,6 @@
     "build:android:dev": "echo $BUILD_WITH_UNITY",
     "build:ios:dev": "xcodebuild -workspace MindloggerMobile.xcworkspace -configuration Debug -scheme MindloggerMobileDev -destination id=00008110-000254A10E29401E",
     "clean": "npm-run-all clean:*",
-    "clean-ios": "yarn clean:ios",
     "clean:ios": "npm-run-all clean:ios:*",
     "clean:ios:build": "rimraf ./ios/build",
     "clean:ios:xcode": "cd ios && xcodebuild clean -workspace MindloggerMobile.xcworkspace -scheme MindloggerMobileDev && cd ..",
