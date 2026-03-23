@@ -3,6 +3,9 @@ import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 import * as mime from 'react-native-mime-types';
+import RNOrientationDirector, {
+  Orientation,
+} from 'react-native-orientation-director';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
@@ -160,6 +163,14 @@ export const UnityView: FC<Props> = props => {
     unityViewKey,
     unityViewKeyWas,
   ]);
+
+  // Unlock orientation when Unity view mounts, re-lock to portrait on unmount.
+  useEffect(() => {
+    RNOrientationDirector.unlock();
+    return () => {
+      RNOrientationDirector.lockTo(Orientation.portrait);
+    };
+  }, []);
 
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {
