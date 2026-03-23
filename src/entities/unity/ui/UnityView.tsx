@@ -1,4 +1,11 @@
-import { FC, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
@@ -9,10 +16,12 @@ import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 import { UnityResult } from '@entities/unity/lib/types/unityType.ts';
 import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 
+import { UnityErrorModal } from './UnityErrorModal';
 import {
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
@@ -23,7 +32,6 @@ import {
   UnityEventEndUnity,
   UnityEventUnityStarted,
 } from '../lib/types/unityMessage';
-import { UnityErrorModal } from './UnityErrorModal';
 
 type Props = {
   payload: UnityPipelineItem['payload'];
@@ -42,6 +50,7 @@ export const UnityView: FC<Props> = props => {
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const unityReadyHandled = useRef<boolean>(false);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
+  const [isUnityUnresponsive, setIsUnityUnresponsive] = useState(false);
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
   const unityPaths = useRef<Array<string>>([]);
@@ -50,6 +59,7 @@ export const UnityView: FC<Props> = props => {
 
   const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({
     sendMessageToUnity,
+    onFirstFailure: () => setIsUnityUnresponsive(true),
     onMaxFailuresReached: () => triggerFailureRef.current(),
   });
 
@@ -73,14 +83,18 @@ export const UnityView: FC<Props> = props => {
   logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
 
   const handleUnityReady = useCallback(async () => {
-    logger.log('[UnityView] handleUnityReady — sending LoadConfigFile immediately');
+    logger.log(
+      '[UnityView] handleUnityReady — sending LoadConfigFile immediately',
+    );
     sendMessageToUnity({
       m_sId: uuidv4(),
       m_sKey: 'LoadConfigFile',
       m_sAdditionalInfo: props.payload.file ?? undefined,
     })
       .then(resp => {
-        logger.log(`[UnityView] LoadConfigFile response: ${JSON.stringify(resp)}`);
+        logger.log(
+          `[UnityView] LoadConfigFile response: ${JSON.stringify(resp)}`,
+        );
       })
       .catch(err => {
         logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
@@ -206,6 +220,7 @@ export const UnityView: FC<Props> = props => {
               handleMessageFromUnity(result.nativeEvent.message);
             }}
           />
+          <Spinner withOverlay isVisible={isUnityUnresponsive} />
           <UnityErrorModal
             visible={showErrorModal}
             onDismiss={handleErrorModalDismiss}

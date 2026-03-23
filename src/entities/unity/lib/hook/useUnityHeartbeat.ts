@@ -3,24 +3,25 @@ import { useCallback, useRef } from 'react';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 
+import { newEchoMessage } from './useRNUnityCommBridge';
 import {
   HEARTBEAT_INTERVAL_MS,
   HEARTBEAT_TIMEOUT_MS,
   MAX_HEARTBEAT_FAILURES,
 } from '../constants';
-import { newEchoMessage } from './useRNUnityCommBridge';
 import { RN2UMessage, U2RNMessage } from '../types/unityMessage';
 
 type UseUnityHeartbeatOptions = {
   sendMessageToUnity: (message: RN2UMessage) => Promise<U2RNMessage | null>;
+  onFirstFailure?: () => void;
   onMaxFailuresReached?: () => void;
 };
-
 
 //Provides startHeartbeat and stopHeartbeat for periodic Echo monitoring of Unity bridge responsiveness.
 // Call startHeartbeat after Unity is ready; stopHeartbeat on unmount or activity end.
 export const useUnityHeartbeat = ({
   sendMessageToUnity,
+  onFirstFailure,
   onMaxFailuresReached,
 }: UseUnityHeartbeatOptions) => {
   const logger: ILogger = getDefaultLogger();
@@ -47,17 +48,18 @@ export const useUnityHeartbeat = ({
     const handleFailure = (reason: string) => {
       failureCountRef.current += 1;
       logger.warn(
-        `[UnityView] Heartbeat failure ${failureCountRef.current}/${MAX_HEARTBEAT_FAILURES}: ${reason}`,
+        `[Heartbeat] failure #${failureCountRef.current}/${MAX_HEARTBEAT_FAILURES}: ${reason}`,
       );
+
+      if (failureCountRef.current === 1) {
+        onFirstFailure?.();
+      }
 
       if (
         failureCountRef.current >= MAX_HEARTBEAT_FAILURES &&
         !firedRef.current
       ) {
         firedRef.current = true;
-        logger.warn(
-          '[UnityView] Max heartbeat failures reached — triggering error flow',
-        );
         stopHeartbeat();
         onMaxFailuresReached?.();
       }
@@ -66,11 +68,10 @@ export const useUnityHeartbeat = ({
     intervalRef.current = setInterval(() => {
       const echoPayload = `heartbeat-${Date.now()}`;
       const echoMsg = newEchoMessage(echoPayload);
+      logger.log('[Heartbeat] sending Echo tick');
 
       const timeoutId = setTimeout(() => {
-        handleFailure(
-          `Echo timed out after ${HEARTBEAT_TIMEOUT_MS}ms`,
-        );
+        handleFailure(`Echo timed out after ${HEARTBEAT_TIMEOUT_MS}ms`);
       }, HEARTBEAT_TIMEOUT_MS);
 
       sendMessageToUnity(echoMsg)
@@ -83,7 +84,13 @@ export const useUnityHeartbeat = ({
           handleFailure(`Echo send failed: ${err}`);
         });
     }, HEARTBEAT_INTERVAL_MS);
-  }, [logger, sendMessageToUnity, stopHeartbeat, onMaxFailuresReached]);
+  }, [
+    logger,
+    sendMessageToUnity,
+    stopHeartbeat,
+    onFirstFailure,
+    onMaxFailuresReached,
+  ]);
 
   return { startHeartbeat, stopHeartbeat };
 };

@@ -28,7 +28,7 @@ export const useUnityFailureHandler = ({
     errorHandledRef.current = true;
 
     const isFlow = !!flowId;
-    logger.warn(`[UnityView] Unity failure detected — isFlow=${isFlow}`);
+    logger.warn(`[FailureHandler] triggerFailure called, isFlow=${isFlow}`);
 
     stopHeartbeat();
     setShowErrorModal(true);
