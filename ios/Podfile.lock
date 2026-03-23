@@ -1535,6 +1535,30 @@ PODS:
     - React-Core
   - react-native-netinfo (11.5.2):
     - React-Core
+  - react-native-orientation-director (2.6.5):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-safe-area-context (5.7.0):
     - React-Core
   - react-native-skia (2.0.2):
@@ -2270,6 +2294,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-orientation-director (from `../node_modules/react-native-orientation-director`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-skia (from `../node_modules/@shopify/react-native-skia`)"
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
@@ -2463,6 +2488,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-mmkv"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-orientation-director:
+    :path: "../node_modules/react-native-orientation-director"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-skia:
@@ -2664,10 +2691,11 @@ SPEC CHECKSUMS:
   react-native-image-picker: 0dedb728321ef49f996619332e10603770434e5a
   react-native-mmkv: e97c0c79403fb94577e5d902ab1ebd42b0715b43
   react-native-netinfo: b72ba1bb4d9f51944311491120786aebf972d650
+  react-native-orientation-director: 6627919cbaccad44dcb904e5a07e586ea713d691
   react-native-safe-area-context: 37b720094bcaa36abcd593e08f2ad16507a94769
   react-native-skia: c80f1d06c9133aa084c979fa2c77ae3c11e45401
   react-native-tcp-socket: c9290d77fea17ee75bee93e599b604bae63166f0
-  react-native-unity: ac42fbcf438c845877ff88eea234b68631d4e58a
+  react-native-unity: 91a74c36d654fb7a7b8eff818435c28bdfdfcb24
   react-native-vector-icons-entypo: 9b3015a5b28f681c668cb3c4c7b4e18ddfac63a3
   react-native-vector-icons-feather: b669f5bc4981f53aaa25d0e0135ae9a7d5c1bbd5
   react-native-vector-icons-fontawesome6: 7464629872b702957385275b62cff2f6c28199cc
