@@ -75,7 +75,6 @@ const config = new DatadogProviderConfiguration(
   
 );
 
-console.log(`Initializing Datadog SDK with config: ${DATADOG_CLIENT_TOKEN} -- ${DATADOG_APPLICATION_ID} -- ${ENV}`)
 
 config.site = 'US1';
 config.service = 'mindlogger-mobile';

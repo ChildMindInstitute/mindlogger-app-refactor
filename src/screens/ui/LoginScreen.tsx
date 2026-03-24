@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import {FC, useEffect} from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Image } from 'react-native';
 
@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LoginForm } from '@app/features/login/ui/LoginForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
-import { IS_SMALL_HEIGHT_SCREEN } from '@app/shared/lib/constants';
+import {DATADOG_APPLICATION_ID, DATADOG_CLIENT_TOKEN, ENV, IS_SMALL_HEIGHT_SCREEN} from '@app/shared/lib/constants';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Link } from '@app/shared/ui/Link';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
@@ -31,6 +31,10 @@ export const LoginScreen: FC = () => {
   const onLoginSuccess = () => {
     navigate('Applets');
   };
+  
+  useEffect(() => {
+    console.info(`Initializing Datadog SDK with config: ${DATADOG_CLIENT_TOKEN} -- ${DATADOG_APPLICATION_ID} -- ${ENV}`)
+  })
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
