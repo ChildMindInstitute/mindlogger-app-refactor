@@ -23,6 +23,7 @@ import {
 } from '../lib/hook/useRNUnityCommBridge';
 import {
   UnityEventEndUnity,
+  UnityEventSetOrientation,
   UnityEventUnityStarted,
 } from '../lib/types/unityMessage';
 
@@ -164,13 +165,42 @@ export const UnityView: FC<Props> = props => {
     unityViewKeyWas,
   ]);
 
-  // Unlock orientation when Unity view mounts, re-lock to portrait on unmount.
+  // Handle orientation change requests from Unity, re-lock to portrait on unmount.
+  const handleSetOrientation =
+    useCallback<RNUnityCommBridgeUnityEventHandler>(
+      msg => {
+        if (msg.m_sKey === 'SetOrientation') {
+          const orientationValue = (
+            msg as { m_sAdditionalInfo: string }
+          ).m_sAdditionalInfo;
+          logger.log(
+            `[UnityView] Received SetOrientation: ${orientationValue}`,
+          );
+
+          const orientationMap: Record<string, Orientation> = {
+            Portrait: Orientation.portrait,
+            LandscapeLeft: Orientation.landscapeLeft,
+            LandscapeRight: Orientation.landscapeRight,
+          };
+
+          const orientation = orientationMap[orientationValue];
+          if (orientation !== undefined) {
+            RNOrientationDirector.lockTo(orientation);
+          } else {
+            logger.warn(
+              `[UnityView] Unknown orientation value: ${orientationValue}`,
+            );
+          }
+        }
+      },
+      [logger],
+    );
   useEffect(() => {
-    RNOrientationDirector.unlock();
+    registerEventHandler(UnityEventSetOrientation, handleSetOrientation);
     return () => {
       RNOrientationDirector.lockTo(Orientation.portrait);
     };
-  }, []);
+  }, [handleSetOrientation, registerEventHandler]);
 
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {
