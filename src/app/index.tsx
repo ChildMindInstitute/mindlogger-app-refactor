@@ -3,8 +3,10 @@ import { LogBox, StyleSheet } from 'react-native';
 import {
   BatchSize,
   DatadogProvider,
-  DatadogProviderConfiguration, PropagatorType,
-  SdkVerbosity, TrackingConsent,
+  DatadogProviderConfiguration,
+  PropagatorType,
+  SdkVerbosity,
+  TrackingConsent,
   UploadFrequency,
 } from '@datadog/mobile-react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
@@ -34,17 +36,14 @@ jobRunner.runAll([localization]).catch(console.error);
 
 getDefaultLogger().configure();
 
-
 const buildFirstPartyHosts = (firstPartyHosts: string[]) => {
   return firstPartyHosts.map(it => {
     return {
-      match: it, propagatorTypes: [
-        PropagatorType.DATADOG,
-        PropagatorType.TRACECONTEXT
-      ]
-    }
+      match: it,
+      propagatorTypes: [PropagatorType.DATADOG, PropagatorType.TRACECONTEXT],
+    };
   });
-}
+};
 
 const config = new DatadogProviderConfiguration(
   DATADOG_CLIENT_TOKEN,
@@ -65,17 +64,15 @@ const config = new DatadogProviderConfiguration(
         'api-dev.cmiml.net',
         'api-uat.cmiml.net',
         'api-prod.cmiml.net',
-      ])
+      ]),
     },
     logsConfiguration: {
       bundleLogsWithRum: true,
-      bundleLogsWithTraces: true
+      bundleLogsWithTraces: true,
     },
-    traceConfiguration: {}
-  }
-  
+    traceConfiguration: {},
+  },
 );
-
 
 config.site = 'US1';
 config.service = 'mindlogger-mobile';
