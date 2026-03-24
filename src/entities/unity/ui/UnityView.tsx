@@ -37,6 +37,7 @@ type Props = {
   payload: UnityPipelineItem['payload'];
   onResponse?: (response: UnityResult) => void;
   onError?: () => void;
+  nextActivityName?: string;
 };
 
 export const UnityView: FC<Props> = props => {
@@ -71,7 +72,6 @@ export const UnityView: FC<Props> = props => {
   } = useUnityFailureHandler({
     flowId,
     stopHeartbeat,
-    onResponse: props.onResponse,
     onError: props.onError,
   });
 
@@ -197,6 +197,8 @@ export const UnityView: FC<Props> = props => {
         <UnityErrorModal
           visible={showErrorModal}
           onDismiss={handleErrorModalDismiss}
+          isFlow={!!flowId}
+          nextActivityName={props.nextActivityName}
         />
       </>
     );
@@ -206,6 +208,8 @@ export const UnityView: FC<Props> = props => {
         <UnityErrorModal
           visible={showErrorModal}
           onDismiss={handleErrorModalDismiss}
+          isFlow={!!flowId}
+          nextActivityName={props.nextActivityName}
         />
       );
     } else {
@@ -224,6 +228,8 @@ export const UnityView: FC<Props> = props => {
           <UnityErrorModal
             visible={showErrorModal}
             onDismiss={handleErrorModalDismiss}
+            isFlow={!!flowId}
+            nextActivityName={props.nextActivityName}
           />
         </>
       );

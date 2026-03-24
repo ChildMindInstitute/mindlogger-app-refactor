@@ -11,9 +11,16 @@ import { Text } from '@app/shared/ui/Text';
 type Props = {
   visible: boolean;
   onDismiss: () => void;
+  isFlow?: boolean;
+  nextActivityName?: string;
 };
 
-export const UnityErrorModal: FC<Props> = ({ visible, onDismiss }) => {
+export const UnityErrorModal: FC<Props> = ({
+  visible,
+  onDismiss,
+  isFlow,
+  nextActivityName,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -25,12 +32,7 @@ export const UnityErrorModal: FC<Props> = ({ visible, onDismiss }) => {
     >
       <Box flex={1} bg="$on_surface_alpha30" ai="center" jc="center">
         <Center>
-          <Box
-            bg="$surface"
-            borderRadius={28}
-            mx={16}
-            overflow="hidden"
-          >
+          <Box bg="$surface" borderRadius={28} mx={16} overflow="hidden">
             {/* Title */}
             <Box pt={20} pl={32} pr={20} pb={16}>
               <Text fontSize={24} lineHeight={32} color="$on_surface">
@@ -40,14 +42,34 @@ export const UnityErrorModal: FC<Props> = ({ visible, onDismiss }) => {
 
             {/* Content */}
             <Box px={32} py={12}>
-              <Text
-                fontSize={16}
-                lineHeight={24}
-                letterSpacing={0.5}
-                color="$on_surface"
-              >
-                {t('unity:error_message')}
-              </Text>
+              {isFlow && nextActivityName ? (
+                <Text
+                  fontSize={16}
+                  lineHeight={24}
+                  letterSpacing={0.5}
+                  color="$on_surface"
+                >
+                  {t('unity:error_message_flow')}
+                  <Text
+                    fontSize={16}
+                    lineHeight={24}
+                    letterSpacing={0.15}
+                    fontWeight="700"
+                    color="$on_surface"
+                  >
+                    {nextActivityName}
+                  </Text>
+                </Text>
+              ) : (
+                <Text
+                  fontSize={16}
+                  lineHeight={24}
+                  letterSpacing={0.5}
+                  color="$on_surface"
+                >
+                  {t('unity:error_message')}
+                </Text>
+              )}
             </Box>
 
             {/* Actions */}

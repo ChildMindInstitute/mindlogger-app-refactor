@@ -44,6 +44,8 @@ type Props = {
   onFinish: (reason: 'regular' | 'idle') => void;
   flowId?: string;
   targetSubjectId: string | null;
+  nextActivityName?: string;
+  onSkipActivity?: () => void;
 };
 
 export function ActivityStepper({
@@ -53,6 +55,8 @@ export function ActivityStepper({
   onClose,
   onFinish,
   flowId,
+  nextActivityName,
+  onSkipActivity,
 }: Props) {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
@@ -324,8 +328,17 @@ export function ActivityStepper({
   };
 
   const handleUnityError = () => {
-    logger.warn('[ActivityStepper] Unity error — navigating back to activity list');
-    onClose('regular');
+    if (flowId && onSkipActivity) {
+      logger.warn(
+        '[ActivityStepper] Unity error in flow — skipping to next activity',
+      );
+      onSkipActivity();
+    } else {
+      logger.warn(
+        '[ActivityStepper] Unity error — navigating back to activity list',
+      );
+      onClose('regular');
+    }
   };
 
   if (!activityStorageRecord) {
@@ -434,6 +447,7 @@ export function ActivityStepper({
                           onContextChange={setContext}
                           context={activityStorageRecord?.context}
                           onUnityError={handleUnityError}
+                          nextActivityName={nextActivityName}
                         />
                       )}
                     </>

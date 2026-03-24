@@ -65,6 +65,7 @@ type Props = ActivityItemProps &
     onContextChange: (contextKey: string, contextValue: unknown) => void;
     context: Record<string, unknown>;
     onUnityError?: () => void;
+    nextActivityName?: string;
   };
 
 export function ActivityItem({
@@ -77,6 +78,7 @@ export function ActivityItem({
   onContextChange,
   context,
   onUnityError,
+  nextActivityName,
 }: Props) {
   const { appletId, activityId, flowId, targetSubjectId } = useContext(
     ActivityIdentityContext,
@@ -462,6 +464,7 @@ export function ActivityItem({
                 payload={pipelineItem.payload}
                 onResponse={handleUnityComplete}
                 onError={onUnityError}
+                nextActivityName={nextActivityName}
               />
             </Box>
           ),
@@ -479,6 +482,7 @@ export function ActivityItem({
     handleRadioChange,
     handleStabilityTrackerComplete,
     handleUnityComplete,
+    nextActivityName,
     onContextChange,
     onResponse,
     onUnityError,
