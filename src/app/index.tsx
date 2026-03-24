@@ -56,6 +56,7 @@ const config = new DatadogProviderConfiguration(
       sessionSampleRate: 100,
       trackInteractions: false,
       trackFrustrations: true,
+      trackResources: true,
       nativeCrashReportEnabled: true,
       longTaskThresholdMs: 100,
       firstPartyHosts: buildFirstPartyHosts([

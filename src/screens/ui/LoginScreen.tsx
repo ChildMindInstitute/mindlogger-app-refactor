@@ -31,10 +31,6 @@ export const LoginScreen: FC = () => {
   const onLoginSuccess = () => {
     navigate('Applets');
   };
-  
-  useEffect(() => {
-    console.info(`Initializing Datadog SDK with config: ${DATADOG_CLIENT_TOKEN} -- ${DATADOG_APPLICATION_ID} -- ${ENV}`)
-  })
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
