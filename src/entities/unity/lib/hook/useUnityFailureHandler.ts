@@ -8,11 +8,19 @@ type UseUnityFailureHandlerOptions = {
   onError?: () => void;
 };
 
+type UseUnityFailureHandlerResult = {
+  showErrorModal: boolean;
+  triggerFailure: () => void;
+  handleErrorModalDismiss: () => void;
+  resetFailureState: () => void;
+  suppressErrors: () => void;
+};
+
 export const useUnityFailureHandler = ({
   flowId,
   stopHeartbeat,
   onError,
-}: UseUnityFailureHandlerOptions) => {
+}: UseUnityFailureHandlerOptions): UseUnityFailureHandlerResult => {
   const logger = getDefaultLogger();
   const errorHandledRef = useRef<boolean>(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -45,6 +53,12 @@ export const useUnityFailureHandler = ({
     onError?.();
   }, [flowId, logger, onError]);
 
+  const resetFailureState = useCallback(() => {
+    logger.log('[UnityView] Resetting failure state for Unity retry');
+    errorHandledRef.current = false;
+    setShowErrorModal(false);
+  }, [logger]);
+
   // Call in the unmount cleanup to prevent post-teardown error handling.
   const suppressErrors = useCallback(() => {
     logger.log('[UnityView] Unmounting — suppressing future error handling');
@@ -55,6 +69,7 @@ export const useUnityFailureHandler = ({
     showErrorModal,
     triggerFailure,
     handleErrorModalDismiss,
+    resetFailureState,
     suppressErrors,
   };
 };

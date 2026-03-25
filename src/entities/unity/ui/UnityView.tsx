@@ -44,6 +44,8 @@ const unityRuntimeState = {
   quitInProcess: false,
 };
 
+type UnityFailureMode = 'unloaded' | 'quit';
+
 export const UnityView: FC<Props> = props => {
   const compiledWithRNUnityView = !!(
     UIManager as never as Record<string, unknown>
@@ -55,8 +57,11 @@ export const UnityView: FC<Props> = props => {
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const quitObservedInThisMountRef = useRef<boolean>(false);
   const unityReadyHandled = useRef<boolean>(false);
+  const restartInProgressRef = useRef<boolean>(false);
+  const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
   const [isUnityUnresponsive, setIsUnityUnresponsive] = useState(false);
+  const [failureMode, setFailureMode] = useState<UnityFailureMode>('quit');
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
   const unityPaths = useRef<Array<string>>([]);
@@ -69,16 +74,20 @@ export const UnityView: FC<Props> = props => {
     onMaxFailuresReached: () => triggerFailureRef.current(),
   });
 
+  const failureHandler: ReturnType<typeof useUnityFailureHandler> =
+    useUnityFailureHandler({
+      flowId,
+      stopHeartbeat,
+      onError: props.onError,
+    });
+
   const {
     showErrorModal,
     triggerFailure,
     handleErrorModalDismiss,
+    resetFailureState,
     suppressErrors,
-  } = useUnityFailureHandler({
-    flowId,
-    stopHeartbeat,
-    onError: props.onError,
-  });
+  } = failureHandler;
 
   // Keep the ref in sync so the heartbeat callback always calls the latest version
   useEffect(() => {
@@ -100,18 +109,45 @@ export const UnityView: FC<Props> = props => {
       logger.log(
         `[UnityView] LoadConfigFile response: ${JSON.stringify(resp)}`,
       );
+      setFailureMode('quit');
     } catch (err) {
       logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
       triggerFailure();
     }
   }, [props.payload.file, logger, sendMessageToUnity, triggerFailure]);
 
+  const handleRestartActivity = useCallback(() => {
+    logger.log('[UnityView] Restarting Unity activity — staged unmount');
+    restartInProgressRef.current = true;
+    stopHeartbeat();
+    (resetFailureState as () => void)();
+    setIsUnityUnresponsive(false);
+    setFailureMode('quit');
+    unityPaths.current = [];
+    unityReadyHandled.current = false;
+
+    // Step 1: fully remove RNUnityView from the tree
+    setUnityViewKey(null);
+
+    // Step 2: after a delay, remount with a fresh key so the native layer
+    // has time to tear down before the new view triggers Unity to boot again.
+    if (restartTimerRef.current) {
+      clearTimeout(restartTimerRef.current);
+    }
+    restartTimerRef.current = setTimeout(() => {
+      restartInProgressRef.current = false;
+      setUnityViewKey(uuidv4());
+    }, 1000);
+  }, [logger, resetFailureState, stopHeartbeat]);
+
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
+        restartInProgressRef.current = false;
         logger.log('[UnityView] Handling Unity ready event');
+        setIsUnityUnresponsive(false);
         await handleUnityReady();
         startHeartbeat();
       } else {
@@ -202,6 +238,9 @@ export const UnityView: FC<Props> = props => {
     return () => {
       suppressErrors();
       stopHeartbeat();
+      if (restartTimerRef.current) {
+        clearTimeout(restartTimerRef.current);
+      }
     };
   }, [stopHeartbeat, suppressErrors]);
 
@@ -215,6 +254,8 @@ export const UnityView: FC<Props> = props => {
         <UnityErrorModal
           visible={showErrorModal}
           onDismiss={handleErrorModalDismiss}
+          onRestart={handleRestartActivity}
+          canRestart={failureMode === 'unloaded'}
           isFlow={!!flowId}
           nextActivityName={props.nextActivityName}
         />
@@ -226,6 +267,8 @@ export const UnityView: FC<Props> = props => {
         <UnityErrorModal
           visible={showErrorModal}
           onDismiss={handleErrorModalDismiss}
+          onRestart={handleRestartActivity}
+          canRestart={failureMode === 'unloaded'}
           isFlow={!!flowId}
           nextActivityName={props.nextActivityName}
         />
@@ -240,6 +283,8 @@ export const UnityView: FC<Props> = props => {
           <UnityErrorModal
             visible={showErrorModal}
             onDismiss={handleErrorModalDismiss}
+            onRestart={handleRestartActivity}
+            canRestart={failureMode === 'unloaded'}
             isFlow={!!flowId}
             nextActivityName={props.nextActivityName}
           />
@@ -255,11 +300,17 @@ export const UnityView: FC<Props> = props => {
             style={{ flex: 1 }}
             onPlayerUnload={() => {
               logger.log('[UnityView] Native player unload received');
+              if (restartInProgressRef.current) {
+                logger.log('[UnityView] Ignoring stale unload during restart');
+                return;
+              }
+              setFailureMode('unloaded');
               setIsUnityUnresponsive(true);
             }}
             onPlayerQuit={() => {
               unityRuntimeState.quitInProcess = true;
               quitObservedInThisMountRef.current = true;
+              setFailureMode('quit');
               logger.warn(
                 '[UnityView] Native player quit received; showing spinner immediately and waiting for heartbeat failures before surfacing the alert',
               );
@@ -273,6 +324,8 @@ export const UnityView: FC<Props> = props => {
           <UnityErrorModal
             visible={showErrorModal}
             onDismiss={handleErrorModalDismiss}
+            onRestart={handleRestartActivity}
+            canRestart={failureMode === 'unloaded'}
             isFlow={!!flowId}
             nextActivityName={props.nextActivityName}
           />

@@ -571,6 +571,11 @@
     "error_title": "Unity Build Failed",
     "error_message": "The activity failed to load, please contact the author for assistance. The activity will now exit.",
     "error_message_flow": "The activity failed to load, please contact the author for assistance. You will be taken to the next activity in the flow: ",
-    "error_ok": "Okay"
+    "error_ok": "Okay",
+    "restart_title": "Unity Build Error",
+    "restart_message": "The activity has encountered a critical error and must exit. The data collected from this activity so far will be lost.\n\nYou can restart the activity to try again.",
+    "restart_primary": "Restart Activity",
+    "restart_secondary_solo": "Exit",
+    "restart_secondary_flow": "Continue to Next Activity"
   }
 }
