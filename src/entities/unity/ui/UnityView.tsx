@@ -40,6 +40,10 @@ type Props = {
   nextActivityName?: string;
 };
 
+const unityRuntimeState = {
+  quitInProcess: false,
+};
+
 export const UnityView: FC<Props> = props => {
   const compiledWithRNUnityView = !!(
     UIManager as never as Record<string, unknown>
@@ -49,6 +53,7 @@ export const UnityView: FC<Props> = props => {
   const { flowId } = useContext(ActivityIdentityContext);
 
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
+  const quitObservedInThisMountRef = useRef<boolean>(false);
   const unityReadyHandled = useRef<boolean>(false);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
   const [isUnityUnresponsive, setIsUnityUnresponsive] = useState(false);
@@ -86,20 +91,19 @@ export const UnityView: FC<Props> = props => {
     logger.log(
       '[UnityView] handleUnityReady — sending LoadConfigFile immediately',
     );
-    sendMessageToUnity({
-      m_sId: uuidv4(),
-      m_sKey: 'LoadConfigFile',
-      m_sAdditionalInfo: props.payload.file ?? undefined,
-    })
-      .then(resp => {
-        logger.log(
-          `[UnityView] LoadConfigFile response: ${JSON.stringify(resp)}`,
-        );
-      })
-      .catch(err => {
-        logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
-        triggerFailure();
+    try {
+      const resp = await sendMessageToUnity({
+        m_sId: uuidv4(),
+        m_sKey: 'LoadConfigFile',
+        m_sAdditionalInfo: props.payload.file ?? undefined,
       });
+      logger.log(
+        `[UnityView] LoadConfigFile response: ${JSON.stringify(resp)}`,
+      );
+    } catch (err) {
+      logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
+      triggerFailure();
+    }
   }, [props.payload.file, logger, sendMessageToUnity, triggerFailure]);
 
   // Register Unity ready handler via the `UnityStarted` event.
@@ -174,6 +178,20 @@ export const UnityView: FC<Props> = props => {
     registerEventHandler('DataExport', handleDataExport);
   }, [handleDataExport, registerEventHandler]);
 
+  useEffect(() => {
+    if (
+      unityRuntimeState.quitInProcess &&
+      !quitObservedInThisMountRef.current &&
+      unityViewKey
+    ) {
+      logger.warn(
+        '[UnityView] Unity runtime previously quit in this iOS process; not remounting native Unity and starting heartbeat probe while retry is evaluated',
+      );
+      setIsUnityUnresponsive(true);
+      startHeartbeat();
+    }
+  }, [logger, startHeartbeat, unityViewKey]);
+
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {
     // (Re)generate a new react key for the RN Unity view so it gets
@@ -185,7 +203,7 @@ export const UnityView: FC<Props> = props => {
       suppressErrors();
       stopHeartbeat();
     };
-  }, []);
+  }, [stopHeartbeat, suppressErrors]);
 
   if (!compiledWithRNUnityView) {
     // TODO: Render some dummy/placeholder UI to bypass the activity
@@ -212,6 +230,21 @@ export const UnityView: FC<Props> = props => {
           nextActivityName={props.nextActivityName}
         />
       );
+    } else if (
+      unityRuntimeState.quitInProcess &&
+      !quitObservedInThisMountRef.current
+    ) {
+      return (
+        <>
+          <Spinner withOverlay isVisible={isUnityUnresponsive} />
+          <UnityErrorModal
+            visible={showErrorModal}
+            onDismiss={handleErrorModalDismiss}
+            isFlow={!!flowId}
+            nextActivityName={props.nextActivityName}
+          />
+        </>
+      );
     } else {
       return (
         <>
@@ -220,6 +253,18 @@ export const UnityView: FC<Props> = props => {
             ref={rnUnityViewRef}
             // eslint-disable-next-line react-native/no-inline-styles
             style={{ flex: 1 }}
+            onPlayerUnload={() => {
+              logger.log('[UnityView] Native player unload received');
+              setIsUnityUnresponsive(true);
+            }}
+            onPlayerQuit={() => {
+              unityRuntimeState.quitInProcess = true;
+              quitObservedInThisMountRef.current = true;
+              logger.warn(
+                '[UnityView] Native player quit received; showing spinner immediately and waiting for heartbeat failures before surfacing the alert',
+              );
+              setIsUnityUnresponsive(true);
+            }}
             onUnityMessage={result => {
               handleMessageFromUnity(result.nativeEvent.message);
             }}

@@ -16,6 +16,8 @@ declare module '@azesmway/react-native-unity' {
 
   export interface UnityViewProps extends ViewProps {
     onUnityMessage?: DirectEventHandler<UnityViewContentUpdateEvent>;
+    onPlayerUnload?: DirectEventHandler<UnityViewContentUpdateEvent>;
+    onPlayerQuit?: DirectEventHandler<UnityViewContentUpdateEvent>;
   }
 
   export default class UnityView extends Component<UnityViewProps> {
