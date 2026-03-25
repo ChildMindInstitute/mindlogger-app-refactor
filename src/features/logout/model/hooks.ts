@@ -40,7 +40,7 @@ export function useLogout() {
     }
 
     getDefaultAnalyticsService().logout();
-    await DdSdkReactNative.clearUserInfo()
+    await DdSdkReactNative.clearUserInfo();
 
     getDefaultFeatureFlagsService().logout();
 
