@@ -92,5 +92,10 @@ export const useUnityHeartbeat = ({
     onMaxFailuresReached,
   ]);
 
-  return { startHeartbeat, stopHeartbeat };
+  const isHeartbeatRunning = useCallback(
+    (): boolean => intervalRef.current !== null,
+    [],
+  );
+
+  return { startHeartbeat, stopHeartbeat, isHeartbeatRunning };
 };

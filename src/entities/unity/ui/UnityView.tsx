@@ -68,11 +68,12 @@ export const UnityView: FC<Props> = props => {
 
   const triggerFailureRef = useRef<() => void>(() => {});
 
-  const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({
-    sendMessageToUnity,
-    onFirstFailure: () => setIsUnityUnresponsive(true),
-    onMaxFailuresReached: () => triggerFailureRef.current(),
-  });
+  const { startHeartbeat, stopHeartbeat, isHeartbeatRunning } =
+    useUnityHeartbeat({
+      sendMessageToUnity,
+      onFirstFailure: () => setIsUnityUnresponsive(true),
+      onMaxFailuresReached: () => triggerFailureRef.current(),
+    });
 
   const failureHandler: ReturnType<typeof useUnityFailureHandler> =
     useUnityFailureHandler({
@@ -306,6 +307,16 @@ export const UnityView: FC<Props> = props => {
               }
               setFailureMode('unloaded');
               setIsUnityUnresponsive(true);
+              if (isHeartbeatRunning()) {
+                logger.log(
+                  '[UnityView] Heartbeat active — letting it detect failures naturally',
+                );
+              } else {
+                logger.log(
+                  '[UnityView] Heartbeat not started — triggering failure immediately',
+                );
+                triggerFailure();
+              }
             }}
             onPlayerQuit={() => {
               unityRuntimeState.quitInProcess = true;
