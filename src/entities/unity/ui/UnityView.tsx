@@ -18,7 +18,10 @@ import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
-import { UnityResult } from '@entities/unity/lib/types/unityType.ts';
+import {
+  UnityFailureMode,
+  UnityResult,
+} from '@entities/unity/lib/types/unityType.ts';
 import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 
 import { UnityErrorModal } from './UnityErrorModal';
@@ -43,8 +46,6 @@ type Props = {
 const unityRuntimeState = {
   quitInProcess: false,
 };
-
-type UnityFailureMode = 'unloaded' | 'quit';
 
 export const UnityView: FC<Props> = props => {
   const compiledWithRNUnityView = !!(

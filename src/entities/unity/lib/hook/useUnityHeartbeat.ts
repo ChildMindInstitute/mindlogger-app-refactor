@@ -9,13 +9,7 @@ import {
   HEARTBEAT_TIMEOUT_MS,
   MAX_HEARTBEAT_FAILURES,
 } from '../constants';
-import { RN2UMessage, U2RNMessage } from '../types/unityMessage';
-
-type UseUnityHeartbeatOptions = {
-  sendMessageToUnity: (message: RN2UMessage) => Promise<U2RNMessage | null>;
-  onFirstFailure?: () => void;
-  onMaxFailuresReached?: () => void;
-};
+import { UseUnityHeartbeatOptions } from '../types/unityType';
 
 //Provides startHeartbeat and stopHeartbeat for periodic Echo monitoring of Unity bridge responsiveness.
 // Call startHeartbeat after Unity is ready; stopHeartbeat on unmount or activity end.

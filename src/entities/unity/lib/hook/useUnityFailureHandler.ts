@@ -2,19 +2,10 @@ import { useCallback, useRef, useState } from 'react';
 
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
-type UseUnityFailureHandlerOptions = {
-  flowId: string | undefined;
-  stopHeartbeat: () => void;
-  onError?: () => void;
-};
-
-type UseUnityFailureHandlerResult = {
-  showErrorModal: boolean;
-  triggerFailure: () => void;
-  handleErrorModalDismiss: () => void;
-  resetFailureState: () => void;
-  suppressErrors: () => void;
-};
+import {
+  UseUnityFailureHandlerOptions,
+  UseUnityFailureHandlerResult,
+} from '../types/unityType';
 
 export const useUnityFailureHandler = ({
   flowId,
