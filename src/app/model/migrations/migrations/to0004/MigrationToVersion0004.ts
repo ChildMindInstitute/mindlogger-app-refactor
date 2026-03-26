@@ -12,9 +12,10 @@ import {
 } from './MigrationReduxTypes0004';
 import { IMigration, MigrationInput, MigrationOutput } from '../../types';
 
-export class MigrationToVersion0004
-  implements IMigration<RootStateFrom, RootStateTo>
-{
+export class MigrationToVersion0004 implements IMigration<
+  RootStateFrom,
+  RootStateTo
+> {
   constructor() {}
 
   migrate(input: MigrationInput<RootStateFrom>): MigrationOutput<RootStateTo> {

@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { XStackProps } from '@tamagui/stacks';

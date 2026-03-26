@@ -10,9 +10,10 @@ import { DatesFromTo } from '@app/shared/lib/types/dateTime';
 import { GroupUtility } from './GroupUtility';
 import { EventEntity } from '../../lib/types/activityGroupsBuilder';
 
-export class ScheduledGroupEvaluator
-  implements IEvaluator<EventEntity, ScheduleEvent>
-{
+export class ScheduledGroupEvaluator implements IEvaluator<
+  EventEntity,
+  ScheduleEvent
+> {
   private utility: GroupUtility;
 
   constructor(appletId: string, entityProgressions: EntityProgression[]) {
