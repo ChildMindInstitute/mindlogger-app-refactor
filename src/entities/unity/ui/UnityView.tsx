@@ -25,6 +25,7 @@ import {
 import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 
 import { UnityErrorModal } from './UnityErrorModal';
+import { CONFIG_LOAD_TIMEOUT_MS, STARTUP_TIMEOUT_MS } from '../lib/constants';
 import {
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
@@ -60,6 +61,8 @@ export const UnityView: FC<Props> = props => {
   const unityReadyHandled = useRef<boolean>(false);
   const restartInProgressRef = useRef<boolean>(false);
   const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const configLoadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
   const [isUnityUnresponsive, setIsUnityUnresponsive] = useState(false);
   const [failureMode, setFailureMode] = useState<UnityFailureMode>('quit');
@@ -69,12 +72,11 @@ export const UnityView: FC<Props> = props => {
 
   const triggerFailureRef = useRef<() => void>(() => {});
 
-  const { startHeartbeat, stopHeartbeat, isHeartbeatRunning } =
-    useUnityHeartbeat({
-      sendMessageToUnity,
-      onFirstFailure: () => setIsUnityUnresponsive(true),
-      onMaxFailuresReached: () => triggerFailureRef.current(),
-    });
+  const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({
+    sendMessageToUnity,
+    onFirstFailure: () => setIsUnityUnresponsive(true),
+    onMaxFailuresReached: () => triggerFailureRef.current(),
+  });
 
   const failureHandler: ReturnType<typeof useUnityFailureHandler> =
     useUnityFailureHandler({
@@ -105,6 +107,10 @@ export const UnityView: FC<Props> = props => {
         m_sKey: 'LoadConfigFile',
         m_sAdditionalInfo: props.payload.file ?? undefined,
       });
+      if (configLoadTimerRef.current) {
+        clearTimeout(configLoadTimerRef.current);
+        configLoadTimerRef.current = null;
+      }
       setFailureMode('quit');
     } catch (err) {
       logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
@@ -120,6 +126,10 @@ export const UnityView: FC<Props> = props => {
     setFailureMode('quit');
     unityPaths.current = [];
     unityReadyHandled.current = false;
+    if (configLoadTimerRef.current) {
+      clearTimeout(configLoadTimerRef.current);
+      configLoadTimerRef.current = null;
+    }
 
     // Step 1: fully remove RNUnityView from the tree
     setUnityViewKey(null);
@@ -141,11 +151,27 @@ export const UnityView: FC<Props> = props => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
         restartInProgressRef.current = false;
+        if (startupTimerRef.current) {
+          clearTimeout(startupTimerRef.current);
+          startupTimerRef.current = null;
+        }
         setIsUnityUnresponsive(false);
-        await handleUnityReady();
         startHeartbeat();
+
+        // Start config load timeout — if handleUnityReady doesn't complete
+        // within the deadline, surface the error modal.
+        configLoadTimerRef.current = setTimeout(() => {
+          logger.warn(
+            `[UnityView] Config did not load within ${CONFIG_LOAD_TIMEOUT_MS}ms — triggering failure`,
+          );
+          setFailureMode('quit');
+          setIsUnityUnresponsive(true);
+          triggerFailureRef.current();
+        }, CONFIG_LOAD_TIMEOUT_MS);
+
+        await handleUnityReady();
       }
-    }, [handleUnityReady, startHeartbeat]);
+    }, [handleUnityReady, logger, startHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
@@ -227,13 +253,33 @@ export const UnityView: FC<Props> = props => {
     // This ensure we can consistently get a Unity startup message.
     setUnityViewKey(uuidv4());
 
+    // Startup timeout: if UnityStarted is not received within the deadline,
+    // assume Unity failed to boot and surface the error modal.
+    startupTimerRef.current = setTimeout(() => {
+      if (!unityReadyHandled.current) {
+        logger.warn(
+          `[UnityView] Unity did not start within ${STARTUP_TIMEOUT_MS}ms — triggering failure`,
+        );
+        setFailureMode('quit');
+        setIsUnityUnresponsive(true);
+        triggerFailure();
+      }
+    }, STARTUP_TIMEOUT_MS);
+
     return () => {
       suppressErrors();
       stopHeartbeat();
       if (restartTimerRef.current) {
         clearTimeout(restartTimerRef.current);
       }
+      if (startupTimerRef.current) {
+        clearTimeout(startupTimerRef.current);
+      }
+      if (configLoadTimerRef.current) {
+        clearTimeout(configLoadTimerRef.current);
+      }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stopHeartbeat, suppressErrors]);
 
   if (!compiledWithRNUnityView) {
@@ -297,9 +343,6 @@ export const UnityView: FC<Props> = props => {
               }
               setFailureMode('unloaded');
               setIsUnityUnresponsive(true);
-              if (!isHeartbeatRunning()) {
-                triggerFailure();
-              }
             }}
             onPlayerQuit={() => {
               unityRuntimeState.quitInProcess = true;
