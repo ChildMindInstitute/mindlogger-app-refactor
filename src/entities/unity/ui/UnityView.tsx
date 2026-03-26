@@ -98,18 +98,12 @@ export const UnityView: FC<Props> = props => {
   logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
 
   const handleUnityReady = useCallback(async () => {
-    logger.log(
-      '[UnityView] handleUnityReady — sending LoadConfigFile immediately',
-    );
     try {
-      const resp = await sendMessageToUnity({
+      await sendMessageToUnity({
         m_sId: uuidv4(),
         m_sKey: 'LoadConfigFile',
         m_sAdditionalInfo: props.payload.file ?? undefined,
       });
-      logger.log(
-        `[UnityView] LoadConfigFile response: ${JSON.stringify(resp)}`,
-      );
       setFailureMode('quit');
     } catch (err) {
       logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
@@ -118,7 +112,6 @@ export const UnityView: FC<Props> = props => {
   }, [props.payload.file, logger, sendMessageToUnity, triggerFailure]);
 
   const handleRestartActivity = useCallback(() => {
-    logger.log('[UnityView] Restarting Unity activity — staged unmount');
     restartInProgressRef.current = true;
     stopHeartbeat();
     (resetFailureState as () => void)();
@@ -139,7 +132,7 @@ export const UnityView: FC<Props> = props => {
       restartInProgressRef.current = false;
       setUnityViewKey(uuidv4());
     }, 1000);
-  }, [logger, resetFailureState, stopHeartbeat]);
+  }, [resetFailureState, stopHeartbeat]);
 
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
@@ -147,14 +140,11 @@ export const UnityView: FC<Props> = props => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
         restartInProgressRef.current = false;
-        logger.log('[UnityView] Handling Unity ready event');
         setIsUnityUnresponsive(false);
         await handleUnityReady();
         startHeartbeat();
-      } else {
-        logger.log('[UnityView] Ignoring Unity ready event');
       }
-    }, [logger, handleUnityReady, startHeartbeat]);
+    }, [handleUnityReady, startHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
@@ -302,19 +292,11 @@ export const UnityView: FC<Props> = props => {
             onPlayerUnload={() => {
               logger.log('[UnityView] Native player unload received');
               if (restartInProgressRef.current) {
-                logger.log('[UnityView] Ignoring stale unload during restart');
                 return;
               }
               setFailureMode('unloaded');
               setIsUnityUnresponsive(true);
-              if (isHeartbeatRunning()) {
-                logger.log(
-                  '[UnityView] Heartbeat active — letting it detect failures naturally',
-                );
-              } else {
-                logger.log(
-                  '[UnityView] Heartbeat not started — triggering failure immediately',
-                );
+              if (!isHeartbeatRunning()) {
                 triggerFailure();
               }
             }}

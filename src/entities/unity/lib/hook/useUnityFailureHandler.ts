@@ -40,30 +40,18 @@ export const useUnityFailureHandler = ({
 
   const handleErrorModalDismiss = useCallback(() => {
     setShowErrorModal(false);
-
-    if (flowId) {
-      logger.log(
-        '[UnityView] Flow mode — calling onError to skip failed activity',
-      );
-    } else {
-      logger.log(
-        '[UnityView] Standalone mode — calling onError to navigate back',
-      );
-    }
     onError?.();
-  }, [flowId, logger, onError]);
+  }, [onError]);
 
   const resetFailureState = useCallback(() => {
-    logger.log('[UnityView] Resetting failure state for Unity retry');
     errorHandledRef.current = false;
     setShowErrorModal(false);
-  }, [logger]);
+  }, []);
 
   // Call in the unmount cleanup to prevent post-teardown error handling.
   const suppressErrors = useCallback(() => {
-    logger.log('[UnityView] Unmounting — suppressing future error handling');
     errorHandledRef.current = true;
-  }, [logger]);
+  }, []);
 
   return {
     showErrorModal,
