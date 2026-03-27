@@ -173,7 +173,12 @@ export const UnityView: FC<Props> = props => {
           .m_sAdditionalInfo;
         logger.log(`[UnityView] Received SetOrientation: ${orientationValue}`);
 
-        const orientationMap: Record<string, Orientation> = {
+        const orientationMap: Record<
+          string,
+          | Orientation.portrait
+          | Orientation.landscapeLeft
+          | Orientation.landscapeRight
+        > = {
           Portrait: Orientation.portrait,
           LandscapeLeft: Orientation.landscapeLeft,
           LandscapeRight: Orientation.landscapeRight,
