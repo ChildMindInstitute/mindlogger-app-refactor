@@ -166,35 +166,31 @@ export const UnityView: FC<Props> = props => {
   ]);
 
   // Handle orientation change requests from Unity, re-lock to portrait on unmount.
-  const handleSetOrientation =
-    useCallback<RNUnityCommBridgeUnityEventHandler>(
-      msg => {
-        if (msg.m_sKey === 'SetOrientation') {
-          const orientationValue = (
-            msg as { m_sAdditionalInfo: string }
-          ).m_sAdditionalInfo;
-          logger.log(
-            `[UnityView] Received SetOrientation: ${orientationValue}`,
+  const handleSetOrientation = useCallback<RNUnityCommBridgeUnityEventHandler>(
+    msg => {
+      if (msg.m_sKey === 'SetOrientation') {
+        const orientationValue = (msg as { m_sAdditionalInfo: string })
+          .m_sAdditionalInfo;
+        logger.log(`[UnityView] Received SetOrientation: ${orientationValue}`);
+
+        const orientationMap: Record<string, Orientation> = {
+          Portrait: Orientation.portrait,
+          LandscapeLeft: Orientation.landscapeLeft,
+          LandscapeRight: Orientation.landscapeRight,
+        };
+
+        const orientation = orientationMap[orientationValue];
+        if (orientation !== undefined) {
+          RNOrientationDirector.lockTo(orientation);
+        } else {
+          logger.warn(
+            `[UnityView] Unknown orientation value: ${orientationValue}`,
           );
-
-          const orientationMap: Record<string, Orientation> = {
-            Portrait: Orientation.portrait,
-            LandscapeLeft: Orientation.landscapeLeft,
-            LandscapeRight: Orientation.landscapeRight,
-          };
-
-          const orientation = orientationMap[orientationValue];
-          if (orientation !== undefined) {
-            RNOrientationDirector.lockTo(orientation);
-          } else {
-            logger.warn(
-              `[UnityView] Unknown orientation value: ${orientationValue}`,
-            );
-          }
         }
-      },
-      [logger],
-    );
+      }
+    },
+    [logger],
+  );
   useEffect(() => {
     registerEventHandler(UnityEventSetOrientation, handleSetOrientation);
     return () => {
