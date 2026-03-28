@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { EntityPathParams } from '@app/abstract/lib/types/entity';
 import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
+import { getDefaultAnswersQueueService } from '@app/entities/activity/lib/services/answersQueueServiceInstance';
 import { getDefaultQueueProcessingService } from '@app/entities/activity/lib/services/queueProcessingServiceInstance';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
 import { appletActions } from '@app/entities/applet/model/slice';
@@ -180,6 +181,7 @@ export function Intermediate({
       dispatch,
       ReduxPersistor,
       entityProgressions,
+      getDefaultAnswersQueueService(),
     );
 
     await constructCompletionService.construct({

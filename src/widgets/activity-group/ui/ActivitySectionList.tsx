@@ -108,7 +108,7 @@ export function ActivitySectionList({
     }
 
     const responseTypes = activityResponseTypes[flowId || activityId];
-    const isWebOnly = responseTypes.some(getIsWebOnly);
+    const isWebOnly = responseTypes?.some(getIsWebOnly) ?? false;
 
     if (isWebOnly) {
       await Linking.openURL(
