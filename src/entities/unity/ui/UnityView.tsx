@@ -22,6 +22,7 @@ import {
   newEchoMessage,
 } from '../lib/hook/useRNUnityCommBridge';
 import {
+  RN2UMessage,
   UnityEventEndUnity,
   UnityEventSetOrientation,
   UnityEventUnityStarted,
@@ -55,15 +56,20 @@ export const UnityView: FC<Props> = props => {
     // config JSON. But for some reasons the `UnityStart` message never arrives
     // and the "backup" check below resolves too soon. So for now, to continue
     // testing we have to wait like 5 seconds for the loading screen to show.
-    logger.log('!!! Waiting before sending LoadConfigFile message ...');
+    logger.log('[UnityView] Waiting before sending LoadConfigFile message...');
     setTimeout(() => {
-      sendMessageToUnity({
+      const msg: RN2UMessage = {
         m_sId: uuidv4(),
         m_sKey: 'LoadConfigFile',
         m_sAdditionalInfo: props.payload.file ?? undefined,
-      })
+      };
+      logger.log('[UnityView] Sending LoadConfigFile message', msg);
+      sendMessageToUnity(msg)
         .then(resp => {
-          logger.log(`!!! LoadConfigFile resp: ${JSON.stringify(resp)}`);
+          logger.log(
+            '[UnityView] Sent LoadConfigFile message',
+            resp ?? undefined,
+          );
         })
         .catch(logger.error);
     }, 5000);
@@ -110,14 +116,13 @@ export const UnityView: FC<Props> = props => {
         taskData: mediaFiles,
       });
 
-      logger.log('[UnityView] Sending Reset message');
-
-      await sendMessageToUnity({
+      const resetMsg: RN2UMessage = {
         m_sId: uuidv4(),
         m_sKey: 'Reset',
-      });
-
-      logger.log('[UnityView] Sent Reset message');
+      };
+      logger.log('[UnityView] Sending Reset message', resetMsg);
+      const resp = await sendMessageToUnity(resetMsg);
+      logger.log('[UnityView] Sent Reset message', resp ?? undefined);
     }, [logger, props, sendMessageToUnity]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
@@ -143,8 +148,11 @@ export const UnityView: FC<Props> = props => {
   useEffect(() => {
     if (!!unityViewKey && !unityViewKeyWas) {
       const backupCheckPayload = `BackupUnityStartedCheck:${uuidv4()}`;
-      sendMessageToUnity(newEchoMessage(backupCheckPayload))
+      const msg: RN2UMessage = newEchoMessage(backupCheckPayload);
+      logger.log('[UnityView] Sending Echo message', msg);
+      sendMessageToUnity(msg)
         .then(resp => {
+          logger.log('[UnityView] Sent Echo message', resp ?? undefined);
           if (resp?.m_sAdditionalInfo === backupCheckPayload) {
             if (!unityReadyHandled.current) {
               unityReadyHandled.current = true;
