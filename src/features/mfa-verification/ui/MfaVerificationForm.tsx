@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 
 import { FormProvider, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ import { Text } from '@app/shared/ui/Text';
 import { MfaVerificationFormSchema } from '../model/MfaVerificationFormSchema';
 
 type Props = BoxProps & {
-  onVerificationSuccess: (code: string) => void;
+  onVerificationSuccess: (code: string, isAutoSubmit?: boolean) => void;
   onUseRecoveryCode: () => void;
   isLoading?: boolean;
   error?: string;
@@ -41,6 +41,9 @@ export const MfaVerificationForm: FC<Props> = ({
 }) => {
   const { t } = useTranslation();
 
+  // Track whether the next submit will be auto-submit
+  const isAutoSubmitRef = useRef(false);
+
   // Local state for translated session expiry warning
   const [translatedWarning, setTranslatedWarning] = useState<
     string | undefined
@@ -52,8 +55,10 @@ export const MfaVerificationForm: FC<Props> = ({
     },
     onSubmitSuccess: data => {
       executeIfOnline(() => {
-        // Pass the verification code to the parent component
-        onVerificationSuccess(data.verificationCode);
+        // Pass the verification code and auto-submit flag to the parent component
+        const wasAutoSubmit = isAutoSubmitRef.current;
+        isAutoSubmitRef.current = false;
+        onVerificationSuccess(data.verificationCode, wasAutoSubmit);
       });
     },
   });
@@ -92,6 +97,9 @@ export const MfaVerificationForm: FC<Props> = ({
     submit,
     onSessionExpiry: warningKey => {
       setTranslatedWarning(t(warningKey));
+    },
+    onAutoSubmit: () => {
+      isAutoSubmitRef.current = true;
     },
   });
 

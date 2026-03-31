@@ -17,14 +17,7 @@ describe('Encryption', () => {
   let appletPrime: number[];
   let appletBase: number[];
 
-  beforeEach(() => {
-    encryptionManager =
-      getDefaultEncryptionManager() as never as TestEncryptionManager;
-
-    jest
-      .spyOn(encryptionManager, 'getRandomBytes')
-      .mockReturnValue(Buffer.alloc(16, 'Mock generate string'));
-
+  beforeAll(() => {
     const dh = crypto.createDiffieHellman(2048);
     dh.generateKeys();
 
@@ -32,6 +25,15 @@ describe('Encryption', () => {
     appletBase = Array.from(dh.getGenerator());
     privateKey = Array.from(dh.getPrivateKey());
     publicKey = Array.from(dh.getPublicKey());
+  });
+
+  beforeEach(() => {
+    encryptionManager =
+      getDefaultEncryptionManager() as never as TestEncryptionManager;
+
+    jest
+      .spyOn(encryptionManager, 'getRandomBytes')
+      .mockReturnValue(Buffer.alloc(16, 'Mock generate string'));
   });
 
   describe('getPrivateKey', () => {

@@ -5,8 +5,7 @@ import {
 
 export class CommonObservable<
   TObserver extends ObserverFunctionBase = ObserverFunctionBase,
-> implements IObservable
-{
+> implements IObservable {
   protected _observers: Array<TObserver>;
 
   constructor() {

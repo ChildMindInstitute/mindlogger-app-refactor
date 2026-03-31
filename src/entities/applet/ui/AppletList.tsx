@@ -1,4 +1,4 @@
-import { FC, memo, useCallback } from 'react';
+import { FC, JSX, memo, useCallback } from 'react';
 import {
   FlatList,
   ListRenderItem,

@@ -16,6 +16,7 @@ interface UseAutoSubmitOptions {
   form: UseFormReturn<{ verificationCode: string }>;
   submit: () => Promise<void>;
   onSessionExpiry: (warning: string) => void;
+  onAutoSubmit?: () => void;
 }
 
 interface UseAutoSubmitReturn {
@@ -44,6 +45,7 @@ export const useAutoSubmit = ({
   form,
   submit,
   onSessionExpiry,
+  onAutoSubmit,
 }: UseAutoSubmitOptions): UseAutoSubmitReturn => {
   // Track when screen was loaded to check session expiry
   const screenLoadTime = useRef(Date.now());
@@ -106,6 +108,9 @@ export const useAutoSubmit = ({
           isAutoSubmittingRef.current = true;
           hasAutoSubmittedRef.current = true;
 
+          // Notify that auto-submit is about to happen
+          onAutoSubmit?.();
+
           // Delay auto-submit slightly for better UX (user can see the complete code)
           autoSubmitTimerRef.current = setTimeout(() => {
             submit()
@@ -142,6 +147,7 @@ export const useAutoSubmit = ({
     form,
     submit,
     onSessionExpiry,
+    onAutoSubmit,
   ]);
 
   return {

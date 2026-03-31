@@ -1,3 +1,5 @@
+import { JSX } from 'react';
+
 export type GridProps<TItem extends { id: string }> = {
   data: Array<TItem>;
   cellWidth: number;

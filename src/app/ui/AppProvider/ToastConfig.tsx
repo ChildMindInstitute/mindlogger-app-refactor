@@ -6,7 +6,7 @@ import Toast, { ToastConfigParams } from 'react-native-toast-message';
 import { palette } from '@app/shared/lib/constants/palette';
 
 type ToastConfigProps = {
-  content: string | JSX.Element;
+  content: string | React.JSX.Element;
 };
 
 export const ToastConfig = {

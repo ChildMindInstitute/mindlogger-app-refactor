@@ -227,8 +227,7 @@ export interface TimePipelineAnswer extends PipelineItemAnswerBase {
   };
 }
 
-export interface RequestHealthRecordDataPipelineAnswer
-  extends PipelineItemAnswerBase {
+export interface RequestHealthRecordDataPipelineAnswer extends PipelineItemAnswerBase {
   type: 'RequestHealthRecordData';
   value: {
     answer?: RequestHealthRecordDataResponse;

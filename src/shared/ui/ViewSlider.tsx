@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  JSX,
   useImperativeHandle,
   PropsWithChildren,
   useCallback,
@@ -111,16 +112,12 @@ export const ViewSlider = forwardRef<ViewSliderRef, ViewSliderProps>(
         : SlideOutRightAnimation(values);
     };
 
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          next,
-          back,
-        };
-      },
-      [back, next],
-    );
+    useImperativeHandle(ref, () => {
+      return {
+        next,
+        back,
+      };
+    }, [back, next]);
 
     return (
       <Animated.View

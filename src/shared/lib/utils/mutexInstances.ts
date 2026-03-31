@@ -3,9 +3,7 @@ import { IMutex } from '@shared/lib/utils/IMutex';
 import { Mutex } from './common';
 import { IMutexDefaultInstanceManager } from './IMutexDefaultInstanceManager';
 
-export class MutexDefaultInstanceManager
-  implements IMutexDefaultInstanceManager
-{
+export class MutexDefaultInstanceManager implements IMutexDefaultInstanceManager {
   private instances: Record<string, IMutex | null | undefined>;
 
   public getRefreshServiceMutex: () => IMutex;
