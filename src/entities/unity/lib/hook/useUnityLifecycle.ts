@@ -83,8 +83,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     triggerFailureRef.current = triggerFailure;
   }, [triggerFailure]);
 
-  logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
-
   const handleUnityReady = useCallback(async () => {
     try {
       await sendMessageToUnity({
@@ -184,7 +182,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         responseType: 'unity',
         // TODO: Figure out what this should be
         startTime: 0,
-
         taskData: mediaFiles,
       });
 

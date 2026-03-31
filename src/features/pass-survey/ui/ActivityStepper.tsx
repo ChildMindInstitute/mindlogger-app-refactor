@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -327,7 +327,7 @@ export function ActivityStepper({
     onFinish('regular');
   };
 
-  const handleUnityError = () => {
+  const handleUnityError = useCallback(() => {
     if (flowId && onSkipActivity) {
       logger.warn(
         '[ActivityStepper] Unity error in flow — skipping to next activity',
@@ -339,7 +339,7 @@ export function ActivityStepper({
       );
       onClose('regular');
     }
-  };
+  }, [flowId, onSkipActivity, logger, onClose]);
 
   if (!activityStorageRecord) {
     return <Spinner withOverlay />;
