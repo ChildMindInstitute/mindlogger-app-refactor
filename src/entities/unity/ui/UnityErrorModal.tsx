@@ -108,7 +108,7 @@ export const UnityErrorModal: FC<Props> = ({
               <Box w={canRestart ? '100%' : undefined}>
                 <SubmitButton
                   mode="primary"
-                  onPress={canRestart ? onRestart ?? onDismiss : onDismiss}
+                  onPress={canRestart ? (onRestart ?? onDismiss) : onDismiss}
                 >
                   {canRestart
                     ? t('unity:restart_primary')
