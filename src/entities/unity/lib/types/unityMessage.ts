@@ -6,12 +6,14 @@ export const UnityEventUnityStarted = 'UnityStarted';
 export const UnityEventEndUnity = 'EndUnity';
 export const UnityEventActivityCompleted = 'ActivityCompleted';
 export const UnityEventDataExport = 'DataExport';
+export const UnityEventSetOrientation = 'SetOrientation';
 
 export type UnityEvent =
   | typeof UnityEventUnityStarted
   | typeof UnityEventEndUnity
   | typeof UnityEventActivityCompleted
-  | typeof UnityEventDataExport;
+  | typeof UnityEventDataExport
+  | typeof UnityEventSetOrientation;
 
 type U2RNMessageBase<TUnityEvent extends UnityEvent> = {
   m_sId: string;
@@ -35,11 +37,18 @@ export type U2RNMessageDataExport = U2RNMessageBase<
   m_listDataPaths: Array<string>;
 };
 
+export type U2RNMessageSetOrientation = U2RNMessageBase<
+  typeof UnityEventSetOrientation
+> & {
+  m_sAdditionalInfo: 'Portrait' | 'LandscapeLeft' | 'LandscapeRight';
+};
+
 export type U2RNMessage =
   | U2RNMessageUnityStarted
   | U2RNMessageEndUnity
   | U2RNMessageActivityCompleted
-  | U2RNMessageDataExport;
+  | U2RNMessageDataExport
+  | U2RNMessageSetOrientation;
 
 // ============================================================================
 // Message from ReactNative to Unity

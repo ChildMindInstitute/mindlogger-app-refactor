@@ -462,6 +462,8 @@ export function ActivityItem({
               />
             </Box>
           ),
+          question: null,
+          noScrollContainer: true,
         };
       default:
         return {

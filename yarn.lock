@@ -8438,6 +8438,11 @@ react-native-modal-datetime-picker@^17.1.0:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-orientation-director@^2.6.5:
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/react-native-orientation-director/-/react-native-orientation-director-2.6.5.tgz#5fb69a12fc0855ed690f143565b955067258054d"
+  integrity sha512-hTkDu5VrRqHcg/5ihPjZhikA0RQpAv1pp7qja8whvic9ROOPGsDUWMSf0+pWRdIRKhmP1R0JyWmuRpjUYvoK7w==
+
 react-native-permissions@^4.0.1:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.1.5.tgz#db4d1ddbf076570043f4fd4168f54bb6020aec92"
