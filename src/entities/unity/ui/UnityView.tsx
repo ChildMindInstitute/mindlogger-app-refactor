@@ -23,6 +23,7 @@ import {
 } from '../lib/hook/useRNUnityCommBridge';
 import {
   RN2UMessage,
+  UnityEventDataExport,
   UnityEventEndUnity,
   UnityEventSetOrientation,
   UnityEventUnityStarted,
@@ -76,23 +77,31 @@ export const UnityView: FC<Props> = props => {
   }, [props.payload.file, logger, sendMessageToUnity]);
 
   // Register Unity ready handler via the `UnityStarted` event.
-  const handleUnityStarted =
-    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
+  const handleUnityStarted = useCallback<RNUnityCommBridgeUnityEventHandler>(
+    async msg => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
-        logger.log('[UnityView] Handling Unity ready event');
+        logger.log(
+          `[UnityView] Handling ${UnityEventUnityStarted} message`,
+          msg,
+        );
         await handleUnityReady();
       } else {
-        logger.log('[UnityView] Ignoring Unity ready event');
+        logger.log(
+          `[UnityView] Ignoring ${UnityEventUnityStarted} message`,
+          msg,
+        );
       }
-    }, [logger, handleUnityReady]);
+    },
+    [logger, handleUnityReady],
+  );
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  const handleEndUnity =
-    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
-      logger.log('[UnityView] Handling EndUnity event');
+  const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(
+    async msg => {
+      logger.log(`[UnityView] Handling ${UnityEventEndUnity} message`, msg);
       logger.log(
         `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
       );
@@ -123,17 +132,17 @@ export const UnityView: FC<Props> = props => {
       logger.log('[UnityView] Sending Reset message', resetMsg);
       const resp = await sendMessageToUnity(resetMsg);
       logger.log('[UnityView] Sent Reset message', resp ?? undefined);
-    }, [logger, props, sendMessageToUnity]);
+    },
+    [logger, props, sendMessageToUnity],
+  );
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
 
   const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
-      if (msg.m_sKey === 'DataExport') {
-        logger.log(
-          `[UnityView] Received DataExport message with paths: ${msg.m_listDataPaths.join(', ')}`,
-        );
+      if (msg.m_sKey === UnityEventDataExport) {
+        logger.log(`[UnityView] Handling ${UnityEventDataExport} message`, msg);
 
         unityPaths.current = [...unityPaths.current, ...msg.m_listDataPaths];
       }
@@ -141,7 +150,7 @@ export const UnityView: FC<Props> = props => {
     [logger],
   );
   useEffect(() => {
-    registerEventHandler('DataExport', handleDataExport);
+    registerEventHandler(UnityEventDataExport, handleDataExport);
   }, [handleDataExport, registerEventHandler]);
 
   // Register a backup Unity ready handler via a `Echo` message.
@@ -156,10 +165,14 @@ export const UnityView: FC<Props> = props => {
           if (resp?.m_sAdditionalInfo === backupCheckPayload) {
             if (!unityReadyHandled.current) {
               unityReadyHandled.current = true;
-              logger.log('[UnityView] Handling Unity ready backup check');
+              logger.log(
+                `[UnityView] Handling ${UnityEventUnityStarted} backup check`,
+              );
               handleUnityReady().catch(logger.error);
             } else {
-              logger.log('[UnityView] Ignoring Unity ready backup check');
+              logger.log(
+                `[UnityView] Ignoring ${UnityEventUnityStarted} backup check`,
+              );
             }
           }
         })
@@ -178,7 +191,10 @@ export const UnityView: FC<Props> = props => {
     msg => {
       if (msg.m_sKey === 'SetOrientation') {
         const orientationValue = msg.m_sAdditionalInfo;
-        logger.log(`[UnityView] Received SetOrientation: ${orientationValue}`);
+        logger.log(
+          `[UnityView] Handling ${UnityEventSetOrientation} message`,
+          msg,
+        );
 
         const orientationMap: Record<
           string,
