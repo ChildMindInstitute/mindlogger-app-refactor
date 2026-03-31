@@ -252,37 +252,37 @@ export class Logger implements ILogger {
     }
   }
 
-  public log(message: string) {
+  public log(message: string, context?: object) {
     if (this.consoleLogLevel <= LogLevel.Debug) {
       console.log(this.withTime(message));
-      DdLogs.info(message);
+      DdLogs.info(message, context);
     }
 
     callWithMutex(this.mutex, () => FileLogger.debug(message));
   }
 
-  public info(message: string) {
+  public info(message: string, context?: object) {
     if (this.consoleLogLevel <= LogLevel.Info) {
       console.info(this.withTime(message));
-      DdLogs.info(message);
+      DdLogs.info(message, context);
     }
 
     callWithMutex(this.mutex, () => FileLogger.info(message));
   }
 
-  public warn(message: string) {
+  public warn(message: string, context?: object) {
     if (this.consoleLogLevel <= LogLevel.Warning) {
       console.warn(this.withTime(message));
-      DdLogs.warn(message);
+      DdLogs.warn(message, context);
     }
 
     callWithMutex(this.mutex, () => FileLogger.warn(message));
   }
 
-  public error(message: string) {
+  public error(message: string, context?: object) {
     if (this.consoleLogLevel <= LogLevel.Error) {
       console.error(this.withTime(message));
-      DdLogs.error(message);
+      DdLogs.error(message, context);
     }
 
     callWithMutex(this.mutex, () => FileLogger.error(message));
