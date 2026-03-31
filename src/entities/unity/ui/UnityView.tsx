@@ -169,8 +169,7 @@ export const UnityView: FC<Props> = props => {
   const handleSetOrientation = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
       if (msg.m_sKey === 'SetOrientation') {
-        const orientationValue = (msg as { m_sAdditionalInfo: string })
-          .m_sAdditionalInfo;
+        const orientationValue = msg.m_sAdditionalInfo;
         logger.log(`[UnityView] Received SetOrientation: ${orientationValue}`);
 
         const orientationMap: Record<
