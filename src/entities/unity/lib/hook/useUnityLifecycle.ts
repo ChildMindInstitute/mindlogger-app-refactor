@@ -2,6 +2,9 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import RNUnityView from '@azesmway/react-native-unity';
 import * as mime from 'react-native-mime-types';
+import RNOrientationDirector, {
+  Orientation,
+} from 'react-native-orientation-director';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
@@ -22,6 +25,7 @@ import { useUnityHeartbeat } from './useUnityHeartbeat';
 import { CONFIG_LOAD_TIMEOUT_MS, STARTUP_TIMEOUT_MS } from '../constants';
 import {
   UnityEventEndUnity,
+  UnityEventSetOrientation,
   UnityEventUnityStarted,
 } from '../types/unityMessage';
 
@@ -213,6 +217,43 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   useEffect(() => {
     registerEventHandler('DataExport', handleDataExport);
   }, [handleDataExport, registerEventHandler]);
+
+  // Handle orientation change requests from Unity, re-lock to portrait on unmount.
+  const handleSetOrientation = useCallback<RNUnityCommBridgeUnityEventHandler>(
+    msg => {
+      if (msg.m_sKey === 'SetOrientation') {
+        const orientationValue = msg.m_sAdditionalInfo;
+        logger.log(`[UnityView] Received SetOrientation: ${orientationValue}`);
+
+        const orientationMap: Record<
+          string,
+          | Orientation.portrait
+          | Orientation.landscapeLeft
+          | Orientation.landscapeRight
+        > = {
+          Portrait: Orientation.portrait,
+          LandscapeLeft: Orientation.landscapeLeft,
+          LandscapeRight: Orientation.landscapeRight,
+        };
+
+        const orientation = orientationMap[orientationValue];
+        if (orientation !== undefined) {
+          RNOrientationDirector.lockTo(orientation);
+        } else {
+          logger.warn(
+            `[UnityView] Unknown orientation value: ${orientationValue}`,
+          );
+        }
+      }
+    },
+    [logger],
+  );
+  useEffect(() => {
+    registerEventHandler(UnityEventSetOrientation, handleSetOrientation);
+    return () => {
+      RNOrientationDirector.lockTo(Orientation.portrait);
+    };
+  }, [handleSetOrientation, registerEventHandler]);
 
   useEffect(() => {
     if (
