@@ -74,13 +74,13 @@ export const UnityView: FC<Props> = props => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
         logger.log(
-          `[UnityView] Handling ${UnityEventUnityStarted} message`,
+          `[UnityView] Handling ${UnityEventUnityStarted} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
           msg,
         );
         await handleUnityReady();
       } else {
         logger.log(
-          `[UnityView] Ignoring ${UnityEventUnityStarted} message`,
+          `[UnityView] Ignoring ${UnityEventUnityStarted} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
           msg,
         );
       }
@@ -93,7 +93,10 @@ export const UnityView: FC<Props> = props => {
 
   const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(
     async msg => {
-      logger.log(`[UnityView] Handling ${UnityEventEndUnity} message`, msg);
+      logger.log(
+        `[UnityView] Handling ${UnityEventEndUnity} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
+        msg,
+      );
       logger.log(
         `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
       );
@@ -132,7 +135,10 @@ export const UnityView: FC<Props> = props => {
   const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
       if (msg.m_sKey === UnityEventDataExport) {
-        logger.log(`[UnityView] Handling ${UnityEventDataExport} message`, msg);
+        logger.log(
+          `[UnityView] Handling ${UnityEventDataExport} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
+          msg,
+        );
 
         unityPaths.current = [...unityPaths.current, ...msg.m_listDataPaths];
       }
@@ -180,7 +186,7 @@ export const UnityView: FC<Props> = props => {
       if (msg.m_sKey === UnityEventSetOrientation) {
         const orientationValue = msg.m_sAdditionalInfo;
         logger.log(
-          `[UnityView] Handling ${UnityEventSetOrientation} message`,
+          `[UnityView] Handling ${UnityEventSetOrientation} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
           msg,
         );
 

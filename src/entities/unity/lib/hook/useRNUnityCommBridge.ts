@@ -67,7 +67,7 @@ export const useRNUnityCommBridge = ({
         }
 
         logger.log(
-          `[RNUnityCommBridge] Sending ${message.m_sKey} message to Unity`,
+          `[RNUnityCommBridge] Sending ${message.m_sKey} message to Unity${message.m_sAdditionalInfo ? ': ' + message.m_sAdditionalInfo : ''}`,
           message,
         );
         rnUnityViewRef.current.postMessage(
@@ -83,7 +83,7 @@ export const useRNUnityCommBridge = ({
         }
       } else {
         logger.warn(
-          `[RNUnityCommBridge] RNUnityView not ready. Not sending ${message.m_sKey} message to Unity`,
+          `[RNUnityCommBridge] RNUnityView not ready. Not sending ${message.m_sKey} message to Unity${message.m_sAdditionalInfo ? ': ' + message.m_sAdditionalInfo : ''}`,
           message,
         );
         rejectPromise(new Error('RNUnityView not ready'));
@@ -91,7 +91,7 @@ export const useRNUnityCommBridge = ({
 
       return promise.then(response => {
         logger.log(
-          `[RNUnityCommBridge] Sent ${message.m_sKey} message to Unity`,
+          `[RNUnityCommBridge] Sent ${message.m_sKey} message to Unity${response?.m_sAdditionalInfo ? ': ' + response.m_sAdditionalInfo : ''}`,
           response ?? undefined,
         );
         return response;
@@ -145,7 +145,7 @@ export const useRNUnityCommBridge = ({
         // Log messages without handler or resolved promise
         if (!handler && !promiseFns) {
           logger.log(
-            `[RNUnityCommBridge] Received ${message.m_sKey} message from Unity`,
+            `[RNUnityCommBridge] Received ${message.m_sKey} message from Unity${message.m_sAdditionalInfo ? ': ' + message.m_sAdditionalInfo : ''}`,
             message,
           );
         }
