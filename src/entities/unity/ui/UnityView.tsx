@@ -64,15 +64,7 @@ export const UnityView: FC<Props> = props => {
         m_sKey: 'LoadConfigFile',
         m_sAdditionalInfo: props.payload.file ?? undefined,
       };
-      logger.log('[UnityView] Sending LoadConfigFile message', msg);
-      sendMessageToUnity(msg)
-        .then(resp => {
-          logger.log(
-            '[UnityView] Sent LoadConfigFile message',
-            resp ?? undefined,
-          );
-        })
-        .catch(logger.error);
+      sendMessageToUnity(msg).catch(logger.error);
     }, 5000);
   }, [props.payload.file, logger, sendMessageToUnity]);
 
@@ -129,9 +121,7 @@ export const UnityView: FC<Props> = props => {
         m_sId: uuidv4(),
         m_sKey: 'Reset',
       };
-      logger.log('[UnityView] Sending Reset message', resetMsg);
-      const resp = await sendMessageToUnity(resetMsg);
-      logger.log('[UnityView] Sent Reset message', resp ?? undefined);
+      await sendMessageToUnity(resetMsg);
     },
     [logger, props, sendMessageToUnity],
   );
@@ -158,10 +148,8 @@ export const UnityView: FC<Props> = props => {
     if (!!unityViewKey && !unityViewKeyWas) {
       const backupCheckPayload = `BackupUnityStartedCheck:${uuidv4()}`;
       const msg: RN2UMessage = newEchoMessage(backupCheckPayload);
-      logger.log('[UnityView] Sending Echo message', msg);
       sendMessageToUnity(msg)
         .then(resp => {
-          logger.log('[UnityView] Sent Echo message', resp ?? undefined);
           if (resp?.m_sAdditionalInfo === backupCheckPayload) {
             if (!unityReadyHandled.current) {
               unityReadyHandled.current = true;
