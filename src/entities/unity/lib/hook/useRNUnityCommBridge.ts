@@ -109,38 +109,45 @@ export const useRNUnityCommBridge = ({
 
   const handleMessageFromUnity = useCallback(
     (messageString: string) => {
-      logger.info(
-        `[RNUnityCommBridge] Received message string from Unity: ${messageString}`,
-      );
-
       let message: U2RNMessage | null;
       try {
         message = JSON.parse(messageString) as U2RNMessage;
       } catch (err) {
+        // Log error on messages that cannot be parsed
         logger.error(
           `[RNUnityCommBridge] Error parsing message from Unity: ${(err as Error).message}`,
+          { messageString },
         );
         message = null;
       }
       if (message) {
-        // Call registered handler before resolving promises.
         const handler = eventHandlersRef.current[message.m_sKey];
+        const promiseFns = message.m_sId
+          ? inFlightMessagesRef.current[message.m_sId]
+          : null;
+
+        // Call registered handler before resolving promises
         if (handler) {
+          // Allow handler to log message
           handler(message);
         }
 
-        if (message.m_sId) {
-          // For messages with message ID (there should always be one, but we
-          // should still check just in case), attempt to resolve any pending
-          // promises.
-          const promiseFns = inFlightMessagesRef.current[message.m_sId];
-          if (promiseFns) {
-            const [resolvePromise] = promiseFns;
-            resolvePromise(message);
+        // Attempt to resolve any pending promises
+        if (promiseFns) {
+          const [resolvePromise] = promiseFns;
 
-            // Clear the saved promise resolver/rejector after use
-            delete inFlightMessagesRef.current[message.m_sId];
-          }
+          // Allow promise consumer to log message
+          resolvePromise(message);
+          // Clear the saved promise resolver/rejector after use
+          delete inFlightMessagesRef.current[message.m_sId];
+        }
+
+        // Log messages without handler or resolved promise
+        if (!handler && !promiseFns) {
+          logger.log(
+            `[RNUnityCommBridge] Received ${message.m_sKey} message from Unity`,
+            message,
+          );
         }
       }
     },
