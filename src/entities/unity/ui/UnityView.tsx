@@ -189,7 +189,7 @@ export const UnityView: FC<Props> = props => {
   // Handle orientation change requests from Unity, re-lock to portrait on unmount.
   const handleSetOrientation = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
-      if (msg.m_sKey === 'SetOrientation') {
+      if (msg.m_sKey === UnityEventSetOrientation) {
         const orientationValue = msg.m_sAdditionalInfo;
         logger.log(
           `[UnityView] Handling ${UnityEventSetOrientation} message`,
