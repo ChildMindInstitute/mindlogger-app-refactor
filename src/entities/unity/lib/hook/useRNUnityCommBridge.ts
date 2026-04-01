@@ -66,30 +66,36 @@ export const useRNUnityCommBridge = ({
           ];
         }
 
-        const messagePayload = [
+        logger.log(
+          `[RNUnityCommBridge] Sending ${message.m_sKey} message to Unity`,
+          message,
+        );
+        rnUnityViewRef.current.postMessage(
           'ReactCommunicationBridge',
           'ReceiveReactMessage',
           JSON.stringify(message),
-        ] as [string, string, string];
-        logger.log(
-          `[RNUnityCommBridge] Sending message to Unity: ${JSON.stringify(messagePayload)}`,
         );
-        rnUnityViewRef.current.postMessage(...messagePayload);
 
-        // If there is not a message ID (there should always be one, but we
-        // should still check just in case), then immediately resolve the
-        // promise.
+        // If there is no message ID (there should always be one, but we should
+        // still check just in case), then immediately resolve the promise.
         if (!message.m_sId) {
           resolvePromise(null);
         }
       } else {
         logger.warn(
-          `[RNUnityCommBridge] RNUnityView not ready. Not sending message: ${JSON.stringify(message)}`,
+          `[RNUnityCommBridge] RNUnityView not ready. Not sending ${message.m_sKey} message to Unity`,
+          message,
         );
         rejectPromise(new Error('RNUnityView not ready'));
       }
 
-      return promise;
+      return promise.then(response => {
+        logger.log(
+          `[RNUnityCommBridge] Sent ${message.m_sKey} message to Unity`,
+          response ?? undefined,
+        );
+        return response;
+      });
     },
     [logger, rnUnityViewRef],
   );
