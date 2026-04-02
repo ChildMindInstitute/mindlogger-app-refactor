@@ -30,9 +30,10 @@ export const useUnityFailureHandler = ({
   }, [flowId, logger, stopHeartbeat]);
 
   const handleErrorModalDismiss = useCallback(() => {
+    logger.log('[FailureHandler] Error modal dismissed by user');
     setShowErrorModal(false);
     onError?.();
-  }, [onError]);
+  }, [logger, onError]);
 
   const resetFailureState = useCallback(() => {
     errorHandledRef.current = false;

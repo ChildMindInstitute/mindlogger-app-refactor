@@ -106,6 +106,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   }, [payloadFile, logger, sendMessageToUnity, triggerFailure]);
 
   const handleRestartActivity = useCallback(() => {
+    logger.log('[UnityView] Restarting Unity activity');
     restartInProgressRef.current = true;
     stopHeartbeat();
     (resetFailureState as () => void)();
@@ -128,9 +129,11 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     }
     restartTimerRef.current = setTimeout(() => {
       restartInProgressRef.current = false;
-      setUnityViewKey(uuidv4());
+      const newKey = uuidv4();
+      logger.log(`[UnityView] Restart remount triggered (key=${newKey})`);
+      setUnityViewKey(newKey);
     }, 1000);
-  }, [resetFailureState, stopHeartbeat]);
+  }, [logger, resetFailureState, stopHeartbeat]);
 
   // Register Unity ready handler via the `UnityStarted` event.
   const handleUnityStarted =
@@ -165,38 +168,42 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const handleEndUnity =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
-      logger.log('[UnityView] Handling EndUnity event');
-      stopHeartbeat();
-      logger.log(
-        `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
-      );
-      const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
-        const fileName = path.split('/').pop() ?? '';
+      try {
+        logger.log('[UnityView] Handling EndUnity event');
+        stopHeartbeat();
+        logger.log(
+          `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
+        );
+        const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
+          const fileName = path.split('/').pop() ?? '';
 
-        return {
-          uri: `file://${path}`,
-          type: mime.lookup(fileName) || '',
-          fileName,
-        };
-      });
+          return {
+            uri: `file://${path}`,
+            type: mime.lookup(fileName) || '',
+            fileName,
+          };
+        });
 
-      logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
+        logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
 
-      onResponse?.({
-        responseType: 'unity',
-        // TODO: Figure out what this should be
-        startTime: 0,
-        taskData: mediaFiles,
-      });
+        onResponse?.({
+          responseType: 'unity',
+          // TODO: Figure out what this should be
+          startTime: 0,
+          taskData: mediaFiles,
+        });
 
-      logger.log('[UnityView] Sending Reset message');
+        logger.log('[UnityView] Sending Reset message');
 
-      await sendMessageToUnity({
-        m_sId: uuidv4(),
-        m_sKey: 'Reset',
-      });
+        await sendMessageToUnity({
+          m_sId: uuidv4(),
+          m_sKey: 'Reset',
+        });
 
-      logger.log('[UnityView] Sent Reset message');
+        logger.log('[UnityView] Sent Reset message');
+      } catch (err) {
+        logger.error(`[UnityView] EndUnity handler failed: ${err}`);
+      }
     }, [logger, onResponse, sendMessageToUnity, stopHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
@@ -274,7 +281,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     // (Re)generate a new react key for the RN Unity view so it gets
     // reinitialized when this container view is rendered for the first time.
     // This ensure we can consistently get a Unity startup message.
-    setUnityViewKey(uuidv4());
+    const key = uuidv4();
+    logger.log(`[UnityView] Mounting Unity view (key=${key})`);
+    setUnityViewKey(key);
 
     // Startup timeout: if UnityStarted is not received within the deadline,
     // assume Unity failed to boot and surface the error modal.
@@ -290,6 +299,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     }, STARTUP_TIMEOUT_MS);
 
     return () => {
+      logger.log('[UnityView] Unmounting Unity view');
       suppressErrors();
       stopHeartbeat();
       if (restartTimerRef.current) {
