@@ -23,14 +23,16 @@ export const useUnityFailureHandler = ({
     errorHandledRef.current = true;
 
     const isFlow = !!flowId;
-    logger.warn(`[FailureHandler] triggerFailure called, isFlow=${isFlow}`);
+    logger.warn(
+      `[UnityFailureHandler] triggerFailure called, isFlow=${isFlow}`,
+    );
 
     stopHeartbeat();
     setShowErrorModal(true);
   }, [flowId, logger, stopHeartbeat]);
 
   const handleErrorModalDismiss = useCallback(() => {
-    logger.log('[FailureHandler] Error modal dismissed by user');
+    logger.log('[UnityFailureHandler] Error modal dismissed by user');
     setShowErrorModal(false);
     onError?.();
   }, [logger, onError]);
