@@ -18,6 +18,7 @@ export type UnityEvent =
 type U2RNMessageBase<TUnityEvent extends UnityEvent> = {
   m_sId: string;
   m_sKey: TUnityEvent;
+  m_sAdditionalInfo?: string;
   [key: string]: unknown;
 };
 

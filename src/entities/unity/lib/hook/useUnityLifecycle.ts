@@ -8,6 +8,7 @@ import RNOrientationDirector, {
 import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
+import { withAdditionalInfo } from '@app/shared/lib/services/Logger';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import {
@@ -143,7 +144,10 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         unityReadyHandled.current = true;
         restartInProgressRef.current = false;
         logger.log(
-          `[UnityView] Handling ${UnityEventUnityStarted} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
+          withAdditionalInfo(
+            `[UnityView] Handling ${UnityEventUnityStarted} message`,
+            msg.m_sAdditionalInfo,
+          ),
           msg,
         );
         if (startupTimerRef.current) {
@@ -177,7 +181,10 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     async msg => {
       try {
         logger.log(
-          `[UnityView] Handling ${UnityEventEndUnity} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
+          withAdditionalInfo(
+            `[UnityView] Handling ${UnityEventEndUnity} message`,
+            msg.m_sAdditionalInfo,
+          ),
           msg,
         );
         stopHeartbeat();
@@ -221,7 +228,10 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     msg => {
       if (msg.m_sKey === UnityEventDataExport) {
         logger.log(
-          `[UnityView] Handling ${UnityEventDataExport} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
+          withAdditionalInfo(
+            `[UnityView] Handling ${UnityEventDataExport} message`,
+            msg.m_sAdditionalInfo,
+          ),
           msg,
         );
 
@@ -240,7 +250,10 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       if (msg.m_sKey === UnityEventSetOrientation) {
         const orientationValue = msg.m_sAdditionalInfo;
         logger.log(
-          `[UnityView] Handling ${UnityEventSetOrientation} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
+          withAdditionalInfo(
+            `[UnityView] Handling ${UnityEventSetOrientation} message`,
+            msg.m_sAdditionalInfo,
+          ),
           msg,
         );
 

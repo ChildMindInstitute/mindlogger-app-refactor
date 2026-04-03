@@ -24,6 +24,13 @@ import {
 } from '../utils/common';
 import { isAppOnline } from '../utils/networkHelpers';
 
+export const withAdditionalInfo = (
+  message: string,
+  additionalInfo?: string,
+): string => {
+  return additionalInfo ? `${message}: ${additionalInfo}` : message;
+};
+
 export class Logger implements ILogger {
   private mutex: IMutex;
 
