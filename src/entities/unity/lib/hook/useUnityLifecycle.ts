@@ -24,6 +24,7 @@ import { useUnityFailureHandler } from './useUnityFailureHandler';
 import { useUnityHeartbeat } from './useUnityHeartbeat';
 import { CONFIG_LOAD_TIMEOUT_MS, STARTUP_TIMEOUT_MS } from '../constants';
 import {
+  UnityEventDataExport,
   UnityEventEndUnity,
   UnityEventSetOrientation,
   UnityEventUnityStarted,
@@ -169,7 +170,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handleEndUnity =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       try {
-        logger.log('[UnityView] Handling EndUnity event');
         stopHeartbeat();
         logger.log(
           `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
@@ -193,14 +193,10 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
           taskData: mediaFiles,
         });
 
-        logger.log('[UnityView] Sending Reset message');
-
         await sendMessageToUnity({
           m_sId: uuidv4(),
           m_sKey: 'Reset',
         });
-
-        logger.log('[UnityView] Sent Reset message');
       } catch (err) {
         logger.error(`[UnityView] EndUnity handler failed: ${err}`);
       }
@@ -211,26 +207,21 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
-      if (msg.m_sKey === 'DataExport') {
-        logger.log(
-          `[UnityView] Received DataExport message with paths: ${msg.m_listDataPaths.join(', ')}`,
-        );
-
+      if (msg.m_sKey === UnityEventDataExport) {
         unityPaths.current = [...unityPaths.current, ...msg.m_listDataPaths];
       }
     },
     [logger],
   );
   useEffect(() => {
-    registerEventHandler('DataExport', handleDataExport);
+    registerEventHandler(UnityEventDataExport, handleDataExport);
   }, [handleDataExport, registerEventHandler]);
 
   // Handle orientation change requests from Unity, re-lock to portrait on unmount.
   const handleSetOrientation = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
-      if (msg.m_sKey === 'SetOrientation') {
+      if (msg.m_sKey === UnityEventSetOrientation) {
         const orientationValue = msg.m_sAdditionalInfo;
-        logger.log(`[UnityView] Received SetOrientation: ${orientationValue}`);
 
         const orientationMap: Record<
           string,
