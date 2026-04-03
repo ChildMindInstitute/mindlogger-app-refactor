@@ -1,37 +1,21 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC } from 'react';
 import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
-import * as mime from 'react-native-mime-types';
-import RNOrientationDirector, {
-  Orientation,
-} from 'react-native-orientation-director';
-import { v4 as uuidv4 } from 'uuid';
 
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
-import { usePreviousValue } from '@app/shared/lib/hooks/usePreviousValue';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
-import { ILogger } from '@app/shared/lib/types/logger';
+import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 import { UnityResult } from '@entities/unity/lib/types/unityType.ts';
-import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 
-import {
-  useRNUnityCommBridge,
-  RNUnityCommBridgeUnityEventHandler,
-  newEchoMessage,
-} from '../lib/hook/useRNUnityCommBridge';
-import {
-  RN2UMessage,
-  UnityEventDataExport,
-  UnityEventEndUnity,
-  UnityEventSetOrientation,
-  UnityEventUnityStarted,
-} from '../lib/types/unityMessage';
+import { UnityErrorModal } from './UnityErrorModal';
+import { useUnityLifecycle } from '../lib/hook/useUnityLifecycle';
 
 type Props = {
   payload: UnityPipelineItem['payload'];
   onResponse?: (response: UnityResult) => void;
+  onError?: () => void;
+  nextActivityName?: string;
 };
 
 export const UnityView: FC<Props> = props => {
@@ -39,217 +23,76 @@ export const UnityView: FC<Props> = props => {
     UIManager as never as Record<string, unknown>
   ).RNUnityView;
 
-  const logger: ILogger = getDefaultLogger();
-
-  const rnUnityViewRef = useRef<RNUnityView | null>(null);
-  const unityReadyHandled = useRef<boolean>(false);
-  const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
-  const unityViewKeyWas = usePreviousValue(unityViewKey);
-  const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
-    useRNUnityCommBridge({ rnUnityViewRef });
-  const unityPaths = useRef<Array<string>>([]);
-
-  logger.log(`[UnityView]: unityPaths: ${JSON.stringify(unityPaths.current)}`);
-
-  const handleUnityReady = useCallback(async () => {
-    // TODO: Look into why this is happening.
-    // We ave to wait until the loading screen appears before sending in the
-    // config JSON. But for some reasons the `UnityStart` message never arrives
-    // and the "backup" check below resolves too soon. So for now, to continue
-    // testing we have to wait like 5 seconds for the loading screen to show.
-    logger.log('[UnityView] Waiting before sending LoadConfigFile message...');
-    setTimeout(() => {
-      const msg: RN2UMessage = {
-        m_sId: uuidv4(),
-        m_sKey: 'LoadConfigFile',
-        m_sAdditionalInfo: props.payload.file ?? undefined,
-      };
-      sendMessageToUnity(msg).catch(logger.error);
-    }, 5000);
-  }, [props.payload.file, logger, sendMessageToUnity]);
-
-  // Register Unity ready handler via the `UnityStarted` event.
-  const handleUnityStarted = useCallback<RNUnityCommBridgeUnityEventHandler>(
-    async msg => {
-      if (!unityReadyHandled.current) {
-        unityReadyHandled.current = true;
-        logger.log(
-          `[UnityView] Handling ${UnityEventUnityStarted} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
-          msg,
-        );
-        await handleUnityReady();
-      } else {
-        logger.log(
-          `[UnityView] Ignoring ${UnityEventUnityStarted} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
-          msg,
-        );
-      }
-    },
-    [logger, handleUnityReady],
-  );
-  useEffect(() => {
-    registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
-  }, [handleUnityStarted, registerEventHandler]);
-
-  const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(
-    async msg => {
-      logger.log(
-        `[UnityView] Handling ${UnityEventEndUnity} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
-        msg,
-      );
-      logger.log(
-        `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
-      );
-      const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
-        const fileName = path.split('/').pop() ?? '';
-
-        return {
-          uri: `file://${path}`,
-          type: mime.lookup(fileName) || '',
-          fileName,
-        };
-      });
-
-      logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
-
-      props.onResponse?.({
-        responseType: 'unity',
-        // TODO: Figure out what this should be
-        startTime: 0,
-
-        taskData: mediaFiles,
-      });
-
-      const resetMsg: RN2UMessage = {
-        m_sId: uuidv4(),
-        m_sKey: 'Reset',
-      };
-      await sendMessageToUnity(resetMsg);
-    },
-    [logger, props, sendMessageToUnity],
-  );
-  useEffect(() => {
-    registerEventHandler(UnityEventEndUnity, handleEndUnity);
-  }, [handleEndUnity, registerEventHandler]);
-
-  const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
-    msg => {
-      if (msg.m_sKey === UnityEventDataExport) {
-        logger.log(
-          `[UnityView] Handling ${UnityEventDataExport} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
-          msg,
-        );
-
-        unityPaths.current = [...unityPaths.current, ...msg.m_listDataPaths];
-      }
-    },
-    [logger],
-  );
-  useEffect(() => {
-    registerEventHandler(UnityEventDataExport, handleDataExport);
-  }, [handleDataExport, registerEventHandler]);
-
-  // Register a backup Unity ready handler via a `Echo` message.
-  useEffect(() => {
-    if (!!unityViewKey && !unityViewKeyWas) {
-      const backupCheckPayload = `BackupUnityStartedCheck:${uuidv4()}`;
-      const msg: RN2UMessage = newEchoMessage(backupCheckPayload);
-      sendMessageToUnity(msg)
-        .then(resp => {
-          if (resp?.m_sAdditionalInfo === backupCheckPayload) {
-            if (!unityReadyHandled.current) {
-              unityReadyHandled.current = true;
-              logger.log(
-                `[UnityView] Handling ${UnityEventUnityStarted} backup check`,
-              );
-              handleUnityReady().catch(logger.error);
-            } else {
-              logger.log(
-                `[UnityView] Ignoring ${UnityEventUnityStarted} backup check`,
-              );
-            }
-          }
-        })
-        .catch(logger.error);
-    }
-  }, [
-    sendMessageToUnity,
-    handleUnityReady,
-    logger,
+  const {
+    rnUnityViewRef,
     unityViewKey,
-    unityViewKeyWas,
-  ]);
+    isUnityUnresponsive,
+    failureMode,
+    flowId,
+    showErrorModal,
+    isQuitBeforeMount,
+    handleErrorModalDismiss,
+    handleRestartActivity,
+    handleMessageFromUnity,
+    handlePlayerUnload,
+    handlePlayerQuit,
+  } = useUnityLifecycle({
+    payloadFile: props.payload.file,
+    onResponse: props.onResponse,
+    onError: props.onError,
+  });
 
-  // Handle orientation change requests from Unity, re-lock to portrait on unmount.
-  const handleSetOrientation = useCallback<RNUnityCommBridgeUnityEventHandler>(
-    msg => {
-      if (msg.m_sKey === UnityEventSetOrientation) {
-        const orientationValue = msg.m_sAdditionalInfo;
-        logger.log(
-          `[UnityView] Handling ${UnityEventSetOrientation} message${msg.m_sAdditionalInfo ? ': ' + msg.m_sAdditionalInfo : ''}`,
-          msg,
-        );
-
-        const orientationMap: Record<
-          string,
-          | Orientation.portrait
-          | Orientation.landscapeLeft
-          | Orientation.landscapeRight
-        > = {
-          Portrait: Orientation.portrait,
-          LandscapeLeft: Orientation.landscapeLeft,
-          LandscapeRight: Orientation.landscapeRight,
-        };
-
-        const orientation = orientationMap[orientationValue];
-        if (orientation !== undefined) {
-          RNOrientationDirector.lockTo(orientation);
-        } else {
-          logger.warn(
-            `[UnityView] Unknown orientation value: ${orientationValue}`,
-          );
-        }
-      }
-    },
-    [logger],
+  const errorModal = (
+    <UnityErrorModal
+      visible={showErrorModal}
+      onDismiss={handleErrorModalDismiss}
+      onRestart={handleRestartActivity}
+      canRestart={failureMode === 'unloaded'}
+      isFlow={!!flowId}
+      nextActivityName={props.nextActivityName}
+    />
   );
-  useEffect(() => {
-    registerEventHandler(UnityEventSetOrientation, handleSetOrientation);
-    return () => {
-      RNOrientationDirector.lockTo(Orientation.portrait);
-    };
-  }, [handleSetOrientation, registerEventHandler]);
-
-  // IMPORTANT: DO NOT use this effect for anything else!
-  useEffect(() => {
-    // (Re)generate a new react key for the RN Unity view so it gets
-    // reinitialized when this container view is rendered for the first time.
-    // This ensure we can consistently get a Unity startup message.
-    setUnityViewKey(uuidv4());
-  }, []);
 
   if (!compiledWithRNUnityView) {
     // TODO: Render some dummy/placeholder UI to bypass the activity
     return (
-      <Text fontSize={16} lineHeight={24}>
-        RNUnityView missing from compiled binary!
-      </Text>
+      <>
+        <Text fontSize={16} lineHeight={24}>
+          RNUnityView missing from compiled binary!
+        </Text>
+        {errorModal}
+      </>
     );
-  } else {
-    if (!unityViewKey) {
-      return null;
-    } else {
-      return (
-        <RNUnityView
-          key={unityViewKey}
-          ref={rnUnityViewRef}
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{ flex: 1 }}
-          onUnityMessage={result => {
-            handleMessageFromUnity(result.nativeEvent.message);
-          }}
-        />
-      );
-    }
   }
+
+  if (!unityViewKey) {
+    return errorModal;
+  }
+
+  if (isQuitBeforeMount) {
+    return (
+      <>
+        <Spinner withOverlay isVisible={isUnityUnresponsive} />
+        {errorModal}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <RNUnityView
+        key={unityViewKey}
+        ref={rnUnityViewRef}
+        // eslint-disable-next-line react-native/no-inline-styles
+        style={{ flex: 1 }}
+        onPlayerUnload={handlePlayerUnload}
+        onPlayerQuit={handlePlayerQuit}
+        onUnityMessage={result => {
+          handleMessageFromUnity(result.nativeEvent.message);
+        }}
+      />
+      <Spinner withOverlay isVisible={isUnityUnresponsive} />
+      {errorModal}
+    </>
+  );
 };

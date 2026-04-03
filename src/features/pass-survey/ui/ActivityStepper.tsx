@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import {
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Spinner } from '@app/shared/ui/Spinner';
@@ -43,6 +44,8 @@ type Props = {
   onFinish: (reason: 'regular' | 'idle') => void;
   flowId?: string;
   targetSubjectId: string | null;
+  nextActivityName?: string;
+  onSkipActivity?: () => void;
 };
 
 export function ActivityStepper({
@@ -52,9 +55,12 @@ export function ActivityStepper({
   onClose,
   onFinish,
   flowId,
+  nextActivityName,
+  onSkipActivity,
 }: Props) {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
+  const logger = getDefaultLogger();
 
   const [timerHeight, setTimerHeight] = useState(0);
   const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
@@ -321,6 +327,20 @@ export function ActivityStepper({
     onFinish('regular');
   };
 
+  const handleUnityError = useCallback(() => {
+    if (flowId && onSkipActivity) {
+      logger.warn(
+        '[ActivityStepper] Unity error in flow — skipping to next activity',
+      );
+      onSkipActivity();
+    } else {
+      logger.warn(
+        '[ActivityStepper] Unity error — navigating back to activity list',
+      );
+      onClose('regular');
+    }
+  }, [flowId, onSkipActivity, logger, onClose]);
+
   if (!activityStorageRecord) {
     return <Spinner withOverlay />;
   }
@@ -426,6 +446,8 @@ export function ActivityStepper({
                           textVariableReplacer={replaceTextVariables}
                           onContextChange={setContext}
                           context={activityStorageRecord?.context}
+                          onUnityError={handleUnityError}
+                          nextActivityName={nextActivityName}
                         />
                       )}
                     </>
