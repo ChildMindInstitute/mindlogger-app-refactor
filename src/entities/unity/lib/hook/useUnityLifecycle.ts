@@ -8,7 +8,6 @@ import RNOrientationDirector, {
 import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
-import { withAdditionalInfo } from '@app/shared/lib/services/Logger';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import {
@@ -138,18 +137,11 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   }, [logger, resetFailureState, stopHeartbeat]);
 
   // Register Unity ready handler via the `UnityStarted` event.
-  const handleUnityStarted = useCallback<RNUnityCommBridgeUnityEventHandler>(
-    async msg => {
+  const handleUnityStarted =
+    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
         restartInProgressRef.current = false;
-        logger.log(
-          withAdditionalInfo(
-            `[UnityView] Handling ${UnityEventUnityStarted} message`,
-            msg.m_sAdditionalInfo,
-          ),
-          msg,
-        );
         if (startupTimerRef.current) {
           clearTimeout(startupTimerRef.current);
           startupTimerRef.current = null;
@@ -170,23 +162,14 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
         await handleUnityReady();
       }
-    },
-    [handleUnityReady, logger, startHeartbeat],
-  );
+    }, [handleUnityReady, logger, startHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(
-    async msg => {
+  const handleEndUnity =
+    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       try {
-        logger.log(
-          withAdditionalInfo(
-            `[UnityView] Handling ${UnityEventEndUnity} message`,
-            msg.m_sAdditionalInfo,
-          ),
-          msg,
-        );
         stopHeartbeat();
         logger.log(
           `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
@@ -217,9 +200,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       } catch (err) {
         logger.error(`[UnityView] EndUnity handler failed: ${err}`);
       }
-    },
-    [logger, onResponse, sendMessageToUnity, stopHeartbeat],
-  );
+    }, [logger, onResponse, sendMessageToUnity, stopHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
@@ -227,14 +208,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
       if (msg.m_sKey === UnityEventDataExport) {
-        logger.log(
-          withAdditionalInfo(
-            `[UnityView] Handling ${UnityEventDataExport} message`,
-            msg.m_sAdditionalInfo,
-          ),
-          msg,
-        );
-
         unityPaths.current = [...unityPaths.current, ...msg.m_listDataPaths];
       }
     },
@@ -249,13 +222,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     msg => {
       if (msg.m_sKey === UnityEventSetOrientation) {
         const orientationValue = msg.m_sAdditionalInfo;
-        logger.log(
-          withAdditionalInfo(
-            `[UnityView] Handling ${UnityEventSetOrientation} message`,
-            msg.m_sAdditionalInfo,
-          ),
-          msg,
-        );
 
         const orientationMap: Record<
           string,

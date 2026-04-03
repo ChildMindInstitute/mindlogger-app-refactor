@@ -138,7 +138,13 @@ export const useRNUnityCommBridge = ({
 
         // Call registered handler before resolving promises
         if (handler) {
-          // Allow handler to log message
+          logger.log(
+            withAdditionalInfo(
+              `[RNUnityCommBridge] Handling ${message.m_sKey} message from Unity`,
+              message.m_sAdditionalInfo,
+            ),
+            message,
+          );
           handler(message);
         }
 
