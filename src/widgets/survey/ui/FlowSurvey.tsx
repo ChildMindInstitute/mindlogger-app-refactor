@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
@@ -42,6 +42,7 @@ export function FlowSurvey({
 
   const {
     next,
+    skipToStep,
     back,
     idleTimeoutNext,
     completeByTimer,
@@ -100,6 +101,29 @@ export function FlowSurvey({
 
   const flowPipelineItem = pipeline[step];
 
+  const nextActivityName = useMemo(() => {
+    for (let i = step + 1; i < pipeline.length; i++) {
+      const item = pipeline[i];
+      if (item.type === 'Stepper') {
+        return item.payload.activityName;
+      }
+    }
+    return undefined;
+  }, [pipeline, step]);
+
+  const skipToNextActivity = useCallback(() => {
+    // Find the next Stepper in the pipeline, skipping Intermediate/Summary
+    for (let i = step + 1; i < pipeline.length; i++) {
+      if (pipeline[i].type === 'Stepper') {
+        skipToStep(i);
+        return;
+      }
+    }
+    // No more activities — close the flow
+    clearFlowStorageRecord();
+    onClose();
+  }, [step, pipeline, skipToStep, clearFlowStorageRecord, onClose]);
+
   function closeFlow() {
     clearFlowStorageRecord();
     onClose();
@@ -146,6 +170,8 @@ export function FlowSurvey({
         onBack={back}
         onComplete={complete}
         flowId={entityType === 'flow' ? entityId : undefined}
+        nextActivityName={nextActivityName}
+        onSkipActivity={skipToNextActivity}
       />
     </>
   );

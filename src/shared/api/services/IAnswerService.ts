@@ -112,6 +112,11 @@ export type StabilityTrackerAnswerDto = {
   text?: string;
 };
 
+export type UnityAnswerDto = {
+  type: 'unity';
+  taskData: MediaFile[];
+};
+
 export type AnswerValueDto =
   | SliderAnswerDto
   | NumberSelectAnswerDto
@@ -131,6 +136,7 @@ export type AnswerValueDto =
   | FlankerAnswerDto
   | DrawerAnswerDto
   | AbTestAnswerDto
+  | UnityAnswerDto
   | null;
 
 export type ObjectAnswerDto =

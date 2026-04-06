@@ -8,7 +8,6 @@ import {
   RenderRules,
   renderRules as defaultRenderRules,
 } from 'react-native-markdown-display';
-// @ts-ignore
 import * as mime from 'react-native-mime-types';
 import sanitizeHtml from 'sanitize-html';
 

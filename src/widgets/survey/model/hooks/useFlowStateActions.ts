@@ -68,6 +68,18 @@ export function useFlowStateActions({
     });
   }
 
+  function skipToStep(targetStep: number) {
+    const record: FlowState = getCurrentFlowStorageRecord()!;
+    const pipeline = getPipeline(record);
+
+    const clampedStep = Math.min(targetStep, pipeline.length - 1);
+
+    upsertFlowStorageRecord({
+      ...record,
+      step: clampedStep,
+    });
+  }
+
   function saveActivitySummary(activitySummary: ActivitySummaryData) {
     const record: FlowState = getCurrentFlowStorageRecord()!;
 
@@ -171,6 +183,7 @@ export function useFlowStateActions({
 
   return {
     next,
+    skipToStep,
     idleTimeoutNext,
     back,
     completeByTimer,

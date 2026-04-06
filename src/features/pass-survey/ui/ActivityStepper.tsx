@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import {
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { Spinner } from '@app/shared/ui/Spinner';
@@ -43,6 +44,8 @@ type Props = {
   onFinish: (reason: 'regular' | 'idle') => void;
   flowId?: string;
   targetSubjectId: string | null;
+  nextActivityName?: string;
+  onSkipActivity?: () => void;
 };
 
 export function ActivityStepper({
@@ -52,9 +55,12 @@ export function ActivityStepper({
   onClose,
   onFinish,
   flowId,
+  nextActivityName,
+  onSkipActivity,
 }: Props) {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
+  const logger = getDefaultLogger();
 
   const [timerHeight, setTimerHeight] = useState(0);
   const [showTimeLeft, setShowTimeLeft] = useState(!!timer);
@@ -127,6 +133,7 @@ export function ActivityStepper({
     showTopNavigation,
     showBottomNavigation,
 
+    isUnityStep,
     isValid,
     getNextButtonText,
   } = useActivityStepper(activityStorageRecord);
@@ -320,13 +327,29 @@ export function ActivityStepper({
     onFinish('regular');
   };
 
+  const handleUnityError = useCallback(() => {
+    if (flowId && onSkipActivity) {
+      logger.warn(
+        '[ActivityStepper] Unity error in flow — skipping to next activity',
+      );
+      onSkipActivity();
+    } else {
+      logger.warn(
+        '[ActivityStepper] Unity error — navigating back to activity list',
+      );
+      onClose('regular');
+    }
+  }, [flowId, onSkipActivity, logger, onClose]);
+
   if (!activityStorageRecord) {
     return <Spinner withOverlay />;
   }
 
+  const safeAreaEdges = isUnityStep ? [] : ['bottom' as const];
+
   return (
     <Box flex={1}>
-      {showTimeLeft && (
+      {showTimeLeft && !isUnityStep && (
         <TimeRemaining
           ml={16}
           mt={top === 0 ? 12 : 0}
@@ -354,23 +377,20 @@ export function ActivityStepper({
       >
         <SafeAreaView
           style={styles.safeAreaContainer}
-          edges={{
-            left: 'off',
-            right: 'off',
-            bottom: 'maximum',
-            top: 'off',
-          }}
+          edges={safeAreaEdges}
           mode="margin"
         >
-          <Header
-            showWatermark={showWatermark}
-            watermark={watermark}
-            activityName={activityName}
-            flowId={flowId}
-            eventId={eventId}
-            appletId={appletId}
-            targetSubjectId={targetSubjectId}
-          />
+          {!isUnityStep && (
+            <Header
+              showWatermark={showWatermark}
+              watermark={watermark}
+              activityName={activityName}
+              flowId={flowId}
+              eventId={eventId}
+              appletId={appletId}
+              targetSubjectId={targetSubjectId}
+            />
+          )}
           {showTopNavigation && (
             <Stepper.NavigationPanel px={16}>
               {canMoveBack && <Stepper.BackButton isIcon />}
@@ -385,88 +405,98 @@ export function ActivityStepper({
             </Stepper.NavigationPanel>
           )}
 
-          <Stepper.ViewList
-            renderItem={({ index }) => {
-              const pipelineItem = activityStorageRecord.items[index];
-              const value = activityStorageRecord.answers[index];
+          <Box flex={1}>
+            <Stepper.ViewList
+              renderItem={({ index }) => {
+                const pipelineItem = activityStorageRecord.items[index];
+                const value = activityStorageRecord.answers[index];
 
-              return (
-                <XStack
-                  flex={1}
-                  key={index}
-                  alignItems="center"
-                  onTouchStart={() => restartIdleTimer()}
-                >
-                  <>
-                    {pipelineItem.type === 'Tutorial' && (
-                      <TutorialViewerItem
-                        {...pipelineItem.payload}
-                        ref={tutorialViewerRef}
-                      />
-                    )}
-
-                    {pipelineItem.type !== 'Tutorial' && (
-                      // @ts-ignore
-                      // TODO
-                      // pipelineItem.type cannot be accepted as a valid type for some reason.
-                      <ActivityItem
-                        type={pipelineItem.type}
-                        value={value}
-                        pipelineItem={pipelineItem}
-                        onResponse={response => {
-                          setAnswer(currentStep, response);
-                          if (shouldPostProcessUserActions) {
-                            postProcessUserActionsForCurrentItem();
-                          }
-                        }}
-                        onAdditionalResponse={response => {
-                          setAdditionalAnswer(currentStep, response);
-                        }}
-                        textVariableReplacer={replaceTextVariables}
-                        onContextChange={setContext}
-                        context={activityStorageRecord?.context}
-                      />
-                    )}
-                  </>
-                </XStack>
-              );
-            }}
-          />
-
-          <YStack borderTopColor="$surface_variant" borderTopWidth={1} gap={8}>
-            <ProgressWithTimer
-              key={currentPipelineItem?.id}
-              duration={currentPipelineItem?.timer}
-            />
-
-            {showBottomNavigation && (
-              <Stepper.NavigationPanel pt={20} px={16} pb={16} gap={8}>
-                {canMoveBack && (
-                  <Stepper.BackButton>
-                    {t(
-                      isFirstStep
-                        ? 'activity_navigation:return'
-                        : 'activity_navigation:back',
-                    )}
-                  </Stepper.BackButton>
-                )}
-
-                {canReset && (
-                  <Stepper.UndoButton>
-                    {t('activity_navigation:undo')}
-                  </Stepper.UndoButton>
-                )}
-
-                {canMoveNext && (
-                  <Stepper.NextButton
-                    accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                return (
+                  <XStack
+                    flex={1}
+                    key={index}
+                    alignItems="center"
+                    onTouchStart={() => restartIdleTimer()}
                   >
-                    {t(nextButtonText)}
-                  </Stepper.NextButton>
-                )}
-              </Stepper.NavigationPanel>
-            )}
-          </YStack>
+                    <>
+                      {pipelineItem.type === 'Tutorial' && (
+                        <TutorialViewerItem
+                          {...pipelineItem.payload}
+                          ref={tutorialViewerRef}
+                        />
+                      )}
+
+                      {pipelineItem.type !== 'Tutorial' && (
+                        // @ts-ignore
+                        // TODO
+                        // pipelineItem.type cannot be accepted as a valid type for some reason.
+                        <ActivityItem
+                          type={pipelineItem.type}
+                          value={value}
+                          pipelineItem={pipelineItem}
+                          onResponse={response => {
+                            setAnswer(currentStep, response);
+                            if (shouldPostProcessUserActions) {
+                              postProcessUserActionsForCurrentItem();
+                            }
+                          }}
+                          onAdditionalResponse={response => {
+                            setAdditionalAnswer(currentStep, response);
+                          }}
+                          textVariableReplacer={replaceTextVariables}
+                          onContextChange={setContext}
+                          context={activityStorageRecord?.context}
+                          onUnityError={handleUnityError}
+                          nextActivityName={nextActivityName}
+                        />
+                      )}
+                    </>
+                  </XStack>
+                );
+              }}
+            />
+          </Box>
+
+          {!isUnityStep && (
+            <YStack
+              borderTopColor="$surface_variant"
+              borderTopWidth={1}
+              gap={8}
+            >
+              <ProgressWithTimer
+                key={currentPipelineItem?.id}
+                duration={currentPipelineItem?.timer}
+              />
+
+              {showBottomNavigation && (
+                <Stepper.NavigationPanel pt={20} px={16} pb={16} gap={8}>
+                  {canMoveBack && (
+                    <Stepper.BackButton>
+                      {t(
+                        isFirstStep
+                          ? 'activity_navigation:return'
+                          : 'activity_navigation:back',
+                      )}
+                    </Stepper.BackButton>
+                  )}
+
+                  {canReset && (
+                    <Stepper.UndoButton>
+                      {t('activity_navigation:undo')}
+                    </Stepper.UndoButton>
+                  )}
+
+                  {canMoveNext && (
+                    <Stepper.NextButton
+                      accessibilityLabel={getAccessibilityLabel(nextButtonText)}
+                    >
+                      {t(nextButtonText)}
+                    </Stepper.NextButton>
+                  )}
+                </Stepper.NavigationPanel>
+              )}
+            </YStack>
+          )}
         </SafeAreaView>
       </Stepper>
     </Box>
