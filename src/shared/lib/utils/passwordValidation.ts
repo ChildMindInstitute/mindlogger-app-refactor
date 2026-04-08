@@ -1,3 +1,13 @@
+import { z } from 'zod';
+
+/**
+ * Normalize password input to NFC so the same passphrase is not treated as
+ * different strings when composed differently (e.g. precomposed é vs e + combining accent).
+ * Use the same normalization before hashing on the server.
+ */
+export const normalizePasswordUnicode = (password: string): string =>
+  password.normalize('NFC');
+
 type ZodCheck = {
   isValid: boolean;
   message: PasswordErrorKey;
@@ -45,8 +55,9 @@ export const hasSymbol: PasswordCheckFn = password => {
 };
 
 export const noBlankSpaces: PasswordCheckFn = password => {
+  const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: !/\s/.test(password),
+    isValid: !/\s/.test(normalized),
     message: PasswordErrorKey.NO_BLANK_SPACES,
   };
 };
@@ -56,15 +67,63 @@ export const noBlankSpaces: PasswordCheckFn = password => {
  *
  * @param password - The password to check
  * @param checks - The list of checks to perform (e.g. [hasUppercase, hasLowercase, hasDigit, hasSymbol])
- * @returns An array of error messages
+ * @param minRequiredChecks - The minimum number of checks that must pass for the password to be valid
+ * @returns An object containing an array of error messages and a boolean indicating whether the password is valid
  */
 export const multiplePasswordChecks = (
   password: string,
   checks: PasswordCheckFn[],
-): string[] => {
-  const results = checks.map(fn => fn(password));
-  console.log('results', results);
-  return results
+  minRequiredChecks: number = 3,
+): { errors: string[]; isValid: boolean } => {
+  const normalized = normalizePasswordUnicode(password);
+  const results = checks.map(fn => fn(normalized));
+  const errors = results
     .filter(result => !result.isValid)
     .map(result => result.message);
+
+  const passed = results.filter(result => result.isValid).length;
+  return {
+    errors,
+    isValid: passed >= minRequiredChecks,
+  };
+};
+
+const defaultPasswordTypeChecks: PasswordCheckFn[] = [
+  hasUppercase,
+  hasLowercase,
+  hasDigit,
+  hasSymbol,
+];
+
+/**
+ * Zod superRefine: at least `minRequiredChecks` of uppercase, lowercase, digit, symbol (default 3 of 4).
+ *
+ * @param minRequiredChecks - The minimum number of checks that must pass for the password to be valid (default 3)
+ *
+ * @returns A function that can be used as a superRefine for a Zod schema
+ */
+export const passwordCharacterTypesSuperRefine = (
+  minRequiredChecks = 3,
+): ((value: string, ctx: z.RefinementCtx) => void) => {
+  return (value, ctx) => {
+    const { errors, isValid } = multiplePasswordChecks(
+      value,
+      defaultPasswordTypeChecks,
+      minRequiredChecks,
+    );
+
+    if (!isValid) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: PasswordErrorKey.TYPES_MET,
+      });
+
+      errors.forEach(error => {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: error,
+        });
+      });
+    }
+  };
 };
