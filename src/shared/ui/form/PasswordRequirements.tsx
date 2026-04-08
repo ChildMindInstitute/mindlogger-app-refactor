@@ -8,6 +8,7 @@ import { palette } from '@app/shared/lib/constants/palette';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 import { Text } from '../Text';
+import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
 
 const themeColors = {
   valid: {
@@ -22,6 +23,7 @@ const themeColors = {
 
 export const StyledPasswordRequirementContainer = styled(View, {
   marginTop: 12,
+  marginBottom: 12,
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
@@ -69,7 +71,7 @@ export const PasswordRequirement = ({
         <Icon color={iconColor} size={16} />
       </StyledIconView>
 
-      <Text fontSize={14} marginLeft={8} color={textColor}>
+      <Text flexShrink={1} fontSize={14} marginLeft={8} color={textColor}>
         {label}
       </Text>
     </StyledView>
@@ -98,6 +100,8 @@ export const PasswordRequirements = ({
           />
         ))}
       </StyledPasswordRequirementContainer>
+
+      <Text color={textColor}>{t(PasswordErrorKey.TYPES_MET)}</Text>
     </YStack>
   );
 };
