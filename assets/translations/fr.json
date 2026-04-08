@@ -286,9 +286,14 @@
     "and": "et"
   },
   "password_requirements": {
-    "at_least_characters": "6 caractères",
+    "at_least_characters": "10 caractères",
     "no_blank_spaces": "pas d'espaces vides",
-    "must_include": "Le mot de passe doit inclure:"
+    "must_include": "Le mot de passe doit inclure:",
+    "must_include_uppercase": "Lettres majuscules (A-Z)",
+    "must_include_lowercase": "Lettres minuscules (A-Z)",
+    "must_include_digits": "Nombre (0-9)",
+    "must_include_symbol": "Symboles (!@#$...)",
+    "types_met": "Au moins 3 des 4 types ci-dessus:"
   },
   "geolocation": {
     "get_location": "LOCALISATION",
