@@ -59,13 +59,24 @@ export type CompletedEntityDto = {
   answerId: string;
   submitId: string;
   scheduledEventId: string;
-  targetSubjectId: string;
-  localEndDate: string; // YYYY-MM-DD
-  localEndTime: string; // hh:mm:ss
+  targetSubjectId: string | null;
+  localEndDate: string | null; // YYYY-MM-DD - null for in-progress flows
+  localEndTime: string | null; // hh:mm:ss - null for in-progress flows
+  startTime: number; // millisecond timestamp when activity/flow started
+  endTime: number; // millisecond timestamp when activity/flow ended
+  isFlowCompleted?: boolean | null; // true=completed, false=in-progress, null=standalone activity
+  activityFlowOrder?: number | null; // 0-indexed position of NEXT activity to complete (for in-progress flows)
 };
 
 export type CompletedEntitiesRequest = {
   fromDate: string; // YYYY-MM-DD
+  includeInProgress?: boolean;
+};
+
+export type AppletCompletedEntitiesRequest = {
+  appletId: string;
+  fromDate: string; // YYYY-MM-DD
+  includeInProgress?: boolean;
 };
 
 export type AppletCompletedEntitiesResponse = SuccessfulResponse<{
@@ -92,4 +103,8 @@ export type IEventsService = {
   getAllCompletedEntities: (
     request: CompletedEntitiesRequest,
   ) => Promise<AxiosResponse<CompletedEntitiesResponse>>;
+
+  getAppletCompletedEntities: (
+    request: AppletCompletedEntitiesRequest,
+  ) => Promise<AxiosResponse<AppletCompletedEntitiesResponse>>;
 };

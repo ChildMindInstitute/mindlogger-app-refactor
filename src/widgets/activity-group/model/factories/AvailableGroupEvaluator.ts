@@ -34,7 +34,10 @@ export class AvailableGroupEvaluator implements IEvaluator<
       targetSubjectId,
     );
 
-    const isNeverCompleted = !progressionRecord;
+    // For one-time completion, check if it's actually completed, not just if a record exists
+    // In-progress flows should still be available/resumable
+    const isNeverCompleted =
+      !progressionRecord || progressionRecord.status !== 'completed';
 
     return (isOneTimeCompletion && isNeverCompleted) || !isOneTimeCompletion;
   }

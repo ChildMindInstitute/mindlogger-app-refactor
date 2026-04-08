@@ -45,6 +45,8 @@ describe('Test ProgressDataCollector', () => {
                 scheduledEventId: 'mock-scheduledEventId-10',
                 targetSubjectId: 'mock-subject-1',
                 submitId: 'mock-submitId-10',
+                startTime: 1633568523000,
+                endTime: 1633568523000,
               },
             ],
             activityFlows: [],
@@ -62,6 +64,8 @@ describe('Test ProgressDataCollector', () => {
                 scheduledEventId: 'mock-scheduledEventId-11',
                 targetSubjectId: 'mock-subject-1',
                 submitId: 'mock-submitId-11',
+                startTime: 1633654925000,
+                endTime: 1633654925000,
               },
             ],
           },
@@ -85,6 +89,8 @@ describe('Test ProgressDataCollector', () => {
               scheduledEventId: 'mock-scheduledEventId-10',
               targetSubjectId: 'mock-subject-1',
               submitId: 'mock-submitId-10',
+              startTime: 1633568523000,
+              endTime: 1633568523000,
             },
           ],
           activityFlows: [],
@@ -102,6 +108,8 @@ describe('Test ProgressDataCollector', () => {
               scheduledEventId: 'mock-scheduledEventId-11',
               targetSubjectId: 'mock-subject-1',
               submitId: 'mock-submitId-11',
+              startTime: 1633654925000,
+              endTime: 1633654925000,
             },
           ],
           id: 'mock-id-2',
@@ -125,6 +133,29 @@ describe('Test ProgressDataCollector', () => {
     const result = await collector.collect();
 
     expect(result).toEqual({ appletEntities: {} });
+  });
+
+  it('Should pass includeInProgress: true to getAllCompletedEntities', async () => {
+    const collector = new ProgressDataCollector(loggerMock);
+
+    const mockedValue: MockedResponse = {
+      data: {
+        result: [],
+      },
+    };
+
+    getAllCompletedEntitiesMock.mockResolvedValue(mockedValue);
+
+    await collector.collect();
+
+    expect(
+      getDefaultEventsService().getAllCompletedEntities,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fromDate: expect.any(String) as string,
+        includeInProgress: true,
+      }),
+    );
   });
 
   const negativeTests: Array<MockedResponse | null | undefined> = [

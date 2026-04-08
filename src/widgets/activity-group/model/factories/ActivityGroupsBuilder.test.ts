@@ -14,6 +14,7 @@ import { ActivityPipelineType } from '@app/abstract/lib/types/activityPipeline';
 import {
   EntityProgression,
   EntityProgressionCompleted,
+  EntityProgressionInProgress,
   EntityProgressionInProgressActivityFlow,
 } from '@app/abstract/lib/types/entityProgress';
 import {
@@ -41,7 +42,23 @@ import {
 } from '../../lib/types/activityGroupsBuilder';
 
 const getProgressions = (startAt: Date, endAt: Date | null) => {
-  const progression: EntityProgression = {
+  if (endAt) {
+    const progression: EntityProgressionCompleted = {
+      status: 'completed',
+      appletId: 'test-applet-id-1',
+      entityType: 'activity',
+      entityId: 'test-entity-id-1',
+      eventId: 'test-event-id-1',
+      targetSubjectId: null,
+      startedAtTimestamp: startAt.getTime(),
+      endedAtTimestamp: endAt.getTime(),
+      availableUntilTimestamp: null,
+      submitId: 'test-submit-id',
+    };
+    return [progression];
+  }
+
+  const progression: EntityProgressionInProgress = {
     status: 'in-progress',
     appletId: 'test-applet-id-1',
     entityType: 'activity',
@@ -52,9 +69,6 @@ const getProgressions = (startAt: Date, endAt: Date | null) => {
     availableUntilTimestamp: null,
     submitId: 'test-submit-id',
   };
-
-  (progression as never as EntityProgressionCompleted).endedAtTimestamp =
-    endAt?.getTime() || null;
 
   return [progression];
 };
