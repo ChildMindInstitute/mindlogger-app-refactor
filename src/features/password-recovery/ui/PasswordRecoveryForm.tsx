@@ -14,6 +14,7 @@ import { InputField } from '@app/shared/ui/form/InputField';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
 import { PasswordRecoveryFormSchema } from '../model/PasswordRecoveryFormSchema';
+import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
 
 type Props = BoxProps & {
   onPasswordRecoverySuccess: () => void;
@@ -95,6 +96,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         >
           {t('password_recovery_form:submit')}
         </SubmitButton>
+        <PasswordRequirementsChecklist />
       </FormProvider>
     </Box>
   );
