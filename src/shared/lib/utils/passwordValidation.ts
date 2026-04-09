@@ -80,29 +80,37 @@ export enum PasswordErrorKey {
 type PasswordCheckFn = (password: string) => ZodCheck;
 
 export const hasUppercase: PasswordCheckFn = password => {
+  const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: UPPERCASE_REGEXP.test(password),
+    isValid:
+      UPPERCASE_REGEXP.test(normalized) ||
+      CASELESS_LETTER_REGEXP.test(normalized),
     message: PasswordErrorKey.MUST_INCLUDE_UPPERCASE,
   };
 };
 
 export const hasLowercase: PasswordCheckFn = password => {
+  const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: LOWERCASE_REGEXP.test(password),
+    isValid:
+      LOWERCASE_REGEXP.test(normalized) ||
+      CASELESS_LETTER_REGEXP.test(normalized),
     message: PasswordErrorKey.MUST_INCLUDE_LOWERCASE,
   };
 };
 
 export const hasDigit: PasswordCheckFn = password => {
+  const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: DIGIT_REGEXP.test(password),
+    isValid: DIGIT_REGEXP.test(normalized),
     message: PasswordErrorKey.MUST_INCLUDE_DIGITS,
   };
 };
 
 export const hasSymbol: PasswordCheckFn = password => {
+  const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: SYMBOL_REGEXP.test(password),
+    isValid: SYMBOL_REGEXP.test(normalized),
     message: PasswordErrorKey.MUST_INCLUDE_SYMBOL,
   };
 };
