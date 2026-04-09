@@ -1,5 +1,6 @@
 import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
 import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
+
 import { SignUpFormSchema } from '../SignUpFormSchema';
 
 const validBase = {
@@ -34,7 +35,9 @@ describe('SignUpFormSchema — password', () => {
     const result = parsePassword('');
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues.some(i => i.message === 'form_item:required')).toBe(true);
+      expect(
+        result.error.issues.some(i => i.message === 'form_item:required'),
+      ).toBe(true);
     }
   });
 
@@ -43,7 +46,9 @@ describe('SignUpFormSchema — password', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(
-        result.error.issues.some(i => i.message === PasswordErrorKey.MIN_LENGTH),
+        result.error.issues.some(
+          i => i.message === PasswordErrorKey.MIN_LENGTH,
+        ),
       ).toBe(true);
     }
   });
@@ -65,7 +70,9 @@ describe('SignUpFormSchema — password', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(
-        result.error.issues.some(i => i.message === PasswordErrorKey.NO_BLANK_SPACES),
+        result.error.issues.some(
+          i => i.message === PasswordErrorKey.NO_BLANK_SPACES,
+        ),
       ).toBe(true);
     }
   });
@@ -81,9 +88,9 @@ describe('SignUpFormSchema — password', () => {
   });
 
   it('accepts equivalent Unicode spellings after NFC normalization', () => {
-    // NFD vs NFC for "À" at the start; same length and character classes after normalize
-    const nfd = '\u0041\u0300bcdefg1!';
-    const nfc = '\u00C0bcdefg1!';
+    // NFD vs NFC for "À" at the start; 10 chars after normalization
+    const nfd = '\u0041\u0300bcdefgh1!';
+    const nfc = '\u00C0bcdefgh1!';
     const nfdResult = parsePassword(nfd);
     const nfcResult = parsePassword(nfc);
     expect(nfdResult.success).toBe(true);
