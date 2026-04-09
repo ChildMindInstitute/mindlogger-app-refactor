@@ -9,5 +9,8 @@ export const LoginFormSchema = z.object({
     .string()
     .min(1, 'form_item:required')
     .min(LEGACY_PASSWORD_MIN_LENGTH, 'login:password_at_least_characters')
-    .refine(value => noBlankSpaces(value).isValid, 'password_requirements:no_blank_spaces'),
+    .refine(
+      value => noBlankSpaces(value).isValid,
+      'password_requirements:no_blank_spaces',
+    ),
 });

@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { z } from 'zod';
 
 import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';

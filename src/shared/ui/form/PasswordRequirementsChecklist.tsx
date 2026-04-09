@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
-import { PasswordRequirements } from '@app/shared/ui/form/PasswordRequirements';
 import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
+import { PasswordRequirements } from '@app/shared/ui/form/PasswordRequirements';
 
 export const PasswordRequirementsChecklist = () => {
   const form = useFormContext();

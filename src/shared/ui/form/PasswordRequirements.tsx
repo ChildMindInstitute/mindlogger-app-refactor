@@ -5,10 +5,10 @@ import { YStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { palette } from '@app/shared/lib/constants/palette';
+import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 import { Text } from '../Text';
-import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
 
 const themeColors = {
   valid: {

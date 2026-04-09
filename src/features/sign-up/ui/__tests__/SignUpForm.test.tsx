@@ -3,10 +3,9 @@ import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
-import { BaseError } from '@app/shared/api/types';
-
 import { useRegistrationMutation } from '@app/features/sign-up/model/hooks/useRegistrationMutation';
 import { SignUpForm } from '@app/features/sign-up/ui/SignUpForm';
+import { BaseError } from '@app/shared/api/types';
 
 jest.mock('react-native-reanimated', () => {
   const { View } = require('react-native');
@@ -102,7 +101,10 @@ describe('SignUpForm', () => {
       const { getByLabelText } = renderForm();
 
       fillValidForm(getByLabelText);
-      fireEvent.changeText(getByLabelText('signup-email-input'), 'not-an-email');
+      fireEvent.changeText(
+        getByLabelText('signup-email-input'),
+        'not-an-email',
+      );
 
       fireEvent.press(getByLabelText('sign_up-button'));
 
@@ -198,9 +200,7 @@ describe('SignUpForm', () => {
       const { getByLabelText, getByText } = renderForm();
 
       expect(getByLabelText('signup-error-message')).toBeTruthy();
-      expect(
-        getByText('identity_error:email_already_registered'),
-      ).toBeTruthy();
+      expect(getByText('identity_error:email_already_registered')).toBeTruthy();
     });
 
     it('does not show error message when there is no mutation error', () => {

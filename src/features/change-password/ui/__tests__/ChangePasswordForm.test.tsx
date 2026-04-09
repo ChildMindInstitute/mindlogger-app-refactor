@@ -4,7 +4,6 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { useChangePasswordMutation } from '@app/entities/identity/api/hooks/useChangePasswordMutation';
-
 import { ChangePasswordForm } from '@app/features/change-password/ui/ChangePasswordForm';
 
 const mockMutate = jest.fn();
@@ -60,10 +59,7 @@ function renderForm() {
 function fillAndSubmitForm(
   getByPlaceholderText: ReturnType<typeof render>['getByPlaceholderText'],
   getByLabelText: ReturnType<typeof render>['getByLabelText'],
-  {
-    prevPassword = 'OldPassword1!',
-    newPassword = 'NewPassword1!',
-  } = {},
+  { prevPassword = 'OldPassword1!', newPassword = 'NewPassword1!' } = {},
 ) {
   fireEvent.changeText(
     getByPlaceholderText('change_pass_form:cur_pass_placeholder'),
@@ -244,9 +240,7 @@ describe('ChangePasswordForm', () => {
       fillAndSubmitForm(getByPlaceholderText, getByLabelText);
 
       await waitFor(() => {
-        expect(mockAddErrorBanner).toHaveBeenCalledWith(
-          'Something went wrong',
-        );
+        expect(mockAddErrorBanner).toHaveBeenCalledWith('Something went wrong');
       });
     });
 

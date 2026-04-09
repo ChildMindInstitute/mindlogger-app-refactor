@@ -1,21 +1,22 @@
 import React, { FC, useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { TouchableWithoutFeedback } from 'react-native';
+
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { useChangePasswordMutation } from '@app/entities/identity/api/hooks/useChangePasswordMutation';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { InputField } from '@app/shared/ui/form/InputField';
+import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
+import { EyeIcon, EyeSlashIcon } from '@app/shared/ui/icons';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
 import { ChangePasswordFormSchema } from '../model/ChangePasswordFormSchema';
-import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
-import { palette } from '@app/shared/lib/constants/palette';
-import { EyeIcon, EyeSlashIcon } from '@app/shared/ui/icons';
 
 type Props = BoxProps & {
   onChangePasswordSuccess: () => void;
