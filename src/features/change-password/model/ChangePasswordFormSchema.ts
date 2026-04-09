@@ -9,14 +9,14 @@ import {
 } from '@app/shared/lib/utils/passwordValidation';
 
 export const ChangePasswordFormSchema = z.object({
-  prev_password: z
-    .string()
-    .min(1, 'form_item:required')
-    .min(PASSWORD_MIN_LENGTH, PasswordErrorKey.MIN_LENGTH),
+  prev_password: z.string().min(1, 'form_item:required'),
   password: z
     .string()
     .min(1, 'form_item:required')
     .min(PASSWORD_MIN_LENGTH, PasswordErrorKey.MIN_LENGTH)
     .superRefine(passwordCharacterTypesSuperRefine())
-    .refine(value => noBlankSpaces(value).isValid, PasswordErrorKey.NO_BLANK_SPACES),
+    .refine(
+      value => noBlankSpaces(value).isValid,
+      PasswordErrorKey.NO_BLANK_SPACES,
+    ),
 });
