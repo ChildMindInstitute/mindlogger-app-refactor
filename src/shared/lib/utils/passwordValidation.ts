@@ -1,5 +1,21 @@
 import { z } from 'zod';
 
+import {
+  PASSWORD_MIN_LENGTH,
+  ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+} from '@app/shared/lib/constants/password';
+
+import {
+  UPPERCASE_REGEXP,
+  LOWERCASE_REGEXP,
+  DIGIT_REGEXP,
+  SYMBOL_REGEXP,
+  VISIBLE_ONLY_REGEXP,
+  HIDDEN_BLANKS_REGEXP,
+  CASELESS_LETTER_REGEXP,
+  PasswordCheckResult,
+} from './passwordPatterns';
+
 /**
  * Normalize password input to NFC so the same passphrase is not treated as
  * different strings when composed differently (e.g. precomposed é vs e + combining accent).
@@ -7,6 +23,43 @@ import { z } from 'zod';
  */
 export const normalizePasswordUnicode = (password: string): string =>
   password.normalize('NFC');
+
+// Unified password check — returns a full result object matching admin/web.
+export const checkPassword = (
+  password: string,
+  minLength: number = PASSWORD_MIN_LENGTH,
+): PasswordCheckResult => {
+  const normalized = normalizePasswordUnicode(password);
+  const hasCaselessLetter = CASELESS_LETTER_REGEXP.test(normalized);
+  const uppercaseResult =
+    UPPERCASE_REGEXP.test(normalized) || hasCaselessLetter;
+  const lowercaseResult =
+    LOWERCASE_REGEXP.test(normalized) || hasCaselessLetter;
+  const digitResult = DIGIT_REGEXP.test(normalized);
+  const symbolResult = SYMBOL_REGEXP.test(normalized);
+  const charTypeCount = [
+    uppercaseResult,
+    lowercaseResult,
+    digitResult,
+    symbolResult,
+  ].filter(Boolean).length;
+
+  return {
+    hasUppercase: uppercaseResult,
+    hasLowercase: lowercaseResult,
+    hasCaselessLetter,
+    hasDigit: digitResult,
+    hasSymbol: symbolResult,
+    hasNoSpaces:
+      VISIBLE_ONLY_REGEXP.test(normalized) &&
+      !HIDDEN_BLANKS_REGEXP.test(normalized),
+    meetsLength: [...normalized].length >= minLength,
+    charTypeCount,
+    meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+  };
+};
+
+export type { PasswordCheckResult } from './passwordPatterns';
 
 type ZodCheck = {
   isValid: boolean;
@@ -28,28 +81,28 @@ type PasswordCheckFn = (password: string) => ZodCheck;
 
 export const hasUppercase: PasswordCheckFn = password => {
   return {
-    isValid: /\p{Lu}/u.test(password),
+    isValid: UPPERCASE_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_UPPERCASE,
   };
 };
 
 export const hasLowercase: PasswordCheckFn = password => {
   return {
-    isValid: /\p{Ll}/u.test(password),
+    isValid: LOWERCASE_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_LOWERCASE,
   };
 };
 
 export const hasDigit: PasswordCheckFn = password => {
   return {
-    isValid: /\p{Nd}/u.test(password),
+    isValid: DIGIT_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_DIGITS,
   };
 };
 
 export const hasSymbol: PasswordCheckFn = password => {
   return {
-    isValid: /[^\p{L}\p{Nd}]/u.test(password),
+    isValid: SYMBOL_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_SYMBOL,
   };
 };
@@ -57,7 +110,9 @@ export const hasSymbol: PasswordCheckFn = password => {
 export const noBlankSpaces: PasswordCheckFn = password => {
   const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: !/\s/.test(normalized),
+    isValid:
+      VISIBLE_ONLY_REGEXP.test(normalized) &&
+      !HIDDEN_BLANKS_REGEXP.test(normalized),
     message: PasswordErrorKey.NO_BLANK_SPACES,
   };
 };
