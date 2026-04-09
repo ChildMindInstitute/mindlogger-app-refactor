@@ -1,20 +1,23 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { useApprovePasswordRecoveryMutation } from '@app/entities/identity/api/hooks/useApprovePasswordRecoveryMutation';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
 import { InputField } from '@app/shared/ui/form/InputField';
+import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
+import { EyeIcon, EyeSlashIcon } from '@app/shared/ui/icons';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
 import { PasswordRecoveryFormSchema } from '../model/PasswordRecoveryFormSchema';
-import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
 
 type Props = BoxProps & {
   onPasswordRecoverySuccess: () => void;
@@ -25,6 +28,7 @@ type Props = BoxProps & {
 export const PasswordRecoveryForm: FC<Props> = props => {
   const { t } = useTranslation();
   const { addSuccessBanner, addErrorBanner } = useBanners();
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const {
     mutate: recoverPassword,
@@ -59,20 +63,29 @@ export const PasswordRecoveryForm: FC<Props> = props => {
 
   useFormChanges({ form, onInputChange: () => reset() });
 
+  const ShowPasswordIcon = isPasswordHidden ? EyeSlashIcon : EyeIcon;
+
   return (
     <Box {...props}>
       <FormProvider {...form}>
         <YStack space={8} mb={40}>
           <InputField
             aria-label="password-recovery-new-password-input"
-            secureTextEntry
+            secureTextEntry={isPasswordHidden}
             name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
+            rightIcon={
+              <TouchableWithoutFeedback
+                onPress={() => setIsPasswordHidden(!isPasswordHidden)}
+              >
+                <ShowPasswordIcon size={18} color={palette.on_surface} />
+              </TouchableWithoutFeedback>
+            }
           />
 
           <InputField
             aria-label="password-recovery-confirm-password-input"
-            secureTextEntry
+            secureTextEntry={isPasswordHidden}
             name="confirmPassword"
             placeholder={t(
               'password_recovery_form:confirm_password_placeholder',
