@@ -2,22 +2,29 @@ import { t } from 'i18next';
 import { z } from 'zod';
 
 import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
+import {
+  checkPassword,
+  noBlankSpaces,
+  passwordCharacterTypesSuperRefine,
+  PasswordErrorKey,
+} from '@app/shared/lib/utils/passwordValidation';
 
 export const PasswordRecoveryFormSchema = z
   .object({
     newPassword: z
       .string()
       .trim()
-      .min(
-        PASSWORD_MIN_LENGTH,
-        t('password_recovery_form:password_at_least_characters', {
-          min: PASSWORD_MIN_LENGTH,
-        }),
-      )
       .refine(
-        value => !value.includes(' '),
-        'password_recovery_form:password_no_spaces',
+        value => checkPassword(value).meetsLength,
+        PasswordErrorKey.MIN_LENGTH,
+      )
+      .superRefine(passwordCharacterTypesSuperRefine())
+      .refine(
+        value => noBlankSpaces(value).isValid,
+        PasswordErrorKey.NO_BLANK_SPACES,
       ),
+    // No char-type validation needed - the passwords-must-match refine below
+    // guarantees confirmPassword satisfies the same rules as newPassword.
     confirmPassword: z
       .string()
       .min(1, 'password_recovery_form:password_confirmation_required'),

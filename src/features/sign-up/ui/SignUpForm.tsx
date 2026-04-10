@@ -11,10 +11,10 @@ import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps } from '@app/shared/ui/base';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
 import { InputField } from '@app/shared/ui/form/InputField';
+import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { EyeIcon, EyeSlashIcon } from '@shared/ui/icons';
 
-import { SignUpPasswordRequirements } from './SignUpPasswordRequirements';
 import { useRegistrationMutation } from '../model/hooks/useRegistrationMutation';
 import { SignUpFormSchema } from '../validation/SignUpFormSchema';
 
@@ -96,7 +96,7 @@ const SignUpForm: FC<Props> = props => {
             />
           )}
 
-          {isPasswordFocus && <SignUpPasswordRequirements />}
+          {isPasswordFocus && <PasswordRequirementsChecklist />}
 
           <SubmitButton
             isLoading={isLoading}

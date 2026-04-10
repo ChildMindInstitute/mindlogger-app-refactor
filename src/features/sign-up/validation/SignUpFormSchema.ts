@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
+import {
+  PasswordErrorKey,
+  checkPassword,
+  noBlankSpaces,
+  passwordCharacterTypesSuperRefine,
+} from '@app/shared/lib/utils/passwordValidation';
+
 export const SignUpFormSchema = z.object({
   email: z
     .string()
@@ -9,10 +17,14 @@ export const SignUpFormSchema = z.object({
   password: z
     .string()
     .min(1, 'form_item:required')
-    .min(6, 'password_requirements:at_least_characters')
     .refine(
-      value => !value.includes(' '),
-      'password_requirements:no_blank_spaces',
+      value => checkPassword(value).meetsLength,
+      PasswordErrorKey.MIN_LENGTH,
+    )
+    .superRefine(passwordCharacterTypesSuperRefine())
+    .refine(
+      value => noBlankSpaces(value).isValid,
+      PasswordErrorKey.NO_BLANK_SPACES,
     ),
   firstName: z.string().trim().min(1, 'form_item:required'),
   lastName: z.string().trim().min(1, 'form_item:required'),

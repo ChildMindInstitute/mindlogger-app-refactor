@@ -5,6 +5,7 @@ import { YStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { palette } from '@app/shared/lib/constants/palette';
+import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 import { Text } from '../Text';
@@ -22,6 +23,7 @@ const themeColors = {
 
 export const StyledPasswordRequirementContainer = styled(View, {
   marginTop: 12,
+  marginBottom: 12,
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
@@ -69,7 +71,7 @@ export const PasswordRequirement = ({
         <Icon color={iconColor} size={16} />
       </StyledIconView>
 
-      <Text fontSize={14} marginLeft={8} color={textColor}>
+      <Text flexShrink={1} fontSize={14} marginLeft={8} color={textColor}>
         {label}
       </Text>
     </StyledView>
@@ -77,11 +79,13 @@ export const PasswordRequirement = ({
 };
 
 export type PasswordRequirementsProps = {
-  requirements: Requirement[];
+  generalRequirements: Requirement[];
+  typeRequirements: Requirement[];
 };
 
 export const PasswordRequirements = ({
-  requirements,
+  generalRequirements,
+  typeRequirements,
 }: PasswordRequirementsProps) => {
   const { t } = useTranslation();
   const { textColor } = themeColors.valid;
@@ -90,7 +94,19 @@ export const PasswordRequirements = ({
       <Text color={textColor}>{t('password_requirements:must_include')}</Text>
 
       <StyledPasswordRequirementContainer>
-        {requirements.map(requirement => (
+        {generalRequirements.map(requirement => (
+          <PasswordRequirement
+            key={requirement.label}
+            label={t(requirement.label)}
+            isValid={requirement.isValid}
+          />
+        ))}
+      </StyledPasswordRequirementContainer>
+
+      <Text color={textColor}>{t(PasswordErrorKey.TYPES_MET)}</Text>
+
+      <StyledPasswordRequirementContainer>
+        {typeRequirements.map(requirement => (
           <PasswordRequirement
             key={requirement.label}
             label={t(requirement.label)}
