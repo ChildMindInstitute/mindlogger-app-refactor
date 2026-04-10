@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
 import {
+  checkPassword,
   noBlankSpaces,
   passwordCharacterTypesSuperRefine,
   PasswordErrorKey,
@@ -13,7 +14,10 @@ export const PasswordRecoveryFormSchema = z
     newPassword: z
       .string()
       .trim()
-      .min(PASSWORD_MIN_LENGTH, t(PasswordErrorKey.MIN_LENGTH))
+      .refine(
+        value => checkPassword(value).meetsLength,
+        PasswordErrorKey.MIN_LENGTH,
+      )
       .superRefine(passwordCharacterTypesSuperRefine())
       .refine(
         value => noBlankSpaces(value).isValid,

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import GraphemeSplitter from 'grapheme-splitter';
 
 import {
   PASSWORD_MIN_LENGTH,
@@ -25,12 +26,16 @@ import {
 export const normalizePasswordUnicode = (password: string): string =>
   password.normalize('NFKC');
 
+const graphemeLength = (str: string) =>
+  new GraphemeSplitter().splitGraphemes(str).length;
+
 // Unified password check — returns a full result object matching admin/web.
 export const checkPassword = (
   password: string,
   minLength: number = PASSWORD_MIN_LENGTH,
 ): PasswordCheckResult => {
   const normalized = normalizePasswordUnicode(password);
+
   const hasCaselessLetter = CASELESS_LETTER_REGEXP.test(normalized);
   const uppercaseResult =
     UPPERCASE_REGEXP.test(normalized) || hasCaselessLetter;
@@ -54,7 +59,7 @@ export const checkPassword = (
     hasNoSpaces:
       VISIBLE_ONLY_REGEXP.test(normalized) &&
       !HIDDEN_BLANKS_REGEXP.test(normalized),
-    meetsLength: [...normalized].length >= minLength,
+    meetsLength: graphemeLength(normalized) >= minLength,
     charTypeCount,
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
   };

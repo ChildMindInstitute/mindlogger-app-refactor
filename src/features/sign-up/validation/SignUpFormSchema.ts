@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
 import {
   PasswordErrorKey,
+  checkPassword,
   noBlankSpaces,
   passwordCharacterTypesSuperRefine,
 } from '@app/shared/lib/utils/passwordValidation';
@@ -16,7 +17,10 @@ export const SignUpFormSchema = z.object({
   password: z
     .string()
     .min(1, 'form_item:required')
-    .min(PASSWORD_MIN_LENGTH, PasswordErrorKey.MIN_LENGTH)
+    .refine(
+      value => checkPassword(value).meetsLength,
+      PasswordErrorKey.MIN_LENGTH,
+    )
     .superRefine(passwordCharacterTypesSuperRefine())
     .refine(
       value => noBlankSpaces(value).isValid,
