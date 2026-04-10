@@ -1,38 +1,65 @@
 import { useMemo } from 'react';
 
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
-import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
-import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
+import {
+  checkPassword,
+  PasswordErrorKey,
+} from '@app/shared/lib/utils/passwordValidation';
 import { PasswordRequirements } from '@app/shared/ui/form/PasswordRequirements';
 
-export const PasswordRequirementsChecklist = () => {
+type Props = {
+  fieldName?: string;
+};
+
+export const PasswordRequirementsChecklist = ({
+  fieldName = 'password',
+}: Props) => {
   const form = useFormContext();
+  const passwordValue = String(
+    useWatch({ control: form.control, name: fieldName }) ?? '',
+  );
 
-  useFormChanges({
-    form,
-    watchInputs: ['password'],
-    onInputChange: () => form.trigger('password'),
-  });
+  const { generalRequirements, typeRequirements } = useMemo(() => {
+    const hasLength = !!passwordValue.length;
+    const result = checkPassword(passwordValue);
 
-  const passwordHasLength = !!form.getValues().password.length;
-  const passwordRequirements = useMemo(() => {
-    const errors = Object.values(
-      form.formState.errors?.password?.types || {},
-    ).flat();
+    return {
+      generalRequirements: [
+        {
+          label: PasswordErrorKey.MIN_LENGTH,
+          isValid: hasLength && result.meetsLength,
+        },
+        {
+          label: PasswordErrorKey.NO_BLANK_SPACES,
+          isValid: hasLength && result.hasNoSpaces,
+        },
+      ],
+      typeRequirements: [
+        {
+          label: PasswordErrorKey.MUST_INCLUDE_UPPERCASE,
+          isValid: hasLength && result.hasUppercase,
+        },
+        {
+          label: PasswordErrorKey.MUST_INCLUDE_LOWERCASE,
+          isValid: hasLength && result.hasLowercase,
+        },
+        {
+          label: PasswordErrorKey.MUST_INCLUDE_DIGITS,
+          isValid: hasLength && result.hasDigit,
+        },
+        {
+          label: PasswordErrorKey.MUST_INCLUDE_SYMBOL,
+          isValid: hasLength && result.hasSymbol,
+        },
+      ],
+    };
+  }, [passwordValue]);
 
-    return [
-      PasswordErrorKey.MIN_LENGTH,
-      PasswordErrorKey.NO_BLANK_SPACES,
-      PasswordErrorKey.MUST_INCLUDE_UPPERCASE,
-      PasswordErrorKey.MUST_INCLUDE_LOWERCASE,
-      PasswordErrorKey.MUST_INCLUDE_DIGITS,
-      PasswordErrorKey.MUST_INCLUDE_SYMBOL,
-    ].map(key => ({
-      label: key,
-      isValid: passwordHasLength && !errors.includes(key),
-    }));
-  }, [passwordHasLength, form.formState.errors?.password?.types]);
-
-  return <PasswordRequirements requirements={passwordRequirements} />;
+  return (
+    <PasswordRequirements
+      generalRequirements={generalRequirements}
+      typeRequirements={typeRequirements}
+    />
+  );
 };

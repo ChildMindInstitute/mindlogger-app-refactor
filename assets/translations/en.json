@@ -310,7 +310,7 @@
     "must_include_lowercase": "Lowercase letters (a-z)",
     "must_include_digits": "Number (0-9)",
     "must_include_symbol": "Symbols (!@#$...)",
-    "types_met": "At least 3 of the above 4 types:"
+    "types_met": "At least 3 of the below 4 types:"
   },
   "geolocation": {
     "get_location": "GET LOCATION",

@@ -96,7 +96,7 @@ describe('ChangePasswordForm', () => {
       expect(mockMutate).not.toHaveBeenCalled();
     });
 
-    it('shows error when previous password is shorter than minimum length', async () => {
+    it('shows error when previous password is shorter than legacy minimum length', async () => {
       const { getByPlaceholderText, getByLabelText } = renderForm();
 
       fireEvent.changeText(

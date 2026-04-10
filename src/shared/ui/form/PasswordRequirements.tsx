@@ -79,11 +79,13 @@ export const PasswordRequirement = ({
 };
 
 export type PasswordRequirementsProps = {
-  requirements: Requirement[];
+  generalRequirements: Requirement[];
+  typeRequirements: Requirement[];
 };
 
 export const PasswordRequirements = ({
-  requirements,
+  generalRequirements,
+  typeRequirements,
 }: PasswordRequirementsProps) => {
   const { t } = useTranslation();
   const { textColor } = themeColors.valid;
@@ -92,7 +94,7 @@ export const PasswordRequirements = ({
       <Text color={textColor}>{t('password_requirements:must_include')}</Text>
 
       <StyledPasswordRequirementContainer>
-        {requirements.map(requirement => (
+        {generalRequirements.map(requirement => (
           <PasswordRequirement
             key={requirement.label}
             label={t(requirement.label)}
@@ -102,6 +104,16 @@ export const PasswordRequirements = ({
       </StyledPasswordRequirementContainer>
 
       <Text color={textColor}>{t(PasswordErrorKey.TYPES_MET)}</Text>
+
+      <StyledPasswordRequirementContainer>
+        {typeRequirements.map(requirement => (
+          <PasswordRequirement
+            key={requirement.label}
+            label={t(requirement.label)}
+            isValid={requirement.isValid}
+          />
+        ))}
+      </StyledPasswordRequirementContainer>
     </YStack>
   );
 };

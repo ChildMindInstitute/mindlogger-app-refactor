@@ -293,7 +293,7 @@
     "must_include_lowercase": "Lettres minuscules (A-Z)",
     "must_include_digits": "Nombre (0-9)",
     "must_include_symbol": "Symboles (!@#$...)",
-    "types_met": "Au moins 3 des 4 types ci-dessus:"
+    "types_met": "Au moins 3 des 4 types ci-dessous:"
   },
   "geolocation": {
     "get_location": "LOCALISATION",

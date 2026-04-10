@@ -46,6 +46,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
   });
 
   const { form, submit } = useAppForm(PasswordRecoveryFormSchema, {
+    criteriaMode: 'all',
     defaultValues: {
       newPassword: '',
       confirmPassword: '',
@@ -109,7 +110,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         >
           {t('password_recovery_form:submit')}
         </SubmitButton>
-        <PasswordRequirementsChecklist />
+        <PasswordRequirementsChecklist fieldName="newPassword" />
       </FormProvider>
     </Box>
   );
