@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import GraphemeSplitter from 'grapheme-splitter';
+import { z } from 'zod';
 
 import {
   PASSWORD_MIN_LENGTH,
