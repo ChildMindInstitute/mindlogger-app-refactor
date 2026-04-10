@@ -96,8 +96,8 @@ describe('SignUpFormSchema — password', () => {
     expect(nfdResult.success).toBe(true);
     expect(nfcResult.success).toBe(true);
     if (nfdResult.success && nfcResult.success) {
-      expect(nfdResult.data.password.normalize('NFC')).toBe(
-        nfcResult.data.password.normalize('NFC'),
+      expect(nfdResult.data.password.normalize('NFKC')).toBe(
+        nfcResult.data.password.normalize('NFKC'),
       );
     }
   });

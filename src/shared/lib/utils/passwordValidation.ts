@@ -17,12 +17,13 @@ import {
 } from './passwordPatterns';
 
 /**
- * Normalize password input to NFC so the same passphrase is not treated as
- * different strings when composed differently (e.g. precomposed é vs e + combining accent).
+ * Normalize password input to NFKC (per RFC 8265 PRECIS OpaqueString profile)
+ * so the same passphrase is not treated as different strings when composed
+ * differently (e.g. precomposed é vs e + combining accent, or fullwidth vs ASCII).
  * Use the same normalization before hashing on the server.
  */
 export const normalizePasswordUnicode = (password: string): string =>
-  password.normalize('NFC');
+  password.normalize('NFKC');
 
 // Unified password check — returns a full result object matching admin/web.
 export const checkPassword = (
