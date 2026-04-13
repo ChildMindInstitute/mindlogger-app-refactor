@@ -7,11 +7,19 @@ import {
   hasUppercase,
   multiplePasswordChecks,
   noBlankSpaces,
+  normalizePasswordUnicode,
 } from '../passwordValidation';
 
 const fourChecks = [hasUppercase, hasLowercase, hasDigit, hasSymbol] as const;
 
 describe('passwordValidation', () => {
+  describe('normalizePasswordUnicode', () => {
+    it('normalizes to NFKC', () => {
+      expect(normalizePasswordUnicode('e\u0301')).toBe('é');
+      expect(normalizePasswordUnicode('A\u0300bcdefgh1!')).toBe('Àbcdefgh1!');
+    });
+  });
+
   describe('hasUppercase / hasLowercase / hasDigit / hasSymbol', () => {
     it('detects each character class in isolation', () => {
       expect(hasUppercase('A').isValid).toBe(true);

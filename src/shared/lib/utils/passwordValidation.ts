@@ -85,47 +85,40 @@ export enum PasswordErrorKey {
 type PasswordCheckFn = (password: string) => ZodCheck;
 
 export const hasUppercase: PasswordCheckFn = password => {
-  const normalized = normalizePasswordUnicode(password);
   return {
     isValid:
-      UPPERCASE_REGEXP.test(normalized) ||
-      CASELESS_LETTER_REGEXP.test(normalized),
+      UPPERCASE_REGEXP.test(password) || CASELESS_LETTER_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_UPPERCASE,
   };
 };
 
 export const hasLowercase: PasswordCheckFn = password => {
-  const normalized = normalizePasswordUnicode(password);
   return {
     isValid:
-      LOWERCASE_REGEXP.test(normalized) ||
-      CASELESS_LETTER_REGEXP.test(normalized),
+      LOWERCASE_REGEXP.test(password) || CASELESS_LETTER_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_LOWERCASE,
   };
 };
 
 export const hasDigit: PasswordCheckFn = password => {
-  const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: DIGIT_REGEXP.test(normalized),
+    isValid: DIGIT_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_DIGITS,
   };
 };
 
 export const hasSymbol: PasswordCheckFn = password => {
-  const normalized = normalizePasswordUnicode(password);
   return {
-    isValid: SYMBOL_REGEXP.test(normalized),
+    isValid: SYMBOL_REGEXP.test(password),
     message: PasswordErrorKey.MUST_INCLUDE_SYMBOL,
   };
 };
 
 export const noBlankSpaces: PasswordCheckFn = password => {
-  const normalized = normalizePasswordUnicode(password);
   return {
     isValid:
-      VISIBLE_ONLY_REGEXP.test(normalized) &&
-      !HIDDEN_BLANKS_REGEXP.test(normalized),
+      VISIBLE_ONLY_REGEXP.test(password) &&
+      !HIDDEN_BLANKS_REGEXP.test(password),
     message: PasswordErrorKey.NO_BLANK_SPACES,
   };
 };
@@ -143,8 +136,7 @@ export const multiplePasswordChecks = (
   checks: PasswordCheckFn[],
   minRequiredChecks: number = 3,
 ): { errors: string[]; isValid: boolean } => {
-  const normalized = normalizePasswordUnicode(password);
-  const results = checks.map(fn => fn(normalized));
+  const results = checks.map(fn => fn(password));
   const errors = results
     .filter(result => !result.isValid)
     .map(result => result.message);
@@ -174,8 +166,9 @@ export const passwordSuperRefine = (
   minRequiredChecks = 3,
 ): ((value: string, ctx: z.RefinementCtx) => void) => {
   return (value, ctx) => {
+    const normalized = normalizePasswordUnicode(value);
     const { errors, isValid } = multiplePasswordChecks(
-      value,
+      normalized,
       defaultPasswordTypeChecks,
       minRequiredChecks,
     );
