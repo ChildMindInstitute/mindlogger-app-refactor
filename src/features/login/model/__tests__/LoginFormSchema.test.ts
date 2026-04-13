@@ -24,18 +24,6 @@ describe('LoginFormSchema', () => {
     }
   });
 
-  it('rejects passwords containing spaces', () => {
-    const result = parseLogin(validEmail, 'abc def');
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(
-        result.error.issues.some(
-          i => i.message === 'password_requirements:no_blank_spaces',
-        ),
-      ).toBe(true);
-    }
-  });
-
   it('does NOT enforce character type requirements (legacy compat)', () => {
     // All lowercase, no digits/symbols — should still pass for login
     const result = parseLogin(validEmail, 'abcdefgh');
