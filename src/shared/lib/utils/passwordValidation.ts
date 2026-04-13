@@ -1,4 +1,4 @@
-import GraphemeSplitter from 'grapheme-splitter';
+import Graphemer from 'graphemer';
 import { z } from 'zod';
 
 import {
@@ -26,8 +26,7 @@ import {
 export const normalizePasswordUnicode = (password: string): string =>
   password.normalize('NFKC');
 
-const graphemeLength = (str: string) =>
-  new GraphemeSplitter().splitGraphemes(str).length;
+const graphemeLength = (str: string) => new Graphemer().countGraphemes(str);
 
 // Unified password check — returns a full result object matching admin/web.
 export const checkPassword = (
