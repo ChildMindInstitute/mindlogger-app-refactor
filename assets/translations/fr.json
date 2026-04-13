@@ -290,7 +290,7 @@
     "no_blank_spaces": "pas d'espaces vides",
     "must_include": "Le mot de passe doit inclure:",
     "must_include_uppercase": "Lettres majuscules (A-Z)",
-    "must_include_lowercase": "Lettres minuscules (A-Z)",
+    "must_include_lowercase": "Lettres minuscules (a-z)",
     "must_include_digits": "Nombre (0-9)",
     "must_include_symbol": "Symboles (!@#$...)",
     "types_met": "Au moins 3 des 4 types ci-dessous:"
