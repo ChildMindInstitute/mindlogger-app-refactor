@@ -5,24 +5,13 @@ import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
 import {
   checkPassword,
   noBlankSpaces,
-  passwordCharacterTypesSuperRefine,
+  passwordSuperRefine,
   PasswordErrorKey,
 } from '@app/shared/lib/utils/passwordValidation';
 
 export const PasswordRecoveryFormSchema = z
   .object({
-    newPassword: z
-      .string()
-      .trim()
-      .refine(
-        value => checkPassword(value).meetsLength,
-        PasswordErrorKey.MIN_LENGTH,
-      )
-      .superRefine(passwordCharacterTypesSuperRefine())
-      .refine(
-        value => noBlankSpaces(value).isValid,
-        PasswordErrorKey.NO_BLANK_SPACES,
-      ),
+    newPassword: z.string().trim().superRefine(passwordSuperRefine()),
     // No char-type validation needed - the passwords-must-match refine below
     // guarantees confirmPassword satisfies the same rules as newPassword.
     confirmPassword: z

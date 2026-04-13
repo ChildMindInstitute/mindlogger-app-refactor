@@ -171,7 +171,7 @@ const defaultPasswordTypeChecks: PasswordCheckFn[] = [
  *
  * @returns A function that can be used as a superRefine for a Zod schema
  */
-export const passwordCharacterTypesSuperRefine = (
+export const passwordSuperRefine = (
   minRequiredChecks = 3,
 ): ((value: string, ctx: z.RefinementCtx) => void) => {
   return (value, ctx) => {
@@ -180,6 +180,20 @@ export const passwordCharacterTypesSuperRefine = (
       defaultPasswordTypeChecks,
       minRequiredChecks,
     );
+
+    if (value.length < PASSWORD_MIN_LENGTH) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: PasswordErrorKey.MIN_LENGTH,
+      });
+    }
+
+    if (!noBlankSpaces(value).isValid) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: PasswordErrorKey.NO_BLANK_SPACES,
+      });
+    }
 
     if (!isValid) {
       ctx.addIssue({

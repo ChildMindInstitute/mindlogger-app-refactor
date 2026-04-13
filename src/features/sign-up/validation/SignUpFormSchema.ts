@@ -5,7 +5,7 @@ import {
   PasswordErrorKey,
   checkPassword,
   noBlankSpaces,
-  passwordCharacterTypesSuperRefine,
+  passwordSuperRefine,
 } from '@app/shared/lib/utils/passwordValidation';
 
 export const SignUpFormSchema = z.object({
@@ -17,15 +17,7 @@ export const SignUpFormSchema = z.object({
   password: z
     .string()
     .min(1, 'form_item:required')
-    .refine(
-      value => checkPassword(value).meetsLength,
-      PasswordErrorKey.MIN_LENGTH,
-    )
-    .superRefine(passwordCharacterTypesSuperRefine())
-    .refine(
-      value => noBlankSpaces(value).isValid,
-      PasswordErrorKey.NO_BLANK_SPACES,
-    ),
+    .superRefine(passwordSuperRefine()),
   firstName: z.string().trim().min(1, 'form_item:required'),
   lastName: z.string().trim().min(1, 'form_item:required'),
 });
