@@ -46,19 +46,21 @@ export const PasswordRequirementsChecklist = ({
       typeRequirements: [
         {
           label: PasswordErrorKey.MUST_INCLUDE_UPPERCASE,
-          isValid: result.hasUppercase,
+          isValid:
+            result.meetsCharTypeRequirement || result.hasUppercase,
         },
         {
           label: PasswordErrorKey.MUST_INCLUDE_LOWERCASE,
-          isValid: result.hasLowercase,
+          isValid:
+            result.meetsCharTypeRequirement || result.hasLowercase,
         },
         {
           label: PasswordErrorKey.MUST_INCLUDE_DIGITS,
-          isValid: result.hasDigit,
+          isValid: result.meetsCharTypeRequirement || result.hasDigit,
         },
         {
           label: PasswordErrorKey.MUST_INCLUDE_SYMBOL,
-          isValid: result.hasSymbol,
+          isValid: result.meetsCharTypeRequirement || result.hasSymbol,
         },
       ],
     };
