@@ -64,7 +64,7 @@ export const checkPassword = (
   };
 };
 
-/** Length, no disallowed spaces, and 3-of-4 character types (via `checkPassword`). */
+/** Check if the password meets the account password policy. */
 export const isAccountPasswordPolicySatisfied = (
   password: string,
   minLength: number = PASSWORD_MIN_LENGTH,
