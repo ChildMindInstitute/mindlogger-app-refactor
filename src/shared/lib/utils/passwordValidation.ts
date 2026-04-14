@@ -71,9 +71,7 @@ export const isAccountPasswordPolicySatisfied = (
 ): boolean => {
   const result = checkPassword(password, minLength);
   return (
-    result.meetsLength &&
-    result.hasNoSpaces &&
-    result.meetsCharTypeRequirement
+    result.meetsLength && result.hasNoSpaces && result.meetsCharTypeRequirement
   );
 };
 

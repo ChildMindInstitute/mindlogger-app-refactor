@@ -85,9 +85,7 @@ export const ChangePasswordForm: FC<Props> = props => {
             }
           />
 
-          <PasswordRequirementsChecklist
-            isPasswordFocused={isPasswordFocus}
-          />
+          <PasswordRequirementsChecklist isPasswordFocused={isPasswordFocus} />
         </YStack>
 
         <SubmitButton

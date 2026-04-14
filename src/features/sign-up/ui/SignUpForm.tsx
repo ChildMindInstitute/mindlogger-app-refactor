@@ -87,9 +87,7 @@ const SignUpForm: FC<Props> = props => {
             onBlur={() => setIsPasswordFocus(false)}
           />
 
-          <PasswordRequirementsChecklist
-            isPasswordFocused={isPasswordFocus}
-          />
+          <PasswordRequirementsChecklist isPasswordFocused={isPasswordFocus} />
 
           {error && (
             <ErrorMessage
