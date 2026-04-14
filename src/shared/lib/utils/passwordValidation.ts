@@ -64,6 +64,19 @@ export const checkPassword = (
   };
 };
 
+/** Length, no disallowed spaces, and 3-of-4 character types (via `checkPassword`). */
+export const isAccountPasswordPolicySatisfied = (
+  password: string,
+  minLength: number = PASSWORD_MIN_LENGTH,
+): boolean => {
+  const result = checkPassword(password, minLength);
+  return (
+    result.meetsLength &&
+    result.hasNoSpaces &&
+    result.meetsCharTypeRequirement
+  );
+};
+
 export type { PasswordCheckResult } from './passwordPatterns';
 
 type ZodCheck = {

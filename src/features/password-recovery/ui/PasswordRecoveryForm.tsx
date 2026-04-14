@@ -29,6 +29,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
   const { t } = useTranslation();
   const { addSuccessBanner, addErrorBanner } = useBanners();
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false);
 
   const {
     mutate: recoverPassword,
@@ -75,6 +76,8 @@ export const PasswordRecoveryForm: FC<Props> = props => {
             secureTextEntry={isPasswordHidden}
             name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
+            onFocus={() => setIsNewPasswordFocused(true)}
+            onBlur={() => setIsNewPasswordFocused(false)}
             rightIcon={
               <TouchableWithoutFeedback
                 onPress={() => setIsPasswordHidden(!isPasswordHidden)}
@@ -82,6 +85,11 @@ export const PasswordRecoveryForm: FC<Props> = props => {
                 <ShowPasswordIcon size={18} color={palette.on_surface} />
               </TouchableWithoutFeedback>
             }
+          />
+
+          <PasswordRequirementsChecklist
+            fieldName="newPassword"
+            isPasswordFocused={isNewPasswordFocused}
           />
 
           <InputField
@@ -110,7 +118,6 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         >
           {t('password_recovery_form:submit')}
         </SubmitButton>
-        <PasswordRequirementsChecklist fieldName="newPassword" />
       </FormProvider>
     </Box>
   );

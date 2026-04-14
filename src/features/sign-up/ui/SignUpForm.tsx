@@ -87,6 +87,10 @@ const SignUpForm: FC<Props> = props => {
             onBlur={() => setIsPasswordFocus(false)}
           />
 
+          <PasswordRequirementsChecklist
+            isPasswordFocused={isPasswordFocus}
+          />
+
           {error && (
             <ErrorMessage
               mode="light"
@@ -95,8 +99,6 @@ const SignUpForm: FC<Props> = props => {
               error={{ message: error?.evaluatedMessage! }}
             />
           )}
-
-          {isPasswordFocus && <PasswordRequirementsChecklist />}
 
           <SubmitButton
             isLoading={isLoading}
