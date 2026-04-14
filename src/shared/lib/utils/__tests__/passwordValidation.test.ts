@@ -5,6 +5,7 @@ import {
   hasLowercase,
   hasSymbol,
   hasUppercase,
+  isAccountPasswordPolicySatisfied,
   multiplePasswordChecks,
   noBlankSpaces,
   normalizePasswordUnicode,
@@ -110,6 +111,19 @@ describe('passwordValidation', () => {
       const tenEmoji = '😀😁😂🤣😃😄😅😆😉😊';
       const result = checkPassword(tenEmoji);
       expect(result.meetsLength).toBe(true);
+    });
+  });
+
+  describe('isAccountPasswordPolicySatisfied', () => {
+    it('returns false when policy is not met', () => {
+      expect(isAccountPasswordPolicySatisfied('short')).toBe(false);
+      expect(isAccountPasswordPolicySatisfied('onlyletterslongenough')).toBe(
+        false,
+      );
+    });
+
+    it('returns true when password meets length, spaces, and character types', () => {
+      expect(isAccountPasswordPolicySatisfied('Goodpass1!')).toBe(true);
     });
   });
 
