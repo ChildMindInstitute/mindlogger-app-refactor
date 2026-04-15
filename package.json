@@ -92,7 +92,7 @@
     "@tamagui/focusable": "^1.127.0",
     "@tamagui/portal": "^1.127.0",
     "@tamagui/radio-group": "^1.127.0",
-    "@tamagui/shorthands": "^1.127.0",
+    "@tamagui/shorthands": "^1.144.4",
     "@tamagui/stacks": "^1.127.0",
     "@tamagui/text": "^1.127.0",
     "@tamagui/themes": "^1.127.0",
