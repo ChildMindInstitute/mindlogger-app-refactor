@@ -1091,10 +1091,10 @@
   dependencies:
     big-integer "^1.6.52"
 
-"@datadog/mobile-react-navigation@^2.13.2":
-  version "2.14.3"
-  resolved "https://registry.yarnpkg.com/@datadog/mobile-react-navigation/-/mobile-react-navigation-2.14.3.tgz#70eb44c155f8f262f45417db69318cf56ad6db59"
-  integrity sha512-WnLudIN1916+b/IYP34SU29Xg5m5mEEUDSa4n1+AA2wT8aTNSYHdS/+MYy9LGOFyOe76nMpg965m/zlwhIsOWQ==
+"@datadog/mobile-react-navigation@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@datadog/mobile-react-navigation/-/mobile-react-navigation-3.0.0.tgz#54fc6bffc7227b7fc68b3f9bf24d1c75ab2daaf2"
+  integrity sha512-9IfgUorM+4lUFOWpzycIc56dbVDlUBBSa/fwojS+nBBQ6RmvZN2XslIBKP170rNB6vAVEyvP1JT8uvrslwz8SA==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
