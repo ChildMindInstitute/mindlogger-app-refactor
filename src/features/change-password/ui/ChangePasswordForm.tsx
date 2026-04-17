@@ -77,8 +77,8 @@ export const ChangePasswordForm: FC<Props> = props => {
             placeholder={t('change_pass_form:new_pass_placeholder')}
             onFocus={() => setIsPasswordFocus(true)}
             onBlur={() => {
-              setIsPasswordFocus(false)
-              setIsFirstTimeFocused(false)
+              setIsPasswordFocus(false);
+              setIsFirstTimeFocused(false);
             }}
             rightIcon={
               <TouchableWithoutFeedback
@@ -89,7 +89,10 @@ export const ChangePasswordForm: FC<Props> = props => {
             }
           />
 
-          <PasswordRequirementsChecklist isPasswordFocused={isPasswordFocus} isFirstTimeFocused={isFirstTimeFocused} />
+          <PasswordRequirementsChecklist
+            isPasswordFocused={isPasswordFocus}
+            isFirstTimeFocused={isFirstTimeFocused}
+          />
         </YStack>
 
         <SubmitButton

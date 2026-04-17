@@ -79,8 +79,8 @@ export const PasswordRecoveryForm: FC<Props> = props => {
             placeholder={t('password_recovery_form:new_password_placeholder')}
             onFocus={() => setIsNewPasswordFocused(true)}
             onBlur={() => {
-              setIsNewPasswordFocused(false)
-              setIsFirstTimeFocused(false)
+              setIsNewPasswordFocused(false);
+              setIsFirstTimeFocused(false);
             }}
             rightIcon={
               <TouchableWithoutFeedback

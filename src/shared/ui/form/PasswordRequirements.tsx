@@ -1,11 +1,9 @@
 import { View } from 'react-native';
 
 import { styled } from '@tamagui/core';
-import { YStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { palette } from '@app/shared/lib/constants/palette';
-import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
 
 import { FeatherCrossIcon, FeatherCheckIcon } from '../icons';
 import { Text } from '../Text';
@@ -30,7 +28,7 @@ const themeColors = {
   green: {
     iconColor: palette.green,
     textColor: palette.green,
-  }
+  },
 };
 
 export const StyledPasswordRequirementContainer = styled(View, {
@@ -90,7 +88,6 @@ export const PasswordRequirement = ({
   );
 };
 
-
 export type PasswordRequirementsProps = {
   generalRequirements: Requirement[];
   typeRequirements: Requirement[];
@@ -105,22 +102,19 @@ export const PasswordRequirements = ({
   const isValidTypeRequirements =
     typeRequirements.filter(r => r.isValid).length >= 3;
 
-
   return (
     <>
-      {
-        !isValidTypeRequirements && (
-          <StyledPasswordRequirementContainer>
-            {typeRequirements.map(requirement => (
-              <PasswordRequirement
-                key={requirement.label}
-                label={t(requirement.label)}
-                isValid={requirement.isValid}
-              />
-            ))}
-          </StyledPasswordRequirementContainer>
-        )
-      }
+      {!isValidTypeRequirements && (
+        <StyledPasswordRequirementContainer>
+          {typeRequirements.map(requirement => (
+            <PasswordRequirement
+              key={requirement.label}
+              label={t(requirement.label)}
+              isValid={requirement.isValid}
+            />
+          ))}
+        </StyledPasswordRequirementContainer>
+      )}
     </>
   );
 };

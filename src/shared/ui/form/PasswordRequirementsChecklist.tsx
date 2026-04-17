@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
+import { palette } from '@app/shared/lib/constants/palette';
+import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '@app/shared/lib/constants/password';
 import {
   checkPassword,
   isAccountPasswordPolicySatisfied,
   PasswordErrorKey,
 } from '@app/shared/lib/utils/passwordValidation';
 import { PasswordRequirements } from '@app/shared/ui/form/PasswordRequirements';
-import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '@app/shared/lib/constants/password';
-import { palette } from '@app/shared/lib/constants/palette';
+
 import { YStack } from '../base';
 import { Text } from '../Text';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   fieldName?: string;
@@ -103,7 +104,11 @@ export const PasswordRequirementsChecklist = ({
   }
 
   const getTitle = () => {
-    if (generalRequirements.concat(typeRequirements).every(requirement => requirement.isValid)) {
+    if (
+      generalRequirements
+        .concat(typeRequirements)
+        .every(requirement => requirement.isValid)
+    ) {
       return t('password_requirements:requirements_met');
     }
 
@@ -116,9 +121,7 @@ export const PasswordRequirementsChecklist = ({
 
   return (
     <YStack mt={0} mx={10}>
-      {
-        <Text color={titleColor}>{getTitle()}</Text >
-      }
+      {<Text color={titleColor}>{getTitle()}</Text>}
       <PasswordRequirements
         generalRequirements={generalRequirements}
         typeRequirements={typeRequirements}

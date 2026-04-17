@@ -1,15 +1,7 @@
 import { z } from 'zod';
 
-import {
-  PASSWORD_MIN_LENGTH,
-  LEGACY_PASSWORD_MIN_LENGTH,
-} from '@app/shared/lib/constants/password';
-import {
-  PasswordErrorKey,
-  checkPassword,
-  noBlankSpaces,
-  passwordSuperRefine,
-} from '@app/shared/lib/utils/passwordValidation';
+import { LEGACY_PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
+import { passwordSuperRefine } from '@app/shared/lib/utils/passwordValidation';
 
 export const ChangePasswordFormSchema = z.object({
   prev_password: z

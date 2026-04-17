@@ -1,5 +1,3 @@
-import { LEGACY_PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
-
 import { LoginFormSchema } from '../LoginFormSchema';
 
 function parseLogin(email: string, password: string) {

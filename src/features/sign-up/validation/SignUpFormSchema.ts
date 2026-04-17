@@ -1,12 +1,6 @@
 import { z } from 'zod';
 
-import { PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
-import {
-  PasswordErrorKey,
-  checkPassword,
-  noBlankSpaces,
-  passwordSuperRefine,
-} from '@app/shared/lib/utils/passwordValidation';
+import { passwordSuperRefine } from '@app/shared/lib/utils/passwordValidation';
 
 export const SignUpFormSchema = z.object({
   email: z
