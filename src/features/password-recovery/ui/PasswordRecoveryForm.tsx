@@ -30,6 +30,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
   const { addSuccessBanner, addErrorBanner } = useBanners();
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false);
+  const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
 
   const {
     mutate: recoverPassword,
@@ -77,7 +78,10 @@ export const PasswordRecoveryForm: FC<Props> = props => {
             name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
             onFocus={() => setIsNewPasswordFocused(true)}
-            onBlur={() => setIsNewPasswordFocused(false)}
+            onBlur={() => {
+              setIsNewPasswordFocused(false)
+              setIsFirstTimeFocused(false)
+            }}
             rightIcon={
               <TouchableWithoutFeedback
                 onPress={() => setIsPasswordHidden(!isPasswordHidden)}
@@ -88,6 +92,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
           />
 
           <PasswordRequirementsChecklist
+            isFirstTimeFocused={isFirstTimeFocused}
             fieldName="newPassword"
             isPasswordFocused={isNewPasswordFocused}
           />

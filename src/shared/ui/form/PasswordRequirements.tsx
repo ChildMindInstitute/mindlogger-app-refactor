@@ -16,9 +16,21 @@ const themeColors = {
     textColor: palette.on_surface,
   },
   invalid: {
+    iconColor: palette.gray,
+    textColor: palette.gray,
+  },
+  neutral: {
+    iconColor: palette.neutral,
+    textColor: palette.neutral,
+  },
+  error: {
     iconColor: palette.error,
     textColor: palette.error,
   },
+  green: {
+    iconColor: palette.green,
+    textColor: palette.green,
+  }
 };
 
 export const StyledPasswordRequirementContainer = styled(View, {
@@ -78,6 +90,7 @@ export const PasswordRequirement = ({
   );
 };
 
+
 export type PasswordRequirementsProps = {
   generalRequirements: Requirement[];
   typeRequirements: Requirement[];
@@ -88,32 +101,26 @@ export const PasswordRequirements = ({
   typeRequirements,
 }: PasswordRequirementsProps) => {
   const { t } = useTranslation();
-  const { textColor } = themeColors.valid;
+
+  const isValidTypeRequirements =
+    typeRequirements.filter(r => r.isValid).length >= 3;
+
+
   return (
-    <YStack mt={12}>
-      <Text color={textColor}>{t('password_requirements:must_include')}</Text>
-
-      <StyledPasswordRequirementContainer>
-        {generalRequirements.map(requirement => (
-          <PasswordRequirement
-            key={requirement.label}
-            label={t(requirement.label)}
-            isValid={requirement.isValid}
-          />
-        ))}
-      </StyledPasswordRequirementContainer>
-
-      <Text color={textColor}>{t(PasswordErrorKey.TYPES_MET)}</Text>
-
-      <StyledPasswordRequirementContainer>
-        {typeRequirements.map(requirement => (
-          <PasswordRequirement
-            key={requirement.label}
-            label={t(requirement.label)}
-            isValid={requirement.isValid}
-          />
-        ))}
-      </StyledPasswordRequirementContainer>
-    </YStack>
+    <>
+      {
+        !isValidTypeRequirements && (
+          <StyledPasswordRequirementContainer>
+            {typeRequirements.map(requirement => (
+              <PasswordRequirement
+                key={requirement.label}
+                label={t(requirement.label)}
+                isValid={requirement.isValid}
+              />
+            ))}
+          </StyledPasswordRequirementContainer>
+        )
+      }
+    </>
   );
 };

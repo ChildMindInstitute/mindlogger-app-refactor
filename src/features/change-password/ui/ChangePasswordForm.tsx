@@ -27,6 +27,7 @@ export const ChangePasswordForm: FC<Props> = props => {
   const { addSuccessBanner, addErrorBanner } = useBanners();
   const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
 
   const {
     mutate: changePassword,
@@ -75,7 +76,10 @@ export const ChangePasswordForm: FC<Props> = props => {
             name="password"
             placeholder={t('change_pass_form:new_pass_placeholder')}
             onFocus={() => setIsPasswordFocus(true)}
-            onBlur={() => setIsPasswordFocus(false)}
+            onBlur={() => {
+              setIsPasswordFocus(false)
+              setIsFirstTimeFocused(false)
+            }}
             rightIcon={
               <TouchableWithoutFeedback
                 onPress={() => setIsPasswordHidden(!isPasswordHidden)}
@@ -85,7 +89,7 @@ export const ChangePasswordForm: FC<Props> = props => {
             }
           />
 
-          <PasswordRequirementsChecklist isPasswordFocused={isPasswordFocus} />
+          <PasswordRequirementsChecklist isPasswordFocused={isPasswordFocus} isFirstTimeFocused={isFirstTimeFocused} />
         </YStack>
 
         <SubmitButton
