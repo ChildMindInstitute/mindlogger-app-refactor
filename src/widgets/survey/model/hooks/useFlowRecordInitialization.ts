@@ -164,5 +164,5 @@ export function useFlowRecordInitialization({
         )}`,
       );
     }
-  }, [logIsFlowStorageRecordExist, step, logFlowStepItem]);
+  }, [logIsFlowStorageRecordExist, step, logFlowStepItem, flowStorageRecord]);
 }

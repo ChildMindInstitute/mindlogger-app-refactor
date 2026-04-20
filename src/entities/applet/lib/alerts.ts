@@ -67,3 +67,17 @@ export function onFlowActivityContainsAllItemsHidden(entityName: string) {
 export function onDataSharingConsentDetails() {
   Alert.alert('', i18n.t('data_sharing:dialog:body'));
 }
+
+export function onFlowCompletedElsewhere(onOk: () => void) {
+  Alert.alert(
+    i18n.t('activity:flow_completed'),
+    i18n.t('activity:flow_completed_elsewhere_message'),
+    [
+      {
+        text: i18n.t('additional:ok'),
+        onPress: onOk,
+      },
+    ],
+    { cancelable: false },
+  );
+}
