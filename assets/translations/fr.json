@@ -288,14 +288,13 @@
   "password_requirements": {
     "at_least_characters": "10 caractères",
     "no_blank_spaces": "pas d'espaces vides",
-    "must_include": "Le mot de passe doit contenir au moins 10 caractères, pas d'espaces, et au moins 3 des 4 types suivants :",
-    "must_include_minimum": "Le mot de passe doit contenir au moins 10 caractères et pas d'espaces",
+    "must_include": "Le mot de passe doit contenir au moins {{minLength}} caractères, pas d'espaces, et au moins {{type}} des 4 types suivants :",
+    "must_include_minimum": "Le mot de passe doit contenir au moins {{minLength}} caractères et pas d'espaces",
     "requirements_met": "Tous les critères ont été respectés.",
     "must_include_uppercase": "Lettres majuscules (A-Z)",
     "must_include_lowercase": "Lettres minuscules (a-z)",
     "must_include_digits": "Nombre (0-9)",
-    "must_include_symbol": "Symboles (!@#$...)",
-    "types_met": "Au moins 3 des 4 types ci-dessous:"
+    "must_include_symbol": "Symboles (!@#$...)"
 
   },
   "geolocation": {

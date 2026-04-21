@@ -89,12 +89,10 @@ export const PasswordRequirement = ({
 };
 
 export type PasswordRequirementsProps = {
-  generalRequirements: Requirement[];
   typeRequirements: Requirement[];
 };
 
 export const PasswordRequirements = ({
-  generalRequirements,
   typeRequirements,
 }: PasswordRequirementsProps) => {
   const { t } = useTranslation();

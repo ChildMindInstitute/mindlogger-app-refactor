@@ -24,7 +24,7 @@ describe('PasswordRecoveryFormSchema', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map(i => i.message);
-      expect(messages).toContain(PasswordErrorKey.TYPES_MET);
+      expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE_MINIMUM);
     }
   });
 
@@ -77,7 +77,9 @@ describe('PasswordRecoveryFormSchema', () => {
         i.path.includes('confirmPassword'),
       );
       const confirmMessages = confirmErrors.map(i => i.message);
-      expect(confirmMessages).not.toContain(PasswordErrorKey.TYPES_MET);
+      expect(confirmMessages).not.toContain(
+        PasswordErrorKey.MUST_INCLUDE_MINIMUM,
+      );
       expect(confirmMessages).toContain(
         'password_recovery_form:passwords_do_not_match',
       );

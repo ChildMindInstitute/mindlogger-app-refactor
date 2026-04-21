@@ -305,14 +305,13 @@
   "password_requirements": {
     "at_least_characters": "10 characters",
     "no_blank_spaces": "no blank spaces",
-    "must_include": "Password must contain at least 10 characters, no spaces, and at least 3 of the 4 below:",
-    "must_include_minimum": "Password must contain at least 10 characters and no spaces",
+    "must_include": "Password must contain at least {{minLength}} characters, no spaces, and at least {{types}} of the 4 below:",
+    "must_include_minimum": "Password must contain at least {{minLength}} characters and no spaces",
     "requirements_met": "All requirements have been met.",
     "must_include_uppercase": "Uppercase letters (A-Z)",
     "must_include_lowercase": "Lowercase letters (a-z)",
     "must_include_digits": "Number (0-9)",
-    "must_include_symbol": "Symbols (!@#$...)",
-    "types_met": "At least 3 of the below 4 types:"
+    "must_include_symbol": "Symbols (!@#$...)"
   },
   "geolocation": {
     "get_location": "GET LOCATION",

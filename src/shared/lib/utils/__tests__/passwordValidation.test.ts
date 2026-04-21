@@ -6,12 +6,12 @@ import {
   hasSymbol,
   hasUppercase,
   isAccountPasswordPolicySatisfied,
-  multiplePasswordChecks,
   noBlankSpaces,
   normalizePasswordUnicode,
+  passwordSuperRefine,
 } from '../passwordValidation';
 
-const fourChecks = [hasUppercase, hasLowercase, hasDigit, hasSymbol] as const;
+import { z } from 'zod';
 
 describe('passwordValidation', () => {
   describe('normalizePasswordUnicode', () => {
@@ -127,36 +127,50 @@ describe('passwordValidation', () => {
     });
   });
 
-  describe('multiplePasswordChecks', () => {
-    it('marks valid when at least minRequiredChecks pass (default 3)', () => {
-      const { isValid, errors } = multiplePasswordChecks(
-        'Abcdefgh12',
-        [...fourChecks],
-        3,
-      );
-      expect(isValid).toBe(true);
-      // Failed checks are still listed even when the minimum count is met
-      expect(errors).toEqual([PasswordErrorKey.MUST_INCLUDE_SYMBOL]);
+  describe('passwordSuperRefine', () => {
+    const schema = z.string().superRefine(passwordSuperRefine());
+
+    it('passes for a fully valid password', () => {
+      const result = schema.safeParse('Goodpass1!');
+      expect(result.success).toBe(true);
     });
 
-    it('marks invalid and lists failed checks when fewer than required types pass', () => {
-      const { isValid, errors } = multiplePasswordChecks(
-        'ABCDEFGH12',
-        [...fourChecks],
-        3,
-      );
-      expect(isValid).toBe(false);
-      expect(errors).toContain(PasswordErrorKey.MUST_INCLUDE_LOWERCASE);
-      expect(errors).toContain(PasswordErrorKey.MUST_INCLUDE_SYMBOL);
+    it('fails when password is too short', () => {
+      const result = schema.safeParse('Ab1!');
+      expect(result.success).toBe(false);
+
+      if (!result.success) {
+        expect(result.error.issues.map(i => i.message)).toContain(
+          PasswordErrorKey.MIN_LENGTH,
+        );
+      }
     });
 
-    it('respects a custom minRequiredChecks threshold', () => {
-      expect(multiplePasswordChecks('ABC123', [...fourChecks], 2).isValid).toBe(
-        true,
-      );
-      expect(multiplePasswordChecks('ABC123', [...fourChecks], 3).isValid).toBe(
-        false,
-      );
+    it('fails when password contains spaces', () => {
+      const result = schema.safeParse('Good pass1!');
+      expect(result.success).toBe(false);
+
+      if (!result.success) {
+        expect(result.error.issues.map(i => i.message)).toContain(
+          PasswordErrorKey.NO_BLANK_SPACES,
+        );
+      }
+    });
+
+    it('passes when 3 out of 4 character types are present', () => {
+      const result = schema.safeParse('Goodpass10'); // no symbol
+      expect(result.success).toBe(true);
+    });
+
+    it('fails when fewer than 3 character types are present', () => {
+      const result = schema.safeParse('goodpassword'); // only lowercase
+      expect(result.success).toBe(false);
+
+      if (!result.success) {
+        expect(result.error.issues.map(i => i.message)).toContain(
+          PasswordErrorKey.MUST_INCLUDE_MINIMUM,
+        );
+      }
     });
   });
 });

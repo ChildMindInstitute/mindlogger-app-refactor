@@ -59,7 +59,7 @@ describe('SignUpFormSchema — password', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map(i => i.message);
-      expect(messages).toContain(PasswordErrorKey.TYPES_MET);
+      expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE_MINIMUM);
       expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE_LOWERCASE);
       expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE_SYMBOL);
     }
@@ -74,16 +74,6 @@ describe('SignUpFormSchema — password', () => {
           i => i.message === PasswordErrorKey.NO_BLANK_SPACES,
         ),
       ).toBe(true);
-    }
-  });
-
-  it('does not report character-type issues when the password is too short', () => {
-    const result = parsePassword('A1!');
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      const messages = result.error.issues.map(i => i.message);
-      expect(messages).toContain(PasswordErrorKey.MIN_LENGTH);
-      expect(messages).not.toContain(PasswordErrorKey.TYPES_MET);
     }
   });
 

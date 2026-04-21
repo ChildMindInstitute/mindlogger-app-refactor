@@ -4,7 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { palette } from '@app/shared/lib/constants/palette';
-import { DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS } from '@app/shared/lib/constants/password';
+import { ACCOUNT_PASSWORD_MIN_CHAR_TYPES, DEFAULT_PASSWORD_CHECKLIST_DEBOUNCE_MS, PASSWORD_MIN_LENGTH } from '@app/shared/lib/constants/password';
 import {
   checkPassword,
   isAccountPasswordPolicySatisfied,
@@ -97,7 +97,7 @@ export const PasswordRequirementsChecklist = ({
     }
 
     return palette.error40;
-  }, [generalRequirements, typeRequirements]);
+  }, [generalRequirements, typeRequirements, isFirstTimeFocused, passwordValue]);
 
   if (!show) {
     return null;
@@ -113,17 +113,16 @@ export const PasswordRequirementsChecklist = ({
     }
 
     if (typeRequirements.every(requirement => requirement.isValid)) {
-      return t('password_requirements:must_include_minimum');
+      return t('password_requirements:must_include_minimum', { minLength: PASSWORD_MIN_LENGTH });
     }
 
-    return t('password_requirements:must_include');
+    return t('password_requirements:must_include', { minLength: PASSWORD_MIN_LENGTH, types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES });
   };
 
   return (
     <YStack mt={0} mx={10}>
       {<Text color={titleColor}>{getTitle()}</Text>}
       <PasswordRequirements
-        generalRequirements={generalRequirements}
         typeRequirements={typeRequirements}
       />
     </YStack>

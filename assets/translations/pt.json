@@ -267,14 +267,13 @@
   "password_requirements": {
     "at_least_characters": "10 caracteres",
     "no_blank_spaces": "nenhum espaço em branco",
-    "must_include": "A senha deve conter pelo menos 10 caracteres, não deve conter espaços e pelo menos 3 dos 4 tipos abaixo:",
-    "must_include_minimum": "A senha deve conter pelo menos 10 caracteres e não deve conter espaços",
+    "must_include": "A senha deve conter pelo menos {{minLength}} caracteres, não deve conter espaços e pelo menos {{types}} dos 4 tipos abaixo:",
+    "must_include_minimum": "A senha deve conter pelo menos {{minLength}} caracteres e não deve conter espaços",
     "requirements_met": "Todos os critérios foram atendidos.",
     "must_include_uppercase": "Letras maiúsculas (A-Z)",
     "must_include_lowercase": "Letras minúsculas (a-z)",
     "must_include_digits": "Números (0-9)",
-    "must_include_symbol": "Símbolos (!@#$...)",
-    "types_met": "Pelo menos 3 dos 4 tipos abaixo:"
+    "must_include_symbol": "Símbolos (!@#$...)"    
   },
   "geolocation": {
     "get_location": "OBTER LOCALIZAÇÃO",
