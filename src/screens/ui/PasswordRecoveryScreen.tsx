@@ -67,8 +67,7 @@ export const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({
         >
           <ScrollView
             flex={1}
-            keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="on-drag"
+            keyboardShouldPersistTaps="always"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ flexGrow: 1 }}
           >

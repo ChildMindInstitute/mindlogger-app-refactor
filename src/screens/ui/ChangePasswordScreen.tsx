@@ -14,8 +14,7 @@ export const ChangePasswordScreen: FC = () => {
     <Box flex={1} mt="$7" px={isTablet() ? '$20' : 0} jc="flex-start">
       <ScrollView
         flex={1}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}
       >

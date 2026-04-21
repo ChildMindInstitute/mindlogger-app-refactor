@@ -36,8 +36,7 @@ export const SignUpScreen: FC = () => {
           <Box flex={1}>
             <ScrollView
               flex={1}
-              keyboardShouldPersistTaps="handled"
-              keyboardDismissMode="on-drag"
+              keyboardShouldPersistTaps="always"
               showsVerticalScrollIndicator={false}
             >
               <Box mt={marginTop} mb={isTablet() ? 0 : 12}>
