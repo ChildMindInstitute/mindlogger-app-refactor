@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import {
   RouteProp,
@@ -13,6 +12,7 @@ import { usePasswordRecoveryHealthCheckQuery } from '@app/entities/identity/api/
 import { PasswordRecoveryForm } from '@app/features/password-recovery/ui/PasswordRecoveryForm';
 import { palette } from '@app/shared/lib/constants/palette';
 import { Box, YStack } from '@app/shared/ui/base';
+import { ScrollView } from '@app/shared/ui/ScrollView';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { Text } from '@app/shared/ui/Text';
@@ -58,13 +58,19 @@ export const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({
           </Box>
         </YStack>
       ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Box
+        <Box
+          flex={1}
+          pt="$5"
+          px={isTablet() ? '$20' : 0}
+          mt="$2"
+          jc="flex-start"
+        >
+          <ScrollView
             flex={1}
-            pt="$5"
-            px={isTablet() ? '$20' : 0}
-            mt="$2"
-            jc="flex-start"
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ flexGrow: 1 }}
           >
             <PasswordRecoveryForm
               px="$8"
@@ -74,8 +80,8 @@ export const PasswordRecoveryScreen: FC<PasswordRecoveryScreenProps> = ({
               email={email}
               resetKey={key}
             />
-          </Box>
-        </TouchableWithoutFeedback>
+          </ScrollView>
+        </Box>
       )}
 
       <Spinner

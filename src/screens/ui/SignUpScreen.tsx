@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -32,65 +31,68 @@ export const SignUpScreen: FC = () => {
       keyboardVerticalOffset={-120}
       behavior="position"
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Box flex={1} px={isTablet() ? '$20' : 0}>
-          <Box flex={1} px="$8">
-            <Box flex={1}>
-              <ScrollView flex={1}>
-                <Box mt={marginTop} mb={isTablet() ? 0 : 12}>
-                  <Text
-                    fontSize={IS_SMALL_HEIGHT_SCREEN ? 28 : 32}
-                    lineHeight={40}
-                  >
-                    {t('login:account_create')}
-                  </Text>
-                </Box>
-
-                <Box mt={30}>
-                  <SignUpForm onLoginSuccess={() => navigate('Applets')} />
-                </Box>
-              </ScrollView>
-
-              <GradientOverlay position="top" color={palette.surface} />
-              <GradientOverlay position="bottom" color={palette.surface} />
-            </Box>
-
-            <Box justifyContent="center" alignItems="center">
-              <Box
-                flexDirection="row"
-                flexWrap="wrap"
-                jc="center"
-                gap="$1.5"
-                mb={32 + bottom}
-                mt={10}
-              >
-                <Text ta="center">{t('sign_up_form:sign_up_agree')}</Text>
+      <Box flex={1} px={isTablet() ? '$20' : 0}>
+        <Box flex={1} px="$8">
+          <Box flex={1}>
+            <ScrollView
+              flex={1}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+              showsVerticalScrollIndicator={false}
+            >
+              <Box mt={marginTop} mb={isTablet() ? 0 : 12}>
                 <Text
-                  ta="center"
-                  textDecorationLine="underline"
-                  accessibilityLabel="terms_of_service_link"
-                  onPress={() =>
-                    openUrl('https://mindlogger.org/terms-of-service')
-                  }
+                  fontSize={IS_SMALL_HEIGHT_SCREEN ? 28 : 32}
+                  lineHeight={40}
                 >
-                  {t('auth:terms')}
-                </Text>
-                <Text ta="center">{t('sign_up_form:and')}</Text>
-                <Text
-                  ta="center"
-                  textDecorationLine="underline"
-                  onPress={() =>
-                    openUrl('https://mindlogger.org/privacy-policy')
-                  }
-                  accessibilityLabel="privacy_policy_link"
-                >
-                  {t('auth:privacy')}.
+                  {t('login:account_create')}
                 </Text>
               </Box>
+
+              <Box mt={30}>
+                <SignUpForm onLoginSuccess={() => navigate('Applets')} />
+              </Box>
+            </ScrollView>
+
+            <GradientOverlay position="top" color={palette.surface} />
+            <GradientOverlay position="bottom" color={palette.surface} />
+          </Box>
+
+          <Box justifyContent="center" alignItems="center">
+            <Box
+              flexDirection="row"
+              flexWrap="wrap"
+              jc="center"
+              gap="$1.5"
+              mb={32 + bottom}
+              mt={10}
+            >
+              <Text ta="center">{t('sign_up_form:sign_up_agree')}</Text>
+              <Text
+                ta="center"
+                textDecorationLine="underline"
+                accessibilityLabel="terms_of_service_link"
+                onPress={() =>
+                  openUrl('https://mindlogger.org/terms-of-service')
+                }
+              >
+                {t('auth:terms')}
+              </Text>
+              <Text ta="center">{t('sign_up_form:and')}</Text>
+              <Text
+                ta="center"
+                textDecorationLine="underline"
+                onPress={() =>
+                  openUrl('https://mindlogger.org/privacy-policy')
+                }
+                accessibilityLabel="privacy_policy_link"
+              >
+                {t('auth:privacy')}.
+              </Text>
             </Box>
           </Box>
         </Box>
-      </TouchableWithoutFeedback>
+      </Box>
     </KeyboardAvoidingView>
   );
 };
