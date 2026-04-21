@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
   PasswordErrorKey,
   checkPassword,
@@ -10,8 +12,6 @@ import {
   normalizePasswordUnicode,
   passwordSuperRefine,
 } from '../passwordValidation';
-
-import { z } from 'zod';
 
 describe('passwordValidation', () => {
   describe('normalizePasswordUnicode', () => {
