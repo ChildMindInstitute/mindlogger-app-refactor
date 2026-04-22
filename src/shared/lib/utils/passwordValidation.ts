@@ -14,6 +14,7 @@ import {
   VISIBLE_ONLY_REGEXP,
   HIDDEN_BLANKS_REGEXP,
   CASELESS_LETTER_REGEXP,
+  EMOJI_REGEXP,
   PasswordCheckResult,
 } from './passwordPatterns';
 
@@ -58,6 +59,7 @@ export const checkPassword = (
     hasNoSpaces:
       VISIBLE_ONLY_REGEXP.test(normalized) &&
       !HIDDEN_BLANKS_REGEXP.test(normalized),
+    hasNoEmoji: !EMOJI_REGEXP.test(normalized),
     meetsLength: graphemeLength(normalized) >= minLength,
     charTypeCount,
     meetsCharTypeRequirement: charTypeCount >= ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
@@ -71,7 +73,10 @@ export const isAccountPasswordPolicySatisfied = (
 ): boolean => {
   const result = checkPassword(password, minLength);
   return (
-    result.meetsLength && result.hasNoSpaces && result.meetsCharTypeRequirement
+    result.meetsLength &&
+    result.hasNoSpaces &&
+    result.hasNoEmoji &&
+    result.meetsCharTypeRequirement
   );
 };
 
@@ -86,6 +91,7 @@ export enum PasswordErrorKey {
   MIN_LENGTH = 'password_requirements:at_least_characters',
   MUST_INCLUDE_MINIMUM = 'password_requirements:must_include_minimum',
   NO_BLANK_SPACES = 'password_requirements:no_blank_spaces',
+  NO_EMOJI = 'password_requirements:cannot_contain_emojis',
   MUST_INCLUDE_UPPERCASE = 'password_requirements:must_include_uppercase',
   MUST_INCLUDE_LOWERCASE = 'password_requirements:must_include_lowercase',
   MUST_INCLUDE_DIGITS = 'password_requirements:must_include_digits',
@@ -133,6 +139,13 @@ export const noBlankSpaces: PasswordCheckFn = password => {
   };
 };
 
+export const noEmoji: PasswordCheckFn = password => {
+  return {
+    isValid: !EMOJI_REGEXP.test(password),
+    message: PasswordErrorKey.NO_EMOJI,
+  };
+};
+
 /**
  * Zod superRefine: at least `minRequiredChecks` of uppercase, lowercase, digit, symbol (default 3 of 4).
  *
@@ -169,10 +182,18 @@ export const passwordSuperRefine = (): ((
       });
     }
 
+    if (!result.hasNoEmoji) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: PasswordErrorKey.NO_EMOJI,
+      });
+    }
+
     const isValid =
       result.meetsCharTypeRequirement &&
       result.meetsLength &&
-      result.hasNoSpaces;
+      result.hasNoSpaces &&
+      result.hasNoEmoji;
 
     if (isValid) {
       return;

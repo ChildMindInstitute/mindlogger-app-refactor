@@ -273,7 +273,8 @@
     "must_include_uppercase": "Κεφαλαία γράμματα (Α–Ω)",
     "must_include_lowercase": "Πεζά γράμματα (α–ω)",
     "must_include_digits": "Αριθμοί (0-9)",
-    "must_include_symbol": "Σύμβολα (!@#$...)"
+    "must_include_symbol": "Σύμβολα (!@#$...)",
+    "cannot_contain_emojis": "Ο κωδικός πρόσβασης δεν μπορεί να περιέχει emojis."
   },
   "geolocation": {
     "get_location": "ΛΗΨΗ ΤΟΠΟΘΕΣΙΑΣ",

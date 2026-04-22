@@ -68,6 +68,10 @@ export const PasswordRequirementsChecklist = ({
           label: PasswordErrorKey.NO_BLANK_SPACES,
           isValid: result.hasNoSpaces,
         },
+        {
+          label: PasswordErrorKey.NO_EMOJI,
+          isValid: result.hasNoEmoji,
+        },
       ],
       typeRequirements: [
         {
@@ -113,6 +117,13 @@ export const PasswordRequirementsChecklist = ({
   }
 
   const getTitle = () => {
+    const emojiReq = generalRequirements.find(
+      r => r.label === PasswordErrorKey.NO_EMOJI,
+    );
+    if (emojiReq && !emojiReq.isValid) {
+      return t('password_requirements:cannot_contain_emojis');
+    }
+
     if (
       generalRequirements
         .concat(typeRequirements)

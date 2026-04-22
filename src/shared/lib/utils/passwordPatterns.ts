@@ -8,6 +8,8 @@ export const VISIBLE_ONLY_REGEXP = /^[\p{L}\p{Nd}\p{P}\p{S}\p{M}]+$/u;
 export const HIDDEN_BLANKS_REGEXP = /[\u2800\u3164\u115F\u1160\uFFA0]/u;
 // Letters with no upper/lower distinction (CJK, Arabic, Hebrew, Korean, etc.)
 export const CASELESS_LETTER_REGEXP = /[\p{Lo}\p{Lm}]/u;
+// Matches emoji: Extended_Pictographic covers standard emoji, Regional Indicators cover flag sequences (🇺🇸).
+export const EMOJI_REGEXP = /\p{Extended_Pictographic}|[\u{1F1E6}-\u{1F1FF}]/u;
 
 export type PasswordCheckResult = {
   hasUppercase: boolean;
@@ -16,6 +18,7 @@ export type PasswordCheckResult = {
   hasDigit: boolean;
   hasSymbol: boolean;
   hasNoSpaces: boolean;
+  hasNoEmoji: boolean;
   meetsLength: boolean;
   charTypeCount: number;
   meetsCharTypeRequirement: boolean;

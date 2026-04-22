@@ -311,7 +311,8 @@
     "must_include_uppercase": "Uppercase letters (A-Z)",
     "must_include_lowercase": "Lowercase letters (a-z)",
     "must_include_digits": "Number (0-9)",
-    "must_include_symbol": "Symbols (!@#$...)"
+    "must_include_symbol": "Symbols (!@#$...)",
+    "cannot_contain_emojis": "Password cannot contain emojis."
   },
   "geolocation": {
     "get_location": "GET LOCATION",

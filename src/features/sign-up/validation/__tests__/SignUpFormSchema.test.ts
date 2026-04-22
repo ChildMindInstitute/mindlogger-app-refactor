@@ -77,6 +77,16 @@ describe('SignUpFormSchema — password', () => {
     }
   });
 
+  it('rejects passwords that contain emoji', () => {
+    const result = parsePassword('Goodpas1😀!');
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some(i => i.message === PasswordErrorKey.NO_EMOJI),
+      ).toBe(true);
+    }
+  });
+
   it('accepts equivalent Unicode spellings after NFC normalization', () => {
     // NFD vs NFC for "À" at the start; 10 chars after normalization
     const nfd = '\u0041\u0300bcdefgh1!';

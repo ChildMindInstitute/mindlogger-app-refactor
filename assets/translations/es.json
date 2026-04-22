@@ -273,7 +273,8 @@
     "must_include_uppercase": "Letras mayúsculas (A-Z)",
     "must_include_lowercase": "Letras minúsculas (a-z)",
     "must_include_digits": "Números (0-9)",
-    "must_include_symbol": "Símbolos (!@#$...)"
+    "must_include_symbol": "Símbolos (!@#$...)",
+    "cannot_contain_emojis": "La contraseña no puede contener emojis."
   },
   "geolocation": {
     "get_location": "OBTENER UBICACIÓN",
