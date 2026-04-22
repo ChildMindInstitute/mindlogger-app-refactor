@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
@@ -31,6 +31,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false);
   const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
+  const [shouldHideError, setShouldHideError] = useState(true);
 
   const {
     mutate: recoverPassword,
@@ -62,7 +63,12 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         }),
       );
     },
+    shouldUseNativeValidation: false,
   });
+
+  const newPasswordValue = String(
+    useWatch({ control: form.control, name: 'newPassword' }) ?? '',
+  );
 
   useFormChanges({ form, onInputChange: () => reset() });
 
@@ -77,6 +83,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
             secureTextEntry={isPasswordHidden}
             name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
+            hideError={isNewPasswordFocused || shouldHideError}
             onFocus={() => setIsNewPasswordFocused(true)}
             onBlur={() => {
               setIsNewPasswordFocused(false);
@@ -118,7 +125,12 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         <SubmitButton
           aria-label="password-recovery-submit-button"
           mode="primary"
-          onPress={submit}
+          onPress={() => {
+            if (!newPasswordValue) {
+              setShouldHideError(false);
+            }
+            submit();
+          }}
           isLoading={isLoading}
         >
           {t('password_recovery_form:submit')}

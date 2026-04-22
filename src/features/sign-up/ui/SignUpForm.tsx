@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
@@ -27,6 +27,7 @@ const SignUpForm: FC<Props> = props => {
   const [isPasswordHidden, setPasswordHidden] = useState(true);
   const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
+  const [shouldHideError, setShouldHideError] = useState(true);
 
   const {
     isLoading,
@@ -45,6 +46,10 @@ const SignUpForm: FC<Props> = props => {
     criteriaMode: 'all',
     shouldUseNativeValidation: false,
   });
+
+  const passwordValue = String(
+    useWatch({ control: form.control, name: 'password' }) ?? '',
+  );
 
   const ShowPasswordIcon = isPasswordHidden ? EyeSlashIcon : EyeIcon;
 
@@ -83,7 +88,7 @@ const SignUpForm: FC<Props> = props => {
                 <ShowPasswordIcon size={18} color={palette.on_surface} />
               </TouchableWithoutFeedback>
             }
-            hideError={isPasswordFocus}
+            hideError={isPasswordFocus || shouldHideError}
             onFocus={() => setIsPasswordFocus(true)}
             onBlur={() => {
               setIsPasswordFocus(false);
@@ -107,7 +112,12 @@ const SignUpForm: FC<Props> = props => {
 
           <SubmitButton
             isLoading={isLoading}
-            onPress={submit}
+            onPress={() => {
+              if (!passwordValue) {
+                setShouldHideError(false);
+              }
+              submit();
+            }}
             accessibilityLabel="sign_up-button"
             borderRadius={30}
             width="100%"

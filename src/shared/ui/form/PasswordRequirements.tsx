@@ -10,8 +10,8 @@ import { Text } from '../Text';
 
 const themeColors = {
   valid: {
-    iconColor: palette.on_surface,
-    textColor: palette.on_surface,
+    iconColor: palette.green,
+    textColor: palette.green,
   },
   invalid: {
     iconColor: palette.gray,

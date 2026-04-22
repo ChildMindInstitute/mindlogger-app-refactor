@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
@@ -28,6 +28,7 @@ export const ChangePasswordForm: FC<Props> = props => {
   const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
+  const [shouldHideError, setShouldHideError] = useState(true);
 
   const {
     mutate: changePassword,
@@ -57,6 +58,10 @@ export const ChangePasswordForm: FC<Props> = props => {
     },
   });
 
+  const passwordValue = String(
+    useWatch({ control: form.control, name: 'password' }) ?? '',
+  );
+
   useFormChanges({ form, onInputChange: () => reset() });
 
   return (
@@ -75,6 +80,7 @@ export const ChangePasswordForm: FC<Props> = props => {
             secureTextEntry={isPasswordHidden}
             name="password"
             placeholder={t('change_pass_form:new_pass_placeholder')}
+            hideError={isPasswordFocus || shouldHideError}
             onFocus={() => setIsPasswordFocus(true)}
             onBlur={() => {
               setIsPasswordFocus(false);
@@ -98,7 +104,12 @@ export const ChangePasswordForm: FC<Props> = props => {
         <SubmitButton
           accessibilityLabel="change-password-submit-button"
           mode="primary"
-          onPress={submit}
+          onPress={() => {
+            if (!passwordValue) {
+              setShouldHideError(false);
+            }
+            submit();
+          }}
           isLoading={isLoading}
         >
           {t('change_pass_form:update')}
