@@ -81,9 +81,7 @@ export const SignUpScreen: FC = () => {
               <Text
                 ta="center"
                 textDecorationLine="underline"
-                onPress={() =>
-                  openUrl('https://mindlogger.org/privacy-policy')
-                }
+                onPress={() => openUrl('https://mindlogger.org/privacy-policy')}
                 accessibilityLabel="privacy_policy_link"
               >
                 {t('auth:privacy')}.

@@ -135,7 +135,11 @@ export const PasswordRequirementsChecklist = ({
 
   return (
     <YStack mt={0} mx={10}>
-      {<Text color={titleColor}>{getTitle()}</Text>}
+      {
+        <Text color={titleColor} testID="password-requirements-title">
+          {getTitle()}
+        </Text>
+      }
       <PasswordRequirements typeRequirements={typeRequirements} />
     </YStack>
   );

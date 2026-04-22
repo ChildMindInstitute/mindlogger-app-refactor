@@ -5,6 +5,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
 import { useChangePasswordMutation } from '@app/entities/identity/api/hooks/useChangePasswordMutation';
 import { ChangePasswordForm } from '@app/features/change-password/ui/ChangePasswordForm';
+import { PasswordErrorKey } from '@app/shared/lib/utils/passwordValidation';
 
 const mockMutate = jest.fn();
 const mockReset = jest.fn();
@@ -84,20 +85,20 @@ describe('ChangePasswordForm', () => {
 
   describe('validation', () => {
     it('shows validation errors when submitting with empty fields', async () => {
-      const { getByLabelText } = renderForm();
+      const { getByLabelText, getAllByText } = renderForm();
 
       fireEvent.press(getByLabelText('change-password-submit-button'));
 
       await waitFor(() => {
-        expect(getByLabelText('prev_password-error-text')).toBeTruthy();
-        expect(getByLabelText('password-error-text')).toBeTruthy();
+        expect(getAllByText('form_item:required')).toHaveLength(2);
       });
 
       expect(mockMutate).not.toHaveBeenCalled();
     });
 
-    it('shows error when previous password is shorter than legacy minimum length', async () => {
-      const { getByPlaceholderText, getByLabelText } = renderForm();
+    it('accepts any non-empty previous password and validates only the new password field', async () => {
+      const { getByPlaceholderText, getByLabelText, queryByLabelText } =
+        renderForm();
 
       fireEvent.changeText(
         getByPlaceholderText('change_pass_form:cur_pass_placeholder'),
@@ -107,14 +108,16 @@ describe('ChangePasswordForm', () => {
       fireEvent.press(getByLabelText('change-password-submit-button'));
 
       await waitFor(() => {
-        expect(getByLabelText('prev_password-error-text')).toBeTruthy();
+        expect(getByLabelText('password-error-text')).toBeTruthy();
       });
 
+      expect(queryByLabelText('prev_password-error-text')).toBeNull();
       expect(mockMutate).not.toHaveBeenCalled();
     });
 
     it('shows error when new password is shorter than minimum length', async () => {
-      const { getByPlaceholderText, getByLabelText } = renderForm();
+      const { getByPlaceholderText, getByLabelText, getByTestId } =
+        renderForm();
 
       fillAndSubmitForm(getByPlaceholderText, getByLabelText, {
         prevPassword: 'OldPassword1!',
@@ -122,14 +125,15 @@ describe('ChangePasswordForm', () => {
       });
 
       await waitFor(() => {
-        expect(getByLabelText('password-error-text')).toBeTruthy();
+        expect(getByTestId('password-requirements-title')).toBeTruthy();
       });
 
       expect(mockMutate).not.toHaveBeenCalled();
     });
 
     it('shows error when new password contains blank spaces', async () => {
-      const { getByPlaceholderText, getByLabelText } = renderForm();
+      const { getByPlaceholderText, getByLabelText, getByTestId } =
+        renderForm();
 
       fillAndSubmitForm(getByPlaceholderText, getByLabelText, {
         prevPassword: 'OldPassword1!',
@@ -137,14 +141,15 @@ describe('ChangePasswordForm', () => {
       });
 
       await waitFor(() => {
-        expect(getByLabelText('password-error-text')).toBeTruthy();
+        expect(getByTestId('password-requirements-title')).toBeTruthy();
       });
 
       expect(mockMutate).not.toHaveBeenCalled();
     });
 
     it('shows error when new password does not meet 3 of 4 character type requirements', async () => {
-      const { getByPlaceholderText, getByLabelText } = renderForm();
+      const { getByPlaceholderText, getByLabelText, getByTestId } =
+        renderForm();
 
       // Only lowercase — meets 1 of 4 character types
       fillAndSubmitForm(getByPlaceholderText, getByLabelText, {
@@ -153,14 +158,15 @@ describe('ChangePasswordForm', () => {
       });
 
       await waitFor(() => {
-        expect(getByLabelText('password-error-text')).toBeTruthy();
+        expect(getByTestId('password-requirements-title')).toBeTruthy();
       });
 
       expect(mockMutate).not.toHaveBeenCalled();
     });
 
     it('accepts a password meeting exactly 3 of 4 character types', async () => {
-      const { getByPlaceholderText, getByLabelText } = renderForm();
+      const { getByPlaceholderText, getByLabelText, getByTestId } =
+        renderForm();
 
       // Uppercase + lowercase + digit — 3 of 4 types, no symbol
       fillAndSubmitForm(getByPlaceholderText, getByLabelText, {
@@ -177,7 +183,8 @@ describe('ChangePasswordForm', () => {
     });
 
     it('shows error then calls mutate after correcting an invalid password', async () => {
-      const { getByPlaceholderText, getByLabelText } = renderForm();
+      const { getByPlaceholderText, getByLabelText, findByTestId } =
+        renderForm();
 
       fireEvent.changeText(
         getByPlaceholderText('change_pass_form:cur_pass_placeholder'),
@@ -192,9 +199,10 @@ describe('ChangePasswordForm', () => {
 
       fireEvent.press(getByLabelText('change-password-submit-button'));
 
-      await waitFor(() => {
-        expect(getByLabelText('password-error-text')).toBeTruthy();
-      });
+      await findByTestId(PasswordErrorKey.MUST_INCLUDE_UPPERCASE);
+      await findByTestId(PasswordErrorKey.MUST_INCLUDE_LOWERCASE);
+      await findByTestId(PasswordErrorKey.MUST_INCLUDE_DIGITS);
+      await findByTestId(PasswordErrorKey.MUST_INCLUDE_SYMBOL);
 
       fireEvent.changeText(newPasswordInput, 'ValidPass1!');
       fireEvent(newPasswordInput, 'blur');

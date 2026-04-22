@@ -158,7 +158,7 @@ describe('SignUpForm', () => {
     });
 
     it('shows error then calls mutate after correcting an invalid password', async () => {
-      const { getByLabelText } = renderForm();
+      const { getByLabelText, getByTestId } = renderForm();
 
       fireEvent.changeText(
         getByLabelText('signup-email-input'),
@@ -174,7 +174,8 @@ describe('SignUpForm', () => {
       fireEvent.press(getByLabelText('sign_up-button'));
 
       await waitFor(() => {
-        expect(getByLabelText('password-error-text')).toBeTruthy();
+        const passwordErrorLabel = getByTestId('password-requirements-title');
+        expect(passwordErrorLabel).toBeTruthy();
       });
 
       fireEvent.changeText(passwordInput, 'ValidPass1!');
