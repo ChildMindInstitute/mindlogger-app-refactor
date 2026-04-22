@@ -115,6 +115,8 @@ const SignUpForm: FC<Props> = props => {
             onPress={() => {
               if (!passwordValue) {
                 setShouldHideError(false);
+              } else {
+                setShouldHideError(true);
               }
               submit();
             }}

@@ -128,6 +128,8 @@ export const PasswordRecoveryForm: FC<Props> = props => {
           onPress={() => {
             if (!newPasswordValue) {
               setShouldHideError(false);
+            } else {
+              setShouldHideError(true);
             }
             submit();
           }}
