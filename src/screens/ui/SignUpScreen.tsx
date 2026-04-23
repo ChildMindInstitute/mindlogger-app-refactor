@@ -1,4 +1,5 @@
 import { FC, useRef } from 'react';
+import { ScrollView as RNScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +20,7 @@ export const SignUpScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
-  const scrollViewRef = useRef<typeof ScrollView>(null);
+  const scrollViewRef = useRef<RNScrollView>(null);
 
   let marginTop: string | number = '$8';
   if (IS_SMALL_HEIGHT_SCREEN) marginTop = '$5';
