@@ -15,9 +15,7 @@ export const usePasswordFieldState = <T extends FieldValues>({
   const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
   const [shouldHideError, setShouldHideError] = useState(true);
 
-  const passwordValue = String(
-    useWatch({ control, name: fieldName }) ?? '',
-  );
+  const passwordValue = String(useWatch({ control, name: fieldName }) ?? '');
 
   const updateHideError = () => {
     if (passwordValue) {

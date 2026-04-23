@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ export const SignUpScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
+  const scrollViewRef = useRef<typeof ScrollView>(null);
 
   let marginTop: string | number = '$8';
   if (IS_SMALL_HEIGHT_SCREEN) marginTop = '$5';
@@ -35,6 +36,7 @@ export const SignUpScreen: FC = () => {
         <Box flex={1} px="$8">
           <Box flex={1}>
             <ScrollView
+              ref={scrollViewRef}
               flex={1}
               keyboardShouldPersistTaps="always"
               showsVerticalScrollIndicator={false}
@@ -49,7 +51,12 @@ export const SignUpScreen: FC = () => {
               </Box>
 
               <Box mt={30}>
-                <SignUpForm onLoginSuccess={() => navigate('Applets')} />
+                <SignUpForm
+                  onLoginSuccess={() => navigate('Applets')}
+                  onPasswordFocus={() =>
+                    scrollViewRef.current?.scrollToEnd({ animated: true })
+                  }
+                />
               </Box>
             </ScrollView>
 

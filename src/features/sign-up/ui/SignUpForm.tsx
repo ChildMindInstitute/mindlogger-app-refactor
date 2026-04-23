@@ -21,6 +21,7 @@ import { SignUpFormSchema } from '../validation/SignUpFormSchema';
 
 type Props = BoxProps & {
   onLoginSuccess: () => void;
+  onPasswordFocus?: () => void;
 };
 
 const SignUpForm: FC<Props> = props => {
@@ -79,6 +80,10 @@ const SignUpForm: FC<Props> = props => {
             placeholder={t('auth:password')}
             secureTextEntry={isPasswordHidden}
             {...passwordFieldProps}
+            onFocus={() => {
+              passwordFieldProps.onFocus();
+              props.onPasswordFocus?.();
+            }}
             rightIcon={
               <TouchableWithoutFeedback
                 onPress={() => setPasswordHidden(!isPasswordHidden)}
