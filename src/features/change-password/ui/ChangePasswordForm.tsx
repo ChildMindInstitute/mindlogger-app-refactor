@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
-import { FormProvider, useWatch } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
@@ -9,6 +9,7 @@ import { useChangePasswordMutation } from '@app/entities/identity/api/hooks/useC
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { usePasswordFieldState } from '@app/shared/lib/hooks/usePasswordFieldState';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { InputField } from '@app/shared/ui/form/InputField';
@@ -25,10 +26,7 @@ type Props = BoxProps & {
 export const ChangePasswordForm: FC<Props> = props => {
   const { t } = useTranslation();
   const { addSuccessBanner, addErrorBanner } = useBanners();
-  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
-  const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
-  const [shouldHideError, setShouldHideError] = useState(true);
 
   const {
     mutate: changePassword,
@@ -58,9 +56,8 @@ export const ChangePasswordForm: FC<Props> = props => {
     },
   });
 
-  const passwordValue = String(
-    useWatch({ control: form.control, name: 'password' }) ?? '',
-  );
+  const { passwordFieldProps, checklistProps, handleSubmitPress } =
+    usePasswordFieldState({ control: form.control });
 
   useFormChanges({ form, onInputChange: () => reset() });
 
@@ -80,12 +77,7 @@ export const ChangePasswordForm: FC<Props> = props => {
             secureTextEntry={isPasswordHidden}
             name="password"
             placeholder={t('change_pass_form:new_pass_placeholder')}
-            hideError={isPasswordFocus || shouldHideError}
-            onFocus={() => setIsPasswordFocus(true)}
-            onBlur={() => {
-              setIsPasswordFocus(false);
-              setIsFirstTimeFocused(false);
-            }}
+            {...passwordFieldProps}
             rightIcon={
               <TouchableWithoutFeedback
                 onPress={() => setIsPasswordHidden(!isPasswordHidden)}
@@ -95,23 +87,13 @@ export const ChangePasswordForm: FC<Props> = props => {
             }
           />
 
-          <PasswordRequirementsChecklist
-            isPasswordFocused={isPasswordFocus}
-            isFirstTimeFocused={isFirstTimeFocused}
-          />
+          <PasswordRequirementsChecklist {...checklistProps} />
         </YStack>
 
         <SubmitButton
           accessibilityLabel="change-password-submit-button"
           mode="primary"
-          onPress={() => {
-            if (!passwordValue) {
-              setShouldHideError(false);
-            } else {
-              setShouldHideError(true);
-            }
-            submit();
-          }}
+          onPress={() => handleSubmitPress(submit)}
           isLoading={isLoading}
         >
           {t('change_pass_form:update')}

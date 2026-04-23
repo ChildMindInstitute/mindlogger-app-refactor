@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 
-import { FormProvider, useWatch } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
@@ -9,6 +9,7 @@ import { useApprovePasswordRecoveryMutation } from '@app/entities/identity/api/h
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { usePasswordFieldState } from '@app/shared/lib/hooks/usePasswordFieldState';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
@@ -29,9 +30,6 @@ export const PasswordRecoveryForm: FC<Props> = props => {
   const { t } = useTranslation();
   const { addSuccessBanner, addErrorBanner } = useBanners();
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
-  const [isNewPasswordFocused, setIsNewPasswordFocused] = useState(false);
-  const [isFirstTimeFocused, setIsFirstTimeFocused] = useState(true);
-  const [shouldHideError, setShouldHideError] = useState(true);
 
   const {
     mutate: recoverPassword,
@@ -66,9 +64,8 @@ export const PasswordRecoveryForm: FC<Props> = props => {
     shouldUseNativeValidation: false,
   });
 
-  const newPasswordValue = String(
-    useWatch({ control: form.control, name: 'newPassword' }) ?? '',
-  );
+  const { passwordFieldProps, checklistProps, handleSubmitPress } =
+    usePasswordFieldState({ control: form.control, fieldName: 'newPassword' });
 
   useFormChanges({ form, onInputChange: () => reset() });
 
@@ -83,12 +80,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
             secureTextEntry={isPasswordHidden}
             name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
-            hideError={isNewPasswordFocused || shouldHideError}
-            onFocus={() => setIsNewPasswordFocused(true)}
-            onBlur={() => {
-              setIsNewPasswordFocused(false);
-              setIsFirstTimeFocused(false);
-            }}
+            {...passwordFieldProps}
             rightIcon={
               <TouchableWithoutFeedback
                 onPress={() => setIsPasswordHidden(!isPasswordHidden)}
@@ -99,9 +91,8 @@ export const PasswordRecoveryForm: FC<Props> = props => {
           />
 
           <PasswordRequirementsChecklist
-            isFirstTimeFocused={isFirstTimeFocused}
             fieldName="newPassword"
-            isPasswordFocused={isNewPasswordFocused}
+            {...checklistProps}
           />
 
           <InputField
@@ -125,14 +116,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         <SubmitButton
           aria-label="password-recovery-submit-button"
           mode="primary"
-          onPress={() => {
-            if (!newPasswordValue) {
-              setShouldHideError(false);
-            } else {
-              setShouldHideError(true);
-            }
-            submit();
-          }}
+          onPress={() => handleSubmitPress(submit)}
           isLoading={isLoading}
         >
           {t('password_recovery_form:submit')}
