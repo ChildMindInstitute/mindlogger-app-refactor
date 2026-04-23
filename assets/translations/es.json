@@ -265,9 +265,16 @@
     "and": "y"
   },
   "password_requirements": {
-    "at_least_characters": "6 caracteres",
+    "at_least_characters": "10 caracteres",
     "no_blank_spaces": "Ningún espacio en blanco",
-    "must_include": "La contraseña debe incluir:"
+    "must_include": "La contraseña debe contener al menos {{minLength}} caracteres, no debe contener espacios y debe contener al menos {{types}} de los 4 tipos siguientes:",
+    "must_include_minimum": "La contraseña debe contener al menos {{minLength}} caracteres y no debe contener espacios",
+    "requirements_met": "Todos los criterios han sido cumplidos.",
+    "must_include_uppercase": "Letras mayúsculas (A-Z)",
+    "must_include_lowercase": "Letras minúsculas (a-z)",
+    "must_include_digits": "Números (0-9)",
+    "must_include_symbol": "Símbolos (!@#$...)",
+    "cannot_contain_emojis": "La contraseña no puede contener emojis."
   },
   "geolocation": {
     "get_location": "OBTENER UBICACIÓN",

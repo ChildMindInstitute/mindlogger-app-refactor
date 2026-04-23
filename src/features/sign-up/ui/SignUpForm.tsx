@@ -7,25 +7,26 @@ import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
+import { usePasswordFieldState } from '@app/shared/lib/hooks/usePasswordFieldState';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps } from '@app/shared/ui/base';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
 import { InputField } from '@app/shared/ui/form/InputField';
+import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 import { EyeIcon, EyeSlashIcon } from '@shared/ui/icons';
 
-import { SignUpPasswordRequirements } from './SignUpPasswordRequirements';
 import { useRegistrationMutation } from '../model/hooks/useRegistrationMutation';
 import { SignUpFormSchema } from '../validation/SignUpFormSchema';
 
 type Props = BoxProps & {
   onLoginSuccess: () => void;
+  onPasswordFocus?: () => void;
 };
 
 const SignUpForm: FC<Props> = props => {
   const { t } = useTranslation();
   const [isPasswordHidden, setPasswordHidden] = useState(true);
-  const [isPasswordFocus, setIsPasswordFocus] = useState(false);
 
   const {
     isLoading,
@@ -44,6 +45,9 @@ const SignUpForm: FC<Props> = props => {
     criteriaMode: 'all',
     shouldUseNativeValidation: false,
   });
+
+  const { passwordFieldProps, checklistProps, handleSubmitPress } =
+    usePasswordFieldState({ control: form.control });
 
   const ShowPasswordIcon = isPasswordHidden ? EyeSlashIcon : EyeIcon;
 
@@ -75,6 +79,11 @@ const SignUpForm: FC<Props> = props => {
             accessibilityLabel="signup-password-input"
             placeholder={t('auth:password')}
             secureTextEntry={isPasswordHidden}
+            {...passwordFieldProps}
+            onFocus={() => {
+              passwordFieldProps.onFocus();
+              props.onPasswordFocus?.();
+            }}
             rightIcon={
               <TouchableWithoutFeedback
                 onPress={() => setPasswordHidden(!isPasswordHidden)}
@@ -82,10 +91,9 @@ const SignUpForm: FC<Props> = props => {
                 <ShowPasswordIcon size={18} color={palette.on_surface} />
               </TouchableWithoutFeedback>
             }
-            hideError={isPasswordFocus}
-            onFocus={() => setIsPasswordFocus(true)}
-            onBlur={() => setIsPasswordFocus(false)}
           />
+
+          <PasswordRequirementsChecklist {...checklistProps} />
 
           {error && (
             <ErrorMessage
@@ -96,11 +104,9 @@ const SignUpForm: FC<Props> = props => {
             />
           )}
 
-          {isPasswordFocus && <SignUpPasswordRequirements />}
-
           <SubmitButton
             isLoading={isLoading}
-            onPress={submit}
+            onPress={() => handleSubmitPress(submit)}
             accessibilityLabel="sign_up-button"
             borderRadius={30}
             width="100%"

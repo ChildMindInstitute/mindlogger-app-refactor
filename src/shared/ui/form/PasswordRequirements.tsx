@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 
 import { styled } from '@tamagui/core';
-import { YStack } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
 
 import { palette } from '@app/shared/lib/constants/palette';
@@ -11,17 +10,30 @@ import { Text } from '../Text';
 
 const themeColors = {
   valid: {
-    iconColor: palette.on_surface,
-    textColor: palette.on_surface,
+    iconColor: palette.green,
+    textColor: palette.green,
   },
   invalid: {
+    iconColor: palette.gray,
+    textColor: palette.gray,
+  },
+  neutral: {
+    iconColor: palette.neutral,
+    textColor: palette.neutral,
+  },
+  error: {
     iconColor: palette.error,
     textColor: palette.error,
+  },
+  green: {
+    iconColor: palette.green,
+    textColor: palette.green,
   },
 };
 
 export const StyledPasswordRequirementContainer = styled(View, {
   marginTop: 12,
+  marginBottom: 12,
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
@@ -69,7 +81,7 @@ export const PasswordRequirement = ({
         <Icon color={iconColor} size={16} />
       </StyledIconView>
 
-      <Text fontSize={14} marginLeft={8} color={textColor}>
+      <Text flexShrink={1} fontSize={14} marginLeft={8} color={textColor}>
         {label}
       </Text>
     </StyledView>
@@ -77,27 +89,30 @@ export const PasswordRequirement = ({
 };
 
 export type PasswordRequirementsProps = {
-  requirements: Requirement[];
+  typeRequirements: Requirement[];
 };
 
 export const PasswordRequirements = ({
-  requirements,
+  typeRequirements,
 }: PasswordRequirementsProps) => {
   const { t } = useTranslation();
-  const { textColor } = themeColors.valid;
-  return (
-    <YStack mt={12}>
-      <Text color={textColor}>{t('password_requirements:must_include')}</Text>
 
-      <StyledPasswordRequirementContainer>
-        {requirements.map(requirement => (
-          <PasswordRequirement
-            key={requirement.label}
-            label={t(requirement.label)}
-            isValid={requirement.isValid}
-          />
-        ))}
-      </StyledPasswordRequirementContainer>
-    </YStack>
+  const isValidTypeRequirements =
+    typeRequirements.filter(r => r.isValid).length >= 3;
+
+  return (
+    <>
+      {!isValidTypeRequirements && (
+        <StyledPasswordRequirementContainer>
+          {typeRequirements.map(requirement => (
+            <PasswordRequirement
+              key={requirement.label}
+              label={t(requirement.label)}
+              isValid={requirement.isValid}
+            />
+          ))}
+        </StyledPasswordRequirementContainer>
+      )}
+    </>
   );
 };
