@@ -267,7 +267,7 @@
   "password_requirements": {
     "at_least_characters": "10 caracteres",
     "no_blank_spaces": "Ningún espacio en blanco",
-    "must_include": "La contraseña debe contener al menos {{minLength}} caracteres, no debe contener espacios y debe contener al menos {{type}} de los 4 tipos siguientes:",
+    "must_include": "La contraseña debe contener al menos {{minLength}} caracteres, no debe contener espacios y debe contener al menos {{types}} de los 4 tipos siguientes:",
     "must_include_minimum": "La contraseña debe contener al menos {{minLength}} caracteres y no debe contener espacios",
     "requirements_met": "Todos los criterios han sido cumplidos.",
     "must_include_uppercase": "Letras mayúsculas (A-Z)",

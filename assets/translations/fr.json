@@ -288,7 +288,7 @@
   "password_requirements": {
     "at_least_characters": "10 caractères",
     "no_blank_spaces": "pas d'espaces vides",
-    "must_include": "Le mot de passe doit contenir au moins {{minLength}} caractères, pas d'espaces, et au moins {{type}} des 4 types suivants :",
+    "must_include": "Le mot de passe doit contenir au moins {{minLength}} caractères, pas d'espaces, et au moins {{types}} des 4 types suivants :",
     "must_include_minimum": "Le mot de passe doit contenir au moins {{minLength}} caractères et pas d'espaces",
     "requirements_met": "Tous les critères ont été respectés.",
     "must_include_uppercase": "Lettres majuscules (A-Z)",
