@@ -4,7 +4,9 @@ import {
   BatchSize,
   DatadogProvider,
   DatadogProviderConfiguration,
+  PropagatorType,
   SdkVerbosity,
+  TrackingConsent,
   UploadFrequency,
 } from '@datadog/mobile-react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
@@ -17,7 +19,7 @@ import localization from '@jobs/localization';
 import {
   DATADOG_APPLICATION_ID,
   DATADOG_CLIENT_TOKEN,
-  ENV,
+  DATADOG_ENV,
   APP_VERSION,
 } from '@shared/lib/constants';
 
@@ -34,31 +36,47 @@ jobRunner.runAll([localization]).catch(console.error);
 
 getDefaultLogger().configure();
 
+const buildFirstPartyHosts = (firstPartyHosts: string[]) => {
+  return firstPartyHosts.map(it => {
+    return {
+      match: it,
+      propagatorTypes: [PropagatorType.DATADOG, PropagatorType.TRACECONTEXT],
+    };
+  });
+};
+
 const config = new DatadogProviderConfiguration(
   DATADOG_CLIENT_TOKEN,
-  ENV as string,
-  DATADOG_APPLICATION_ID,
-  true, // track User interactions (e.g.: Tap on buttons. You can use 'accessibilityLabel' element property to give tap action the name, otherwise element type will be reported)
-  true, // track XHR Resources
-  true, // track Errors
+  DATADOG_ENV as string,
+  TrackingConsent.GRANTED,
+  {
+    rumConfiguration: {
+      applicationId: DATADOG_APPLICATION_ID,
+      sessionSampleRate: 100,
+      trackInteractions: false,
+      trackFrustrations: true,
+      trackResources: true,
+      nativeCrashReportEnabled: true,
+      longTaskThresholdMs: 100,
+      firstPartyHosts: buildFirstPartyHosts([
+        'api-v2.mindlogger.org',
+        'api-v2.gettingcurious.com',
+        'api-dev.cmiml.net',
+        'api-uat.cmiml.net',
+        'api-prod.cmiml.net',
+      ]),
+    },
+    logsConfiguration: {
+      bundleLogsWithRum: true,
+      bundleLogsWithTraces: true,
+    },
+    traceConfiguration: {},
+  },
 );
 
 config.site = 'US1';
-// Optional: Enable JavaScript long task collection
-config.longTaskThresholdMs = 100;
-// Optional: enable or disable native crash reports
-config.nativeCrashReportEnabled = true;
-// Optional: sample RUM sessions (here, 100% of session will be sent to Datadog. Default = 100%. Only tracked sessions send RUM events.)
-config.sessionSamplingRate = 100;
-config.serviceName = 'mindlogger-mobile';
+config.service = 'mindlogger-mobile';
 config.version = APP_VERSION;
-config.firstPartyHosts = [
-  'api-v2.mindlogger.org',
-  'api-v2.gettingcurious.com',
-  'api-dev.cmiml.net',
-  'api-uat.cmiml.net',
-  'api-prod.cmiml.net',
-];
 
 if (__DEV__) {
   // Optional: Send data more frequently

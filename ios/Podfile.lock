@@ -4,32 +4,36 @@ PODS:
   - BVLinearGradient (2.8.3):
     - React-Core
   - CocoaAsyncSocket (7.6.5)
-  - CocoaLumberjack (3.8.5):
-    - CocoaLumberjack/Core (= 3.8.5)
-  - CocoaLumberjack/Core (3.8.5)
-  - DatadogCore (2.30.2):
-    - DatadogInternal (= 2.30.2)
-  - DatadogCrashReporting (2.30.2):
-    - DatadogInternal (= 2.30.2)
-    - PLCrashReporter (~> 1.12.0)
-  - DatadogInternal (2.30.2)
-  - DatadogLogs (2.30.2):
-    - DatadogInternal (= 2.30.2)
-  - DatadogRUM (2.30.2):
-    - DatadogInternal (= 2.30.2)
-  - DatadogSDKReactNative (2.14.3):
-    - DatadogCore (= 2.30.2)
-    - DatadogCrashReporting (= 2.30.2)
-    - DatadogLogs (= 2.30.2)
-    - DatadogRUM (= 2.30.2)
-    - DatadogTrace (= 2.30.2)
-    - DatadogWebViewTracking (= 2.30.2)
+  - CocoaLumberjack (3.9.0):
+    - CocoaLumberjack/Core (= 3.9.0)
+  - CocoaLumberjack/Core (3.9.0)
+  - DatadogCore (3.5.0):
+    - DatadogInternal (= 3.5.0)
+  - DatadogCrashReporting (3.5.0):
+    - DatadogInternal (= 3.5.0)
+    - KSCrash/Filters (= 2.5.0)
+    - KSCrash/Recording (= 2.5.0)
+  - DatadogFlags (3.5.0):
+    - DatadogInternal (= 3.5.0)
+  - DatadogInternal (3.5.0)
+  - DatadogLogs (3.5.0):
+    - DatadogInternal (= 3.5.0)
+  - DatadogRUM (3.5.0):
+    - DatadogInternal (= 3.5.0)
+  - DatadogSDKReactNative (3.1.2):
+    - DatadogCore (= 3.5.0)
+    - DatadogCrashReporting (= 3.5.0)
+    - DatadogFlags (= 3.5.0)
+    - DatadogLogs (= 3.5.0)
+    - DatadogRUM (= 3.5.0)
+    - DatadogTrace (= 3.5.0)
+    - DatadogWebViewTracking (= 3.5.0)
     - React-Core
-  - DatadogTrace (2.30.2):
-    - DatadogInternal (= 2.30.2)
-    - OpenTelemetrySwiftApi (= 1.13.1)
-  - DatadogWebViewTracking (2.30.2):
-    - DatadogInternal (= 2.30.2)
+  - DatadogTrace (3.5.0):
+    - DatadogInternal (= 3.5.0)
+    - OpenTelemetry-Swift-Api (~> 2.3.0)
+  - DatadogWebViewTracking (3.5.0):
+    - DatadogInternal (= 3.5.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
   - FBLazyVector (0.79.7)
@@ -133,22 +137,32 @@ PODS:
   - hermes-engine (0.79.7):
     - hermes-engine/Pre-built (= 0.79.7)
   - hermes-engine/Pre-built (0.79.7)
+  - KSCrash/Core (2.5.0)
+  - KSCrash/Filters (2.5.0):
+    - KSCrash/Recording
+    - KSCrash/RecordingCore
+    - KSCrash/ReportingCore
+  - KSCrash/Recording (2.5.0):
+    - KSCrash/RecordingCore
+  - KSCrash/RecordingCore (2.5.0):
+    - KSCrash/Core
+  - KSCrash/ReportingCore (2.5.0):
+    - KSCrash/Core
   - Mixpanel-swift (4.2.0):
     - Mixpanel-swift/Complete (= 4.2.0)
   - Mixpanel-swift/Complete (4.2.0)
   - MixpanelReactNative (2.4.1):
     - Mixpanel-swift (= 4.2.0)
     - React-Core
-  - MMKV (2.2.2):
-    - MMKVCore (~> 2.2.2)
-  - MMKVCore (2.2.2)
+  - MMKV (2.4.0):
+    - MMKVCore (~> 2.4.0)
+  - MMKVCore (2.4.0)
   - nanopb (2.30909.1):
     - nanopb/decode (= 2.30909.1)
     - nanopb/encode (= 2.30909.1)
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
-  - OpenTelemetrySwiftApi (1.13.1)
-  - PLCrashReporter (1.12.0)
+  - OpenTelemetry-Swift-Api (2.3.0)
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
     - PromisesObjC (= 2.4.0)
@@ -2236,7 +2250,7 @@ PODS:
   - SocketRocket (0.7.1)
   - TSBackgroundFetch (4.0.6)
   - Yoga (0.0.0)
-  - ZIPFoundation (0.9.19)
+  - ZIPFoundation (0.9.20)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -2365,6 +2379,7 @@ SPEC REPOS:
     - CocoaLumberjack
     - DatadogCore
     - DatadogCrashReporting
+    - DatadogFlags
     - DatadogInternal
     - DatadogLogs
     - DatadogRUM
@@ -2380,12 +2395,12 @@ SPEC REPOS:
     - FirebaseSessions
     - GoogleDataTransport
     - GoogleUtilities
+    - KSCrash
     - Mixpanel-swift
     - MMKV
     - MMKVCore
     - nanopb
-    - OpenTelemetrySwiftApi
-    - PLCrashReporter
+    - OpenTelemetry-Swift-Api
     - PromisesObjC
     - PromisesSwift
     - SocketRocket
@@ -2620,15 +2635,16 @@ SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
-  DatadogCore: 8e50ad6cb68343f701707f7eeca16e0acb52ed8c
-  DatadogCrashReporting: 34763d4276d4fce286c7e8729cfcd2ac04dca43b
-  DatadogInternal: bd8672d506a7e67936ed5f7ca612169e49029b44
-  DatadogLogs: d683aa9e0c9339f5ae679ead70bbdbe41cdc32f6
-  DatadogRUM: 8b794aa458e6323ea9b1cef3f820fd3d092cbe27
-  DatadogSDKReactNative: 9c8f715ae6cb2af883a2b5ffa4dcac7c0768b9a8
-  DatadogTrace: 3ba194791267efa09634234749111cac95abd3e5
-  DatadogWebViewTracking: 8287d5ad06e992de5e46dd72a17e05c7513344be
+  CocoaLumberjack: 5644158777912b7de7469fa881f8a3f259c2512a
+  DatadogCore: 4cbe2646591d2f96fb3188400863ec93ac411235
+  DatadogCrashReporting: e48da3f880a59d2aa2d04e5034e56507177e9d64
+  DatadogFlags: f8cf88371460d6c672abfd97fdc9af5be208f33b
+  DatadogInternal: 63308b529cd87fb2f99c5961d9ff13afb300a3aa
+  DatadogLogs: be538def1d5204e011f7952915ad0261014a0dd5
+  DatadogRUM: cffc65659ce29546fcc2639a74003135259548fc
+  DatadogSDKReactNative: 6354f14adc074cf491f70b0ddd0f357c599b3aa6
+  DatadogTrace: 085e35f9e4889f82f8a747922c58ea4b19728720
+  DatadogWebViewTracking: 61b8344da898cbaccffc75bc1a17c86175e8573a
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: b60fe06f0f15b7d7408f169442176e69e8eeacde
@@ -2645,13 +2661,13 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   hermes-engine: 13c84524b3b6e884b2cf3b3b1e002ffd147d88a3
+  KSCrash: 80e1e24eaefbe5134934ae11ca8d7746586bc2ed
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
-  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
-  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
+  MMKV: 86859fdfa2b0b21db1fd6e48788474a6416a2c77
+  MMKVCore: 3d16ce9f7d411e135020915fde98a056859a1efa
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
-  OpenTelemetrySwiftApi: aaee576ed961e0c348af78df58b61300e95bd104
-  PLCrashReporter: db59ef96fa3d25f3650040d02ec2798cffee75f2
+  OpenTelemetry-Swift-Api: 3d77582ab6837a63b65bf7d2eacc57d8f2595edd
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RCT-Folly: d533c1d21249a85e67a4be97f4d793665de0222e
@@ -2756,7 +2772,7 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   TSBackgroundFetch: 0afbeaae4e1132866e1d4b6e55265af26b5958ae
   Yoga: 7ec3c34208133557b95850966446f48c6b3fa468
-  ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
+  ZIPFoundation: dfd3d681c4053ff7e2f7350bc4e53b5dba3f5351
 
 PODFILE CHECKSUM: e5e9c13af102c13d7eec5a297c6580ee7be1911a
 
