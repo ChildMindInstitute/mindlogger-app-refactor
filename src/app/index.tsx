@@ -19,7 +19,7 @@ import localization from '@jobs/localization';
 import {
   DATADOG_APPLICATION_ID,
   DATADOG_CLIENT_TOKEN,
-  ENV,
+  DATADOG_ENV,
   APP_VERSION,
 } from '@shared/lib/constants';
 
@@ -47,7 +47,7 @@ const buildFirstPartyHosts = (firstPartyHosts: string[]) => {
 
 const config = new DatadogProviderConfiguration(
   DATADOG_CLIENT_TOKEN,
-  ENV as string,
+  DATADOG_ENV as string,
   TrackingConsent.GRANTED,
   {
     rumConfiguration: {

@@ -37,6 +37,7 @@ export const LAUNCHDARKLY_MOBILE_KEY = Config.LAUNCHDARKLY_MOBILE_KEY as string;
 // Datadog
 export const DATADOG_CLIENT_TOKEN = Config.DATADOG_CLIENT_TOKEN || '';
 export const DATADOG_APPLICATION_ID = Config.DATADOG_APPLICATION_ID || '';
+export const DATADOG_ENV = Config.DATADOG_ENV || '';
 
 /**
  * The scheme and host of the respondent web app in this environment.
