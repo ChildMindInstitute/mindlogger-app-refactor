@@ -90,6 +90,7 @@ type ZodCheck = {
 export enum PasswordErrorKey {
   MIN_LENGTH = 'password_requirements:at_least_characters',
   MUST_INCLUDE_MINIMUM = 'password_requirements:must_include_minimum',
+  MUST_INCLUDE = 'password_requirements:must_include',
   NO_BLANK_SPACES = 'password_requirements:no_blank_spaces',
   NO_EMOJI = 'password_requirements:cannot_contain_emojis',
   MUST_INCLUDE_UPPERCASE = 'password_requirements:must_include_uppercase',
@@ -164,7 +165,7 @@ export const passwordSuperRefine = (): ((
     if (!result.meetsCharTypeRequirement) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: PasswordErrorKey.MUST_INCLUDE_MINIMUM,
+        message: PasswordErrorKey.MUST_INCLUDE,
       });
     }
 
