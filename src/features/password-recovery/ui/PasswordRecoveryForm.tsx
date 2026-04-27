@@ -1,16 +1,21 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 
 import { FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { useBanners } from '@app/entities/banner/lib/hooks/useBanners';
 import { useApprovePasswordRecoveryMutation } from '@app/entities/identity/api/hooks/useApprovePasswordRecoveryMutation';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppForm } from '@app/shared/lib/hooks/useAppForm';
 import { useFormChanges } from '@app/shared/lib/hooks/useFormChanges';
+import { usePasswordFieldState } from '@app/shared/lib/hooks/usePasswordFieldState';
 import { executeIfOnline } from '@app/shared/lib/utils/networkHelpers';
 import { Box, BoxProps, YStack } from '@app/shared/ui/base';
 import { ErrorMessage } from '@app/shared/ui/form/ErrorMessage';
 import { InputField } from '@app/shared/ui/form/InputField';
+import { PasswordRequirementsChecklist } from '@app/shared/ui/form/PasswordRequirementsChecklist';
+import { EyeIcon, EyeSlashIcon } from '@app/shared/ui/icons';
 import { SubmitButton } from '@app/shared/ui/SubmitButton';
 
 import { PasswordRecoveryFormSchema } from '../model/PasswordRecoveryFormSchema';
@@ -24,6 +29,7 @@ type Props = BoxProps & {
 export const PasswordRecoveryForm: FC<Props> = props => {
   const { t } = useTranslation();
   const { addSuccessBanner, addErrorBanner } = useBanners();
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const {
     mutate: recoverPassword,
@@ -41,6 +47,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
   });
 
   const { form, submit } = useAppForm(PasswordRecoveryFormSchema, {
+    criteriaMode: 'all',
     defaultValues: {
       newPassword: '',
       confirmPassword: '',
@@ -54,9 +61,15 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         }),
       );
     },
+    shouldUseNativeValidation: false,
   });
 
+  const { passwordFieldProps, checklistProps, handleSubmitPress } =
+    usePasswordFieldState({ control: form.control, fieldName: 'newPassword' });
+
   useFormChanges({ form, onInputChange: () => reset() });
+
+  const ShowPasswordIcon = isPasswordHidden ? EyeSlashIcon : EyeIcon;
 
   return (
     <Box {...props}>
@@ -64,14 +77,27 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         <YStack space={8} mb={40}>
           <InputField
             aria-label="password-recovery-new-password-input"
-            secureTextEntry
+            secureTextEntry={isPasswordHidden}
             name="newPassword"
             placeholder={t('password_recovery_form:new_password_placeholder')}
+            {...passwordFieldProps}
+            rightIcon={
+              <TouchableWithoutFeedback
+                onPress={() => setIsPasswordHidden(!isPasswordHidden)}
+              >
+                <ShowPasswordIcon size={18} color={palette.on_surface} />
+              </TouchableWithoutFeedback>
+            }
+          />
+
+          <PasswordRequirementsChecklist
+            fieldName="newPassword"
+            {...checklistProps}
           />
 
           <InputField
             aria-label="password-recovery-confirm-password-input"
-            secureTextEntry
+            secureTextEntry={isPasswordHidden}
             name="confirmPassword"
             placeholder={t(
               'password_recovery_form:confirm_password_placeholder',
@@ -90,7 +116,7 @@ export const PasswordRecoveryForm: FC<Props> = props => {
         <SubmitButton
           aria-label="password-recovery-submit-button"
           mode="primary"
-          onPress={submit}
+          onPress={() => handleSubmitPress(submit)}
           isLoading={isLoading}
         >
           {t('password_recovery_form:submit')}

@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:web-dev.cmiml.net</string>
+		<string>applinks:web-dev.cmiml.net?mode=developer</string>
 		<string>webcredentials:web-dev.cmiml.net</string>
 	</array>
 </dict>
