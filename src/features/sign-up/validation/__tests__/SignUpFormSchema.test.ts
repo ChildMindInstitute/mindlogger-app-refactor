@@ -59,7 +59,7 @@ describe('SignUpFormSchema — password', () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const messages = result.error.issues.map(i => i.message);
-      expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE_MINIMUM);
+      expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE);
       expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE_LOWERCASE);
       expect(messages).toContain(PasswordErrorKey.MUST_INCLUDE_SYMBOL);
     }

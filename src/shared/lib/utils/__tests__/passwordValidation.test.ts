@@ -224,7 +224,7 @@ describe('passwordValidation', () => {
 
       if (!result.success) {
         expect(result.error.issues.map(i => i.message)).toContain(
-          PasswordErrorKey.MUST_INCLUDE_MINIMUM,
+          PasswordErrorKey.MUST_INCLUDE,
         );
       }
     });
