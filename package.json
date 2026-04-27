@@ -163,7 +163,7 @@
     "sanitize-html": "^2.11.0",
     "stream-browserify": "^3.0.0",
     "use-debounce": "^10.0.0",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "victory-native": "^36.7.0",
     "ws": ">=7.5.10",
     "zod": "^3.22.4",
