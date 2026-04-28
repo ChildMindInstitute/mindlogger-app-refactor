@@ -4,7 +4,11 @@ import { passwordSuperRefine } from '@app/shared/lib/utils/passwordValidation';
 
 export const PasswordRecoveryFormSchema = z
   .object({
-    newPassword: z.string().trim().superRefine(passwordSuperRefine()),
+    newPassword: z
+      .string()
+      .trim()
+      .min(1, 'form_item:required')
+      .superRefine(passwordSuperRefine()),
     // No char-type validation needed - the passwords-must-match refine below
     // guarantees confirmPassword satisfies the same rules as newPassword.
     confirmPassword: z
