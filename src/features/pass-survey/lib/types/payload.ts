@@ -279,6 +279,7 @@ type PipelineItemBase = {
   name?: string;
   type: ActivityItemType;
   payload: PipelinePayload;
+  isUnity?: boolean;
   isSkippable?: boolean;
   isAbleToMoveBack?: boolean;
   canBeReset?: boolean;

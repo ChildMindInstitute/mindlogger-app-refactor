@@ -6,7 +6,11 @@ cd "$SCRIPT_DIR"
 
 echo "[Unity][Pre-build] Removing snapshotted UnityFramework.framework ..."
 rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/UnityFramework.framework
+rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/baselib.a
+rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/il2cpp.a
+rm -fr $SCRIPT_DIR/../../node_modules/@azesmway/react-native-unity/ios/libGameAssembly.a
 
+# This is now done with a Unity post build script
 echo "[Unity][Pre-build] Removing <intent-filter /> from AndroidManifest.xml ..."
 if [ -d $SCRIPT_DIR/../../unity/builds/android ]; then
   awk '/<intent-filter>/ {skip=1} !skip {print} /<\/intent-filter>/ {skip=0}' \

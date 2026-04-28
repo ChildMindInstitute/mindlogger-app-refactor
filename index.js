@@ -9,6 +9,9 @@ import { AppRegistry } from 'react-native';
 import { Buffer } from 'buffer';
 import process from 'process';
 import PropTypes from 'prop-types';
+import RNOrientationDirector, {
+  Orientation,
+} from 'react-native-orientation-director';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import { palette } from '@shared/lib/constants/palette';
@@ -51,5 +54,6 @@ HeadlessCheck.propTypes = {
 };
 
 SystemNavigationBar.setNavigationColor(palette.surface1, 'dark', 'navigation');
+RNOrientationDirector.lockTo(Orientation.portrait);
 
 AppRegistry.registerComponent(appName, () => HeadlessCheck);

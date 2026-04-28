@@ -24,6 +24,12 @@ const DatePickerButton = styled(Button, {
   borderBottomWidth: 1,
   borderRadius: 0,
   backgroundColor: 'transparent',
+  pressTheme: false,
+  hoverTheme: false,
+  pressStyle: {
+    backgroundColor: '$surface2',
+    borderColor: 'transparent',
+  },
 });
 
 export const DateTimePicker: FC<Props & AccessibilityProps> = ({

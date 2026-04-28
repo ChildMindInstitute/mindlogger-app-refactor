@@ -4,6 +4,7 @@ import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import TSBackgroundFetch
 import Firebase
+import react_native_orientation_director
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -35,6 +36,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     TSBackgroundFetch.sharedInstance().didFinishLaunching();
 
     return true
+  }
+
+  func application(
+    _ application: UIApplication,
+    supportedInterfaceOrientationsFor window: UIWindow?
+  ) -> UIInterfaceOrientationMask {
+    return OrientationDirector.getSupportedInterfaceOrientationsForWindow()
   }
 
   func application(
