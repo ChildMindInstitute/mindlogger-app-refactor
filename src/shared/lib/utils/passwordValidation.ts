@@ -166,6 +166,10 @@ export const passwordSuperRefine = (): ((
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: PasswordErrorKey.MUST_INCLUDE,
+        params: {
+          minLength: PASSWORD_MIN_LENGTH,
+          types: ACCOUNT_PASSWORD_MIN_CHAR_TYPES,
+        },
       });
     }
 
@@ -173,6 +177,9 @@ export const passwordSuperRefine = (): ((
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: PasswordErrorKey.MIN_LENGTH,
+        params: {
+          minLength: PASSWORD_MIN_LENGTH,
+        },
       });
     }
 
