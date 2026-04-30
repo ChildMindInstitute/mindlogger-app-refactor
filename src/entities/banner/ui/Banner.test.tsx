@@ -5,13 +5,38 @@ import { useAppState } from '@react-native-community/hooks';
 import { fireEvent, render } from '@testing-library/react-native';
 
 import { TamaguiProvider } from '@app/app/ui/AppProvider/TamaguiProvider';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
+import { bannerActions } from '@entities/banner/model/slice';
 
 import { Banner } from './Banner';
+import { UnityView } from '../../unity/ui/UnityView';
 
 // Mock dependencies
 jest.mock('@react-native-community/hooks', () => ({
   useAppState: jest.fn(),
 }));
+
+jest.mock('@app/shared/lib/hooks/redux', () => ({
+  useAppDispatch: jest.fn(),
+}));
+
+jest.mock('../../unity/lib/hook/useUnityLifecycle', () => ({
+  useUnityLifecycle: () => ({
+    rnUnityViewRef: { current: null },
+    unityViewKey: 'test-key',
+    isUnityUnresponsive: false,
+    failureMode: null,
+    flowId: null,
+    showErrorModal: false,
+    isQuitBeforeMount: false,
+    handleErrorModalDismiss: jest.fn(),
+    handleRestartActivity: jest.fn(),
+    handleMessageFromUnity: jest.fn(),
+    handlePlayerUnload: jest.fn(),
+    handlePlayerQuit: jest.fn(),
+  }),
+}));
+
 
 // Mock timer
 jest.useFakeTimers();
@@ -38,6 +63,7 @@ describe('Banner', () => {
     // No close button by default since onClose is not provided
     expect(() => getByLabelText('banner-close')).toThrow();
   });
+
 
   test('renders with custom severity', () => {
     const { getByLabelText } = render(
@@ -202,5 +228,20 @@ describe('Banner', () => {
 
     // Close button should not be visible
     expect(queryByLabelText('banner-close')).toBeNull();
+  });
+
+  test('banners are hidden when UnityView is showing', () => {
+    const mockDispatch = jest.fn();
+    (useAppDispatch as jest.Mock).mockReturnValue(mockDispatch);
+
+    render(
+      <TamaguiProvider>
+        <UnityView payload={{ file: 'test.json' }} />
+      </TamaguiProvider>,
+    );
+
+    expect(mockDispatch).toHaveBeenCalledWith(
+      bannerActions.setBannersHidden(true),
+    );
   });
 });
