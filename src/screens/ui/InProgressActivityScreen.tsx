@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
-import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
 import { Box } from '@app/shared/ui/base';

@@ -3,15 +3,15 @@ import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 import { UnityResult } from '@entities/unity/lib/types/unityType.ts';
 
 import { UnityErrorModal } from './UnityErrorModal';
 import { useUnityLifecycle } from '../lib/hook/useUnityLifecycle';
-import { useAppDispatch } from '@app/shared/lib/hooks/redux';
-import { bannerActions } from '@app/entities/banner/model/slice';
 
 type Props = {
   payload: UnityPipelineItem['payload'];

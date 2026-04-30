@@ -37,7 +37,6 @@ jest.mock('../../unity/lib/hook/useUnityLifecycle', () => ({
   }),
 }));
 
-
 // Mock timer
 jest.useFakeTimers();
 
@@ -63,7 +62,6 @@ describe('Banner', () => {
     // No close button by default since onClose is not provided
     expect(() => getByLabelText('banner-close')).toThrow();
   });
-
 
   test('renders with custom severity', () => {
     const { getByLabelText } = render(
