@@ -19,7 +19,11 @@ import { DEFAULT_BG } from '@entities/banner/lib/constants';
 
 import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
-import { bannersBgSelector, bannersSelector } from '../model/selectors';
+import {
+  bannersBgSelector,
+  bannersHiddenSelector,
+  bannersSelector,
+} from '../model/selectors';
 import { BannerType } from '../model/slice';
 
 const handleClose = (
@@ -35,6 +39,7 @@ export const Banners = () => {
   const { removeBanner } = useBanners();
   const banners = useAppSelector(bannersSelector);
   const bannersBg = useAppSelector(bannersBgSelector) ?? DEFAULT_BG;
+  const isHidden = useAppSelector(bannersHiddenSelector);
   const { top } = useSafeAreaInsets();
 
   // Animate top safe area background color to match native header background color transition
@@ -47,6 +52,10 @@ export const Banners = () => {
       easing: Easing.out(Easing.ease),
     }),
   }));
+
+  if (isHidden) {
+    return null;
+  }
 
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
 
