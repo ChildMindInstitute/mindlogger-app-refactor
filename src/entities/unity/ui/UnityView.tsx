@@ -1,9 +1,11 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
 import { UnityResult } from '@entities/unity/lib/types/unityType.ts';
@@ -53,6 +55,15 @@ export const UnityView: FC<Props> = props => {
     />
   );
 
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(bannerActions.setBannersHidden(true));
+    return () => {
+      dispatch(bannerActions.setBannersHidden(false));
+    };
+  }, [dispatch]);
+
   if (!compiledWithRNUnityView) {
     // TODO: Render some dummy/placeholder UI to bypass the activity
     return (
@@ -82,6 +93,7 @@ export const UnityView: FC<Props> = props => {
     <>
       <RNUnityView
         key={unityViewKey}
+        testID="merit-unity-view"
         ref={rnUnityViewRef}
         // eslint-disable-next-line react-native/no-inline-styles
         style={{ flex: 1 }}
