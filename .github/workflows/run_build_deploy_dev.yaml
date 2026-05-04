@@ -1,6 +1,10 @@
 name: Build and Deploy to Dev
 
 on:
+  push:
+    branches:
+      - dev
+      - develop
   workflow_dispatch: {} 
     
 
