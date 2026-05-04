@@ -177,6 +177,16 @@ The above scripts run the app using Debug configuration and for Curious's `dev`
 
 For concerns related to Unity integration, see [unity/README.md](unity/README.md)
 
+## Deep Linking
+
+Testing deep linking in the simulator requires access to the organization’s Apple Developer Account and a valid provisioning profile.
+
+Also, make sure the Associated Domains contains the domains:
+`applinks:web-dev.cmiml.net?mode=developer
+webcredentials:web-dev.cmiml.net`
+
+Having mode=developer is essential to work properly in the simulator.
+
 ## License
 
 Common Public Attribution License Version 1.0 (CPAL-1.0)
