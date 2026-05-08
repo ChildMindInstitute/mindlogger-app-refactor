@@ -2,6 +2,13 @@
 
 Applied via [patch-package](https://github.com/ds300/patch-package).
 
+## @azesmway+react-native-unity+1.0.11.patch
+
+Patch `requestFrame` in UPlayer.java to fix Android build issue.
+
+- Resolves issue azesmway/react-native-unity#123.
+- Added in commit 187d7933 of pull request #1117.
+
 ## react-native+0.79.7.patch
 
 Bumps `fmt` dependency 11.0.2 → 12.1.0 to fix iOS compile errors with Xcode 26.4.
