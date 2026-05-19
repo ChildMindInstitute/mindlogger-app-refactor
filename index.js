@@ -1,3 +1,6 @@
+// Silence RNFirebase v21 namespaced API deprecation warnings (we use namespace API intentionally)
+global.RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;
+
 import 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 
