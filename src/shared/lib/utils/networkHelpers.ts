@@ -99,10 +99,19 @@ const RetryWaitInterval = 1000;
 const NetworkErrorCode = -1;
 const NetworkErrorMessage = 'network error';
 
-export const callApiWithRetry = async <TResponse>(
-  apiFunction: () => Promise<AxiosResponse<TResponse>>,
+export class HttpError extends Error {
+  constructor(
+    message: string,
+    public response: { status: number },
+  ) {
+    super(message);
+  }
+}
+
+export const callApiWithRetry = async <T>(
+  apiFunction: () => Promise<T>,
   retryErrorCodes: number[] = [502, NetworkErrorCode],
-): Promise<AxiosResponse<TResponse>> => {
+): Promise<T> => {
   const shouldCheckNetworkError = () =>
     retryErrorCodes.includes(NetworkErrorCode);
 
@@ -110,7 +119,7 @@ export const callApiWithRetry = async <TResponse>(
     error.toString().toLowerCase().includes(NetworkErrorMessage);
 
   const isRetryErrorCode = (error: any) => {
-    const status = (error as AxiosError)?.response?.status ?? 0;
+    const status = (error as HttpError)?.response?.status ?? 0;
 
     if (status > 0 && retryErrorCodes.includes(status)) {
       return true;
