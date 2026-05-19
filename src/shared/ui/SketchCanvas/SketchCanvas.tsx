@@ -127,7 +127,12 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
         onLayout={e => (width.value = e.nativeEvent.layout.width)}
       >
         <Canvas style={StyleSheet.absoluteFill}>
-          <Path path={fullPath} strokeWidth={1.5} color="black" style="stroke" />
+          <Path
+            path={fullPath}
+            strokeWidth={1.5}
+            color="black"
+            style="stroke"
+          />
         </Canvas>
       </View>
     </GestureDetector>
