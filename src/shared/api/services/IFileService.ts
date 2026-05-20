@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
+import { FetchBlobResponse } from 'react-native-blob-util';
 
 import { SuccessfulResponse, SuccessfulEmptyResponse } from '../types';
-import { FetchBlobResponse } from 'react-native-blob-util';
 
 export type FileUploadRequest = {
   uri: string;
