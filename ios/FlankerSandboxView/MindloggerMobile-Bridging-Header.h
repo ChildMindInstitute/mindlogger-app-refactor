@@ -8,3 +8,4 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 #import <React/RCTDevLoadingView.h>
+#import <OrientationDirector.h>

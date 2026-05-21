@@ -30,6 +30,8 @@ type Props = {
   interruptionStep: number | null;
   entityStartedAt: number;
   flowId?: string;
+  nextActivityName?: string;
+  onSkipActivity?: () => void;
 } & FlowPipelineItem;
 
 export function FlowElementSwitch({
@@ -43,6 +45,8 @@ export function FlowElementSwitch({
   interruptionStep,
   entityStartedAt,
   flowId,
+  nextActivityName,
+  onSkipActivity,
 }: Props) {
   const { t } = useTranslation();
   const context = useMemo(
@@ -69,6 +73,7 @@ export function FlowElementSwitch({
         <ActivityIdentityContext.Provider value={context}>
           <Box flex={1}>
             <ActivityStepper
+              key={payload.activityId}
               {...payload}
               idleTimer={event.timers.idleTimer}
               timer={event.timers.timer}
@@ -76,6 +81,8 @@ export function FlowElementSwitch({
               onClose={closeAssessment}
               onFinish={onComplete}
               flowId={flowId}
+              nextActivityName={nextActivityName}
+              onSkipActivity={onSkipActivity}
             />
           </Box>
         </ActivityIdentityContext.Provider>

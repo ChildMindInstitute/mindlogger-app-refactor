@@ -38,6 +38,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func application(
+    _ application: UIApplication,
+    supportedInterfaceOrientationsFor window: UIWindow?
+  ) -> UIInterfaceOrientationMask {
+    // Mask must be static option set (M2-10056)
+    return [.portrait, .landscapeLeft, .landscapeRight]
+  }
+
+  func application(
     _ app: UIApplication,
     open url: URL,
     options: [UIApplication.OpenURLOptionsKey: Any] = [:]

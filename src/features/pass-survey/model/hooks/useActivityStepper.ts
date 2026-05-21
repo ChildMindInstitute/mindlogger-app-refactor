@@ -21,10 +21,15 @@ export function useActivityStepper(state: ActivityState | undefined) {
 
   const currentPipelineItem = state?.items[step];
 
-  const isTutorialStep = currentPipelineItem?.type === 'Tutorial';
-  const isAbTestStep = currentPipelineItem?.type === 'AbTest';
-  const isMessageStep = currentPipelineItem?.type === 'Message';
-  const isSplashStep = currentPipelineItem?.type === 'Splash';
+  const currentType =
+    typeof currentPipelineItem?.type === 'string'
+      ? currentPipelineItem?.type.trim().toLowerCase()
+      : undefined;
+
+  const isTutorialStep = currentType === 'tutorial';
+  const isAbTestStep = currentType === 'abtest';
+  const isMessageStep = currentType === 'message';
+  const isSplashStep = currentType === 'splash';
   const isFirstStep = step === 0;
   const isLastStep = items && step === items.length - 1;
 
@@ -55,9 +60,11 @@ export function useActivityStepper(state: ActivityState | undefined) {
   const canMoveBack = currentPipelineItem?.isAbleToMoveBack;
   const canReset =
     currentPipelineItem?.canBeReset && (hasAnswer || hasAdditionalAnswer);
-  const showTopNavigation = currentPipelineItem?.hasTopNavigation;
-  const showBottomNavigation = !showTopNavigation;
-  const showWatermark = !isSplashStep && !showTopNavigation;
+  const isUnityStep = currentPipelineItem?.isUnity ?? currentType === 'unity';
+  const showTopNavigation =
+    currentPipelineItem?.hasTopNavigation && !isUnityStep;
+  const showBottomNavigation = !showTopNavigation && !isUnityStep;
+  const showWatermark = !isSplashStep && !showTopNavigation && !isUnityStep;
 
   const isConditionalLogicItem = ConditionalLogicItems.includes(
     currentPipelineItem!?.type,
@@ -95,6 +102,7 @@ export function useActivityStepper(state: ActivityState | undefined) {
     showTopNavigation,
     showBottomNavigation,
 
+    isUnityStep,
     isValid,
     getNextButtonText,
   };

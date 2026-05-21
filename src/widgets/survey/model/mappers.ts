@@ -14,6 +14,7 @@ import {
   StackedRadioPipelineItem,
   StackedRadioResponse,
   StackedSliderPipelineItem,
+  UnityResponse,
 } from '@app/features/pass-survey/lib/types/payload';
 import { PipelineItemAnswer } from '@app/features/pass-survey/lib/types/pipelineItemAnswer';
 import { AnswerAlerts } from '@app/features/pass-survey/lib/types/summary';
@@ -437,6 +438,17 @@ function convertToAbTestAnswer(answer: Answer): AnswerDto {
   };
 }
 
+function convertToUnityAnswer(answer: Answer): AnswerDto {
+  const unityResponse = answer.answer as UnityResponse;
+
+  return {
+    value: {
+      type: 'unity',
+      taskData: unityResponse.taskData,
+    },
+  };
+}
+
 function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
   switch (type) {
     case 'TextInput':
@@ -505,6 +517,10 @@ function convertToAnswerDto(type: ActivityItemType, answer: Answer): AnswerDto {
 
     case 'AbTest': {
       return convertToAbTestAnswer(answer);
+    }
+
+    case 'Unity': {
+      return convertToUnityAnswer(answer);
     }
 
     default:

@@ -81,7 +81,7 @@ Run the follow commands to prepare the build:
 
 ```
 $ yarn
-$ yarn clean
+$ yarn clean:ios
 $ yarn unity:relink
 $ yarn pods:reinstall
 ```
@@ -100,7 +100,7 @@ Run the follow commands to prepare the build:
 
 ```
 $ yarn
-$ yarn clean
+$ yarn clean:ios
 $ yarn pods:reinstall
 ```
 
