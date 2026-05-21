@@ -47,7 +47,7 @@ const buildFirstPartyHosts = (firstPartyHosts: string[]) => {
 
 const config = new DatadogProviderConfiguration(
   DATADOG_CLIENT_TOKEN,
-  DATADOG_ENV as string,
+  DATADOG_ENV,
   TrackingConsent.GRANTED,
   {
     rumConfiguration: {
