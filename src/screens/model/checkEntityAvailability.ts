@@ -173,6 +173,29 @@ const checkEntityAvailabilityInternal = ({
   );
 
   if (isInProgress && !shouldBeAutocompleted) {
+    // Additional safety check: Verify the event window is currently active
+    // Don't allow resuming in-progress flows from expired schedule windows
+    const eventDto = queryUtils.getEventDto(appletId, eventId);
+
+    if (eventDto) {
+      const event = mapEventFromDto(eventDto);
+      event.scheduledAt = getDefaultScheduledDateCalculator().calculate(event);
+
+      const isEventCurrentlyAvailable = new AvailableGroupEvaluator(
+        appletId,
+        freshProgressions,
+      ).isEventInGroup(event, targetSubjectId);
+
+      if (!isEventCurrentlyAvailable) {
+        logger.log(
+          '[checkEntityAvailability] Check done: false (in-progress but event window not currently active)',
+        );
+        onActivityNotAvailable(entityName);
+        callback(false);
+        return;
+      }
+    }
+
     logger.log('[checkEntityAvailability] Check done: true (in-progress)');
 
     callback(true);
@@ -231,8 +254,10 @@ const checkEntityAvailabilityInternal = ({
     const from = getNow();
     const { timeFrom } = event.availability;
 
-    from.setHours(timeFrom!.hours);
-    from.setMinutes(timeFrom!.minutes);
+    if (timeFrom) {
+      from.setHours(timeFrom.hours);
+      from.setMinutes(timeFrom.minutes);
+    }
 
     logger.log('[checkEntityAvailability] Check done: false (scheduled today)');
 

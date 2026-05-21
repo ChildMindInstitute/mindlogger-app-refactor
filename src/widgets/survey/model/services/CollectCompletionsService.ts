@@ -130,21 +130,14 @@ export class CollectCompletionsService implements ICollectCompletionsService {
     });
 
     for (const incompleteEntity of filtered) {
-      const {
-        entityType,
-        appletId,
-        entityId,
-        eventId,
-        targetSubjectId,
-        progression,
-      } = incompleteEntity;
+      const { progression } = incompleteEntity;
 
-      const flowId = entityType === 'activityFlow' ? entityId : undefined;
-
-      if (
-        isEntityExpired(progression.availableUntilTimestamp) &&
-        isCurrentActivityRecordExist(flowId, appletId, eventId, targetSubjectId)
-      ) {
+      // Check only if entity is expired - don't check for activity records
+      // since auto-completion needs to work even when user hasn't answered
+      if (isEntityExpired(progression.availableUntilTimestamp)) {
+        this.logger.log(
+          `[CollectCompletionsService.hasExpiredEntity] Found expired entity - entityId=${incompleteEntity.entityId}, availableUntil=${progression.availableUntilTimestamp ? new Date(progression.availableUntilTimestamp).toISOString() : 'null'}`,
+        );
         return true;
       }
     }

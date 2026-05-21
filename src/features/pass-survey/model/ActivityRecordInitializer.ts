@@ -33,6 +33,7 @@ type InitializeFlowArgs = {
   eventId: string;
   targetSubjectId: string | null;
   flowActivityIds: string[];
+  flowActivityOrders: number[];
 };
 
 export type InitializeHiddenItem = {
@@ -124,8 +125,10 @@ export function ActivityRecordInitializer({
     eventId,
     targetSubjectId,
     flowActivityIds,
+    flowActivityOrders,
   }: InitializeFlowArgs) => {
-    flowActivityIds.forEach((activityId, order) => {
+    flowActivityIds.forEach((activityId, index) => {
+      const order = flowActivityOrders[index];
       initializeActivity({
         activityId,
         eventId,

@@ -6,7 +6,9 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { EntityPath } from '@app/abstract/lib/types/entity';
+import { useTargetedSync } from '@app/entities/applet/model/hooks/useTargetedSync';
 import { selectAppletsEntityProgressions } from '@app/entities/applet/model/selectors';
+import { AppletsRefresh } from '@app/features/applets-refresh/ui/AppletsRefresh';
 import { ConnectionStatusBar } from '@app/features/streaming/ui/ConnectionStatusBar';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
@@ -16,6 +18,7 @@ import {
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box } from '@app/shared/ui/base';
 import { HorizontalCalendar } from '@app/shared/ui/HorizontalCalendar';
 import { ActivityGroups } from '@app/widgets/activity-group/ui/ActivityGroups';
@@ -38,9 +41,18 @@ export const ActivityListScreen: FC<Props> = props => {
     });
   });
 
+  const { syncApplet } = useTargetedSync();
+
   const entityProgressions = useAppSelector(selectAppletsEntityProgressions);
 
   const queryClient = useQueryClient();
+
+  // Sync when screen becomes focused
+  useOnFocus(() => {
+    syncApplet(appletId).catch(err =>
+      getDefaultLogger().error(`[ActivityListScreen] Sync failed: ${err}`),
+    );
+  });
 
   const checkAvailability = useCallback(
     async (
@@ -85,6 +97,7 @@ export const ActivityListScreen: FC<Props> = props => {
           appletId={appletId}
           completeEntity={completeEntityIntoUploadToQueue}
           checkAvailability={checkAvailability}
+          refreshControl={<AppletsRefresh appletId={appletId} />}
         />
       )}
     </Box>

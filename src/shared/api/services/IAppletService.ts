@@ -71,6 +71,7 @@ export type AppletDetailsDto = {
 };
 
 export type AppletRespondentMetaDto = {
+  subjectId: string | null;
   nickname?: string;
 };
 

@@ -36,14 +36,28 @@ export function useFlowState({
     {}) as FlowSummaryData;
 
   const remainingActivityIds: string[] = useMemo(() => {
-    if (!record?.pipeline.length || record?.step == null) {
+    if (!record?.pipeline.length || record?.step === null) {
       return [];
     }
 
     const restActivitySteps = record.pipeline
       .slice(record.step)
       .filter(x => x.type === 'Stepper');
-    return restActivitySteps.map(x => x.payload.activityId);
+
+    const activityIds = restActivitySteps.map(x => x.payload.activityId);
+
+    return activityIds;
+  }, [record?.pipeline, record?.step]);
+
+  const remainingActivityOrders = useMemo(() => {
+    if (!record?.pipeline.length || record?.step === null) {
+      return [];
+    }
+
+    return record.pipeline
+      .slice(record.step)
+      .filter(x => x.type === 'Stepper')
+      .map(x => x.payload.order);
   }, [record?.pipeline, record?.step]);
 
   return {
@@ -53,5 +67,6 @@ export function useFlowState({
     pipeline,
     flowSummaryData,
     remainingActivityIds,
+    remainingActivityOrders,
   };
 }

@@ -18,6 +18,7 @@ import { getDefaultAlertsExtractor } from '@app/features/pass-survey/model/alert
 import { getDefaultScoresExtractor } from '@app/features/pass-survey/model/scoresExtractorInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
+import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -156,8 +157,6 @@ export const useAutoCompletion = (): Result => {
       try {
         mutex.setBusy();
 
-        logger.log('[useAutoCompletion.processAutocompletion] Started');
-
         const collectOutputs = collectAllInternal(collectService, exclude);
 
         completionsCollected = !!collectOutputs.length;
@@ -178,8 +177,20 @@ export const useAutoCompletion = (): Result => {
 
       let result = true;
 
-      if (hasItemsInQueue()) {
+      const queueLength = hasItemsInQueue();
+
+      // Always ensure upload status is updated for UI feedback
+      // Even if queue is empty, we need to signal completion
+      if (queueLength) {
         result = await getDefaultQueueProcessingService().process();
+      } else {
+        // Queue is empty (no activities to upload) - manually set completion status
+        // This handles the case where activities were completed on web and synced
+        const uploadObservable = getDefaultUploadObservable();
+        uploadObservable.isCompleted = true;
+        uploadObservable.isLoading = false;
+        uploadObservable.isError = false;
+        uploadObservable.isPostponed = false;
       }
 
       if (forceRefreshNotifications || completionsCollected) {
