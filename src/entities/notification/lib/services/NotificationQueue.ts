@@ -19,7 +19,7 @@ export function NotificationQueue(
   }
 
   function clear() {
-    return notificationQueueStorage.delete(storageKey);
+    return notificationQueueStorage.remove(storageKey);
   }
 
   return {

@@ -12,14 +12,14 @@ export class AsyncStorage {
   setItem(key: string, value: string): Promise<unknown> {
     // We have to remove item before setting a new value in MMKV
     // https://github.com/mrousavy/react-native-mmkv/issues/440
-    this.storage.delete(key);
+    this.storage.remove(key);
     this.storage.set(key, value);
 
     return Promise.resolve();
   }
 
   removeItem(key: string): Promise<void> {
-    this.storage.delete(key);
+    this.storage.remove(key);
 
     return Promise.resolve();
   }

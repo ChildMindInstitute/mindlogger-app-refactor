@@ -63,7 +63,7 @@ export class AnswersQueueService implements IAnswersQueueService {
       return;
     }
 
-    this.uploadQueueStorage.delete(String(firstKey));
+    this.uploadQueueStorage.remove(String(firstKey));
   }
 
   public swap() {
