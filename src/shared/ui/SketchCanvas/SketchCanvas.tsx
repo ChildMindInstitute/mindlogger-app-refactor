@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Canvas, Path, Skia, SkPath } from '@shopify/react-native-skia';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -122,12 +122,19 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
 
   return (
     <GestureDetector gesture={drawingGesture}>
-      <Canvas
+      <View
         style={styles.canvas}
         onLayout={e => (width.value = e.nativeEvent.layout.width)}
       >
-        <Path path={fullPath} strokeWidth={1.5} color="black" style="stroke" />
-      </Canvas>
+        <Canvas style={StyleSheet.absoluteFill}>
+          <Path
+            path={fullPath}
+            strokeWidth={1.5}
+            color="black"
+            style="stroke"
+          />
+        </Canvas>
+      </View>
     </GestureDetector>
   );
 });

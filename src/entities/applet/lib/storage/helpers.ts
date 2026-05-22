@@ -23,7 +23,7 @@ export const clearStorageRecords = {
           : keys.includes(eventId) && keys.includes(targetSubjectId),
       );
 
-    activityRecordKeys.forEach(key => activityStorage.delete(key));
-    flowRecordKeys.forEach(key => flowStorage.delete(key));
+    activityRecordKeys.forEach(key => activityStorage.remove(key));
+    flowRecordKeys.forEach(key => flowStorage.remove(key));
   },
 };

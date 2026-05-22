@@ -20,7 +20,7 @@ export function UserPrivateKeyRecord(
   }
 
   function clear() {
-    return userPrivateKeyStorage.delete(storeKey);
+    return userPrivateKeyStorage.remove(storeKey);
   }
 
   return {

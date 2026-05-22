@@ -68,7 +68,7 @@ export function useFlowStorageRecord({
   );
 
   const clearFlowStorageRecord = useCallback(() => {
-    storage.delete(key);
+    storage.remove(key);
   }, [key, storage]);
 
   const getCurrentFlowStorageRecord = useCallback(() => {
