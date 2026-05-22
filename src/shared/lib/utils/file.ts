@@ -7,5 +7,5 @@ export const isLocalFileUrl = (value: string) => {
   return localFileRegex.test(value);
 };
 
-export const getFilePath = (path: string) =>
+export const getFileUri = (path: string) =>
   IS_ANDROID ? `file://${path}` : path;
