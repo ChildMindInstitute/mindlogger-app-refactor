@@ -9,3 +9,6 @@ export const isLocalFileUrl = (value: string) => {
 
 export const getFileUri = (path: string) =>
   IS_ANDROID ? `file://${path}` : path;
+
+export const getFilePath = (uri: string) =>
+  uri.startsWith('file://') ? uri.slice('file://'.length) : uri;
