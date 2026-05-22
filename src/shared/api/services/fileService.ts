@@ -4,6 +4,7 @@ import { IS_ANDROID } from '@app/shared/lib/constants';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getStringHashCode } from '@app/shared/lib/utils/common';
+import { getFilePath } from '@app/shared/lib/utils/file';
 import {
   HttpError,
   watchForConnectionLoss,
@@ -149,9 +150,8 @@ export function fileService(): IFileService {
 
         try {
           const body = [];
-          const localUrl = request.localUrl.replace('file://', ''); // no 'file://' on both Android and iOS
-
           const fieldKeys = Object.keys(request.fields);
+          const localUrl = getFilePath(request.localUrl); // no 'file://' on both Android and iOS
 
           for (const key of fieldKeys) {
             body.push({ name: key, data: request.fields[key] });
