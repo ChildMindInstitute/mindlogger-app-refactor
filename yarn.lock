@@ -1084,17 +1084,17 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@datadog/mobile-react-native@^2.13.2":
-  version "2.14.3"
-  resolved "https://registry.yarnpkg.com/@datadog/mobile-react-native/-/mobile-react-native-2.14.3.tgz#256d40a66f8d8f0720a4126a03e46f55faced0b8"
-  integrity sha512-3OzkuAmwxF6RjgG/g5sRtmlIcRkvZCYYKeuLJNSWTWheMZqjPTNXkJj4zGCN9eEv9rEufF0ZkAhOhjDcqsjb0Q==
+"@datadog/mobile-react-native@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@datadog/mobile-react-native/-/mobile-react-native-3.1.2.tgz#99350153f412baada7b6c6cf82b542dca22920b9"
+  integrity sha512-EOCMZbke5obDNlnPe8ZKwLgxFJtG3mhIY6NP5ApeCc/V1rz8gjh4E7mWOf4EeFnLf3NiR/vElXJsTi7HVORzfA==
   dependencies:
     big-integer "^1.6.52"
 
-"@datadog/mobile-react-navigation@^2.13.2":
-  version "2.14.3"
-  resolved "https://registry.yarnpkg.com/@datadog/mobile-react-navigation/-/mobile-react-navigation-2.14.3.tgz#70eb44c155f8f262f45417db69318cf56ad6db59"
-  integrity sha512-WnLudIN1916+b/IYP34SU29Xg5m5mEEUDSa4n1+AA2wT8aTNSYHdS/+MYy9LGOFyOe76nMpg965m/zlwhIsOWQ==
+"@datadog/mobile-react-navigation@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@datadog/mobile-react-navigation/-/mobile-react-navigation-3.1.2.tgz#d9c098e2885c2b65897ccb9a6ce529f0f4d12db1"
+  integrity sha512-FEpkWLEd863mz9B2QoYEbneVodm+vFKEjZElO+HrpqubiStH3opZO2qR63wMk7k6f6+aRqeiB3DiZ55XqKKXHQ==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
