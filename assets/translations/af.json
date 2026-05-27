@@ -278,7 +278,10 @@
     "fr": "Français",
     "el": "Ελληνικά",
     "es": "Español",
-    "pt": "Português"
+    "pt": "Português",
+    "af": "Afrikaans",
+    "xh": "isiXhosa",
+    "zu": "isiZulu"
   },
   "application_logs_screen": {
     "upload_button": "Laai logs op",
