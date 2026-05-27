@@ -1,0 +1,588 @@
+{
+  "auth": {
+    "email": "I-imeyili",
+    "email_address": "Ikheli le-imeyili",
+    "password": "Iphasiwedi",
+    "i_agree": "Ngivumelana ne",
+    "terms_of_service": "Imigomo Yesevisi",
+    "terms": "Imigomo",
+    "privacy": "Ubumfihlo",
+    "privacy_policy": "Inqubomgomo yobumfihlo",
+    "password_updated": "Iphasiwedi ibuyekeziwe"
+  },
+  "activity": {
+    "completeOnWeb": "Sicela ugcwalise ku-app yewebhu ye-Curious",
+    "incorrect_answer": "Impendulo engalungile. Sicela uzame futhi",
+    "failed": "Yehlulekile",
+    "flanker_accuracy_warn": "*Izitembu zesikhathi eziqoqwe ku-android azinembile njengamadivayisi we-iOS.",
+    "please_wait": "Ngicela ulinde",
+    "activity_all_items_hidden": "\"{{entityName}}\" ayikwazi ukuqaliswa ngoba zonke izinto ezingaphakathi komsebenzi zifihliwe",
+    "flow_all_items_hidden": "“”{{entityName}}” ayikwazi ukuqaliswa ngoba iqukethe umsebenzi lapho zonke izinto zifihlwe khona",
+    "progress": {
+      "upload_files": "Ilayisha amafayela akho...",
+      "encrypt_answers": "Ibethela izimpendulo zakho...",
+      "upload_answers": "Ilayisha izimpendulo zakho...",
+      "completed": "Umsebenzi ulayishiwe"
+    },
+    "step": "Isinyathelo",
+    "flowStep": "({{activityPositionInFlow}} kokungu-{{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} kokuthi {{totalSteps}}",
+    "activityCounter": "Umsebenzi {{currentStep}} wokuthi {{totalSteps}}"
+  },
+  "activity_time": {
+    "time_remaining": "usele kule nto"
+  },
+  "timed_activity": {
+    "time_to_complete": "Isikhathi sokuqeda",
+    "time_to_complete_hm": "Isikhathi sokuqeda: {{hours}} amahora kanye nemizuzu engu-{{minutes}}",
+    "hours": "amahora"
+  },
+  "activity_summary": {
+    "terms_text": "Ngiyaqonda ukuthi ulwazi oluhlinzekwe yilolu hlu lwemibuzo akuhloselwe ukuthatha indawo yeseluleko, ukuxilongwa, noma ukwelashwa okunikezwa uchwepheshe wezempilo noma wengqondo, nokuthi izimpendulo zami ezingaziwa zingasetshenziswa futhi kwabelwane ngazo ukuze kwenziwe ucwaningo olujwayelekile mayelana nempilo yengqondo yezingane.",
+    "footer_text": "I-CHILD MIND INSTITUTE, INC. FUTHI UKWELASHWA KOMQONDO WENGANE, I-PLLC (NDAWONYE, “I-CMI”) AYISEBENZI NGEMITHI NGOKUQONDILE NOMA NGOKUNGAQONDILE NOMA IKHIPHE ISELULEKO SOKWELAPHA NJENGXENYE YALE MIBUZO. I-CMI AYITHATHI ISIBOPHO SOKUHLOLA, UKWELASHWA, ISINQUMO ESENZIWE, NOMA ISINYATHELO ESITHATHWE NGOKUTHEMBA ULWAZI OLUNIKEZWE NGALOLU LWEMIBUZO, FUTHI AYIQINISEKI ISIBOPHO NGOKUSEBENZISA KWAKHO LE MIBUZO.",
+    "score_on_subscale": "Isikolo sesikali esingaphansi se-{{name}} besithi",
+    "save": "Londoloza",
+    "summary": "Isifinyezo",
+    "alerts": "Izexwayiso",
+    "report_summary": "Bika Isifinyezo",
+    "not_yet_completed": "Akukaqedwa",
+    "last_completed": "Kugcine ukuqedwa",
+    "unscheduled": "Akuhleliwe",
+    "due": "Ifuneka",
+    "scheduled_for": "Kuhlelelwe",
+    "category_suicide": "Ukuzibulala",
+    "category_suicide_message": "Izinga elibalulekile: Umzali ubonise ubuxhwanguxhwangu obungase bube khona. Letha kudokotela ngokushesha ngenxa yesimo esiphuthumayo esingaba khona.",
+    "category_emotional": "Okungokomzwelo",
+    "category_emotional_message": "Ngaphakathi kwemikhawulo evamile: Akukho okunye ukuhlolwa noma ukuhlolwa okudingekayo.",
+    "category_sport": "Ezemidlalo",
+    "category_sport_message": "Ibanga Lezokwelashwa: Yazisa umtholampilo; Yenza ukuhlolwa kokulandelela (Kunconyiwe); Khiqiza ukudluliselwa.",
+    "share_report": "Yabelana ngombiko",
+    "share_all_reports": "Yabelana Ngayo Yonke Imibiko"
+  },
+  "activity_chart": {
+    "title": "Sicela uthathe ukuhlolwa ukuze idatha iboniswe.",
+    "monday": "M",
+    "tuesday": "T",
+    "wednesday": "W",
+    "thursday": "T",
+    "friday": "F",
+    "saturday": "S",
+    "sunday": "S"
+  },
+  "calendar": {
+    "months": "January_February_March_April_May_June_July_August_September_October_November_December",
+    "weekdays": "Sun_Mon_Tue_Wed_Thu_Fri_Sat",
+    "x_days": "M_T_W_T_F_S_S"
+  },
+  "applet_data": {
+    "title": "Sicela uthathe ukuhlolwa ukuze idatha iboniswe."
+  },
+  "widget_error": {
+    "error_text": "Kube nenkinga ekulayisheni lesi sikrini.",
+    "error_description": "Sicela uqinisekise ukuthi unenguqulo yakamuva ye-Curious efakiwe, bese uthinta umlawuli wakho womsebenzi uma inkinga isenzeka."
+  },
+  "about": {
+    "about": "Mayelana",
+    "applets_title": "Thola okwengeziwe mayelana ne-applet yakho ngayinye kanye nenkundla ye-Curious.",
+    "data_title": "Thola okwengeziwe mayelana nenkundla yokuqoqwa kwedatha ye-Curious ngokuthepha okuthi ‘Mayelana\nne-Curious' ngezansi.",
+    "about_curious": "Mayelana Ne-Curious",
+    "icons_title": "Izithonjana ze-NounProject zisungulwe ngu-Alina Oleynik (inhlolovo), u-beth bolton (incwadi), kanye\nno-Shakeel (ishadi)",
+    "device_id": "I-ID yedivayisi"
+  },
+  "about_app": {
+    "title_with_version": "Iyini i-Curious? v.{{version}}",
+    "title": "Ngaphandle kwalapho kushiwo kwenye indawo, izithonjana zidwetshwa ku-OpenMoji naku-NounProject.",
+    "subtitle": "Ngaphandle kwalapho kushiwo kwenye indawo, izithonjana zidwetshwa ku-OpenMoji naku-NounProject.",
+    "curious_about": "## \n ### Iyini i-Curious? \n\n Le app iyingxenye yomthombo ovulekile wokuqoqwa kwedatha ye-Curious nenkundla yokuhlaziya eklanywe i-MATTER Lab ku-Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### Yini ekwazi ukwenziwa yi-Curious? \n\n Isethi yesici se-Curious iyakhula, futhi njengamanje isekela izinhlobo zokufaka ezibanzi. Isikrini ngasinye kumsebenzi Wokufuna ukwazi singafaka noma yikuphi kokulandelayo: \n  - Umbhalo, isithombe, nomsindo \n  - Umbuzo olandelwa isithombe kanye/noma izinketho zokuphendula umbhalo \n  - Ibha yesilayidi \n  - Okufakiwe kombhalo \n  - Ukufakwa kwethebula \n  - Irekhodi lomsindo \n  - Ukuthwebula isithombe/ividiyo \n  - Ukudweba noma ukuthepha \n  - I-geolocation yamanje \n  - Umsebenzi wengqondo elula \n  - Ukubambezeleka ngaphambi kwempendulo \n  - Isikhathi \n  - I-logic enemibandela yokunquma ukuthi uzoya kuphi ngokulandelayo \n\n #### Ngingakufunda kuphi okwengeziwe? \n Sicela uvakashele okuthi [https://mindlogger.org](https://mindlogger.org) ukuze uthole ulwazi olwengeziwe.  \n ## [Usekelo]({{credits_link}}) \n ## [Imigomo yesevisi](https://mindlogger.org/terms-of-service) \n ## [Inqubomgomo yobumfihlo](https://mindlogger.org/privacy-policy) \n\n ##### Usale kahle, \n\n ##### Ithimba Le-Curious \n\n ##### I-Child Mind Institute"
+  },
+  "applet_footer": {
+    "surveys": "Inhlolovo",
+    "data": "Idatha",
+    "about": "Mayelana",
+    "activities": "Imisebenzi",
+    "activity": "Umsebenzi"
+  },
+  "applet_invite_flow": {
+    "back": "Emuva",
+    "next": "Olandelayo"
+  },
+  "live_connection": {
+    "disconnect": "NQAMULA",
+    "connect": "THUMELA",
+    "connect_to_server": "Xhuma Kuseva",
+    "remember": "Khumbula",
+    "ip": "Ikheli le-IP",
+    "port": "Imbobo",
+    "connection_closed": "I-TCP Connection ivaliwe",
+    "connection_error": "Uxhumano lwehlulekile. Sicela uhlole kabili i-ip kanye nembobo",
+    "connection_set_error": "Ayikwazi ukusetha uxhumano",
+    "live_connection": "Uxhumano Olubukhoma",
+    "not_available": "akutholakali"
+  },
+  "join_invite": {
+    "click_below": "Chofoza ngezansi uma usukulungele ukujoyina lolu cwaningo. Ungazikhipha kulolu cwaningo futhi/noma ususe idatha yakho noma nini ngaphandle kwemiphumela.",
+    "decline": "Uma ungazizwa ukhululekile ngokwabelana ngedatha yakho yalolu cwaningo, ungasenqaba lesi simemo. ",
+    "decline_title": "Yenqaba"
+  },
+  "applet_list_component": {
+    "about_title": "Mayelana Ne-Curious",
+    "no_applets_yet": "Awunawo ama-applet.",
+    "noon": "Emini",
+    "midnight": "Phakathi kwamabili",
+    "refresh_error_header": "Vuselela iphutha",
+    "applets_not_refreshed": "Ama-applet alandelayo awavuselelwanga:",
+    "common_refresh_error": "Uhlu lwama-applet aluvuselelwanga. Sicela uzame futhi."
+  },
+  "activity_list_component": {
+    "no_activities": "Ayikho imisebenzi etholakalayo ukuthi uyiqedele njengamanje",
+    "insufficient_data_error": "Le applet ayizange ivuselelwe. Sicela uzame ukuvuselela futhi.",
+    "other_error": "Kwenzeke iphutha elingachazwanga"
+  },
+  "applet_settings": {
+    "applet_not_defined": "Alikho i-applet echaziwe.",
+    "want_remove": "Uma ufuna ukususa le applet, kodwa ugcine idatha yakho, chofoza ngezansi",
+    "remove": "Susa",
+    "want_delete": "Uma ufuna ukususa idatha yakho kule applet futhi uyisuse, chofoza ngezansi.",
+    "remove_delete": "Susa futhi Susa idatha",
+    "alert_title": "Uqinisekile ukuthi ufuna ukususa idatha yakho?",
+    "alert_message": "Ngeke ukwazi ukukubuyisela",
+    "cancel_text": "Cha, khansela",
+    "confirm_text": "Yebo, yisuse"
+  },
+  "change_pass_form": {
+    "update": "Buyekeza",
+    "cur_pass_placeholder": "Iphasiwedi Yamanje",
+    "new_pass_placeholder": "Iphasiwedi Entsha",
+    "error": "Ayikwazi ukubuyekeza imininingwane yomsebenzisi.",
+    "submission_error": "Iphasiwedi yamanje oyifakile ibingalungile.",
+    "change_pass": "Shintsha iphasiwedi",
+    "password_at_least_characters": "Iphasiwedi kumele okungenani ibe nezinhlamvu ezingu-{{min}}"
+  },
+  "password_recovery_form": {
+    "password_at_least_characters": "Iphasiwedi kumele okungenani ibe nezinhlamvu ezingu-{{min}}",
+    "password_no_spaces": "Iphasiwedi akumele iqukathe izikhala",
+    "passwords_do_not_match": "Amaphasiwedi awafani",
+    "password_confirmation_required": "Sicela uqinisekise iphasiwedi yakho",
+    "new_password_placeholder": "Iphasiwedi Entsha",
+    "confirm_password_placeholder": "Qinisekisa Iphasiwedi",
+    "submit": "Thumela",
+    "invalid_password_reset_link": "Le linki ayivumelekile noma iphelelwe yisikhathi.",
+    "click_to_reset_password": "Sicela uchofoze ngezansi ukuze usethe kabusha iphasiwedi yakho.",
+    "forgot_password": "Ukhohlwe iphasiwedi",
+    "success": "Iphasiwedi yakho isethwe kabusha ngempumelelo. Sicela ungene ngemvume ngephasiwedi yakho entsha.",
+    "error": "Iphutha lokusetha kabusha iphasiwedi yakho"
+  },
+  "mfa_recovery": {
+    "title": "Qinisekisa Ubuwena",
+    "subtitle": "Sicela ufake ikhodi yokutakula i-akhawunti.",
+    "continue": "Qhubeka",
+    "back": "Emuva",
+    "invalid_code_format": "Ikhodi yokutakula kufanele ibe ngefomethi ethi XXXXX-XXXXX",
+    "placeholder": "XXXXX-XXXXX",
+    "error": "Ikhodi yokutakula engavumelekile. Sicela uzame futhi.",
+    "success": "Ubunikazi buqinisekiswe ngempumelelo",
+    "error_invalid_code": "Ikhodi yokutakula engavumelekile. Sicela uhlole bese uzama futhi.",
+    "error_code_not_found": "Ikhodi yokutakula ayitholakali noma isivele isetshenzisiwe.",
+    "error_session_expired": "Isikhathi sakho siphelelwe yisikhathi. Sicela ungene futhi.",
+    "error_too_many_attempts": "Imizamo eminingi kakhulu ehlulekile. Sicela uzame ukungena futhi.",
+    "error_global_lockout": "Imizamo eminingi kakhulu ehlulekile. Ukhiyelwe ngaphandle okwesikhashana. Sicela uzame ukungena ngemva kwemizuzu engu-15.",
+    "error_network": "Iphutha lenethiwekhi. Sicela uhlole uxhumo lwakho bese uzama futhi.",
+    "error_unknown": "Kwenzeke iphutha. Sicela uzame futhi."
+  },
+  "mfa_verification": {
+    "title": "Qinisekisa Ubuwena",
+    "subtitle": "Sicela ufake ikhodi yokuqinisekisa eboniswe ku-app yakho yokufakazela ubuqiniso.",
+    "verify": "Qhubeka",
+    "placeholder": "Faka ikhodi yokuqinisekisa",
+    "invalid_code_format": "Ikhodi yokuqinisekisa kufanele ibe namadijithi ayi-6",
+    "error": "Ikhodi engavumelekile",
+    "success": "Ukuqinisekisa kuphumelele",
+    "use_recovery_code": "Angikwazi ukufinyelela i-app yami yokufakazela ubuqiniso",
+    "session_expiry_warning": "Iseshini kungenzeka iphelelwe yisikhathi. Sicela uqinisekise mathupha noma ungene ngemvume futhi.",
+    "error_invalid_code": "Ikhodi yokuqinisekisa engavumelekile. Sicela uhlole bese uzama futhi.",
+    "error_session_expired": "Isikhathi sakho siphelelwe yisikhathi. Sicela ungene futhi.",
+    "error_too_many_attempts": "Imizamo eminingi kakhulu ehlulekile. Sicela uzame ukungena futhi.",
+    "error_global_lockout": "Imizamo eminingi kakhulu ehlulekile. Ukhiyelwe ngaphandle okwesikhashana. Sicela uzame ukungena ngemva kwemizuzu engu-15.",
+    "error_network": "Iphutha lenethiwekhi. Sicela uhlole uxhumo lwakho bese uzama futhi.",
+    "error_unknown": "Kwenzeke iphutha. Sicela uzame futhi.",
+    "warning_session_attempts_remaining": ". Kusele umzamo ongu-{{count}}",
+    "warning_session_attempts_remaining_plural": ". Kusele imizamo engu-{{count}}",
+    "warning_global_attempts_remaining": ". Kusele umzamo ongu-{{count}} ngaphambi kokuvalwa kwesikhashana",
+    "warning_global_attempts_remaining_plural": ". Kusele imizamo engu-{{count}} ngaphambi kokuvalwa kwesikhashana"
+  },
+  "change_study": {
+    "reset": "Setha kabusha",
+    "submit": "Thumela",
+    "enter_url_manually": "Faka i-URL ngokwenza",
+    "scan_qr": "Skena i-QR",
+    "successfully_changed": "I-Url yeseva ishintshwe ngempumelelo.",
+    "successfully_reset": "I-Url yeseva isethwe kabusha ngempumelelo.",
+    "change_server": "Shintsha iseva",
+    "http_confirm": "Uqinisekile ukuthi ufuna ukuxhuma kuseva engasekeli i-ssl?",
+    "set_by_qr": "Ucwaningo lusethwe yi-QR.",
+    "yes": "Yebo",
+    "no": "Cha"
+  },
+  "consent": {
+    "this_app_provides": "Le app inikeza indlela elula yokuqoqa inhlolovo, izwi, imisebenzi yokudweba.",
+    "i_understand": "Ngiyaqonda ukuthi ukubuka izithombe ezithile kungase kukwenze ungakhululeki ngenkathi usebenzisa le app",
+    "i_will_allow": "Ngizovumela i-Child Mind Institute ukuthi igcine idatha yokusetshenziswa kwale app ivikelekile\niseva ye-cloud, kanye nokufinyelela lolu lwazi ngezinjongo zokwelashwa nezocwaningo",
+    "i_premit": "Ngivumela i-Child Mind Institute ukuthi ingithinte mayelana nolwazi oluqoqwe kulo\nle app yezinjongo zokwelashwa noma zocwaningo.",
+    "next": "Olandelayo"
+  },
+  "forgot_pass_form": {
+    "reset_pass": "Setha kabusha Iphasiwedi",
+    "enter_email_mess": "Sicela ufake ikheli lakho le-imeyili",
+    "invalid_email": "Ikheli le-imeyili elingavumelekile",
+    "email_address": "Ikheli le-imeyili",
+    "email_send_success": "I-imeyili yokusetha kabusha ithunyelwe kokuthi <strong>{{email}}</strong> uma i-akhawunti ikhona.",
+    "email_send_error": "Ayikwazi ukuthumela i-imeyili yokusetha kabusha ngalesi sikhathi.",
+    "forgot_password": "Ukhohlwe iphasiwedi?"
+  },
+  "login": {
+    "new_user": "Umsebenzisi Omusha",
+    "account_create": "Yenza i-akhawunti",
+    "forgot_password": "Ukhohlwe iphasiwedi?",
+    "what_is": "Yini",
+    "login_error": "Ukungena kokuyimfihlo ayiphumelelanga.",
+    "password_at_least_characters": "Iphasiwedi kumele okungenani ibe nezinhlamvu eziyi-10"
+  },
+  "login_form": {
+    "login": "Ngena ngemvume",
+    "email_placeholder": "I-imeyili",
+    "password": "Iphasiwedi"
+  },
+  "logout_warning": {
+    "warning": "Isexwayiso Sokuphuma",
+    "uploads_in_progress": "Ukulayisha kuyaqhubeka",
+    "currently_uploading": "Unezimpendulo ezilayishayo njengamanje. Uma uphuma manje bese ungena njengomsebenzisi ohlukile, izimpendulo zakho zizolahleka.",
+    "not_uploaded": "Awulayishile izimpendulo. Uma uphuma manje bese ungena njengomsebenzisi ohlukile, izimpendulo zakho zizolahleka.",
+    "sure_logout": "Uqinisekile ukuthi ufuna ukuphuma?",
+    "cancel": "Khansela",
+    "logout": "Phuma"
+  },
+  "settings": {
+    "logged_out": "Uphumile.",
+    "change_pass": "Shintsha iphasiwedi",
+    "use_cellular_data": "Sebenzisa Idatha Yeselula",
+    "logout": "Phuma",
+    "permanently_delete_account": "Susa Unomphela I-akhawunti",
+    "user_settings": "Amasethingi Omsebenzisi",
+    "upload_logs": "Layisha Amalogi",
+    "create_new_password": "Sungula iphasiwedi entsha"
+  },
+  "language_screen": {
+    "app_language": "Ulimi lwe-application",
+    "change_app_language": "Shintsha Ulimi",
+    "en": "IsiNgisi",
+    "fr": "Français",
+    "el": "Ελληνικά",
+    "es": "Español",
+    "pt": "Português"
+  },
+  "application_logs_screen": {
+    "upload_button": "Layisha Amalogi",
+    "title": "Unezinkinga zobuchwepheshe? Amafayela akho okungena azosiza ithimba lethu ukuxazulula inkinga.",
+    "subTitle": "Sicela uwalayishe usebenzisa inkinobho engezansi.",
+    "success": "Impumelelo - sithole amalogi akho.",
+    "error": "Iphutha - amalogi awathunyelwanga. Sicela uzame futhi."
+  },
+  "sign_up_form": {
+    "sign_up": "Bhalisela",
+    "error": "Ukubhalisa kwehlulekile: igama lomsebenzisi kungenzeka selivele liyasetshenziswa.",
+    "new_user": "Umsebenzisi Omusha",
+    "username_validation_error": "Igama lomsebenzisi kufanele okungenani libe nezinhlamvu ezi-4, liqale ngohlamvu, futhi lingaqukatha kuphela izinhlamvu, izinombolo, amadeshi namachashazi.",
+    "email_validation_error": "Kubonakala sengathi le imeyili ayiphelele",
+    "email_placeholder": "I-imeyili",
+    "first_name": "Igama",
+    "last_name": "Isibongo",
+    "password_placeholder": "Iphasiwedi",
+    "please_accept_terms": "Sicela wamukele imigomo yesevisi.",
+    "email_looks_incomplete": "Kubonakala sengathi le imeyili ayiphelele",
+    "sign_up_agree": "Ngokubhalisa, uyavumelana ne-Curious",
+    "and": "futhi"
+  },
+  "password_requirements": {
+    "at_least_characters": "Izinhlamvu ezingu-10",
+    "no_blank_spaces": "azikho izikhala ezingenalutho",
+    "must_include": "Iphasiwedi kumele okungenani iqukathe izinhlamvu ezingu-{{minLength}}, azikho izikhala, futhi okungenani okuthi {{types}} koku-4 kokungezansi:",
+    "must_include_minimum": "Iphasiwedi kumele okungenani iqukathe izinhlamvu ezingu-{{minLength}} futhi zingabikhona izikhala",
+    "requirements_met": "Zonke izimfuneko zifinyelelwe.",
+    "must_include_uppercase": "Izinhlamvu ezinkulu (A-Z)",
+    "must_include_lowercase": "Izinhlamvu ezincane (a-z)",
+    "must_include_digits": "Inombolo (0-9)",
+    "must_include_symbol": "Izimpawu (!@#$...)",
+    "cannot_contain_emojis": "Iphasiwedi ayikwazi ukuqukatha ama-emoji."
+  },
+  "geolocation": {
+    "get_location": "THOLA INDAWO",
+    "must_enable_location": "Kufanele unike amandla amasevisi endawo ukuze uqedele lo msebenzi. Sicela unikeze imvume ye-Curious kumaSethingi akho e-iOS bese ucindezela inkinobho futhi.",
+    "must_enable_location_subtitle": "Kufanele unike amandla amasevisi endawo ukuze uqedele lo msebenzi. Sicela ucindezele inkinobho futhi bese unikeza i-Curious imvume yokusebenzisa indawo yakho.",
+    "location_saved": "Indawo ilondoloziwe.",
+    "service_not_available": "Isevisi yendawo ayitholakali."
+  },
+  "select": {
+    "select_one": "Khetha eyodwa",
+    "no_items": "Azikho izinto"
+  },
+  "permissions": {
+    "alert_button_cancel": "Cashisa",
+    "alert_button_ok": "Vula Amasethingi",
+    "alarm_permission_warning": "Isicelo sezimvume ze-alamu",
+    "alarm_permission_disabled": "Sicela uvule izimvume ze-alamu kudivayisi yakho ukuze uthole izikhumbuzi ze-Curious ngesikhathi. Sicela uqaphele ukuthi i-app izovalwa ngokuzenzakalelayo uma usuvule izimvume ze-alamu.",
+    "gallery": "\"I-Curious\" ingathanda ukusebenzisa igalari yakho ukuqedela lo msebenzi",
+    "camera": "”I-Curious” ingathanda ukusebenzisa ikhamera yakho ukuze iqedele lo msebenzi"
+  },
+  "media": {
+    "alert_message": "Lokhu kungalungiselelwa kokuthi Amasethingi",
+    "media_found_title": "Awuxhunyiwe ku-inthanethi",
+    "media_found_body": "Lo msebenzi uqukethe izinto ezidinga uxhumano lwe-inthanethi. Sicela uvule i-inthanethi ukuze uqhubeke."
+  },
+  "audio_recorder": {
+    "permission": "Kufanele unikeze imvume yokusebenzisa imakrofoni yakho ukuze uqedele lo msebenzi.",
+    "alert_title": "I-”Curious” ingathanda ukusebenzisa imakrofoni yakho ukuze iqedele lo msebenzi.",
+    "alert_message": "Lokhu kungalungiselelwa kokuthi Amasethingi.",
+    "record_error": "Kube nephutha ukuqalisa isiqophi.",
+    "stop": "IMA",
+    "record": "REKHODA",
+    "recording": "Iyarekhoda...",
+    "seconds": "imizuzwana",
+    "file_saved": "Ifayela lilondoloziwe."
+  },
+  "audio_player": {
+    "stop": "IMA",
+    "playing": "IYADLALA...",
+    "play": "DLALA",
+    "done": "KWENZIWE",
+    "loading": "IYALAYISHA"
+  },
+  "optional_text": {
+    "required": "Lena inkambu edingekayo.",
+    "enter_text": "Sicela ufake umbhalo."
+  },
+  "date_picker": {
+    "ok": "KULUNGILE"
+  },
+  "table_input": {
+    "short_press_detail": "* Ukucindezela okufushane kwandisa ikhawunta",
+    "long_press_detail": "* Ukucindezela isikhathi eside kunciphisa ikhawunta"
+  },
+  "activity_due_date": {
+    "available_all_day": "Iyatholakala: Usuku lonke",
+    "scheduled_at": "Ihlelwe Ngo-",
+    "available": "Itholakala Kusuka",
+    "to": "Kuya",
+    "day": "usuku",
+    "days": "izinsuku",
+    "am": "AM",
+    "the_following_day": "ngosuku olulandelayo"
+  },
+  "form_item": {
+    "required": "Kudingeka",
+    "must_be": "Kumele",
+    "characters_or_less": "izinhlamvu noma ngaphansi",
+    "must_be_a_number": "Kufanele kube inombolo"
+  },
+  "applet_about": {
+    "loading": "iyalayisha",
+    "no_info": "Ababhali bale applet abanikezanga noma yiluphi ulwazi!"
+  },
+  "firebase_messaging": {
+    "alert_title": "”I-Curious” ingathanda ukukuthumelela izaziso",
+    "alert_message": "Lokhu kungalungiselelwa kokuthi Amasethingi",
+    "alert_text": "Vula Amasethingi",
+    "response_refresh_request": "Isicelo sokuvuselela impendulo",
+    "refresh_request_details": "Njengoba iphasiwedi yakho isethwe kabusha, izimpendulo zakho ezedlule zidinga ukuvuselelwa. Uyafuna ukukucela lokhu?",
+    "refresh_request_text": "Abaphathi bakho bazoqalisa ukuvuselela maduze nje.",
+    "applet_not_found_1": "I-Applet ayitholakalanga",
+    "applet_not_found_2": "Alikho i-applet ye-id enikeziwe.",
+    "activity_not_found": "Umsebenzi othi ”{{entityName}}” ayitholakali manje.",
+    "activity_not_available_title": "Umsebenzi awutholakali",
+    "activity_not_available_message": "Umsebenzi ozame ukufinyelela kuwo awutholakali okwamanje. Ungazama futhi ngemva kwewindi lesikhathi esihleliwe elilandelayo.",
+    "activity_not_assigned": "Lokhu okuthi {{entityName}} akwabelwe wena.",
+    "activity_not_available": "Lokhu okuthi {{entityName}} akusatholakali.",
+    "activity_scheduled_today": "Okuthi {{entityName}} kuhlelelwe ukuthi kutholakale ngo-{{time}}.",
+    "activity_completed_today": "{{entityName}} seyiqediwe namuhla.",
+    "already_completed": "Usuvele uqedile",
+    "app_killed_on_redux_persist": "Lo msebenzi awukwazi ukuqaliswa. Sicela uthinte abosekelo.",
+    "activity_was_due_at": "Lo msebenzi ubuzodingeka ngo-",
+    "if_progress_was_made_on_the": "Uma inqubekelaphambili yenziwe ku-",
+    "it_was_saved_but_it_can_no_longer_be_taken": "yasindiswa kodwa ngeke isathathwa",
+    "today": "namuhla.",
+    "today2": "Kuhlelelwe namuhla",
+    "activity_not_ready": "Umsebenzi awukalungi",
+    "not_able_to_start": "Awukwazi ukuqala umsebenzi okwamanje",
+    "is": "kuyinto",
+    "scheduled_to_start_at": "ihlelelwe ukuqala ngo",
+    "postponed_notification": "Uma izimpendulo sezilayishiwe, sizozama ukuvula umsebenzi"
+  },
+  "local_notifications": {
+    "complete_activity": "Sicela uqedele lo msebenzi."
+  },
+  "join_demo_applets": {
+    "healthy_brain_network": "I-Healthy Brain Network: I-EMA",
+    "cognitive_tasks": "Imisebenzi Yokuqonda",
+    "mind_logger_demos": "Amademo E-Curious"
+  },
+  "data_invite": {
+    "message": "Sicabanga ukuthi kubalulekile kuwena ukwazi ukuthi ubani onokufinyelela idatha yakho uma wamukela lesi simemo.\n\nAbantu abalandelayo bazokwazi ukufinyelela idatha yakho uma wamukela lesi simemo:"
+  },
+  "sidebar": {
+    "home": "Ikhaya",
+    "settings": "Amasethingi",
+    "about": "Mayelana",
+    "logout": "Phuma"
+  },
+  "navigator": {
+    "exit_title": "Phuma Ku-app",
+    "exit_subtitle": "Phuma ku-application?",
+    "cancel": "Khansela"
+  },
+  "activity_navigation": {
+    "next": "Olandelayo",
+    "skip": "Yeqa",
+    "done": "Kwenziwe",
+    "back": "Emuva",
+    "return": "Buyela",
+    "undo": "Hlehlisa",
+    "exit": "Londoloza futhi Uphume"
+  },
+  "network_alerts": {
+    "no_internet_title": "Alukho Uxhumo Lwe-inthanethi",
+    "no_internet_subtitle": "Sicela uxhume ku-inthanethi",
+    "no_internet_text": "Cashisa",
+    "cellular_data_title": "Idatha Yeselula Ikhutshaziwe",
+    "cellular_data_subtitle": "Sicela uxhume ku-wi-fi noma uvumele idatha yeselula",
+    "cellular_data_text": "Cashisa",
+    "use_cellular_data": "Sebenzisa Idatha Yeselula"
+  },
+  "timing": {
+    "provide_option": "Kufanele unikeze inketho ethi “ngemuva” noma “yonke”.",
+    "to_be_number": "Izinketho ezilindelwe.ngemuva kokuba inombolo",
+    "every_number": "Izinketho ezilindelwe.zonke zibe yinombolo"
+  },
+  "camera": {
+    "choose_photo": "Khetha isithombe",
+    "choose_video": "Khetha ividiyo",
+    "take_a_photo": "Thatha isithombe esisha noma khetha esisodwa kulabhulari yakho",
+    "take_a_video": "Thatha ividiyo entsha noma khetha eyodwa kulabhulari yakho",
+    "camera": "Ikhamera",
+    "library": "Ilabhulari"
+  },
+  "text_entry": {
+    "type_placeholder": "Sicela uthayiphe umbhalo",
+    "paragraph_placeholder": "Thayipha impendulo yakho lapha."
+  },
+  "character_counter": {
+    "characters": "{{numberOfCharacters}}/izinhlamvu ezingu-{{limit}}"
+  },
+  "additional": {
+    "server-error": "Kwenzeke iphutha leseva",
+    "time-end": "Siphelile isikhathi!",
+    "time-end-tap": "Siphelile isikhathi. Thepha ukuze uqedele",
+    "thanks": "Siyabonga!",
+    "sorry": "Uxolo",
+    "saved_answers": "Sizigcinile izimpendulo zakho!",
+    "submit_flow_answers": "Thepha okuthi",
+    "submit": "Thumela",
+    "submit_flow_answers_ex": "inkinobho ukuze ulondoloze izimpendulo zakho futhi uqhubekele kokuthi:",
+    "close": "Vala",
+    "resume_activity": "Qalisa kabusha umsebenzi",
+    "activity_resume_restart": "Ungathanda ukuqalisa kabusha lo msebenzi oqhubekayo noma uqale kabusha?",
+    "restart": "Qala kabusha",
+    "resume": "Qalisa kabusha",
+    "retry": "Zama futhi",
+    "send": "Thumela",
+    "later": "Kamuva",
+    "in_progress": "Kuyaqhubeka",
+    "unscheduled": "Akuhleliwe",
+    "scheduled": "Okuhleliwe",
+    "past_due": "Isikhathi Esidlule",
+    "available": "Iyatholakala",
+    "sure_delete_account_data": "Uqinisekile ukuthi ufuna ukususa i-akhawunti yakho nedatha?",
+    "no_cancel": "Cha, khansela",
+    "yes_delete": "Yebo, yisuse",
+    "hi": "Sawubona",
+    "enter_old_password": "Sicela ufake iphasiwedi yakho endala",
+    "enter_new_password": "Sicela ufake iphasiwedi entsha",
+    "data_not_sent": "Chofoza okuthi Thumela ukuze ulayishe idatha eqoqwe ngaphambilini",
+    "data_is_sending": "Ilayisha idatha eqoqwe ngaphambilini",
+    "upload_error": "Iphutha Lokulayisha",
+    "want_to_retry": "I-inthanethi yakho ingase ingazinzi. Asikwazanga ukuthumela idatha yakho."
+  },
+  "prize": {
+    "lack_tokens_title": "Zama futhi",
+    "lack_tokens_subtitle": "Awunawo amathokheni anele.\nSicela ukhethe omunye umklomelo"
+  },
+  "cognitive": {
+    "incorrect_start_point": "Iphoyinti lokuqala elingalungile!",
+    "incorrect_line": "Umugqa ongalungile!",
+    "finished_continue": "Kuqediwe. Chofoza okulandelayo ukuze uqhubeke.",
+    "finished_complete": "Kuqediwe. Chofoza okuthi Kwenziwe ukuze uqedele.",
+    "begin": "Qala",
+    "end": "Qeda"
+  },
+  "system": {
+    "migration_not_applied_text": "Ukuthuthwa kwedatha akuzange kusetshenziswe ngempumelelo. Sicela uthinte abosekelo.",
+    "ok": "KULUNGILE"
+  },
+  "activity_skip_popup": {
+    "popup_title": "Yeqela esivivinyweni esilandelayo?",
+    "popup_description": "Lesi sivivinyo asiphelele. Uma weqela esivivinyweni esilandelayo, ukuqhubeka kwakho kuzolondolozwa. Ngeke ukwazi ukuqeda lesi sivivinyo kamuva.",
+    "keep_working": "Qhubeka usebenza",
+    "skip": "Yeqa"
+  },
+  "autocompletion": {
+    "done": "Kwenziwe",
+    "time_limit_reached": "Umkhawulo wesikhathi ufinyelelwe",
+    "time_expired": "Isikhathi sokuqeda okuthi {{activityNames}} siphelelwe yisikhathi. Izimpendulo zakho zizothunyelwa ngokuzenzakalelayo.",
+    "processing_answers": "Icubungula Izimpendulo",
+    "preparing_answers": "Sicela ulinde futhi ungasivali isikrini.",
+    "answers_submitted": "Izimpendulo zithunyelwe",
+    "thanks": "Siyabonga! Silondoloze yonke into.",
+    "time_is_up_modal_description": "Asisekho isikhathi sokusebenza kulo msebenzi. Wonke umsebenzi owenzile uzogcinwa futhi uhanjiswe.",
+    "time_is_up_modal_title": "Isikhathi siphelile",
+    "ok": "KULUNGILE"
+  },
+  "data_sharing": {
+    "consent": "Ngiyavuma ukwenza izimpendulo zami",
+    "media_consent": "Ngiyavuma ukwenza izimpendulo zami zemidiya",
+    "public": "umphakathi",
+    "dialog": {
+      "body": "Ukwabelana ngezimpendulo esidlangalaleni kusho ukuthi ulwazi olunikezwa abasebenzisi ngabanye, njengezimpendulo zenhlolovo noma impendulo, luzotholakala ngokusobala ukuze abanye balubuke."
+    }
+  },
+  "assignment": {
+    "badge": "Mayelana {{name}}",
+    "banner": "Sicela uqinisekise ukuthi zonke izimpendulo zakho zimayelana <strong>{{name}}</strong>"
+  },
+  "splash": {
+    "version": "Inguqulo"
+  },
+  "requestHealthRecordData": {
+    "title": "Cela Idatha Yerekhodi Lezempilo",
+    "linkText": "Funda kabanzi mayelana nendlela i-Curious efinyelela ngayo ngokuphephile kudatha yokunakekelwa kwezempilo.",
+    "partnershipText": "I-Curious isebenzisa i-1upHealth’s Medical Information Service ukuze umcwaningi wakho akwazi ukufinyelela ulwazi kumarekhodi akho okunakekelwa kwezempilo.\n\nKuzikrini ezilandelayo, uzocelwa ukuthi ungene ngemvume kumasistimu akho Omhlinzeki Wokunakekelwa Kwezempilo futhi wabelane ngedatha yakho yokunakekelwa kwezempilo nalolu cwaningo. Uzobuyela emsebenzini we-Curious uma usuqedile.",
+    "enterYourHealthSystem": "Faka Uhlelo lwakho Lwezempilo:",
+    "healthSystemName": "Igama Lesistimu Yezempilo",
+    "search": "Sesha",
+    "additionalPromptText": "Usuqedile ukungena ku-akhawunti yakho yokunakekelwa kwezempilo.\n\nUngathanda ukungena ngemvume kunoma imaphi ama-akhawunti okunakekelwa kwezempilo engeziwe?",
+    "yes": "Yebo",
+    "no": "Cha",
+    "noResults": "Abekho Abahlinzeki Bezempilo abatholakele abafana nosesho lwakho."
+  },
+  "announcementBanner": {
+    "content": "<0>Senza kabusha!</0> <1>Izibuyekezo zedizayini zisendleleni—i-app enhle efanayo, ukubukeka okusha. Ufuna ukwazi?</1> <2>Thepha ukuze ufunde kabanzi.</2>"
+  },
+  "unity": {
+    "error_title": "Ukwakhiwa Kobumbano Kwehlulekile",
+    "error_message": "Umsebenzi wehlulekile ukulayishwa, sicela uxhumane nombhali ukuze uthole usizo. Umsebenzi usuzophuma manje.",
+    "error_message_flow": "Umsebenzi wehlulekile ukulayishwa, sicela uxhumane nombhali ukuze uthole usizo. Uzoyiswa kumsebenzi olandelayo ekuhambeni: ",
+    "error_ok": "Kulungile",
+    "restart_title": "Iphutha Lokwakha Ubumbano",
+    "restart_message": "Umsebenzi uhlangabezane nephutha elibucayi futhi kufanele uphume. Idatha eqoqwe kulo msebenzi kuze kube manje izolahleka.\n\nUngaqala kabusha umsebenzi ukuze uzame futhi.",
+    "restart_primary": "Qala kabusha Umsebenzi",
+    "restart_secondary_solo": "Phuma",
+    "restart_secondary_flow": "Qhubekela kumsebenzi olandelayo"
+  }
+}
