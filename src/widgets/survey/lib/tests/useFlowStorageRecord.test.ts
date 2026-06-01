@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { renderHook, screen } from '@testing-library/react-native';
-import { MMKV } from 'react-native-mmkv';
+import { cleanup, renderHook } from '@testing-library/react-native';
+import { MMKV, useMMKVObject } from 'react-native-mmkv';
 
 import { getDefaultStorageInstanceManager } from '@app/shared/lib/storages/storageInstanceManagerInstance';
 
@@ -10,23 +10,20 @@ import {
   useFlowStorageRecord,
 } from '../useFlowStorageRecord';
 
-jest.mock('react-native-mmkv', () => ({
-  ...jest.requireActual('react-native-mmkv'),
-  useMMKVObject: jest.fn().mockImplementation((key: string) => {
-    return [
-      { name: key },
-      (item: FlowState) => upsertFlowStorageRecordMock(item),
-    ];
-  }),
-}));
-
-const deleteMock = jest.fn();
+const removeMock = jest.fn();
 
 const upsertFlowStorageRecordMock = jest.fn();
 
+(useMMKVObject as jest.Mock).mockImplementation((key: string) => {
+  return [
+    { name: key },
+    (item: FlowState) => upsertFlowStorageRecordMock(item),
+  ];
+});
+
 const storageMock = {
   getString: (id: string) => JSON.stringify({ flowName: `test-name-${id}` }),
-  delete: (key: string) => deleteMock(key) as void,
+  remove: (key: string) => removeMock(key) as void,
   addOnValueChangedListener: jest.fn(),
 } as never as MMKV;
 
@@ -46,7 +43,7 @@ describe('Test useFlowStorageRecord', () => {
   });
 
   afterEach(() => {
-    screen.unmount();
+    cleanup();
   });
 
   it('Should return storage record', () => {
@@ -118,7 +115,7 @@ describe('Test useFlowStorageRecord', () => {
 
     result.current.clearFlowStorageRecord();
 
-    expect(deleteMock).toHaveBeenCalledWith(
+    expect(removeMock).toHaveBeenCalledWith(
       'mock-flow-id-1-mock-applet-id-1-mock-event-id-1',
     );
   });

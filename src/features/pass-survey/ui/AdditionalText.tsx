@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
@@ -19,6 +19,17 @@ export function AdditionalText({ value, onChange, required }: Props) {
   const { t } = useTranslation();
   const [height, setHeight] = useState(MIN_FIELD_HEIGHT);
 
+  // Local state prevents MMKV v4 sync re-renders from breaking Android IME composition.
+  const [localValue, setLocalValue] = useState(value ?? '');
+  useEffect(() => {
+    setLocalValue(value ?? '');
+  }, [value]);
+
+  const onChangeText = (text: string) => {
+    setLocalValue(text);
+    onChange(text);
+  };
+
   const placeholder = t(
     required ? 'optional_text:required' : 'optional_text:enter_text',
   );
@@ -27,8 +38,8 @@ export function AdditionalText({ value, onChange, required }: Props) {
     <Input
       placeholder={placeholder}
       aria-label="additional_text-input"
-      value={value}
-      onChangeText={onChange}
+      value={localValue}
+      onChangeText={onChangeText}
       onContentSizeChange={e => {
         const contentHeight = e.nativeEvent.contentSize.height;
 

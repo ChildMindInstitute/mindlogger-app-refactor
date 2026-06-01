@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { StyleSheet, TextInputProps, View } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,14 @@ export const ParagraphText: FC<Props> = ({
   const { maxLength = 50 } = config;
   const { t } = useTranslation();
 
+  // Local state prevents MMKV v4 sync re-renders from breaking Android IME composition.
+  const [localValue, setLocalValue] = useState(value);
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
   const onChangeText = (text: string) => {
+    setLocalValue(text);
     onChange(text);
   };
 
@@ -34,7 +41,7 @@ export const ParagraphText: FC<Props> = ({
         aria-label="paragraph-item"
         placeholder={t('text_entry:paragraph_placeholder')}
         onChangeText={onChangeText}
-        value={value}
+        value={localValue}
         autoCorrect={false}
         multiline={true}
         keyboardType={'default'}
@@ -45,7 +52,7 @@ export const ParagraphText: FC<Props> = ({
       <CharacterCounter
         focused={paragraphOnFocus}
         limit={maxLength}
-        numberOfCharacters={value.length}
+        numberOfCharacters={localValue.length}
       />
     </View>
   );

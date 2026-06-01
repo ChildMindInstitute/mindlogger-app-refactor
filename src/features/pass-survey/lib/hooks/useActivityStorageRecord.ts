@@ -61,7 +61,7 @@ export function useActivityStorageRecord({
     );
 
   const clearActivityStorageRecord = useCallback(() => {
-    getDefaultStorageInstanceManager().getActivityProgressStorage().delete(key);
+    getDefaultStorageInstanceManager().getActivityProgressStorage().remove(key);
   }, [key]);
 
   const getCurrentActivityStorageRecord = useCallback(() => {
