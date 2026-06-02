@@ -1,0 +1,591 @@
+{
+  "auth": {
+    "email": "E-pos",
+    "email_address": "E-posadres",
+    "password": "Wagwoord",
+    "i_agree": "Ek stem in tot die",
+    "terms_of_service": "Diensbepalings",
+    "terms": "Bepalings",
+    "privacy": "Privaatheid",
+    "privacy_policy": "Privaatheidsbeleid",
+    "password_updated": "Wagwoord opgedateer"
+  },
+  "activity": {
+    "completeOnWeb": "Voltooi asseblief op die Curious-webtoep",
+    "incorrect_answer": "Antwoord is verkeerd. Probeer asseblief weer",
+    "failed": "Misluk",
+    "flanker_accuracy_warn": "*Die tydstempels wat vir ’n Android-toestel versamel word, is nie so akkuraat as vir iOS-toestelle nie.",
+    "please_wait": "Wag asseblief",
+    "activity_all_items_hidden": "“{{entityName}}” kan nie begin word nie, want alle items binne die aktiwiteit is versteek",
+    "flow_all_items_hidden": "“{{entityName}}” kan nie begin word nie, want dit bevat ’n aktiwiteit waarin alle items versteek is",
+    "progress": {
+      "upload_files": "Laai tans jou lêers op ...",
+      "encrypt_answers": "Enkripteer tans jou antwoorde ...",
+      "upload_answers": "Laai tans jou antwoorde op ...",
+      "completed": "Aktiwiteit opgelaai"
+    },
+    "step": "Stap",
+    "flowStep": "({{activityPositionInFlow}} van {{numberOfActivitiesInFlow}}) {{activityFlowName}}",
+    "stepCounter": "{{currentStep}} van {{totalSteps}}",
+    "activityCounter": "Aktiwiteit {{currentStep}} van {{totalSteps}}"
+  },
+  "activity_time": {
+    "time_remaining": "oorblywend vir hierdie item"
+  },
+  "timed_activity": {
+    "time_to_complete": "Tyd om te voltooi",
+    "time_to_complete_hm": "Tyd om te voltooi: {{hours}} uur en {{minutes}} minute",
+    "hours": "uur"
+  },
+  "activity_summary": {
+    "terms_text": "Ek verstaan dat die inligting wat in hierdie vraelys verskaf word, nie bedoel is om die advies, diagnose of behandeling wat deur ’n mediese of geestesgesondheidskundige aangebied word, te vervang nie, en dat my anonieme antwoorde gebruik en gedeel kan word vir algemene navorsing oor kinders se geestesgesondheid.",
+    "footer_text": "CHILD MIND INSTITUTE, INC. EN CHILD MIND MEDICAL PRACTICE, PLLC (SAAM “CMI”) BEOEFEN NIE DIREK OF INDIREK GENEESKUNDE OF VERSKAF MEDIESE ADVIES AS DEEL VAN HIERDIE VRAELYS NIE. CMI AANVAAR GEEN AANSPREEKLIKHEID VIR ENIGE DIAGNOSE, BEHANDELING, BESLUIT GENEEM OF AKSIE ONDERNEEM WAT VERTROU OP INLIGTING WAT DEUR HIERDIE VRAELYS VERSKAF WORD NIE, EN AANVAAR GEEN VERANTWOORDELIKHEID VIR JOU GEBRUIK VAN HIERDIE VRAELYS NIE.",
+    "score_on_subscale": "Die telling op die {{name}}-subskaal was",
+    "save": "Stoor",
+    "summary": "Opsomming",
+    "alerts": "Waarskuwings",
+    "report_summary": "Verslagopsomming",
+    "not_yet_completed": "Nog nie voltooi nie",
+    "last_completed": "Laas voltooi",
+    "unscheduled": "Ongeskeduleerd",
+    "due": "Uitstaande",
+    "scheduled_for": "Geskeduleer vir",
+    "category_suicide": "Selfmoord",
+    "category_suicide_message": "Kritieke vlak: Ouer het moontlike boeliegedrag aangedui. Bring dit onmiddellik onder die aandag van die klinikus weens ’n potensiële noodsituasie.",
+    "category_emotional": "Emosioneel",
+    "category_emotional_message": "Binne normale limiete: Geen verdere sifting of assessering word vereis nie.",
+    "category_sport": "Sport",
+    "category_sport_message": "Kliniese reeks: Maak klinikus bewus; voer opvolgassessering uit (aanbeveel); algemene verwysing.",
+    "share_report": "Deel verslag",
+    "share_all_reports": "Deel alle verslae"
+  },
+  "activity_chart": {
+    "title": "Neem asseblief die assessering vir data om vertoon te word.",
+    "monday": "M",
+    "tuesday": "D",
+    "wednesday": "W",
+    "thursday": "D",
+    "friday": "V",
+    "saturday": "S",
+    "sunday": "S"
+  },
+  "calendar": {
+    "months": "Januarie_Februarie_Maart_April_Mei_Junie_Julie_Augustus_September_Oktober_November_Desember",
+    "weekdays": "So_Ma_Di_Wo_Do_Vr_Sa",
+    "x_days": "M_D_W_D_V_S_S"
+  },
+  "applet_data": {
+    "title": "Neem asseblief die assessering vir data om vertoon te word."
+  },
+  "widget_error": {
+    "error_text": "Daar was ’n probleem om hierdie skerm te laai.",
+    "error_description": "Maak asseblief seker dat jy die jongste weergawe van Curious geïnstalleer het, en kontak dan jou aktiwiteitadministrateur indien die probleem steeds voorkom."
+  },
+  "about": {
+    "about": "Meer oor",
+    "applets_title": "Vind meer uit oor elkeen van jou minitoeps en oor die Curious-platform.",
+    "data_title": "Vind meer uit oor die Curious-dataversameling-platform deur te tik op “Meer oor\nCurious” hier onder.",
+    "about_curious": "Meer oor Curious",
+    "icons_title": "NounProject-ikone is geskep deur Alina Oleynik (opname), Beth Bolton (boek) en\nShakeel (grafiek)",
+    "device_id": "Toestel-ID"
+  },
+  "about_app": {
+    "title_with_version": "Wat is Curious? v.{{version}}",
+    "title": "Tensy anders vermeld, is ikone geneem uit OpenMoji en NounProject.",
+    "subtitle": "Tensy anders vermeld, is ikone geneem uit OpenMoji en NounProject.",
+    "curious_about": "## \n ### Wat is Curious? \n\n Hierdie toep is deel van die oopbron Curious-dataversameling- en ontledingsplatform wat ontwerp is deur die MATTER Lab by die Child Mind Institute ([https://matter.childmind.org](https://matter.childmind.org)). \n # \n ### Wat kan Curious doen? \n\n Curious se kenmerkstel groei en ondersteun tans ’n wye verskeidenheid invoertipes. Elke skerm in ’n Curious-aktiwiteit kan enige van die volgende insluit: \n  - Teks, prent en oudio \n  - Vraag gevolg deur beeld- en/of teksantwoord-opsies \n  - Skuifbalk \n  - Teksinskrywing \n  - Tabelinskrywing \n  - Oudio opneem \n  - Foto-/videovaslegging \n  - Teken of tik \n  - Huidige geoligging \n  - Eenvoudige kognitiewe taak \n  - Vertraging voor antwoord \n  - Tydhouer \n  - Voorwaardelike logika om te bepaal waarheen om volgende te gaan \n\n #### Waar kan ek meer uitvind? \n Besoek [https://mindlogger.org](https://mindlogger.org) vir meer inligting.  \n ## [Steundiens]({{credits_link}}) \n ## [Diensbepalings](https://mindlogger.org/terms-of-service) \n ## [Privaatheidsbeleid](https://mindlogger.org/privacy-policy) \n\n ##### Vriendelike groete \n\n ##### die Curious-span \n\n ##### Child Mind Institute"
+  },
+  "applet_footer": {
+    "surveys": "Opnames",
+    "data": "Data",
+    "about": "Meer oor",
+    "activities": "Aktiwiteite",
+    "activity": "Aktiwiteit"
+  },
+  "applet_invite_flow": {
+    "back": "Terug",
+    "next": "Volgende"
+  },
+  "live_connection": {
+    "disconnect": "ONTKOPPEL",
+    "connect": "DIEN IN",
+    "connect_to_server": "Verbind met bediener",
+    "remember": "Onthou",
+    "ip": "IP-adres",
+    "port": "Poort",
+    "connection_closed": "TCP-verbinding is toegemaak",
+    "connection_error": "Verbinding het misluk. Kontroleer asseblief weer IP en poort",
+    "connection_set_error": "Kan nie verbinding stel nie",
+    "live_connection": "Lewende verbinding",
+    "not_available": "nie beskikbaar nie"
+  },
+  "join_invite": {
+    "click_below": "Klik hier onder as jy gereed is om by hierdie studie aan te sluit. Jy kan jouself te eniger tyd van hierdie studie verwyder en/of jou data skrap sonder enige gevolge.",
+    "decline": "Indien jy nie gemaklik voel om jou data van hierdie studie te deel nie, kan jy hierdie uitnodiging van die hand wys. ",
+    "decline_title": "Weier"
+  },
+  "applet_list_component": {
+    "about_title": "Meer oor Curious",
+    "no_applets_yet": "Jy het geen minitoeps nie.",
+    "noon": "Middag",
+    "midnight": "Middernag",
+    "refresh_error_header": "Herlaaifout",
+    "applets_not_refreshed": "Die volgende minitoeps is nie herlaai nie:",
+    "common_refresh_error": "Die minitoep-lys is nie herlaai nie. Probeer asseblief weer."
+  },
+  "activity_list_component": {
+    "no_activities": "Geen aktiwiteite is vir jou beskikbaar om tans te voltooi nie",
+    "insufficient_data_error": "Hierdie minitoep is nie herlaai nie. Probeer asseblief weer herlaai.",
+    "other_error": "Ongedefinieerde fout het voorgekom"
+  },
+  "applet_settings": {
+    "applet_not_defined": "Daar is nie ’n minitoep gedefinieer nie.",
+    "want_remove": "As jy hierdie minitoep wil verwyder, maar jou data behou, klik hier onder",
+    "remove": "Verwyder",
+    "want_delete": "As jy jou data van hierdie minitoep wil skrap en dit wil verwyder, klik hier onder.",
+    "remove_delete": "Verwyder en skrap data",
+    "alert_title": "Is jy seker jy wil jou data skrap?",
+    "alert_message": "Jy sal dit nie weer kan terugkry nie",
+    "cancel_text": "Nee, kanselleer",
+    "confirm_text": "Yes, delete it"
+  },
+  "change_pass_form": {
+    "update": "Dateer op",
+    "cur_pass_placeholder": "Huidige wagwoord",
+    "new_pass_placeholder": "Nuwe wagwoord",
+    "error": "Kon nie gebruikerbesonderhede opdateer nie.",
+    "submission_error": "Die huidige wagwoord wat jy ingevoer het, was verkeerd.",
+    "change_pass": "Verander wagwoord",
+    "password_at_least_characters": "Wagwoord moet ten minste {{min}} karakters wees"
+  },
+  "password_recovery_form": {
+    "password_at_least_characters": "Wagwoord moet ten minste {{min}} karakters wees",
+    "password_no_spaces": "Wagwoord mag nie spasies bevat nie",
+    "passwords_do_not_match": "Wagwoorde is nie dieselfde nie",
+    "password_confirmation_required": "Bevestig asseblief jou wagwoord",
+    "new_password_placeholder": "Nuwe wagwoord",
+    "confirm_password_placeholder": "Bevestig wagwoord",
+    "submit": "Dien in",
+    "invalid_password_reset_link": "Hierdie skakel is ongeldig of het verval.",
+    "click_to_reset_password": "Klik asseblief hier onder om jou wagwoord terug te stel.",
+    "forgot_password": "Wagwoord vergeet",
+    "success": "Jou wagwoord is suksesvol teruggestel. Meld asseblief aan met jou nuwe wagwoord.",
+    "error": "Kon nie jou wagwoord terugstel nie"
+  },
+  "mfa_recovery": {
+    "title": "Bevestig jou identiteit",
+    "subtitle": "Voer asseblief ’n rekeningherstelkode in.",
+    "continue": "Gaan voort",
+    "back": "Terug",
+    "invalid_code_format": "Herstelkode moet in die XXXXX-XXXXX-formaat wees",
+    "placeholder": "XXXXX-XXXXX",
+    "error": "Ongeldige herstelkode. Probeer asseblief weer.",
+    "success": "Identiteit suksesvol bevestig",
+    "error_invalid_code": "Ongeldige herstelkode. Kontroleer asseblief en probeer weer.",
+    "error_code_not_found": "Herstelkode nie gevind nie of reeds gebruik.",
+    "error_session_expired": "Jou sessie het verval. Meld asseblief weer aan.",
+    "error_too_many_attempts": "Te veel mislukte pogings. Probeer asseblief om weer aan te meld.",
+    "error_global_lockout": "Te veel mislukte pogings. Jy is tydelik uitgesluit. Probeer asseblief om weer na 15 minute aan te meld.",
+    "error_network": "Netwerkfout. Kontroleer asseblief jou verbinding en probeer weer.",
+    "error_unknown": "’n Fout het voorgekom. Probeer asseblief weer."
+  },
+  "mfa_verification": {
+    "title": "Bevestig jou identiteit",
+    "subtitle": "Voer asseblief die verifikasiekode in wat in jou waarmerkingstoep (authenticator) vertoon word.",
+    "verify": "Gaan voort",
+    "placeholder": "Voer verifikasiekode in",
+    "invalid_code_format": "Verifikasiekode moet 6 syfers wees",
+    "error": "Ongeldige kode",
+    "success": "Verifikasie suksesvol",
+    "use_recovery_code": "Ek kan nie toegang tot my waarmerkingstoep (authenticator) kry nie",
+    "session_expiry_warning": "Sessie het dalk verval. Verifieer asseblief handmatig of meld weer aan.",
+    "error_invalid_code": "Ongeldige verifikasiekode. Kontroleer asseblief en probeer weer.",
+    "error_session_expired": "Jou sessie het verval. Meld asseblief weer aan.",
+    "error_too_many_attempts": "Te veel mislukte pogings. Probeer asseblief om weer aan te meld.",
+    "error_global_lockout": "Te veel mislukte pogings. Jy is tydelik uitgesluit. Probeer asseblief om weer na 15 minute aan te meld.",
+    "error_network": "Netwerkfout. Kontroleer asseblief jou verbinding en probeer weer.",
+    "error_unknown": "’n Fout het voorgekom. Probeer asseblief weer.",
+    "warning_session_attempts_remaining": ". {{count}} poging oor",
+    "warning_session_attempts_remaining_plural": ". {{count}} pogings oor",
+    "warning_global_attempts_remaining": ". {{count}} poging oor voordat tydelik gesluit word",
+    "warning_global_attempts_remaining_plural": ". {{count}} pogings oor voordat tydelik gesluit word"
+  },
+  "change_study": {
+    "reset": "Stel terug",
+    "submit": "Dien in",
+    "enter_url_manually": "Voer URL handmatig in",
+    "scan_qr": "Skandeer QR",
+    "successfully_changed": "Bediener-URL is suksesvol verander.",
+    "successfully_reset": "Bediener-URL is suksesvol teruggestel.",
+    "change_server": "Verander van bediener",
+    "http_confirm": "Is jy seker jy wil verbind aan ’n bediener wat nie SSL ondersteun nie?",
+    "set_by_qr": "Studie is deur QR gestel.",
+    "yes": "Yes",
+    "no": "Nee"
+  },
+  "consent": {
+    "this_app_provides": "Hierdie toep bied ’n maklike manier om opnames, stemopnames en tekenaktiwiteite te versamel.",
+    "i_understand": "Ek verstaan dat om sekere beelde te kyk, ongemaklik kan wees terwyl hierdie toep gebruik word",
+    "i_will_allow": "Ek sal die Child Mind Institute toelaat om data van die gebruik van hierdie toep op ’n beveiligde\nwolkbediener te bewaar en om toegang tot hierdie inligting te kry vir kliniese en navorsingdoeleindes",
+    "i_premit": "Ek gee toestemming dat die Child Mind Institute my mag kontak oor inligting wat versamel is deur\nhierdie toep vir kliniese of navorsingdoeleindes.",
+    "next": "Volgende"
+  },
+  "forgot_pass_form": {
+    "reset_pass": "Stel wagwoord terug",
+    "enter_email_mess": "Voer asseblief jou e-posadres in",
+    "invalid_email": "Ongeldige e-posadres",
+    "email_address": "E-posadres",
+    "email_send_success": "Terugstel-e-pos is gestuur na <strong>{{email}}</strong> indien die rekening bestaan.",
+    "email_send_error": "Kan tans nie terugstel-e-pos stuur nie.",
+    "forgot_password": "Wagwoord vergeet?"
+  },
+  "login": {
+    "new_user": "Nuwe gebruiker",
+    "account_create": "Skep ’n rekening",
+    "forgot_password": "Wagwoord vergeet?",
+    "what_is": "Wat is",
+    "login_error": "Kon nie aanmeld nie.",
+    "password_at_least_characters": "Wagwoord moet ten minste 10 karakters wees"
+  },
+  "login_form": {
+    "login": "Meld aan",
+    "email_placeholder": "E-pos",
+    "password": "Wagwoord"
+  },
+  "logout_warning": {
+    "warning": "Afmeld-waarskuwing",
+    "uploads_in_progress": "Oplaaie is tans aan die gang",
+    "currently_uploading": "Jy het antwoorde wat tans opgelaai word. As jy nou afmeld en dan as ’n ander gebruiker aanmeld, sal jou antwoorde verlore gaan.",
+    "not_uploaded": "Jy het nie antwoorde opgelaai nie. As jy nou afmeld en dan as ’n ander gebruiker aanmeld, sal jou antwoorde verlore gaan.",
+    "sure_logout": "Is jy seker jy wil afmeld?",
+    "cancel": "Kanselleer",
+    "logout": "Meld af"
+  },
+  "settings": {
+    "logged_out": "Jy het afgemeld.",
+    "change_pass": "Verander wagwoord",
+    "use_cellular_data": "Gebruik sellulêre data",
+    "logout": "Meld af",
+    "permanently_delete_account": "Skrap rekening permanent",
+    "user_settings": "Gebruikerinstellings",
+    "upload_logs": "Laai logs op",
+    "create_new_password": "Skep ’n nuwe wagwoord"
+  },
+  "language_screen": {
+    "app_language": "Toepassingstaal",
+    "change_app_language": "Verander taal",
+    "en": "English",
+    "fr": "Français",
+    "el": "Ελληνικά",
+    "es": "Español",
+    "pt": "Português",
+    "af": "Afrikaans",
+    "xh": "isiXhosa",
+    "zu": "isiZulu"
+  },
+  "application_logs_screen": {
+    "upload_button": "Laai logs op",
+    "title": "Tegniese probleme? Jou loglêers sal ons span met probleemoplossing help.",
+    "subTitle": "Laai dit asseblief op deur die knoppie hier onder te gebruik.",
+    "success": "Sukses – ons het jou logs ontvang.",
+    "error": "Fout – logs is nie gestuur nie. Probeer asseblief weer."
+  },
+  "sign_up_form": {
+    "sign_up": "Registreer",
+    "error": "Kon nie registreer nie: gebruikersnaam is reeds in gebruik.",
+    "new_user": "Nuwe gebruiker",
+    "username_validation_error": "Gebruikersnaam moet ten minste 4 karakters lank wees, met ’n letter begin, en mag slegs letters, syfers, strepies en punte bevat.",
+    "email_validation_error": "Lyk of hierdie e-pos onvoltooid is",
+    "email_placeholder": "E-pos",
+    "first_name": "Voornaam",
+    "last_name": "Van",
+    "password_placeholder": "Wagwoord",
+    "please_accept_terms": "Kies asseblief diensbepalings.",
+    "email_looks_incomplete": "Lyk of hierdie e-pos onvoltooid is",
+    "sign_up_agree": "Deur te registreer, stem jy in tot Curious se",
+    "and": "en"
+  },
+  "password_requirements": {
+    "at_least_characters": "10 karakters",
+    "no_blank_spaces": "geen oop spasies nie",
+    "must_include": "Wagwoord moet ten minste {{minLength}} karakters bevat, geen spasies en ten minste {{types}} van die 4 hier onder:",
+    "must_include_minimum": "Wagwoord moet ten minste {{minLength}} karakters bevat en geen spasies nie",
+    "requirements_met": "Daar is aan alle vereistes voldoen.",
+    "must_include_uppercase": "Hoofletters (A-Z)",
+    "must_include_lowercase": "Kleinletters (a-z)",
+    "must_include_digits": "Syfers (0-9)",
+    "must_include_symbol": "Simbole (!@#$ ...)",
+    "cannot_contain_emojis": "Wagwoorde mag nie emoji bevat nie."
+  },
+  "geolocation": {
+    "get_location": "KRY LIGGING",
+    "must_enable_location": "Jy moet liggingdienste aktiveer om hierdie taak te voltooi. Gee asseblief Curious toestemming in jou iOS-instellings en druk weer die knoppie.",
+    "must_enable_location_subtitle": "Jy moet liggingdienste aktiveer om hierdie taak te voltooi. Druk asseblief weer die knoppie en gee Curious toestemming om jou ligging te gebruik.",
+    "location_saved": "Ligging gestoor.",
+    "service_not_available": "Liggingdiens is nie beskikbaar nie."
+  },
+  "select": {
+    "select_one": "Kies een",
+    "no_items": "Geen items nie"
+  },
+  "permissions": {
+    "alert_button_cancel": "Weier",
+    "alert_button_ok": "Maak instellings oop",
+    "alarm_permission_warning": "Alarmtoestemming-versoek",
+    "alarm_permission_disabled": "Skakel asseblief die alarmtoestemmings op jou toestel aan om die Curious-herinneringe betyds te ontvang. Let wel: die toepassing sal outomaties toegemaak word sodra jy die alarmtoestemmings aanskakel.",
+    "gallery": "“Curious” wil graag jou galery gebruik om hierdie taak te voltooi",
+    "camera": "“Curious” wil graag jou kamera gebruik om hierdie taak te voltooi"
+  },
+  "media": {
+    "alert_message": "Dit kan in instellings opgestel word",
+    "media_found_title": "Jy is vanlyn",
+    "media_found_body": "Hierdie aktiwiteit bevat items wat ’n internetverbinding vereis. Skakel asseblief die internet aan om voort te gaan."
+  },
+  "audio_recorder": {
+    "permission": "Jy moet toestemming gee om jou mikrofoon te gebruik om hierdie taak te voltooi.",
+    "alert_title": "“Curious” wil graag jou mikrofoon gebruik om hierdie taak te voltooi.",
+    "alert_message": "Dit kan in instellings opgestel word.",
+    "record_error": "Kon nie die opnemer begin nie.",
+    "stop": "STOP",
+    "record": "NEEM OP",
+    "recording": "Neem tans op ...",
+    "seconds": "sekondes",
+    "file_saved": "Lêer gestoor."
+  },
+  "audio_player": {
+    "stop": "STOP",
+    "playing": "SPEEL TANS ...",
+    "play": "SPEEL",
+    "done": "KLAAR",
+    "loading": "LAAI TANS"
+  },
+  "optional_text": {
+    "required": "Hierdie is ’n vereiste veld.",
+    "enter_text": "Voer asseblief die teks in."
+  },
+  "date_picker": {
+    "ok": "Goed"
+  },
+  "table_input": {
+    "short_press_detail": "* ’n Kortdruk vermeerder die teller",
+    "long_press_detail": "* ’n Langdruk verminder die teller"
+  },
+  "activity_due_date": {
+    "available_all_day": "Beskikbaar: Heeldag",
+    "scheduled_at": "Geskeduleer om",
+    "available": "Beskikbaar vanaf",
+    "to": "tot",
+    "day": "dag",
+    "days": "dae",
+    "am": "vm.",
+    "the_following_day": "die volgende dag"
+  },
+  "form_item": {
+    "required": "Word vereis",
+    "must_be": "Moet",
+    "characters_or_less": "karakters of minder wees",
+    "must_be_a_number": "Moet ’n syfer wees"
+  },
+  "applet_about": {
+    "loading": "laai tans",
+    "no_info": "Die outeurs van hierdie minitoep het geen inligting verskaf nie!"
+  },
+  "firebase_messaging": {
+    "alert_title": "“Curious” wil graag kennisgewings aan jou stuur",
+    "alert_message": "Dit kan in instellings opgestel word",
+    "alert_text": "Maak instellings oop",
+    "response_refresh_request": "Antwoordherlaai-versoek",
+    "refresh_request_details": "Aangesien jou wagwoord teruggestel is, moet jou vorige antwoorde herlaai word. Wil jy dit versoek?",
+    "refresh_request_text": "Jou bestuurders sal binnekort die herlaai inisieer.",
+    "applet_not_found_1": "Minitoep is nie gevind nie",
+    "applet_not_found_2": "Daar is geen minitoep vir gegewe ID nie.",
+    "activity_not_found": "Aktiwiteit “{{entityName}}” is tans nie beskikbaar nie.",
+    "activity_not_available_title": "Aktiwiteit is onbeskikbaar",
+    "activity_not_available_message": "Die aktiwiteit wat jy probeer oopmaak het, is tans nie beskikbaar nie. Jy kan later weer gedurende die volgende geskeduleerde tydvenster probeer.",
+    "activity_not_assigned": "Hierdie {{entityName}} is nie aan jou toegewys nie.",
+    "activity_not_available": "Hierdie {{entityName}} is nie meer beskikbaar nie.",
+    "activity_scheduled_today": "Die {{entityName}} is geskeduleer om beskikbaar te wees om {{time}}.",
+    "activity_completed_today": "{{entityName}} is reeds vir vandag voltooi.",
+    "already_completed": "Jy het dit reeds voltooi",
+    "app_killed_on_redux_persist": "Hierdie aktiwiteit kan nie begin word nie. Kontak asseblief die steundiens.",
+    "activity_was_due_at": "Hierdie aktiwiteit was uitstaande om",
+    "if_progress_was_made_on_the": "As vordering gemaak is op die",
+    "it_was_saved_but_it_can_no_longer_be_taken": "dan was dit gestoor maar dit kan nie meer",
+    "today": "vandag geneem word nie.",
+    "today2": "Vandag geskeduleer",
+    "activity_not_ready": "Aktiwiteit is nie gereed nie",
+    "not_able_to_start": "Jy is nog nie in staat om die aktiwiteit te begin nie",
+    "is": "is",
+    "scheduled_to_start_at": "geskeduleer om te begin om",
+    "postponed_notification": "Sodra die antwoorde opgelaai is, sal ons probeer om die aktiwiteit oop te maak"
+  },
+  "local_notifications": {
+    "complete_activity": "Voltooi asseblief hierdie aktiwiteit."
+  },
+  "join_demo_applets": {
+    "healthy_brain_network": "Healthy Brain Network: EMA",
+    "cognitive_tasks": "Kognitiewe take",
+    "mind_logger_demos": "Curious-demonstrasies"
+  },
+  "data_invite": {
+    "message": "Ons dink dit is belangrik dat jy weet wie toegang tot jou data het as jy hierdie uitnodiging aanvaar.\n\nDie volgende mense sal toegang tot jou data hê as jy hierdie uitnodiging aanvaar:"
+  },
+  "sidebar": {
+    "home": "Tuis",
+    "settings": "Instellings",
+    "about": "Meer oor",
+    "logout": "Meld af"
+  },
+  "navigator": {
+    "exit_title": "Verlaat toep",
+    "exit_subtitle": "Verlaat die toepassing?",
+    "cancel": "Kanselleer"
+  },
+  "activity_navigation": {
+    "next": "Volgende",
+    "skip": "Slaan oor",
+    "done": "Klaar",
+    "back": "Terug",
+    "return": "Keer terug",
+    "undo": "Ontdoen",
+    "exit": "Stoor en verlaat"
+  },
+  "network_alerts": {
+    "no_internet_title": "Geen interverbinding nie",
+    "no_internet_subtitle": "Verbind asseblief met die internet",
+    "no_internet_text": "Weier",
+    "cellular_data_title": "Sellulêre data is gedeaktiveer",
+    "cellular_data_subtitle": "Verbind asseblief met Wi-Fi of laat sellulêre data toe",
+    "cellular_data_text": "Weier",
+    "use_cellular_data": "Gebruik sellulêre data"
+  },
+  "timing": {
+    "provide_option": "Jy moet die opsie “na” of “elke” verskaf",
+    "to_be_number": "Verwagte opsies.na om ’n getal te wees",
+    "every_number": "Verwagte opsies.elke om ’n getal te wees"
+  },
+  "camera": {
+    "choose_photo": "Kies foto",
+    "choose_video": "Kies video",
+    "take_a_photo": "Neem ’n nuwe foto of kies een uit jou biblioteek",
+    "take_a_video": "Neem ’n nuwe video of kies een uit jou biblioteek",
+    "camera": "Kamera",
+    "library": "Biblioteek"
+  },
+  "text_entry": {
+    "type_placeholder": "Tik asseblief teks in",
+    "paragraph_placeholder": "Tik jou antwoord hier in."
+  },
+  "character_counter": {
+    "characters": "{{numberOfCharacters}}/{{limit}} karakters"
+  },
+  "additional": {
+    "server-error": "Bedienerfout het voorgekom",
+    "time-end": "Tyd is verstreke!",
+    "time-end-tap": "Tyd is verstreke. Tik om te voltooi",
+    "thanks": "Dankie!",
+    "sorry": "Jammer",
+    "saved_answers": "Ons het jou antwoorde gestoor!",
+    "submit_flow_answers": "Tik die",
+    "submit": "Dien in",
+    "submit_flow_answers_ex": "knoppie om jou antwoorde te stoor en voort te gaan na:",
+    "close": "Maak toe",
+    "resume_activity": "Hervat aktiwiteit",
+    "activity_resume_restart": "Wil jy hierdie aktiwiteit wat aan die gang is, hervat of weer begin?",
+    "restart": "Herbegin",
+    "resume": "Hervat",
+    "retry": "Probeer weer",
+    "send": "Stuur",
+    "later": "Later",
+    "in_progress": "Tans aan die gang",
+    "unscheduled": "Ongeskeduleerd",
+    "scheduled": "Geskeduleerd",
+    "past_due": "Agterstallig",
+    "available": "Beskikbaar",
+    "sure_delete_account_data": "Is jy seker jy wil jou rekening en data skrap?",
+    "no_cancel": "Nee, kanselleer",
+    "yes_delete": "Yes, delete it",
+    "hi": "Hallo",
+    "enter_old_password": "Voer asseblief jou ou wagwoord in",
+    "enter_new_password": "Voer asseblief ’n nuwe wagwoord in",
+    "data_not_sent": "Klik Stuur om die data wat vroeër versamel is, op te laai",
+    "data_is_sending": "Laai tans die data op wat vroeër versamel is",
+    "upload_error": "Oplaaifout",
+    "want_to_retry": "Jou internet is dalk onstabiel. Ons kon nie vir jou data stuur nie."
+  },
+  "prize": {
+    "lack_tokens_title": "Probeer weer",
+    "lack_tokens_subtitle": "Jy het nie genoeg tokens nie.\nKies asseblief ’n ander prys"
+  },
+  "cognitive": {
+    "incorrect_start_point": "Beginpunt is verkeerd!",
+    "incorrect_line": "Lyn is verkeerd!",
+    "finished_continue": "Klaar. Klik Volgende om voort te gaan.",
+    "finished_complete": "Klaar. Klik Klaar om te voltooi.",
+    "begin": "Begin",
+    "end": "Einde"
+  },
+  "system": {
+    "migration_not_applied_text": "Datamigrasie is nie suksesvol toegepas nie. Kontak asseblief die steundiens.",
+    "ok": "Goed"
+  },
+  "activity_skip_popup": {
+    "popup_title": "Slaan oor na die volgende proef?",
+    "popup_description": "Hierdie proef is onvoltooid. As jy na die volgende proef oorslaan, sal jou vordering gestoor word. Jy sal nie hierdie proef later kan voltooi nie.",
+    "keep_working": "Hou aan werk",
+    "skip": "Slaan oor"
+  },
+  "autocompletion": {
+    "done": "Klaar",
+    "time_limit_reached": "Tydlimiet is bereik",
+    "time_expired": "Die tyd om {{activityNames}} te voltooi, het verval. Jou antwoorde sal outomaties ingedien word.",
+    "processing_answers": "Verwerk tans antwoorde",
+    "preparing_answers": "Wag asseblief en moenie die skerm toemaak nie.",
+    "answers_submitted": "Antwoorde ingedien",
+    "thanks": "Dankie! Ons het alles gestoor.",
+    "time_is_up_modal_description": "Daar is nie meer tyd oor om aan hierdie aktiwiteit te werk nie. Al die werk wat jy gedoen het, sal gestoor en ingedien word.",
+    "time_is_up_modal_title": "Tyd is verstreke",
+    "ok": "Goed"
+  },
+  "data_sharing": {
+    "consent": "Ek stem in om my antwoorde te gee",
+    "media_consent": "Ek stem in om my media-antwoorde",
+    "public": "openbaar te maak",
+    "dialog": {
+      "body": "Om antwoorde openbaar te deel, impliseer dat inligting wat deur individuele gebruikers verskaf word, bv. opname-antwoorde of terugvoer, openlik beskikbaar sal wees vir ander om te besigtig."
+    }
+  },
+  "assignment": {
+    "badge": "Meer oor {{name}}",
+    "banner": "Maak asseblief seker al jou antwoorde handel oor <strong>{{name}}</strong>"
+  },
+  "splash": {
+    "version": "Weergawe"
+  },
+  "requestHealthRecordData": {
+    "title": "Versoek gesondheidsrekorddata",
+    "linkText": "Vind uit hoe Curious beveiligd toegang tot gesondheidsorgdata verkry.",
+    "partnershipText": "Curious gebruik 1UpHealth se mediese inligtingsdiens om jou navorser in staat te stel om toegang tot inligting in jou gesondheidsorgrekords te verkry.\n\nIn die volgende skerms sal jy gevra word om by jou gesondheidsorgverskafferstelsels aan te meld en jou gesondheidsorgdata met hierdie studie te deel. Jy sal terugkeer na die Curious-aktiwiteit wanneer jy klaar is.",
+    "enterYourHealthSystem": "Voer jou gesondheidstelsel in:",
+    "healthSystemName": "Naam van gesondheidstelsel",
+    "search": "Soek",
+    "additionalPromptText": "Jy het klaar aangemeld by jou gesondheidsorgrekening.\n\nWil jy by enige bykomende gesondheidsorgrekeninge aanmeld?",
+    "yes": "Yes",
+    "no": "Nee",
+    "noResults": "Geen gesondheidsorgverskaffers is gevind wat by jou soektog pas nie."
+  },
+  "announcementBanner": {
+    "content": "<0>Ons kry ’n nuwe voorkoms!</0> <1>Ontwerpopdaterings is op pad – dieselfde wonderlike toep, vars nuwe voorkoms. Nuuskierig?</1> <2>Tik vir meer inligting.</2>"
+  },
+  "unity": {
+    "error_title": "Unity Build het misluk",
+    "error_message": "Kon nie die aktiwiteit laai nie; kontak asseblief die outeur vir hulp. Die aktiwiteit sal nou toemaak.",
+    "error_message_flow": "Kon nie die aktiwiteit laai nie; kontak asseblief die outeur vir hulp. Jy sal na die volgende aktiwiteit in die vloei geneem word: ",
+    "error_ok": "Goed",
+    "restart_title": "Unity Build-fout",
+    "restart_message": "Die aktiwiteit het ’n kritieke fout teëgekom en moet toemaak. Die data wat tot dusver uit hierdie aktiwiteit versamel is, sal verlore gaan.\n\nJy kan die aktiwiteit herbegin om weer te probeer.",
+    "restart_primary": "Herbegin aktiwiteit",
+    "restart_secondary_solo": "Verlaat",
+    "restart_secondary_flow": "Gaan voort na volgende aktiwiteit"
+  }
+}
