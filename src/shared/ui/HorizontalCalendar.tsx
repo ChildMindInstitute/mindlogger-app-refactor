@@ -17,6 +17,8 @@ export const HorizontalCalendar: FC<BoxProps> = styledProps => {
 
   // Get weekday abbreviations from translations instead of date-fns locale
   const weekdays = t('calendar:weekdays').split('_');
+  // Fall back to English per-day if a translation is missing/malformed
+  const enWeekdays = t('calendar:weekdays', { lng: 'en' }).split('_');
 
   return (
     <Box gap={8} pt={16} px={16} {...styledProps}>
@@ -28,7 +30,11 @@ export const HorizontalCalendar: FC<BoxProps> = styledProps => {
         {dates.map(date => {
           const dateOfMonth = date.getDate();
           const dayIndex = date.getDay(); // 0 = Sunday, 6 = Saturday
-          const weekDayName = weekdays[dayIndex].toUpperCase();
+          const weekDayName = (
+            weekdays[dayIndex] ??
+            enWeekdays[dayIndex] ??
+            ''
+          ).toUpperCase();
 
           const isToday = currentDate.getDate() === dateOfMonth;
           const textColor = isToday ? '$primary' : '$outline';
