@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { FetchBlobResponse } from 'react-native-blob-util';
 
 import { SuccessfulResponse, SuccessfulEmptyResponse } from '../types';
 
@@ -84,5 +85,5 @@ export interface IFileService {
   ) => Promise<AxiosResponse<GetFieldsForFileUploadResponse>>;
   uploadAppletFileToS3: (
     request: AppletFileUploadToS3Request,
-  ) => Promise<AxiosResponse<AppletFileUploadToS3Response>>;
+  ) => Promise<FetchBlobResponse>;
 }

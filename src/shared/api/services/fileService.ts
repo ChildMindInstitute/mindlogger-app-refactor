@@ -1,16 +1,18 @@
+import ReactNativeBlobUtil from 'react-native-blob-util';
+
 import { IS_ANDROID } from '@app/shared/lib/constants';
 import { getDefaultSystemRecord } from '@app/shared/lib/records/systemRecordInstance';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getStringHashCode } from '@app/shared/lib/utils/common';
 import {
+  HttpError,
   watchForConnectionLoss,
   callApiWithRetry,
 } from '@app/shared/lib/utils/networkHelpers';
 
-import { getAxiosInstance, httpService } from './httpService';
+import { httpService } from './httpService';
 import {
   AppletFileUploadToS3Request,
-  AppletFileUploadToS3Response,
   CheckIfFilesExistRequest,
   CheckIfFilesExistResponse,
   CheckIfLogsExistRequest,
@@ -146,34 +148,42 @@ export function fileService(): IFileService {
         const { abortController, reset } = watchForConnectionLoss();
 
         try {
-          const data = new FormData();
-          const localUrl = IS_ANDROID
-            ? request.localUrl
-            : request.localUrl.replace('file://', '');
+          const body = [];
+          const localUrl = request.localUrl.replace('file://', ''); // no 'file://' on both Android and iOS
 
           const fieldKeys = Object.keys(request.fields);
 
           for (const key of fieldKeys) {
-            data.append(key, request.fields[key]);
+            body.push({ name: key, data: request.fields[key] });
           }
 
-          data.append('file', {
-            uri: localUrl,
-            name: request.fileName,
+          body.push({
+            name: 'file',
+            data: ReactNativeBlobUtil.wrap(localUrl),
+            filename: request.fileName,
             type: request.type,
-          } as unknown as Blob);
+          });
 
-          const httpInstance = getAxiosInstance();
+          const task = ReactNativeBlobUtil.fetch(
+            'POST',
+            request.uploadUrl,
+            {},
+            body,
+          );
 
-          const response =
-            await httpInstance.post<AppletFileUploadToS3Response>(
-              request.uploadUrl,
-              data,
-              {
-                headers: { 'Content-Type': 'multipart/form-data' },
-                signal: abortController.signal,
-              },
-            );
+          abortController.signal.addEventListener(
+            'abort',
+            () => task.cancel(),
+            { once: true },
+          );
+
+          const response = await task;
+          const status = response.info().status;
+
+          if (status >= 400) {
+            throw new HttpError(await response.text(), { status });
+          }
+
           return response;
         } catch (error) {
           getDefaultLogger().error(

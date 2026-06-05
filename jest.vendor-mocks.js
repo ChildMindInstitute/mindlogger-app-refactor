@@ -114,6 +114,11 @@ jest.mock('axios', () => {
   };
 });
 
+jest.mock('react-native-blob-util', () => ({
+  wrap: jest.fn(uri => uri),
+  fetch: jest.fn(),
+}));
+
 jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
 );
@@ -274,5 +279,20 @@ jest.mock('@launchdarkly/react-native-client-sdk', () => ({
 jest.mock('@georstat/react-native-image-cache', () => {
   return {
     CachedImage: () => <></>,
+  };
+});
+
+jest.mock('react-native-mmkv', () => {
+  const {
+    createMockMMKV,
+  } = require('react-native-mmkv/lib/createMMKV/createMockMMKV');
+  return {
+    createMMKV: createMockMMKV,
+    useMMKVObject: jest.fn(() => [undefined, jest.fn()]),
+    useMMKVString: jest.fn(() => [undefined, jest.fn()]),
+    useMMKVNumber: jest.fn(() => [undefined, jest.fn()]),
+    useMMKVBoolean: jest.fn(() => [undefined, jest.fn()]),
+    useMMKVBuffer: jest.fn(() => [undefined, jest.fn()]),
+    useMMKV: jest.fn(),
   };
 });

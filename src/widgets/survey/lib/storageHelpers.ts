@@ -70,7 +70,7 @@ export const clearActivityStorageRecord = (
     targetSubjectId,
     order,
   );
-  getDefaultStorageInstanceManager().getActivityProgressStorage().delete(key);
+  getDefaultStorageInstanceManager().getActivityProgressStorage().remove(key);
 };
 
 export const getFlowRecordKey = (

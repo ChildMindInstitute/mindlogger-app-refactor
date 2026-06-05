@@ -20,7 +20,7 @@ export function NavigationService(navigationStorage: MMKV): INavigationService {
     },
 
     clearInitialNavigationState(scope: NavigationServiceScope) {
-      navigationStorage.delete(`initialNavigationState-${scope}`);
+      navigationStorage.remove(`initialNavigationState-${scope}`);
     },
 
     getInitialNavigationState(scope: NavigationServiceScope) {

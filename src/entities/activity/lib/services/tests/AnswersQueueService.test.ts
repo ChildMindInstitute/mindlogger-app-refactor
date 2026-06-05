@@ -10,7 +10,7 @@ const notifyMock = { notify: () => {} };
 const getAllKeysMock = jest.fn();
 const getStringMock = jest.fn();
 const setMock = jest.fn();
-const deleteMock = jest.fn();
+const removeMock = jest.fn();
 
 const storageMock = {
   addOnValueChangedListener: jest.fn().mockImplementation((f: () => void) => {
@@ -19,7 +19,7 @@ const storageMock = {
   getAllKeys: () => getAllKeysMock() as Array<string>,
   getString: (id: string) => getStringMock(id) as string,
   set: (key: string, item: UploadItem) => setMock(key, item) as void,
-  delete: (key: string) => deleteMock(key) as void,
+  remove: (key: string) => removeMock(key) as void,
 } as unknown as MMKV;
 
 describe('Test AnswersQueueService', () => {
@@ -100,9 +100,9 @@ describe('Test AnswersQueueService', () => {
 
     uploadService.dequeue();
 
-    expect(deleteMock).toHaveBeenCalledTimes(1);
+    expect(removeMock).toHaveBeenCalledTimes(1);
 
-    expect(deleteMock).toHaveBeenCalledWith('7');
+    expect(removeMock).toHaveBeenCalledWith('7');
   });
 
   it('Should not dequeue an object when no keys', () => {
@@ -112,7 +112,7 @@ describe('Test AnswersQueueService', () => {
 
     uploadService.dequeue();
 
-    expect(deleteMock).toHaveBeenCalledTimes(0);
+    expect(removeMock).toHaveBeenCalledTimes(0);
   });
 
   it('Should swap when three different keys exist', () => {

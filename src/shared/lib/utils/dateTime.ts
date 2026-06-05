@@ -4,8 +4,9 @@ import {
   subDays,
   getUnixTime,
   subMonths,
+  Locale,
 } from 'date-fns';
-import { enGB, fr, el, es, ptBR } from 'date-fns/locale';
+import { enGB, fr, el, es, ptBR, af } from 'date-fns/locale';
 import i18n from 'i18next';
 
 import { getTwoDigits, range } from './common';
@@ -17,7 +18,17 @@ import {
 import { DayMonthYear, HourMinute } from '../types/dateTime';
 import { Language } from '../types/language';
 
-const dateFnsLocales = { fr, en: enGB, el, es, pt: ptBR };
+// xh and zu fall back to date-fns' default (en-US-style) because no isiXhosa
+// or isiZulu locales ship with date-fns. Typed as Partial so the lookup safely
+// yields undefined for unsupported languages.
+const dateFnsLocales: Partial<Record<Language, Locale>> = {
+  fr,
+  en: enGB,
+  el,
+  es,
+  pt: ptBR,
+  af,
+};
 
 export const getMsFromHours = (hours: number): number => {
   return hours * (MINUTES_IN_HOUR * MS_IN_MINUTE);

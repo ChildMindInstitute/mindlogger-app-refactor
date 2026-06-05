@@ -3,11 +3,14 @@ import { initReactI18next } from 'react-i18next';
 import { z } from 'zod';
 import { zodI18nMap } from 'zod-i18n-map';
 
+import af from '@assets/translations/af.json';
 import el from '@assets/translations/el.json';
 import en from '@assets/translations/en.json';
 import es from '@assets/translations/es.json';
 import fr from '@assets/translations/fr.json';
 import ptBr from '@assets/translations/pt.json';
+import xh from '@assets/translations/xh.json';
+import zu from '@assets/translations/zu.json';
 
 import { getDefaultLocalizationStorage } from './localizationStorageInstance';
 
@@ -32,6 +35,9 @@ export function setupLocalization() {
       el,
       es,
       pt: ptBr,
+      af,
+      xh,
+      zu,
     },
     returnNull: false,
   });
