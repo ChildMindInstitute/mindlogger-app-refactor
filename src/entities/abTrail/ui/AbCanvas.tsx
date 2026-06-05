@@ -294,7 +294,7 @@ export const AbCanvas: FC<Props> = props => {
     const isFinished = currentIndexRef.current === testData.nodes.length;
 
     if (readonly || isFinished) {
-      hideSketchCanvas();
+      // Don't unmount the canvas (flickers on Android); resetCurrentPath clears without unmounting.
       resetCurrentPath();
       return;
     }
@@ -329,7 +329,10 @@ export const AbCanvas: FC<Props> = props => {
     const currentPath = getCurrentPath();
 
     if (!currentPath) {
-      hideSketchCanvas();
+      // Once finished, don't unmount the canvas on finger-move (flickers the last line on Android).
+      if (currentIndexRef.current !== testData.nodes.length) {
+        hideSketchCanvas();
+      }
       return;
     }
 
@@ -340,11 +343,11 @@ export const AbCanvas: FC<Props> = props => {
     addLogPoint(createLogPoint(point, time));
 
     if (isOverNext(point) && isOverLast(point)) {
-      hideSketchCanvas();
       markLastLogPoints({ valid: true });
       addOverCorrectPointToStream(point, time);
       keepPathInState();
-      resetCurrentPath();
+      // Just null the ref so onTouchEnd no-ops; don't unmount the live canvas — that flickers the last line on Android (Skia 2.4+).
+      currentPathRef.current = null;
       onMessage(MessageType.Completed);
       incrementCurrentIndex();
       onResult();
@@ -402,7 +405,8 @@ export const AbCanvas: FC<Props> = props => {
   return (
     <Box {...props} borderWidth={1} borderColor="$outline">
       <Box width={width} height={width}>
-        {isSketchCanvasShown && !readonly && (
+        {/* Keep mounted after completion; unmounting flickers the canvas on Android. Input is blocked above. */}
+        {isSketchCanvasShown && (
           <SketchCanvas
             ref={sketchCanvasRef}
             initialLines={[]}
