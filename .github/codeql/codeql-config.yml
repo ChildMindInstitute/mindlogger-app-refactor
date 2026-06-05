@@ -1,0 +1,19 @@
+name: "Custom CodeQL Config"
+
+# Specify which queries to run
+queries:
+  - uses: security-extended
+  - uses: security-and-quality
+
+# Paths to exclude from analysis
+paths-ignore:
+  - node_modules
+  - dist
+  - build
+  - coverage
+  - '**/test_*.py'
+
+
+# Paths to include in analysis
+paths:
+  - src
