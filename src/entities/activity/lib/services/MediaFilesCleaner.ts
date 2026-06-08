@@ -7,6 +7,7 @@ import {
   ObjectAnswerDto,
 } from '@app/shared/api/services/IAnswerService';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getFilePath } from '@app/shared/lib/utils/file';
 import { MediaFile, MediaValue } from '@app/shared/ui/survey/MediaItems/types';
 import { getActivityRecordKey } from '@app/widgets/survey/lib/storageHelpers';
 
@@ -43,10 +44,11 @@ export const createMediaFilesCleaner = (
 
     for (const fileUrl of urlsToProcess) {
       try {
-        const fileExists = await FileSystem.exists(fileUrl);
+        const filePath = getFilePath(fileUrl);
+        const fileExists = await FileSystem.exists(filePath);
 
         if (fileExists) {
-          await FileSystem.unlink(fileUrl);
+          await FileSystem.unlink(filePath);
         }
       } catch (error) {
         getDefaultLogger().warn(
@@ -85,10 +87,11 @@ export const createMediaFilesCleaner = (
         const mediaValue = answerValue as MediaValue;
 
         if (mediaValue?.uri) {
-          const fileExists = await FileSystem.exists(mediaValue.uri);
+          const filePath = getFilePath(mediaValue.uri);
+          const fileExists = await FileSystem.exists(filePath);
 
           if (fileExists) {
-            await FileSystem.unlink(mediaValue.uri);
+            await FileSystem.unlink(filePath);
 
             console.info('[MediaFilesCleaner.cleanUp]: completed');
           }
