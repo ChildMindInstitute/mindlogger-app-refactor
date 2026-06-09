@@ -90,7 +90,9 @@ export const LoginScreen: FC = () => {
 
             <Link
               textDecorationLine="underline"
-              onPress={() => openUrl('https://gettingcurious.com/privacy-policy')}
+              onPress={() =>
+                openUrl('https://gettingcurious.com/privacy-policy')
+              }
               accessibilityLabel="privacy_policy_link"
             >
               {t('auth:privacy')}
