@@ -28,7 +28,13 @@ type Props = {
 };
 
 export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
-  const { initialLines, enabled = true, onStrokeStart, onStrokeChanged, onStrokeEnd } = props;
+  const {
+    initialLines,
+    enabled = true,
+    onStrokeStart,
+    onStrokeChanged,
+    onStrokeEnd,
+  } = props;
 
   const fullPath = useSharedValue<SkPath>(
     initialLines
