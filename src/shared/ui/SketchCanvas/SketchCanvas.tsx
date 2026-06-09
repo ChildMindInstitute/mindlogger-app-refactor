@@ -21,13 +21,14 @@ export type SketchCanvasRef = {
 
 type Props = {
   initialLines: Array<Point[]>;
+  enabled?: boolean;
   onStrokeStart: (x: number, y: number, time: number) => void;
   onStrokeChanged: (x: number, y: number, time: number) => void;
   onStrokeEnd: (x: number, y: number, time: number) => void;
 };
 
 export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
-  const { initialLines, onStrokeStart, onStrokeChanged, onStrokeEnd } = props;
+  const { initialLines, enabled = true, onStrokeStart, onStrokeChanged, onStrokeEnd } = props;
 
   const fullPath = useSharedValue<SkPath>(
     initialLines
@@ -116,7 +117,7 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, Props>((props, ref) => {
   };
 
   const drawingGesture = useDrawingGesture(
-    { areaSize: width },
+    { areaSize: width, enabled },
     { onTouchStart, onTouchProgress, onTouchEnd },
   );
 
