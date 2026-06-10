@@ -4,6 +4,7 @@ import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import TSBackgroundFetch
 import Firebase
+import react_native_orientation_director
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
