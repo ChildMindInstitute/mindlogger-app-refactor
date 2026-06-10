@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { LogBox, StyleSheet } from 'react-native';
 
 import {
@@ -7,6 +8,9 @@ import {
   SdkVerbosity,
   UploadFrequency,
 } from '@datadog/mobile-react-native';
+import RNOrientationDirector, {
+  Orientation,
+} from 'react-native-orientation-director';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { Banners } from '@app/entities/banner/ui/Banners';
@@ -70,6 +74,11 @@ if (__DEV__) {
 }
 
 const App = () => {
+  useEffect(() => {
+    // Lock to portrait after app mounts
+    RNOrientationDirector.lockTo(Orientation.portrait);
+  }, []);
+
   return (
     <DatadogProvider configuration={config}>
       <AppProvider>
