@@ -51,7 +51,7 @@ jobs:
             -H "Content-Type: application/json"
       
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::917902836630:role/ssm-versions-oidc-github-role
           role-session-name: OIDC-GHA-session-version
