@@ -62,17 +62,17 @@
   "activity_chart": {
     "title": "Sicela uthathe ukuhlolwa ukuze idatha iboniswe.",
     "monday": "M",
-    "tuesday": "T",
-    "wednesday": "W",
-    "thursday": "T",
-    "friday": "F",
-    "saturday": "S",
+    "tuesday": "B",
+    "wednesday": "T",
+    "thursday": "S",
+    "friday": "H",
+    "saturday": "M",
     "sunday": "S"
   },
   "calendar": {
     "months": "January_February_March_April_May_June_July_August_September_October_November_December",
-    "weekdays": "Sun_Mon_Tue_Wed_Thu_Fri_Sat",
-    "x_days": "M_T_W_T_F_S_S"
+    "weekdays": "Mso_Bil_Tha_Sine_Hla_Mgqi_Sonto",
+    "x_days": "M_B_T_S_H_M_S"
   },
   "applet_data": {
     "title": "Sicela uthathe ukuhlolwa ukuze idatha iboniswe."
