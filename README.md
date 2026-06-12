@@ -1,6 +1,6 @@
 # Child Mind Institute - Curious Mobile App
 
-This repository is used for the respondent mobile app of the [Curious](https://mindlogger.org/) application stack.
+This repository is used for the respondent mobile app of the [Curious](https://gettingcurious.com/) application stack.
 
 ## Application Stack
 

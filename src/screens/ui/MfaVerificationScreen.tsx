@@ -241,7 +241,7 @@ export const MfaVerificationScreen: FC = () => {
 
             <Link
               textDecorationLine="underline"
-              onPress={() => openUrl('https://mindlogger.org/terms-of-service')}
+              onPress={() => openUrl('https://gettingcurious.com/terms')}
               accessibilityLabel="terms_of_service_link"
             >
               {t('auth:terms')}

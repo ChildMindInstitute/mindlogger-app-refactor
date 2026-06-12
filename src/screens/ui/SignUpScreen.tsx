@@ -79,9 +79,7 @@ export const SignUpScreen: FC = () => {
                 ta="center"
                 textDecorationLine="underline"
                 accessibilityLabel="terms_of_service_link"
-                onPress={() =>
-                  openUrl('https://mindlogger.org/terms-of-service')
-                }
+                onPress={() => openUrl('https://gettingcurious.com/terms')}
               >
                 {t('auth:terms')}
               </Text>
@@ -89,7 +87,9 @@ export const SignUpScreen: FC = () => {
               <Text
                 ta="center"
                 textDecorationLine="underline"
-                onPress={() => openUrl('https://mindlogger.org/privacy-policy')}
+                onPress={() =>
+                  openUrl('https://gettingcurious.com/privacy-policy')
+                }
                 accessibilityLabel="privacy_policy_link"
               >
                 {t('auth:privacy')}.
