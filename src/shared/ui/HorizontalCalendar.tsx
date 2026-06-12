@@ -56,6 +56,11 @@ export const HorizontalCalendar: FC<BoxProps> = styledProps => {
                 lineHeight={16}
                 letterSpacing={0.5}
                 color={textColor}
+                width={daySize}
+                ta="center"
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.6}
               >
                 {weekDayName}
               </Text>
