@@ -78,6 +78,11 @@ export const AbCanvas: FC<Props> = props => {
 
     const id = setTimeout(() => {
       setErrorPath(null);
+      // Clear the live stroke with the error path; guard against a new stroke
+      // started during the error window.
+      if (!getCurrentPath()) {
+        sketchCanvasRef.current?.clear();
+      }
     }, ErrorLineTimeout);
 
     return () => {
@@ -344,7 +349,9 @@ export const AbCanvas: FC<Props> = props => {
       markLastLogPoints({ valid: true });
       addOverCorrectPointToStream(point, time);
       keepPathInState();
-      resetCurrentPath();
+      // Don't clear the live stroke — keep it visible under the committed last
+      // segment so there's no frame where the line disappears (blink).
+      currentPathRef.current = null;
       onMessage(MessageType.Completed);
       incrementCurrentIndex();
       onResult();
@@ -366,6 +373,9 @@ export const AbCanvas: FC<Props> = props => {
       const node = findNodeByPoint(point)!;
       hideSketchCanvas();
       setErrorPath(currentPath);
+      // Null the ref so onTouchEnd doesn't call resetCurrentPath() and clear().
+      // Clearing livePath before errorPath renders causes a one-frame blink.
+      currentPathRef.current = null;
       markLastLogPoints({ valid: false, actual: node.label });
       setFlareGreenPointIndex({ index: getCurrentIndex() });
       onMessage(MessageType.IncorrectLine);
@@ -402,15 +412,14 @@ export const AbCanvas: FC<Props> = props => {
   return (
     <Box {...props} borderWidth={1} borderColor="$outline">
       <Box width={width} height={width}>
-        {isSketchCanvasShown && !readonly && (
-          <SketchCanvas
-            ref={sketchCanvasRef}
-            initialLines={[]}
-            onStrokeStart={onTouchStart}
-            onStrokeChanged={onTouchProgress}
-            onStrokeEnd={onTouchEnd}
-          />
-        )}
+        <SketchCanvas
+          ref={sketchCanvasRef}
+          initialLines={[]}
+          enabled={isSketchCanvasShown && !readonly}
+          onStrokeStart={onTouchStart}
+          onStrokeChanged={onTouchProgress}
+          onStrokeEnd={onTouchEnd}
+        />
       </Box>
 
       {canvasData && (
