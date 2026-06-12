@@ -51,7 +51,7 @@ jobs:
             -H "Content-Type: application/json"
       
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::917902836630:role/ssm-versions-oidc-github-role
           role-session-name: OIDC-GHA-session-version
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-deploy
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Send scheduled Slack message
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

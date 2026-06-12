@@ -293,14 +293,13 @@ export class AnswersUploadService implements IAnswersUploadService {
         continue;
       }
 
-      this.uploadProgressObservable.currentFile++;
-
       const remoteUrls: string[] = [];
 
       if (isUnityItem) {
         const unityAnswer = answerValue as UnityAnswerDto;
         const mediaFiles = unityAnswer.taskData;
         for (const file of mediaFiles) {
+          this.uploadProgressObservable.currentFile++;
           const remoteUrl = await this.processFileUpload(
             file,
             uploadChecks,
@@ -310,6 +309,7 @@ export class AnswersUploadService implements IAnswersUploadService {
           remoteUrls.push(remoteUrl);
         }
       } else {
+        this.uploadProgressObservable.currentFile++;
         const remoteUrl = await this.processFileUpload(
           mediaAnswer,
           uploadChecks,

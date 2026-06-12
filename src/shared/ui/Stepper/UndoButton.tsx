@@ -30,6 +30,7 @@ export function UndoButton({ children, isIcon }: Props) {
       maxWidth="100%"
       width={120}
       px={10}
+      textProps={{ numberOfLines: 1, adjustsFontSizeToFit: true }}
     >
       {children}
     </SubmitButton>

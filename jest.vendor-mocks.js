@@ -114,6 +114,11 @@ jest.mock('axios', () => {
   };
 });
 
+jest.mock('react-native-blob-util', () => ({
+  wrap: jest.fn(uri => uri),
+  fetch: jest.fn(),
+}));
+
 jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
 );

@@ -1523,6 +1523,8 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
+  - react-native-blob-util (0.24.7):
+    - React-Core
   - react-native-config (1.5.10):
     - react-native-config/App (= 1.5.10)
   - react-native-config/App (1.5.10):
@@ -2334,6 +2336,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
+  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-config (from `../node_modules/react-native-config`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
@@ -2525,6 +2528,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
+  react-native-blob-util:
+    :path: "../node_modules/react-native-blob-util"
   react-native-config:
     :path: "../node_modules/react-native-config"
   react-native-geolocation:
@@ -2734,6 +2739,7 @@ SPEC CHECKSUMS:
   React-logger: fbdc0814b62fefa412a90af7cacc666387f1bc9a
   React-Mapbuffer: cfe4726ba1929b9dab4645c78376a9165375d62f
   React-microtasksnativemodule: c99b8f1240609566de105b73f2569c0f22880ee1
+  react-native-blob-util: 32d49c4e825abb0bee1e9c0056d58c9ed53d17c1
   react-native-config: eae2b928a919c9743d710bbff3b7592882268fe8
   react-native-geolocation: ec15ffebc53790314885eb9e5f2132132fbc2600
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
