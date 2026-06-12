@@ -62,17 +62,17 @@
   "activity_chart": {
     "title": "Nceda uthathe uvavanyo ukuze idatha iboniswe.",
     "monday": "M",
-    "tuesday": "L",
-    "wednesday": "L",
-    "thursday": "L",
-    "friday": "L",
+    "tuesday": "S",
+    "wednesday": "S",
+    "thursday": "S",
+    "friday": "H",
     "saturday": "M",
     "sunday": "C"
   },
   "calendar": {
     "months": "NgoJanuwari_Februwari_Matshi_Apreli_Meyi_Juni_Julayi_Agasti_Septemba_Okthobha_Novemba_Disemba",
     "weekdays": "Cawa_Mvu_Lwesibi_Lwesith_Levine_Lwesihlanu_Mgqi",
-    "x_days": "M_L_L_L_L_M_C"
+    "x_days": "M_S_S_S_H_M_C"
   },
   "applet_data": {
     "title": "Nceda uthathe uvavanyo ukuze idatha iboniswe."
