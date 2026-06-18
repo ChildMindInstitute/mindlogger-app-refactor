@@ -79,7 +79,7 @@ export const SignUpScreen: FC = () => {
                 ta="center"
                 textDecorationLine="underline"
                 accessibilityLabel="terms_of_service_link"
-                onPress={() => openUrl('https://gettingcurious.com/terms')}
+                onPress={() => openUrl('https://www.gettingcurious.com/terms')}
               >
                 {t('auth:terms')}
               </Text>
@@ -88,7 +88,7 @@ export const SignUpScreen: FC = () => {
                 ta="center"
                 textDecorationLine="underline"
                 onPress={() =>
-                  openUrl('https://gettingcurious.com/privacy-policy')
+                  openUrl('https://www.gettingcurious.com/privacy-policy')
                 }
                 accessibilityLabel="privacy_policy_link"
               >

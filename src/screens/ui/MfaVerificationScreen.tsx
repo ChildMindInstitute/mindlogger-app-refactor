@@ -241,7 +241,7 @@ export const MfaVerificationScreen: FC = () => {
 
             <Link
               textDecorationLine="underline"
-              onPress={() => openUrl('https://gettingcurious.com/terms')}
+              onPress={() => openUrl('https://www.gettingcurious.com/terms')}
               accessibilityLabel="terms_of_service_link"
             >
               {t('auth:terms')}
