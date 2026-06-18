@@ -4,6 +4,7 @@ import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import TSBackgroundFetch
 import Firebase
+import react_native_orientation_director
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -42,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     supportedInterfaceOrientationsFor window: UIWindow?
   ) -> UIInterfaceOrientationMask {
     // Mask must be static option set (M2-10056)
+    // Constrain orientations with OrientationAwareRootViewController
     return [.portrait, .landscapeLeft, .landscapeRight]
   }
 
@@ -77,5 +79,17 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
     #else
     return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
     #endif
+  }
+
+  override func createRootViewController() -> UIViewController {
+    return OrientationAwareRootViewController()
+  }
+}
+
+class OrientationAwareRootViewController: UIViewController {
+  override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    // Constrain view controller to orientations configured by react-native-orientation-director
+    // Intersects with the app's static orientation mask above (M2-10056)
+    return OrientationDirector.getSupportedInterfaceOrientationsForWindow()
   }
 }

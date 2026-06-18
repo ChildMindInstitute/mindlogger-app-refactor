@@ -1,5 +1,5 @@
 import NetInfo from '@react-native-community/netinfo';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 import { httpService } from '@app/shared/api/services/httpService';
 

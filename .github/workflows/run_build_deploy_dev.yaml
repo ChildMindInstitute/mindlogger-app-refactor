@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Get git short sha
         id: sha
         run: |
@@ -42,7 +42,7 @@ jobs:
             --data '{"build_params":{"branch":"dev","pipeline_id":"start_dev"},"hook_info":{"build_trigger_token":"${{ secrets.BITRISE_BUILD_TOKEN }}","type":"bitrise"},"triggered_by":"gha"}' \
             -H "Content-Type: application/json"
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::917902836630:role/ssm-versions-oidc-github-role
           role-session-name: OIDC-GHA-session-version

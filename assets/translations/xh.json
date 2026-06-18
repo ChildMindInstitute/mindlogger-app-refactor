@@ -61,18 +61,18 @@
   },
   "activity_chart": {
     "title": "Nceda uthathe uvavanyo ukuze idatha iboniswe.",
-    "monday": "UMVULO",
-    "tuesday": "ULWESIBINI",
-    "wednesday": "ULWESITHATHU",
-    "thursday": "ULWESIBINI",
-    "friday": "ULWESIHLANU",
-    "saturday": "UMGQIBELO",
-    "sunday": "UMGQIBELO"
+    "monday": "M",
+    "tuesday": "S",
+    "wednesday": "S",
+    "thursday": "S",
+    "friday": "H",
+    "saturday": "M",
+    "sunday": "C"
   },
   "calendar": {
     "months": "NgoJanuwari_Februwari_Matshi_Apreli_Meyi_Juni_Julayi_Agasti_Septemba_Okthobha_Novemba_Disemba",
-    "weekdays": "Langa_Mso_Lwesibini_Lwesithathu_Lwesine_Lwesihlanu_Sat",
-    "x_days": "MVULO_LWESIBINI_LWESITHATHU_LWESINE_LWESIHLANU_MGQIBELO_CAWE"
+    "weekdays": "Cawa_Mvu_Lwesibi_Lwesith_Levine_Lwesihlanu_Mgqi",
+    "x_days": "M_S_S_S_H_M_C"
   },
   "applet_data": {
     "title": "Nceda uthathe uvavanyo ukuze idatha iboniswe."
