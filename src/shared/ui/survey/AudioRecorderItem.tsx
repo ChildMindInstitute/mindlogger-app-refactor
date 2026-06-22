@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import AudioRecorderPlayer, {
   AudioSet,
-} from 'react-native-audio-recorder-player';
+} from 'react-native-nitro-sound';
 import { FileSystem, Dirs } from 'react-native-file-access';
 import { v4 as uuidv4 } from 'uuid';
 
