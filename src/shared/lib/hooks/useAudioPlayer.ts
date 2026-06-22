@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer from 'react-native-nitro-sound';
 
 import { IS_ANDROID } from '../constants';
 import { wait } from '../utils/common';
