@@ -164,10 +164,15 @@ android {
         }
     }
     
-    // Add packaging options to ensure proper alignment for 16KB page sizes
     packagingOptions {
         jniLibs {
-            useLegacyPackaging = false
+            // Extract native libs to disk at install time (legacy packaging) instead of
+            // loading from the APK as workaround for:
+            //
+            //     SoLoaderDSONotFoundError: couldn't find DSO to load: libreactnative.so`SoLoader
+            //
+            // https://github.com/react/react-native/issues/55562
+            useLegacyPackaging = true
         }
     }
 }
