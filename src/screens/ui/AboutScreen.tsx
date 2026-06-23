@@ -27,7 +27,7 @@ export const AboutScreen: FC = () => {
       >
         <MarkdownView
           content={t('about_app:curious_about', {
-            credits_link: 'https://help.mindlogger.org',
+            credits_link: 'https://help.gettingcurious.com',
           })}
           markdownStyle={markdownStyle}
         />
