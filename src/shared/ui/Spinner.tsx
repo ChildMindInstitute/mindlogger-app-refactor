@@ -68,7 +68,7 @@ export function Spinner({
 }
 
 const overlayStyle: ViewStyle = {
-  ...StyleSheet.absoluteFillObject,
+  ...StyleSheet.absoluteFill,
   alignItems: 'center',
   justifyContent: 'center',
   paddingBottom: 20,
