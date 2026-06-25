@@ -23,7 +23,7 @@ export class MutexDefaultInstanceManager implements IMutexDefaultInstanceManager
       if (!this.instances[mutexName]) {
         this.instances[mutexName] = Mutex();
       }
-      return this.instances[mutexName] as IMutex;
+      return this.instances[mutexName];
     };
 
     return getter.bind(this);

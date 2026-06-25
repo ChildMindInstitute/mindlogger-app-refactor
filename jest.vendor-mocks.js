@@ -24,8 +24,20 @@ jest.mock('react-native-reanimated', () => {
     return instance;
   });
 
+  const { View, Text, Image, ScrollView } = require('react-native');
+
   return {
-    createAnimatedComponent: jest.fn(),
+    __esModule: true,
+    default: {
+      View,
+      Text,
+      Image,
+      ScrollView,
+      createAnimatedComponent: jest.fn(comp => comp),
+    },
+    setUpTests: jest.fn(),
+    createAnimatedComponent: jest.fn(comp => comp),
+    LinearTransition: MockAnimation,
     SlideInLeft: MockAnimation,
     SlideInRight: MockAnimation,
     SlideOutLeft: MockAnimation,
@@ -123,31 +135,24 @@ jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
 );
 
-jest.mock('react-native-audio-recorder-player', () => {
+jest.mock('react-native-nitro-sound', () => {
+  const mockSoundInstance = {
+    stopPlayer: jest.fn(),
+    startPlayer: jest.fn(),
+    pausePlayer: jest.fn(),
+    stopRecorder: jest.fn(),
+    startRecorder: jest.fn(),
+    pauseRecorder: jest.fn(),
+    addPlayBackListener: jest.fn(),
+    removePlayBackListener: jest.fn(),
+    addRecordBackListener: jest.fn(),
+    removeRecordBackListener: jest.fn(),
+    setSubscriptionDuration: jest.fn(),
+  };
+
   return {
-    DocumentDir: () => {},
-    fetch: () => {},
-    base64: () => {},
-    android: () => {},
-    ios: () => {},
-    config: () => {},
-    session: () => {},
-    fs: {
-      dirs: {
-        MainBundleDir: () => {},
-        CacheDir: () => {},
-        DocumentDir: () => {},
-      },
-    },
-    wrap: () => {},
-    polyfill: () => {},
-    JSONStream: () => {},
-    stopPlayer: () => {},
-    removePlayBackListener: () => {},
-    startPlayer: () => {},
-    addPlayBackListener: () => {},
-    pausePlayer: () => {},
-    setSubscriptionDuration: () => {},
+    createSound: jest.fn(() => mockSoundInstance),
+    default: mockSoundInstance,
   };
 });
 
@@ -218,21 +223,6 @@ jest.mock('react-i18next', () => ({
     t: jest.fn().mockImplementation(key => key),
   })),
 }));
-
-jest.mock(
-  'react-native-audio-recorder-player',
-  () =>
-    function () {
-      return {
-        stopPlayer: jest.fn(),
-        removePlayBackListener: jest.fn(),
-        startPlayer: jest.fn(),
-        addPlayBackListener: jest.fn(),
-        pausePlayer: jest.fn(),
-        setSubscriptionDuration: jest.fn(),
-      };
-    },
-);
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),

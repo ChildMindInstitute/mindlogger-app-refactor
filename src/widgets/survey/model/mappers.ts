@@ -105,7 +105,7 @@ const mapFlankerAnswersToDto = (
       x.type === 'Flanker' && x.payload.blockType === 'practice' ? index : null,
     )
     .filter(x => x !== null)
-    .map(x => x!);
+    .map(x => x);
 
   const firstPracticeAnswer = answers[practiceSteps[0]];
 

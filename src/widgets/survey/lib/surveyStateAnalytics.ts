@@ -1,7 +1,4 @@
-import {
-  PipelineItem,
-  RequestHealthRecordDataPipelineItem,
-} from '@app/features/pass-survey/lib/types/payload';
+import { PipelineItem } from '@app/features/pass-survey/lib/types/payload';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import {
@@ -148,7 +145,7 @@ export const trackCompleteSurvey = (params: TrackCompleteSurveyParams) => {
 
   const ehrItem = params.pipelineItems.find(
     item => item.type === 'RequestHealthRecordData',
-  ) as RequestHealthRecordDataPipelineItem | undefined;
+  );
 
   if (ehrItem) {
     if (ehrItem.ehrShareSuccess) {
