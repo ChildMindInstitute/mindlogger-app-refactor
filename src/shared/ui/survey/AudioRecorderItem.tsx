@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect, FC } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import AudioRecorderPlayer, {
-  AudioSet,
-} from 'react-native-nitro-sound';
 import { FileSystem, Dirs } from 'react-native-file-access';
+import { createSound, type AudioSet } from 'react-native-nitro-sound';
 import { v4 as uuidv4 } from 'uuid';
 
 import { handleBlockedPermissions } from '@app/shared/lib/alerts/permissionAlerts';
@@ -43,7 +41,7 @@ export const AudioRecorderItem: FC<Props> = ({
   onChange: onFinish,
   value: initialValue,
 }) => {
-  const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
+  const audioRecorderPlayer = useRef(createSound());
   audioRecorderPlayer.current.setSubscriptionDuration(0.1);
   const { t } = useTranslation();
   const { maxDuration = Infinity } = config;
