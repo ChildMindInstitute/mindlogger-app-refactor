@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout devops
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ChildMindInstitute/cmiml-devops
           ssh-key: ${{ secrets.devops-repo-key }}

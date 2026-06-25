@@ -7,7 +7,7 @@ jobs:
   slack-scheduler:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Send scheduled Slack message
         env:
           SLACK_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
