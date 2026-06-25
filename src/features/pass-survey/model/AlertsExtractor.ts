@@ -243,7 +243,7 @@ export class AlertsExtractor implements IAlertsExtractor {
         }
       })
       .filter(x => x != null)
-      .map(x => x!);
+      .map(x => x);
 
     return alerts;
   }
