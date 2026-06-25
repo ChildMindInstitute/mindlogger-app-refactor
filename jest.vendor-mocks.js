@@ -14,6 +14,9 @@ jest.mock('react-native-file-access', () => {
   };
 });
 
+// Reanimated v4 removed the jestUtils.ts setup file that v3 provided,
+// so we manually mock the default export (Animated.View, etc.) and named exports
+// (LinearTransition, setUpTests, createAnimatedComponent) that tests depend on.
 jest.mock('react-native-reanimated', () => {
   const MockAnimation = jest.fn().mockImplementation(() => {
     const instance = {
@@ -135,6 +138,9 @@ jest.mock('react-native-permissions', () =>
   require('react-native-permissions/mock'),
 );
 
+// react-native-nitro-sound replaced react-native-audio-recorder-player.
+// Unlike the old library (which was a class instantiated with `new`),
+// nitro-sound uses a `createSound()` factory and a singleton default export.
 jest.mock('react-native-nitro-sound', () => {
   const mockSoundInstance = {
     stopPlayer: jest.fn(),
