@@ -224,7 +224,7 @@ export class AnswersUploadService implements IAnswersUploadService {
         remoteUrl = uploadRecord.remoteUrl;
       }
 
-      return remoteUrl;
+      return remoteUrl!;
     } catch (error) {
       throw new Error(
         `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n${error}`,
