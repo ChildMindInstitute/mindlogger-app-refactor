@@ -1,0 +1,13 @@
+--- RNUnityView.mm.orig	2025-06-18 00:00:00
++++ RNUnityView.mm	2025-06-18 00:00:00
+@@ -186,6 +186,10 @@
+         gridViewEventEmitter->onUnityMessage(event);
+       }
+     };
++
++    // RN 0.85 new arch: updateProps is not reliably called by Fabric,
++    // so initialize Unity here, matching the old arch initWithFrame behavior.
++    [self initUnityModule];
+   }
+
+   return self;
