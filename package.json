@@ -29,7 +29,7 @@
     "pods:reinstall": "npm-run-all pods:clean pods:install:bundler",
     "pods:clean": "rimraf ios/Pods",
     "pods:install": "npm-run-all unity:prebuild pods:install:bundler",
-    "pods:install:bundler": "cd ios && RCT_NEW_ARCH_ENABLED=0 bundle exec pod install",
+    "pods:install:bundler": "cd ios && bundle exec pod install",
     "postinstall": "script/postinstall.sh",
     "unity:prebuild": "script/unity/prebuild.sh",
     "unity:unlink": "script/unity/unlink-react-native-unity.sh ./node_modules/@azesmway/react-native-unity",
