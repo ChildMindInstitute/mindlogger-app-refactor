@@ -181,7 +181,7 @@ export class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      let remoteUrl;
+      let remoteUrl: string;
 
       if (!uploadRecord.uploaded) {
         this.logger.log(
@@ -221,10 +221,10 @@ export class AnswersUploadService implements IAnswersUploadService {
           `[UploadAnswersService.processFileUpload] File ${logFileInfo} already uploaded`,
         );
 
-        remoteUrl = uploadRecord.remoteUrl;
+        remoteUrl = uploadRecord.remoteUrl!;
       }
 
-      return remoteUrl!;
+      return remoteUrl;
     } catch (error) {
       throw new Error(
         `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n${error}`,
