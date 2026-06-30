@@ -35,7 +35,7 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
   if (isIcon) {
     return (
       <TouchableOpacity
-        aria-label={`${accessibilityLabel}-top` ?? ''}
+        aria-label={accessibilityLabel ? `${accessibilityLabel}-top` : ''}
         onPress={onPressNextDebounced}
       >
         <RightArrowIcon color={palette.on_surface} size={30} />
@@ -45,7 +45,7 @@ export function NextButton({ children, isIcon, accessibilityLabel }: Props) {
 
   return (
     <SubmitButton
-      aria-label={`${accessibilityLabel}-bottom` ?? ''}
+      aria-label={accessibilityLabel ? `${accessibilityLabel}-bottom` : ''}
       onPress={onPressNextDebounced}
       maxWidth="100%"
       width={120}
