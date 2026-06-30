@@ -35,6 +35,7 @@ Running the app:
 - Build and run either the iOS or Android app:
   - `yarn android` builds the Android app and runs in an Android emulator
   - `yarn ios` builds the iOS app and runs in an iOS simulator
+  - To build a standalone Android APK for testing (no Metro required): `cd android && ./gradlew assembleDevRelease`
 
 ## Features
 
