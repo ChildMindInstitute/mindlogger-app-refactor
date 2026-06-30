@@ -1,8 +1,6 @@
 // Jest manual mock for react-native-config.
-// In RN 0.85, the bridge was removed and react-native-config now uses
-// TurboModuleRegistry which returns null in Jest. This mock provides
-// empty config values so tests can run without the native module.
-// See: https://github.com/luggit/react-native-config#jest
+// The native module is not available in Jest, so we provide
+// empty config values for tests.
 export default {
   ENV: '',
   API_URL: '',
