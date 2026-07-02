@@ -22,6 +22,17 @@ declare module 'i18next' {
 
 z.setErrorMap(zodI18nMap);
 
+const resources = {
+  en,
+  fr,
+  el,
+  es,
+  pt: ptBr,
+  af,
+  xh,
+  zu,
+};
+
 export function setupLocalization() {
   const language = getDefaultLocalizationStorage().getLanguage() ?? 'en';
 
@@ -29,16 +40,7 @@ export function setupLocalization() {
     compatibilityJSON: 'v3',
     lng: language,
     fallbackLng: 'en',
-    resources: {
-      en,
-      fr,
-      el,
-      es,
-      pt: ptBr,
-      af,
-      xh,
-      zu,
-    },
+    resources,
     returnNull: false,
   });
 
