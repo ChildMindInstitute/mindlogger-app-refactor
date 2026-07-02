@@ -12,7 +12,6 @@ import { Point } from './LineSketcher';
 
 type Options = {
   areaSize: SharedValue<number>;
-  enabled?: boolean;
 };
 
 type Callbacks = {
@@ -31,7 +30,7 @@ const findTouchById = (event: GestureTouchEvent, id?: number) => {
 };
 
 export function useDrawingGesture(
-  { areaSize, enabled = true }: Options,
+  { areaSize }: Options,
   { onTouchStart, onTouchProgress, onTouchEnd }: Callbacks,
 ) {
   const registeredTouch = useSharedValue<TouchData | null>(null);
@@ -247,14 +246,10 @@ export function useDrawingGesture(
         onTouchEnd(event, Date.now());
       });
 
-  const iosGesture = () => iosManualGesture().enabled(enabled);
+  const iosGesture = () => iosManualGesture();
 
   const androidGesture = () =>
-    Gesture.Exclusive(
-      androidPanGesture().enabled(enabled),
-      tapGesture().enabled(enabled),
-      longTapGesture().enabled(enabled),
-    );
+    Gesture.Exclusive(androidPanGesture(), tapGesture(), longTapGesture());
 
   const gesture = IS_IOS ? iosGesture() : androidGesture();
 
