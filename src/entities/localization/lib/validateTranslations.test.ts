@@ -23,4 +23,19 @@ describe('translations', () => {
 
     expect(malformed).toEqual([]);
   });
+
+  // A key present in the English reference but absent in another language is reported.
+  it('reports keys missing from a non-reference language', () => {
+    const findings = validateTranslations(
+      {
+        en: { greeting: 'Hello', farewell: 'Goodbye' },
+        fr: { greeting: 'Bonjour' },
+      },
+      'en',
+    );
+
+    expect(findings).toEqual([
+      { type: 'missing-key', language: 'fr', key: 'farewell' },
+    ]);
+  });
 });
