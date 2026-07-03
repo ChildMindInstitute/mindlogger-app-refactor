@@ -8,7 +8,9 @@ export const ChangeLanguageScreen: FC = () => {
   const navigation = useNavigation();
 
   const onLanguageChanged = () => {
-    navigation.goBack();
+    requestAnimationFrame(() => {
+      navigation.goBack();
+    });
   };
 
   return (
