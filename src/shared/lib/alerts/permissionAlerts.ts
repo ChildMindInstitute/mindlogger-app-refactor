@@ -1,7 +1,7 @@
 import { Alert, Linking, Platform } from 'react-native';
 
-import notifee from 'react-native-notify-kit';
 import i18n from 'i18next';
+import notifee from 'react-native-notify-kit';
 import { openSettings } from 'react-native-permissions';
 
 import { IS_ANDROID } from '../constants';
