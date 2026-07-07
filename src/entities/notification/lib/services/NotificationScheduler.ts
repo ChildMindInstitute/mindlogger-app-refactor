@@ -1,4 +1,4 @@
-import notifee, { TriggerType } from '@notifee/react-native';
+import notifee, { TriggerType } from 'react-native-notify-kit';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
 

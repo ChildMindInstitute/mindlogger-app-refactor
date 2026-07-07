@@ -162,8 +162,8 @@ jest.mock('react-native-nitro-sound', () => {
   };
 });
 
-jest.mock('@notifee/react-native', () =>
-  require('@notifee/react-native/jest-mock'),
+jest.mock('react-native-notify-kit', () =>
+  require('react-native-notify-kit/jest-mock'),
 );
 jest.mock('@react-native-community/netinfo', () => {
   return {
