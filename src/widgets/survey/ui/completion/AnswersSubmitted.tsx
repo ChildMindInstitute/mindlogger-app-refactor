@@ -22,6 +22,7 @@ export const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
         fontSize={32}
         lineHeight={40}
         mb={14}
+        textAlign="center"
       >
         {t('autocompletion:answers_submitted')}
       </Text>
@@ -30,6 +31,7 @@ export const AnswersSubmitted: FC<SubComponentProps> = ({ onPressDone }) => {
         fontSize={18}
         lineHeight={28}
         mb={32}
+        textAlign="center"
       >
         {t('autocompletion:thanks')}
       </Text>

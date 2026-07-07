@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-import notifee, { EventType } from '@notifee/react-native';
+import notifee, { EventType } from 'react-native-notify-kit';
 
 import {
   LocalEventDetail,

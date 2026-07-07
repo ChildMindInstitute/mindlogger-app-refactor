@@ -4,7 +4,7 @@ import {
   InitialNotification,
   Notification,
   TriggerNotification,
-} from '@notifee/react-native';
+} from 'react-native-notify-kit';
 import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 
 type NotificationEventCallback = (eventDetail: LocalEventDetail) => void;

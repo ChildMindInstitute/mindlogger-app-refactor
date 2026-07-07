@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import notifee, {
   AndroidImportance,
   Notification,
-} from '@notifee/react-native';
+} from 'react-native-notify-kit';
 
 import { IS_IOS } from '@app/shared/lib/constants';
 import { ILogger } from '@app/shared/lib/types/logger';
