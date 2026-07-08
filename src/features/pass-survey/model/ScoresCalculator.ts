@@ -52,7 +52,7 @@ export class ScoresCalculator implements IScoresCalculator {
         return foundAnswer ? option.score : null;
       })
       .filter(x => x != null)
-      .map(x => x!);
+      .map(x => x);
 
     return Calculator.sum(scores);
   }
@@ -143,14 +143,14 @@ export class ScoresCalculator implements IScoresCalculator {
             const allScores = item.payload.options
               .map(x => x.score)
               .filter(x => x != null)
-              .map(x => x!);
+              .map(x => x);
             return Math.max(...allScores);
           }
           case 'Checkbox': {
             const allScores = item.payload.options
               .map(x => x.score)
               .filter(x => x != null)
-              .map(x => x!);
+              .map(x => x);
             return Calculator.sum(allScores);
           }
           case 'Slider': {
@@ -200,9 +200,7 @@ export class ScoresCalculator implements IScoresCalculator {
       );
     }
 
-    const filteredScores: number[] = scores
-      .filter(x => x !== null)
-      .map(x => x!);
+    const filteredScores: number[] = scores.filter(x => x !== null).map(x => x);
 
     if (!filteredScores.length) {
       return null;
@@ -219,9 +217,7 @@ export class ScoresCalculator implements IScoresCalculator {
           settings.includedItems,
         );
 
-        const filteredMaxScores = maxScores
-          .filter(x => x !== null)
-          .map(x => x!);
+        const filteredMaxScores = maxScores.filter(x => x !== null).map(x => x);
 
         const currentScore = Calculator.sum(filteredScores);
         const sumOfMaxScores = Calculator.sum(filteredMaxScores);

@@ -1,4 +1,4 @@
-import { TimestampTrigger } from '@notifee/react-native';
+import { TimestampTrigger } from 'react-native-notify-kit';
 
 import { ILogger } from '@app/shared/lib/types/logger';
 import { splitArray, Mutex } from '@app/shared/lib/utils/common';

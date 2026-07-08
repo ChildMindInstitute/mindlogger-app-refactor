@@ -2,7 +2,7 @@ import { pathsToModuleNameMapper } from 'ts-jest';
 import type { JestConfigWithTsJest } from 'ts-jest';
 
 const jestConfig: JestConfigWithTsJest = {
-  preset: 'react-native',
+  preset: '@react-native/jest-preset',
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   transform: {
     '^.+\\.(js|jsx)$': '<rootDir>/node_modules/babel-jest',
@@ -22,7 +22,6 @@ const jestConfig: JestConfigWithTsJest = {
   setupFiles: [
     '<rootDir>/jest.vendor-mocks.js',
     '<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js',
-    '<rootDir>/node_modules/react-native-reanimated/src/jestUtils.ts',
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleDirectories: ['node_modules', '<rootDir>'],

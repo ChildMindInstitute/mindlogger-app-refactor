@@ -3,7 +3,6 @@ import React, { FC, PropsWithChildren } from 'react';
 import NetInfo from '@react-native-community/netinfo';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { onlineManager } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import { useSystemBootUp } from '@app/shared/lib/contexts/SplashContext';
@@ -61,7 +60,6 @@ export const ReactQueryProvider: FC<PropsWithChildren> = ({ children }) => {
       onSuccess={onCacheRestored}
     >
       {initialized && children}
-      <ReactQueryDevtools initialIsOpen={false} />
     </PersistQueryClientProvider>
   );
 };

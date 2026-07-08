@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 import { useFocusEffect } from '@react-navigation/native';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import { createSound, type PlayBackType } from 'react-native-nitro-sound';
 
 import { IS_ANDROID } from '../constants';
 import { wait } from '../utils/common';
@@ -15,7 +15,7 @@ enum LoadingStates {
 }
 
 export const useAudioPlayer = () => {
-  const audioRecorderPlayer = useRef(new AudioRecorderPlayer());
+  const audioRecorderPlayer = useRef(createSound());
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState<LoadingStates>(
     LoadingStates.initial,
@@ -43,7 +43,7 @@ export const useAudioPlayer = () => {
       setIsLoading(LoadingStates.loaded);
     }
 
-    audioRecorderPlayer.current.addPlayBackListener(data => {
+    audioRecorderPlayer.current.addPlayBackListener((data: PlayBackType) => {
       setIsLoading(LoadingStates.loaded);
       if (data.currentPosition >= data.duration - SUBSCRIPTION_DURATION) {
         setIsPlaying(false);
