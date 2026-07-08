@@ -6,6 +6,7 @@
 # $ ./script/unity/patch-react-native-unity.sh ./node_modules/@azesmway/react-native-unity ./react-native-unity.patch
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+PKG_DIR=$(cd "$1" && pwd)
 
 echo "[Unity][Patch react-native-unity] Patching UPlayer.java ..."
 if [ -d $1/android.disabled ]; then
@@ -19,5 +20,5 @@ patch --forward -p0 < $2 || [ $? -eq 1 ]
 # This patch adds [self initUnityModule] to the new arch initWithFrame, matching
 # the old arch behavior.
 echo "[Unity][Patch react-native-unity] Patching RNUnityView.mm (Fabric init fix) ..."
-cd $1/ios
+cd "$PKG_DIR/ios"
 patch --forward -p0 < $SCRIPT_DIR/react-native-unity-ios-fabric-init.patch || [ $? -eq 1 ]
