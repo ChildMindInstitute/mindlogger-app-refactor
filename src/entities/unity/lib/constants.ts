@@ -12,3 +12,9 @@ export const STARTUP_TIMEOUT_MS = 30000;
 
 // Maximum time to wait for LoadConfigFile to complete after UnityStarted (ms).
 export const CONFIG_LOAD_TIMEOUT_MS = 30000;
+
+// Maximum time to wait for Reset confirmation before unmounting (ms).
+export const RESET_TIMEOUT_MS = 3000;
+
+// Timeout for Echo probe sent when Unity is expected to be idle in loading scene from previous activity (ms).
+export const IDLE_PROBE_TIMEOUT_MS = 3000;
