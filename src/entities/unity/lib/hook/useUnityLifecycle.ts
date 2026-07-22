@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { wait } from '@app/shared/lib/utils/common';
 import {
   UnityFailureMode,
   UnityResult,
@@ -37,8 +38,10 @@ import {
 } from '../types/unityMessage';
 
 const unityRuntimeState = {
+  startedInProcess: false, // Unity has started at some point during this app process
   quitInProcess: false, // Unity has quit at some point during this app process
   idleInLoadingScene: false, // Unity is confirmed to be running and idle in its loading scene
+  configLoadCount: 0, // Bumped per config load, used to verify that Reset reply is not stale
 };
 
 type UseUnityLifecycleOptions = {
@@ -56,6 +59,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const quitObservedInThisMountRef = useRef<boolean>(false);
   const unityReadyHandled = useRef<boolean>(false);
+  const endUnityHandledRef = useRef<boolean>(false);
   const restartInProgressRef = useRef<boolean>(false);
   const restartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -97,6 +101,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const handleUnityReady = useCallback(async () => {
     try {
+      unityRuntimeState.configLoadCount += 1;
       unityRuntimeState.idleInLoadingScene = false;
       await sendMessageToUnity({
         m_sId: uuidv4(),
@@ -124,6 +129,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     setFailureMode('quit');
     unityPaths.current = [];
     unityReadyHandled.current = false;
+    endUnityHandledRef.current = false;
     if (configLoadTimerRef.current) {
       clearTimeout(configLoadTimerRef.current);
       configLoadTimerRef.current = null;
@@ -150,6 +156,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       if (!unityReadyHandled.current) {
         unityReadyHandled.current = true;
+        unityRuntimeState.startedInProcess = true;
         restartInProgressRef.current = false;
         if (startupTimerRef.current) {
           clearTimeout(startupTimerRef.current);
@@ -176,62 +183,121 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  // Unity only sends UnityStarted on its first boot in the app process
-  // - If Unity is running and idle in loading scene, probe with Echo and proceed on reply
+  // Keep the latest handler in a ref so the configure effect below does not
+  // re-run (cancelling an in-flight probe) whenever this identity changes.
+  const handleUnityStartedRef = useRef<RNUnityCommBridgeUnityEventHandler>(
+    () => {},
+  );
+  useEffect(() => {
+    handleUnityStartedRef.current = handleUnityStarted;
+  }, [handleUnityStarted]);
+
+  // Send Reset and wait for Unity's "Loaded Successfully" confirmation
+  const sendResetAndConfirm = useCallback(async (): Promise<boolean> => {
+    const configLoadCountAtReset = unityRuntimeState.configLoadCount;
+    const resetPromise = sendMessageToUnity({
+      m_sId: uuidv4(),
+      m_sKey: 'Reset',
+    });
+
+    resetPromise
+      .then(reply => {
+        if (
+          reply?.m_sAdditionalInfo === 'Loaded Successfully' &&
+          unityRuntimeState.configLoadCount === configLoadCountAtReset
+        ) {
+          unityRuntimeState.idleInLoadingScene = true;
+        }
+      })
+      .catch(() => {});
+
+    const reply = await Promise.race([
+      resetPromise,
+      wait(RESET_TIMEOUT_MS).then(() => null),
+    ]);
+    const confirmed = reply?.m_sAdditionalInfo === 'Loaded Successfully';
+    if (!confirmed) {
+      logger.warn(
+        `[UnityView] Reset not confirmed within ${RESET_TIMEOUT_MS}ms (reply: ${JSON.stringify(reply)})`,
+      );
+    }
+    return confirmed;
+  }, [logger, sendMessageToUnity]);
+
+  // Unity only sends UnityStarted on its first boot in the app process (M2-10980)
+  // - If Unity is already running, probe with Echo and wait for reply
   // - If Unity is booting fresh, probe stays unanswered and we wait for normal UnityStarted
+  // - If probe is answered, Reset any abandoned previous session and proceed to configure new session
   useEffect(() => {
     if (
       !unityViewKey ||
-      !unityRuntimeState.idleInLoadingScene ||
+      !unityRuntimeState.startedInProcess ||
       unityRuntimeState.quitInProcess ||
       unityReadyHandled.current
     ) {
       return;
     }
 
-    logger.log(
-      '[UnityView] Unity expected to be idle in loading scene; probing with Echo',
-    );
-
     let cancelled = false;
-    let probeTimer: ReturnType<typeof setTimeout> | undefined;
 
-    Promise.race([
-      sendMessageToUnity(newEchoMessage('idle-probe')),
-      new Promise<null>(resolve => {
-        probeTimer = setTimeout(() => resolve(null), IDLE_PROBE_TIMEOUT_MS);
-      }),
-    ])
-      .finally(() => clearTimeout(probeTimer))
-      .then(reply => {
+    const configureRunningUnity = async () => {
+      logger.log('[UnityView] Check if Unity is idling; probing with Echo');
+      const reply = await Promise.race([
+        sendMessageToUnity(newEchoMessage('idle-probe')),
+        wait(IDLE_PROBE_TIMEOUT_MS).then(() => null),
+      ]);
+
+      if (cancelled || unityReadyHandled.current) {
+        return; // Stop if this mount is cancelled or normal UnityStarted is handled
+      }
+
+      if (reply) {
+        logger.log('[UnityView] Unity responded to Echo probe');
+      } else {
+        logger.warn(
+          '[UnityView] No probe response from Unity; waiting for UnityStarted',
+        );
+        return;
+      }
+
+      if (!unityRuntimeState.idleInLoadingScene) {
+        logger.log(
+          '[UnityView] Previous Unity session is not idle; send Reset before proceeding with new session',
+        );
+        const resetConfirmed = await sendResetAndConfirm();
         if (cancelled || unityReadyHandled.current) {
-          return;
+          return; // Stop if this mount is cancelled or normal UnityStarted is handled (recheck after await)
         }
-        if (reply) {
-          logger.log(
-            '[UnityView] Unity responded to probe; skipping UnityStarted wait',
-          );
-          handleUnityStarted({
-            m_sId: '',
-            m_sKey: UnityEventUnityStarted,
-          });
-        } else {
-          logger.warn(
-            '[UnityView] No probe response from Unity; waiting for UnityStarted',
-          );
+        if (!resetConfirmed) {
+          return; // Stop if abandoned session has not been reset
         }
-      })
-      .catch(err => {
-        logger.warn(`[UnityView] Echo probe failed: ${err}`);
+      }
+
+      logger.log(
+        '[UnityView] Ready to configure new Unity session; skipping UnityStarted wait',
+      );
+      handleUnityStartedRef.current({
+        m_sId: '',
+        m_sKey: UnityEventUnityStarted,
       });
+    };
+
+    configureRunningUnity().catch(err => {
+      logger.warn(`[UnityView] Failed to configure running Unity: ${err}`);
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [handleUnityStarted, logger, sendMessageToUnity, unityViewKey]);
+  }, [logger, sendMessageToUnity, sendResetAndConfirm, unityViewKey]);
 
   const handleEndUnity =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
+      if (endUnityHandledRef.current) {
+        logger.warn('[UnityView] Duplicate EndUnity event ignored');
+        return;
+      }
+      endUnityHandledRef.current = true;
       try {
         stopHeartbeat();
         logger.log(
@@ -252,24 +318,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         // Reset Unity and wait for "Loaded Successfully" reply before advancing --
         // advancing first would unmount this view and freeze Unity mid-reset (M2-10980)
         try {
-          let resetTimer: ReturnType<typeof setTimeout> | undefined;
-          const resetReply = await Promise.race([
-            sendMessageToUnity({
-              m_sId: uuidv4(),
-              m_sKey: 'Reset',
-            }),
-            new Promise<null>(resolve => {
-              resetTimer = setTimeout(() => resolve(null), RESET_TIMEOUT_MS);
-            }),
-          ]).finally(() => clearTimeout(resetTimer));
-
-          if (resetReply?.m_sAdditionalInfo === 'Loaded Successfully') {
-            unityRuntimeState.idleInLoadingScene = true;
-          } else {
-            logger.warn(
-              `[UnityView] Reset not confirmed by Unity (reply: ${JSON.stringify(resetReply)}); advancing anyway`,
-            );
-          }
+          await sendResetAndConfirm();
         } catch (err) {
           logger.warn(
             `[UnityView] Sending Reset to Unity failed: ${err}; advancing anyway`,
@@ -284,8 +333,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         });
       } catch (err) {
         logger.error(`[UnityView] EndUnity handler failed: ${err}`);
+        endUnityHandledRef.current = false;
       }
-    }, [logger, onResponse, sendMessageToUnity, stopHeartbeat]);
+    }, [logger, onResponse, sendResetAndConfirm, stopHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
