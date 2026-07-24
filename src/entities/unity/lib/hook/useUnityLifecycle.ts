@@ -25,9 +25,10 @@ import {
 import { useUnityFailureHandler } from './useUnityFailureHandler';
 import { useUnityHeartbeat } from './useUnityHeartbeat';
 import {
+  ABANDONED_UNITY_RESET_TIMEOUT_MS,
   CONFIG_LOAD_TIMEOUT_MS,
+  END_UNITY_RESET_TIMEOUT_MS,
   IDLE_PROBE_TIMEOUT_MS,
-  RESET_TIMEOUT_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
 import {
@@ -193,36 +194,39 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   }, [handleUnityStarted]);
 
   // Send Reset and wait for Unity's "Loaded Successfully" confirmation
-  const sendResetAndConfirm = useCallback(async (): Promise<boolean> => {
-    const configLoadCountAtReset = unityRuntimeState.configLoadCount;
-    const resetPromise = sendMessageToUnity({
-      m_sId: uuidv4(),
-      m_sKey: 'Reset',
-    });
+  const sendResetAndConfirm = useCallback(
+    async (timeoutMs: number): Promise<boolean> => {
+      const configLoadCountAtReset = unityRuntimeState.configLoadCount;
+      const resetPromise = sendMessageToUnity({
+        m_sId: uuidv4(),
+        m_sKey: 'Reset',
+      });
 
-    resetPromise
-      .then(reply => {
-        if (
-          reply?.m_sAdditionalInfo === 'Loaded Successfully' &&
-          unityRuntimeState.configLoadCount === configLoadCountAtReset
-        ) {
-          unityRuntimeState.idleInLoadingScene = true;
-        }
-      })
-      .catch(() => {});
+      resetPromise
+        .then(reply => {
+          if (
+            reply?.m_sAdditionalInfo === 'Loaded Successfully' &&
+            unityRuntimeState.configLoadCount === configLoadCountAtReset
+          ) {
+            unityRuntimeState.idleInLoadingScene = true;
+          }
+        })
+        .catch(() => {});
 
-    const reply = await Promise.race([
-      resetPromise,
-      wait(RESET_TIMEOUT_MS).then(() => null),
-    ]);
-    const confirmed = reply?.m_sAdditionalInfo === 'Loaded Successfully';
-    if (!confirmed) {
-      logger.warn(
-        `[UnityView] Reset not confirmed within ${RESET_TIMEOUT_MS}ms (reply: ${JSON.stringify(reply)})`,
-      );
-    }
-    return confirmed;
-  }, [logger, sendMessageToUnity]);
+      const reply = await Promise.race([
+        resetPromise,
+        wait(timeoutMs).then(() => null),
+      ]);
+      const confirmed = reply?.m_sAdditionalInfo === 'Loaded Successfully';
+      if (!confirmed) {
+        logger.warn(
+          `[UnityView] Reset not confirmed within ${timeoutMs}ms (reply: ${JSON.stringify(reply)})`,
+        );
+      }
+      return confirmed;
+    },
+    [logger, sendMessageToUnity],
+  );
 
   // Unity only sends UnityStarted on its first boot in the app process (M2-10980)
   // - If Unity is already running, probe with Echo and wait for reply
@@ -264,12 +268,15 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         logger.log(
           '[UnityView] Previous Unity session is not idle; send Reset before proceeding with new session',
         );
-        const resetConfirmed = await sendResetAndConfirm();
+        // Reset abandoned Unity session before configuring the new session
+        const resetConfirmed = await sendResetAndConfirm(
+          ABANDONED_UNITY_RESET_TIMEOUT_MS,
+        );
         if (cancelled || unityReadyHandled.current) {
           return; // Stop if this mount is cancelled or normal UnityStarted is handled (recheck after await)
         }
         if (!resetConfirmed) {
-          return; // Stop if abandoned session has not been reset
+          return; // Stop if abandoned Unity session has not been reset
         }
       }
 
@@ -318,7 +325,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         // Reset Unity and wait for "Loaded Successfully" reply before advancing --
         // advancing first would unmount this view and freeze Unity mid-reset (M2-10980)
         try {
-          await sendResetAndConfirm();
+          await sendResetAndConfirm(END_UNITY_RESET_TIMEOUT_MS);
         } catch (err) {
           logger.warn(
             `[UnityView] Sending Reset to Unity failed: ${err}; advancing anyway`,
