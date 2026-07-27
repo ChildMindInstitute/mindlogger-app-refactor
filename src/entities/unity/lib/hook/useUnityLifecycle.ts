@@ -42,7 +42,7 @@ const unityRuntimeState = {
   startedInProcess: false, // Unity has started at some point during this app process
   quitInProcess: false, // Unity has quit at some point during this app process
   idleInLoadingScene: false, // Unity is confirmed to be running and idle in its loading scene
-  configLoadCount: 0, // Bumped per config load and session invalidation, used to verify that Reset reply is not stale
+  pendingResetId: null as string | null, // ID of pending Reset command
 };
 
 type UseUnityLifecycleOptions = {
@@ -102,7 +102,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const handleUnityReady = useCallback(async () => {
     try {
-      unityRuntimeState.configLoadCount += 1;
+      unityRuntimeState.pendingResetId = null;
       unityRuntimeState.idleInLoadingScene = false;
       await sendMessageToUnity({
         m_sId: uuidv4(),
@@ -123,7 +123,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handleRestartActivity = useCallback(() => {
     logger.log('[UnityView] Restarting Unity activity');
     restartInProgressRef.current = true;
-    unityRuntimeState.configLoadCount += 1;
+    unityRuntimeState.pendingResetId = null;
     unityRuntimeState.idleInLoadingScene = false;
     stopHeartbeat();
     (resetFailureState as () => void)();
@@ -194,12 +194,13 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     handleUnityStartedRef.current = handleUnityStarted;
   }, [handleUnityStarted]);
 
-  // Send Reset and wait for Unity's "Loaded Successfully" confirmation
+  // Send Reset and wait for Unity's 'Loaded Successfully' confirmation
   const sendResetAndConfirm = useCallback(
     async (timeoutMs: number): Promise<boolean> => {
-      const configLoadCountAtReset = unityRuntimeState.configLoadCount;
+      const resetId = uuidv4();
+      unityRuntimeState.pendingResetId = resetId;
       const resetPromise = sendMessageToUnity({
-        m_sId: uuidv4(),
+        m_sId: resetId,
         m_sKey: 'Reset',
       });
 
@@ -207,8 +208,10 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         .then(reply => {
           if (
             reply?.m_sAdditionalInfo === 'Loaded Successfully' &&
-            unityRuntimeState.configLoadCount === configLoadCountAtReset
+            unityRuntimeState.pendingResetId === resetId
           ) {
+            // Received 'Loaded Successfully' confirmation for this Reset
+            unityRuntimeState.pendingResetId = null;
             unityRuntimeState.idleInLoadingScene = true;
           }
         })
@@ -451,7 +454,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const handlePlayerUnload = useCallback(() => {
     logger.log('[UnityView] Native player unload received');
-    unityRuntimeState.configLoadCount += 1;
+    unityRuntimeState.pendingResetId = null;
     unityRuntimeState.idleInLoadingScene = false;
     if (restartInProgressRef.current) {
       return;
@@ -462,7 +465,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const handlePlayerQuit = useCallback(() => {
     unityRuntimeState.quitInProcess = true;
-    unityRuntimeState.configLoadCount += 1;
+    unityRuntimeState.pendingResetId = null;
     unityRuntimeState.idleInLoadingScene = false;
     quitObservedInThisMountRef.current = true;
     setFailureMode('quit');
