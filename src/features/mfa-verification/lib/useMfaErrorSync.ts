@@ -28,10 +28,17 @@ export const useMfaErrorSync = ({
   // Sync external API error to form field error, combining with attempts warning
   useEffect(() => {
     if (error) {
-      // Combine error with attempts warning if present
-      const combinedMessage = attemptsWarning
-        ? `${error} ${attemptsWarning}`
-        : error;
+      // Combine error with attempts warning if present. The warning starts with
+      // its own ". " separator, so drop the error's trailing period to avoid a
+      // doubled period.
+      let combinedMessage = error;
+      if (attemptsWarning) {
+        const trimmedError = error.trimEnd();
+        const errorBase = trimmedError.endsWith('.')
+          ? trimmedError.slice(0, -1)
+          : trimmedError;
+        combinedMessage = `${errorBase}${attemptsWarning}`;
+      }
 
       form.setError(fieldName, {
         type: 'manual',

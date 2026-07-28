@@ -177,7 +177,7 @@
     "subtitle": "Nceda ngenisa ikhowudi yokubuyisela i-akhawunti.",
     "continue": "Qhubeka",
     "back": "Emva",
-    "invalid_code_format": "Ikhowudi yokubuyisela must be ibekwifomathi XXXXX-XXXXX",
+    "invalid_code_format": "Ikhowudi yokubuyisela mayibe kwifomathi XXXXX-XXXXX",
     "placeholder": "XXXXX-XXXXX",
     "error": "Ikhowudi yokubuyisela engasebenziyo. Nceda zama kwakhona.",
     "success": "Isazisi siqinisekiswe ngempumelelo",
@@ -194,7 +194,7 @@
     "subtitle": "Nceda ngenisa ikhowudi yokuqinisekisa eboniswe kwi-app yakho yesiqinisekiso.",
     "verify": "Qhubeka",
     "placeholder": "Faka ikhowudi yokugqina",
-    "invalid_code_format": "Ikhowudi yokuqinisekisa must be inamanani ama-6",
+    "invalid_code_format": "Ikhowudi yokuqinisekisa mayibe ngamanani ama-6",
     "error": "Ikhowudi engasebenziyo",
     "success": "Uqinisekiso luphumelele",
     "use_recovery_code": "Andikwazi ukufikelela kwi-app yam yesiqinisekisi",
@@ -245,7 +245,7 @@
     "forgot_password": "Ingaba uyilibele iphasiwedi?",
     "what_is": "Yintoni i",
     "login_error": "Ukungena akuphumelelanga.",
-    "password_at_least_characters": "Igama lokugqithisa must be libe nonobumba abali-10"
+    "password_at_least_characters": "Igama lokugqithisa malibe nonobumba abali-10"
   },
   "login_form": {
     "login": "Ngena",
@@ -294,7 +294,7 @@
     "sign_up": "Bhalisa",
     "error": "Ukubhalisa akuphumelelanga: igama lomsebenzisi lisenokuba sele lisetyenziswa.",
     "new_user": "Umsebenzisi omtsha",
-    "username_validation_error": "Igama lomsebenzisi must be libe nonobumba aba-4 ubuncinane, liqale ngonobumba, kwaye lingaqulatha kuphela oonobumba, amanani, iidash, kunye namachaphaza.",
+    "username_validation_error": "Igama lomsebenzisi malibe nonobumba aba-4 ubuncinane, liqale ngonobumba, kwaye lingaqulatha kuphela oonobumba, amanani, iidash, kunye namachaphaza.",
     "email_validation_error": "Kubonakala ngathi le imeyile ayigqitywanga",
     "email_placeholder": "I-imeyile",
     "first_name": "Igama lakho",
@@ -382,9 +382,9 @@
   },
   "form_item": {
     "required": "Kufuneka",
-    "must_be": "Must be",
+    "must_be": "Malibe",
     "characters_or_less": "abalinganiswa okanye ngaphantsi",
-    "must_be_a_number": "Must be inani"
+    "must_be_a_number": "Mayibe linani"
   },
   "applet_about": {
     "loading": "iyalayisha",
