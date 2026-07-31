@@ -58,7 +58,7 @@
     "ios:production-release": "react-native run-ios --scheme MindloggerMobile --mode Release"
   },
   "dependencies": {
-    "@azesmway/react-native-unity": "^1.0.11",
+    "@azesmway/react-native-unity": "^1.1.0",
     "@datadog/mobile-react-native": "^2.13.2",
     "@datadog/mobile-react-navigation": "^2.13.2",
     "@georstat/react-native-image-cache": "^3.1.0",

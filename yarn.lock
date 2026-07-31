@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@azesmway/react-native-unity@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@azesmway/react-native-unity/-/react-native-unity-1.0.11.tgz#ec4ff504dcd3cdc6a602ee9462c0959ae66d0bb9"
-  integrity sha512-2rANRnCgAvtUXzBCNvMO9M18WAe7BrDnDYL3FeFhHw/jW9NOKKWxJcEaBPHtl4yBTUy7DNU+V5Rl9QcstCgsMA==
+"@azesmway/react-native-unity@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@azesmway/react-native-unity/-/react-native-unity-1.1.0.tgz#3750ef4e7da5d8795e304d8f45bad224955cd82a"
+  integrity sha512-SvsUtderEGA9iPgLDIj9vrWkP0yRpwWeGM1s7VkCepCc66zx7lX2kFdE4cu4aJfq5PvRHydKsc0Z2oBTtHIc2g==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.28.6", "@babel/code-frame@^7.29.0":
   version "7.29.0"
