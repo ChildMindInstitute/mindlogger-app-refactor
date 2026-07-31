@@ -1865,7 +1865,7 @@ PODS:
   - react-native-tcp-socket (6.4.1):
     - CocoaAsyncSocket
     - React-Core
-  - react-native-unity (1.0.11):
+  - react-native-unity (1.1.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2502,11 +2502,51 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNNotifee (7.9.0):
+  - RNNotifee (10.4.6):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
-    - RNNotifee/NotifeeCore (= 7.9.0)
-  - RNNotifee/NotifeeCore (7.9.0):
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - RNNotifee/NotifeeCore (= 10.4.6)
+    - Yoga
+  - RNNotifee/NotifeeCore (10.4.6):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNPermissions (4.1.5):
     - hermes-engine
     - RCTRequired
@@ -2889,7 +2929,7 @@ DEPENDENCIES:
   - RNFileLogger (from `../node_modules/react-native-file-logger`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNLocalize (from `../node_modules/react-native-localize`)
-  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
+  - RNNotifee (from `../node_modules/react-native-notify-kit`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -3152,7 +3192,7 @@ EXTERNAL SOURCES:
   RNLocalize:
     :path: "../node_modules/react-native-localize"
   RNNotifee:
-    :path: "../node_modules/@notifee/react-native"
+    :path: "../node_modules/react-native-notify-kit"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNReanimated:
@@ -3193,7 +3233,7 @@ SPEC CHECKSUMS:
   FirebaseSessions: f5c6bfeb66a7202deaf33352017bb6365e395820
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 4f2618a4a1e762a1ee134a1e2323bba9843e06da
-  hermes-engine: 455fefc8fae65f8e83bde584966f78b7c668161d
+  hermes-engine: 8a9a1c88e014da778e6b4f75038b2ff370410f0d
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 37259ace491ca9d927c0f81498e6577a32a69f43
   MMKVCore: 3d16ce9f7d411e135020915fde98a056859a1efa
@@ -3213,7 +3253,7 @@ SPEC CHECKSUMS:
   React: e2dc35338068bbd299c66f043ae0d7f25de8499e
   React-callinvoker: 28b25d21b124c26cebaea713ba7d801b9351dc48
   React-Core: 02ed7d2ffb70437bdf2aba074a13078a7b0b9ff0
-  React-Core-prebuilt: 86ed372578997ef35290f0952f8e1fd8d38e9fd5
+  React-Core-prebuilt: bdc91db8c541225a419864ce30cc5c34b773324d
   React-CoreModules: b3a5a42dadcde3b5d47b325bd912eb2ced89e146
   React-cxxreact: fe8f88dda044e5905e99a00f41b7a874c3908716
   React-debug: 92944dc4d89f56d640e75498266cbde557a48189
@@ -3252,7 +3292,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: fb5c8ee9f6dd62ef710611b3d370c501f42a4ac0
   react-native-skia: 63b67b6bf628e1d436012844788c8f1d7f3c67f4
   react-native-tcp-socket: 7c7e53a07f122ecf00fb3626684bc0ca82c4f044
-  react-native-unity: de9bee0faa8cf7079983a5fcd3e90c1b28b0f929
+  react-native-unity: 387983cba99f5a853bd943dc4bcb1b6aca0866a0
   react-native-vector-icons-entypo: 9b3015a5b28f681c668cb3c4c7b4e18ddfac63a3
   react-native-vector-icons-feather: b669f5bc4981f53aaa25d0e0135ae9a7d5c1bbd5
   react-native-vector-icons-fontawesome6: 7464629872b702957385275b62cff2f6c28199cc
@@ -3293,7 +3333,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 25c9c516839be2c5e3d3344f95dc7da5f7e63fc2
   ReactCodegen: c8f81e6c6f762dcf442a6203a1fb58f7dafc8014
   ReactCommon: 7dfc3250793bf36cf221096ff59e1179e13eef7f
-  ReactNativeDependencies: d7b6373e6e0e3f10988c2be06b57bc06c2bd79f6
+  ReactNativeDependencies: 996e02ddda0f8759cd69fdd1cfd1dc3039dd970e
   ReactNativeFileAccess: 20f24f5dae50db8802d7161b999f14fc76a9cf8d
   RNBackgroundFetch: a5c9975c270d869a666364ade366d92f7435dd74
   RNCAsyncStorage: 2ad919e88b8bc2cd80e8697ce66d04d006743283
@@ -3306,7 +3346,7 @@ SPEC CHECKSUMS:
   RNFileLogger: 25252ae3e0c8104b8e4dc29ff1f027d3c70f0b5c
   RNGestureHandler: 1a13430fe6d4ba08ee545f53a245a2b8eaa0042d
   RNLocalize: fecc53d5f2799030d6d0d13e469a4bb1f54b87da
-  RNNotifee: 271cfeb505183d2cd1b858c14c3968b6ca30a642
+  RNNotifee: 787292c38ab54b3880ee66f812c1528c04f5d695
   RNPermissions: 2f646b747e713fd55ea62aaba444a522ffb3a7fc
   RNReanimated: 80a8d6e0854c9dddedc054efbce746294a8d3a3b
   RNScreens: 991cc417cd396602a6cf59a42139e5a9d91462a9
@@ -3317,6 +3357,6 @@ SPEC CHECKSUMS:
   Yoga: 77dfa8673de2874e1855002ae59c68b8be9b007b
   ZIPFoundation: dfd3d681c4053ff7e2f7350bc4e53b5dba3f5351
 
-PODFILE CHECKSUM: e5e9c13af102c13d7eec5a297c6580ee7be1911a
+PODFILE CHECKSUM: 749d17b3f16372a7af1d16e5eee7cb72ea5d901f
 
 COCOAPODS: 1.14.3
