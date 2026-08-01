@@ -2,13 +2,11 @@ import { useCallback, useContext, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletDetailsQuery';
 import { useActiveAssessmentLink } from '@app/screens/model/hooks/useActiveAssessmentLink';
+import { useStableTopInset } from '@app/shared/lib/hooks/useStableTopInset';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { HourMinute } from '@app/shared/lib/types/dateTime';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
@@ -59,7 +57,7 @@ export function ActivityStepper({
   onSkipActivity,
 }: Props) {
   const { t } = useTranslation();
-  const { top } = useSafeAreaInsets();
+  const top = useStableTopInset();
   const logger = getDefaultLogger();
 
   const [timerHeight, setTimerHeight] = useState(0);
