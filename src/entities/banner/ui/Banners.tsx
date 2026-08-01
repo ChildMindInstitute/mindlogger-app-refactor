@@ -1,13 +1,14 @@
+import { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 
 import Animated, {
   FadeInUp,
   FadeOutUp,
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   IS_ANDROID,
@@ -15,6 +16,7 @@ import {
   OS_MAJOR_VERSION,
 } from '@app/shared/lib/constants';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useStableTopInset } from '@app/shared/lib/hooks/useStableTopInset';
 import { DEFAULT_BG } from '@entities/banner/lib/constants';
 
 import { Banner, BannerProps } from './Banner';
@@ -40,7 +42,36 @@ export const Banners = () => {
   const banners = useAppSelector(bannersSelector);
   const bannersBg = useAppSelector(bannersBgSelector) ?? DEFAULT_BG;
   const isHidden = useAppSelector(bannersHiddenSelector);
-  const { top } = useSafeAreaInsets();
+  // Use a stable inset so the banners strip keeps reserving the status bar
+  // space while the status bar is hidden during an activity. This prevents
+  // the whole app layout from shifting when the status bar hides/shows.
+  const top = useStableTopInset();
+
+  // Animate the strip's height to 0 when Unity takes over the full screen
+  // (isHidden), instead of unmounting and causing a layout jump. The strip
+  // stays mounted so re-expanding on Unity exit is also smooth.
+  const animatedHeight = useSharedValue(isHidden ? 0 : top);
+  const animatedMargin = useSharedValue(
+    isHidden ? 0 : IS_ANDROID && OS_MAJOR_VERSION >= 15 ? -top : 0,
+  );
+
+  useEffect(() => {
+    const timingConfig = {
+      duration: 250,
+      easing: Easing.out(Easing.ease),
+    };
+
+    if (isHidden) {
+      animatedHeight.value = withTiming(0, timingConfig);
+      animatedMargin.value = withTiming(0, timingConfig);
+    } else {
+      animatedHeight.value = withTiming(top, timingConfig);
+      animatedMargin.value = withTiming(
+        IS_ANDROID && OS_MAJOR_VERSION >= 15 ? -top : 0,
+        timingConfig,
+      );
+    }
+  }, [isHidden, top, animatedHeight, animatedMargin]);
 
   // Animate top safe area background color to match native header background color transition
   const animatedStyles = useAnimatedStyle(() => ({
@@ -51,11 +82,12 @@ export const Banners = () => {
       duration: IS_IOS ? 320 : 270,
       easing: Easing.out(Easing.ease),
     }),
+    paddingTop: animatedHeight.value,
+    // There's weird white space on Android 15 and above because of the safe area insets
+    // We can remove this negative bottom margin when this issue is resolved:
+    // https://github.com/react-navigation/react-navigation/issues/12608
+    marginBottom: animatedMargin.value,
   }));
-
-  if (isHidden) {
-    return null;
-  }
 
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
 
@@ -64,12 +96,8 @@ export const Banners = () => {
       style={[
         animatedStyles,
         {
-          paddingTop: top,
-          // There's weird white space on Android 15 and above because of the safe area insets
-          // We can remove this negative bottom margin when this issue is resolved:
-          // https://github.com/react-navigation/react-navigation/issues/12608
-          marginBottom: IS_ANDROID && OS_MAJOR_VERSION >= 15 ? -top : 0,
           zIndex: 1000,
+          overflow: 'hidden',
         },
       ]}
     >
