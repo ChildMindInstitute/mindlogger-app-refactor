@@ -55,8 +55,7 @@ export const useAppletAnalytics = (appletId: string) => {
 
     InteractionManager.runAfterInteractions(async () => {
       // Delay encryption to avoid blocking the JS thread during tab transition.
-      // Fabric's synchronous rendering requires a longer delay than the old arch.
-      await wait(500);
+      await wait(100);
 
       const encryptionService =
         getDefaultEncryptionManager().createEncryptionService({
