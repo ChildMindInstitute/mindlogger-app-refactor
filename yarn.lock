@@ -60,6 +60,17 @@
     eslint-visitor-keys "^2.1.0"
     semver "^6.3.1"
 
+"@babel/generator@^7.27.1":
+  version "7.29.8"
+  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.29.8.tgz#4b0b887885422643339e09022148a4c4ebaa4979"
+  integrity sha512-gZbepsdh3WDtgZKWL+vTPh71LSBrm/Y4/QDZBVCcYfmeTEEuoOYwlSy+G1StfJg+/Zy550u/3TATbm7qDbbMtg==
+  dependencies:
+    "@babel/parser" "^7.29.8"
+    "@babel/types" "^7.29.8"
+    "@jridgewell/gen-mapping" "^0.3.12"
+    "@jridgewell/trace-mapping" "^0.3.28"
+    jsesc "^3.0.2"
+
 "@babel/generator@^7.29.0", "@babel/generator@^7.7.2":
   version "7.29.1"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.29.1.tgz#d09876290111abbb00ef962a7b83a5307fba0d50"
@@ -340,6 +351,13 @@
   integrity sha512-hnORnjP/1P/zFEndoeX+n+t1RwWRJiJpM/jO7FW32Kn9r5+sJB2JWOdYo4L6k78j15eCwY3Gm/7364B1EMwtNg==
   dependencies:
     "@babel/types" "^7.29.7"
+
+"@babel/parser@^7.29.8":
+  version "7.29.8"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.29.8.tgz#9653716a2f10c677b98fbc63d4bfb000c302cf17"
+  integrity sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==
+  dependencies:
+    "@babel/types" "^7.29.8"
 
 "@babel/plugin-bugfix-firefox-class-in-computed-class-key@^7.28.5":
   version "7.28.5"
@@ -1212,6 +1230,14 @@
   version "7.29.7"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.29.7.tgz#8005e31d82712ee7adaef6e23c63b71a62770a92"
   integrity sha512-4zBIxpPzowiZpusoFkyGVwakdRJUyuH5PxQ/PrqghfdFWWasvnCdPfQXHrenDai+gyLARulZjZowCOj6fjT4pA==
+  dependencies:
+    "@babel/helper-string-parser" "^7.29.7"
+    "@babel/helper-validator-identifier" "^7.29.7"
+
+"@babel/types@^7.29.8":
+  version "7.29.8"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.29.8.tgz#1229eef31d85156d70fa3f4cd859376d0eaf6863"
+  integrity sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==
   dependencies:
     "@babel/helper-string-parser" "^7.29.7"
     "@babel/helper-validator-identifier" "^7.29.7"
@@ -9242,10 +9268,10 @@ react-native-video-player@^0.16.3:
   resolved "https://registry.yarnpkg.com/react-native-video-player/-/react-native-video-player-0.16.3.tgz#7ac6057f4ff4db32b08f3b12422be983e7006d04"
   integrity sha512-7FMPl2uO9HRkklAaAGqtuAx+8qphbluacWTxyOhV19AOLc0GC4hkD0FrQoj6ksmgrwFJEXIkBlWkkfu1GS1YyA==
 
-react-native-video@^6.14.1:
-  version "6.19.0"
-  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.19.0.tgz#828887010291259fef1367fb53a2de01886876fc"
-  integrity sha512-JVojWIxwuH5C3RjVrF4UyuweuOH/Guq/W2xeN9zugePXZI8Xn/j6/oU94gCWHaFzkR/HGeJpqMq+l9aEHSnpIQ==
+react-native-video@^6.19.2:
+  version "6.19.2"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.19.2.tgz#91065e087f90bc653b312ff2347903345c4f2411"
+  integrity sha512-gh5dBMGSHywKr8+p4azRXrFQgT+QTmS1tI4sz6kVRjSENORfsrGGLQzmyo/7S9m+ZOTLWQJ3h8ONaXxR4F2Fcw==
 
 react-native-webview@^13.14.1:
   version "13.16.1"
@@ -9255,11 +9281,12 @@ react-native-webview@^13.14.1:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"
 
-react-native-worklets@0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/react-native-worklets/-/react-native-worklets-0.9.1.tgz#a220942e3447559cb5edb183c1814484bc407900"
-  integrity sha512-kb6lGtBI5Ap41tvBPM09Np472r2GXuJ+jRApIFy1eXBk699eChG3U+lyqRC2/wz/VDpaJAy6i5XPcceNOoH3mA==
+react-native-worklets@0.11.3:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/react-native-worklets/-/react-native-worklets-0.11.3.tgz#b92ca2bd3ea96610e0143a7ef0e386b19b281b0f"
+  integrity sha512-paLRlVFTrrGhkGTi37LHwtaJbrTftA54/zAx1h/ONSBw7XejZn6XUUl1KpM6EOMwsbw7TEGuxJXTAp/wkvuMqQ==
   dependencies:
+    "@babel/generator" "^7.27.1"
     "@babel/plugin-transform-arrow-functions" "^7.27.1"
     "@babel/plugin-transform-class-properties" "^7.28.6"
     "@babel/plugin-transform-classes" "^7.28.6"
@@ -9269,6 +9296,8 @@ react-native-worklets@0.9.1:
     "@babel/plugin-transform-template-literals" "^7.27.1"
     "@babel/plugin-transform-unicode-regex" "^7.27.1"
     "@babel/preset-typescript" "^7.28.5"
+    "@babel/traverse" "^7.27.1"
+    "@babel/types" "^7.27.1"
     convert-source-map "^2.0.0"
     semver "^7.7.4"
 
