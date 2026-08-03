@@ -74,11 +74,10 @@ The `postinstall` script in `package.json` is updated to run a script to
   * this excludes Unity artifacts from the iOS build
 * the `android` directory inside `react-native-unity` is renamed to
   `android.disabled`
-  * this excludes Untiy artifacts from the Android build
+  * this excludes Unity artifacts from the Android build
 
-The `postinstall` script also includes an automatic patch to update the
-`UPlayer.java` inside `react-native-unity` to ensure compatibility with Unity 6
-(see https://github.com/azesmway/react-native-unity/issues/123#issuecomment-2508887728).
+The `postinstall` script also applies the patches in `script/unity` to
+`react-native-unity`. See `script/unity/patch-react-native-unity.sh` for details.
 
 ## Building with Unity Artifact
 

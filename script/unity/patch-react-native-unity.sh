@@ -1,20 +1,11 @@
 #!/bin/sh
 
-# Run this script with path to the react-native-unity package in node_modules,
-# plus the path to the patch file
+# Run this script with path to the react-native-unity package in node_modules
 # For example:
-# $ ./script/unity/patch-react-native-unity.sh ./node_modules/@azesmway/react-native-unity ./react-native-unity.patch
+# $ ./script/unity/patch-react-native-unity.sh ./node_modules/@azesmway/react-native-unity
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 PKG_DIR=$(cd "$1" && pwd)
-
-echo "[Unity][Patch react-native-unity] Patching UPlayer.java ..."
-if [ -d $1/android.disabled ]; then
-  cd $1/android.disabled/src/main/java/com/azesmwayreactnativeunity
-else
-  cd $1/android/src/main/java/com/azesmwayreactnativeunity
-fi
-patch --forward -p0 < $2 || [ $? -eq 1 ]
 
 # RN 0.85 Fabric: updateProps is not reliably called, so Unity never initializes.
 # This patch adds [self initUnityModule] to the new arch initWithFrame, matching
