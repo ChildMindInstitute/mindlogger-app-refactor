@@ -1,0 +1,22 @@
+--- ReactNativeUnityViewManager.java	2026-08-04 00:00:00
++++ ReactNativeUnityViewManager.java	2026-08-04 00:00:00
+@@ -62,6 +62,9 @@
+
+               @Override
+               public void onUnload() {
++                if (view == null) {
++                  return;
++                }
+                 WritableMap data = Arguments.createMap();
+                 data.putString("message", "MyMessage");
+                 ReactContext reactContext = (ReactContext) view.getContext();
+@@ -70,6 +73,9 @@
+
+               @Override
+               public void onQuit() {
++                if (view == null) {
++                  return;
++                }
+                 WritableMap data = Arguments.createMap();
+                 data.putString("message", "MyMessage");
+                 ReactContext reactContext = (ReactContext) view.getContext();
