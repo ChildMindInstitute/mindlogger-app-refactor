@@ -1,6 +1,12 @@
 import { jest } from '@jest/globals';
 
-import { StorageInstanceManager } from '@app/shared/lib/storages/StorageInstanceManager';
+jest.mock('@app/shared/lib/storages/mmkvEncryptionKeyManager', () => ({
+  initializeStorageEncryption: jest.fn(() => Promise.resolve()),
+  getStorageEncryptionConfigSync: jest.fn(() => ({
+    encryptionKey: '0123456789abcdef0123456789abcdef',
+    encryptionType: 'AES-256',
+  })),
+}));
 
 require('react-native-reanimated').setUpTests();
 
@@ -14,10 +20,4 @@ jest.mock('moti', () => {
   return {
     MotiView: props => <View {...props} />,
   };
-});
-
-global.beforeEach(() => {
-  jest
-    .spyOn(StorageInstanceManager.prototype, 'getStoreEncryptionKey')
-    .mockReturnValue('12345');
 });
