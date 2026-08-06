@@ -1,9 +1,9 @@
 import { MMKV } from 'react-native-mmkv';
 
+import { SYSTEM_STORAGE_ID } from '../constants';
 import { createStorage, createSecureStorage } from './createStorage';
 import { IStorageInstanceManager } from './IStorageInstanceManager';
-import { STORE_ENCRYPTION_KEY } from '../constants';
-import { throwError } from '../services/errorService';
+import { getStorageEncryptionConfigSync } from './mmkvEncryptionKeyManager';
 
 export class StorageInstanceManager implements IStorageInstanceManager {
   private instances: Record<string, MMKV | null | undefined>;
@@ -27,7 +27,7 @@ export class StorageInstanceManager implements IStorageInstanceManager {
     this.instances = {};
     this.securedInstances = {};
 
-    this.getSystemStorage = this.getter('system');
+    this.getSystemStorage = this.getter(SYSTEM_STORAGE_ID);
     this.getAnalyticsStorage = this.getter('analytics-storage');
     this.getLocalizationStorage = this.getter('localization');
     this.getNotificationQueueStorage = this.getter('notification-queue');
@@ -56,28 +56,24 @@ export class StorageInstanceManager implements IStorageInstanceManager {
   }
 
   private securedGetter(storageName: string) {
-    const storeEncryptionKey = this.getStoreEncryptionKey();
-
-    if (!storeEncryptionKey) {
-      throwError(
-        '[createSecureStorage]: STORE_ENCRYPTION_KEY has not been provided',
-      );
-    }
-
     const getter = (): MMKV => {
       if (!this.securedInstances[storageName]) {
+        // Resolved lazily at first storage access: the per-device key is
+        // fetched asynchronously from the keychain during app bootstrap
+        // (see initializeStorageEncryption), before any secured storage
+        // consumer runs.
+        const { encryptionKey, encryptionType } =
+          getStorageEncryptionConfigSync();
+
         this.securedInstances[storageName] = createSecureStorage(
           storageName,
-          storeEncryptionKey as string,
+          encryptionKey,
+          encryptionType,
         );
       }
       return this.securedInstances[storageName] as MMKV;
     };
 
     return getter.bind(this);
-  }
-
-  private getStoreEncryptionKey(): string | undefined {
-    return STORE_ENCRYPTION_KEY;
   }
 }

@@ -22,6 +22,7 @@ import { NavigationProvider } from './NavigationProvider';
 import { ReactQueryProvider } from './ReactQueryProvider';
 import { ReduxProvider, reduxStore } from './ReduxProvider';
 import { SplashProvider } from './SplashProvider';
+import { StorageEncryptionProvider } from './StorageEncryptionProvider';
 import { StorageMigrationProvider } from './StorageMigrationProvider';
 import { SystemBootUpProvider } from './SystemBootUpProvider';
 import { TamaguiProvider } from './TamaguiProvider';
@@ -55,35 +56,37 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <GestureHandlerRootView style={styles.gestureHandlerView}>
-      <SystemBootUpProvider onLoadingFinished={onLoadingFinished}>
-        <FeatureFlagsProvider>
-          <AnalyticsProvider>
-            <ReactQueryProvider>
-              <ReduxProvider>
-                <StorageMigrationProvider>
-                  <LocalizationProvider>
-                    <TamaguiProvider>
-                      <FontLanguageProvider>
-                        <NavigationProvider>
-                          <PortalProvider>
-                            <SafeAreaProvider>
-                              <SplashProvider isLoading={isBootingUp}>
-                                {children}
-                              </SplashProvider>
+      <StorageEncryptionProvider>
+        <SystemBootUpProvider onLoadingFinished={onLoadingFinished}>
+          <FeatureFlagsProvider>
+            <AnalyticsProvider>
+              <ReactQueryProvider>
+                <ReduxProvider>
+                  <StorageMigrationProvider>
+                    <LocalizationProvider>
+                      <TamaguiProvider>
+                        <FontLanguageProvider>
+                          <NavigationProvider>
+                            <PortalProvider>
+                              <SafeAreaProvider>
+                                <SplashProvider isLoading={isBootingUp}>
+                                  {children}
+                                </SplashProvider>
 
-                              <Toast config={ToastConfig} topOffset={0} />
-                            </SafeAreaProvider>
-                          </PortalProvider>
-                        </NavigationProvider>
-                      </FontLanguageProvider>
-                    </TamaguiProvider>
-                  </LocalizationProvider>
-                </StorageMigrationProvider>
-              </ReduxProvider>
-            </ReactQueryProvider>
-          </AnalyticsProvider>
-        </FeatureFlagsProvider>
-      </SystemBootUpProvider>
+                                <Toast config={ToastConfig} topOffset={0} />
+                              </SafeAreaProvider>
+                            </PortalProvider>
+                          </NavigationProvider>
+                        </FontLanguageProvider>
+                      </TamaguiProvider>
+                    </LocalizationProvider>
+                  </StorageMigrationProvider>
+                </ReduxProvider>
+              </ReactQueryProvider>
+            </AnalyticsProvider>
+          </FeatureFlagsProvider>
+        </SystemBootUpProvider>
+      </StorageEncryptionProvider>
     </GestureHandlerRootView>
   );
 };
