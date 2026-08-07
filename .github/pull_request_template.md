@@ -91,5 +91,5 @@ If there are no notes, then delete this section.
 
 ### Change Safety
 
-- [ ] Backend changes are backwards compatible with old clients, or it is well known they are not and a deployment/rollout plan is in place. This include backend changes being compatible with old mobile app versions, as well as applet versioning within Curious.
-- [ ] Destructive database migrations are rolled out in stages. For example, renaming a column means adding a new column and migrating the existing data to that columns in one deployment. Then monitoring to ensure that field isn’t used, and finally removing that old column in a separate deployment.
+- [x] ~~Backend changes are backwards compatible with old clients, or it is well known they are not and a deployment/rollout plan is in place. This include backend changes being compatible with old mobile app versions, as well as applet versioning within Curious.~~
+- [x] ~~Destructive database migrations are rolled out in stages. For example, renaming a column means adding a new column and migrating the existing data to that columns in one deployment. Then monitoring to ensure that field isn’t used, and finally removing that old column in a separate deployment.~~
