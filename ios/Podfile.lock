@@ -1865,7 +1865,7 @@ PODS:
   - react-native-tcp-socket (6.4.1):
     - CocoaAsyncSocket
     - React-Core
-  - react-native-unity (1.1.0):
+  - react-native-unity (1.1.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -3292,7 +3292,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: fb5c8ee9f6dd62ef710611b3d370c501f42a4ac0
   react-native-skia: 63b67b6bf628e1d436012844788c8f1d7f3c67f4
   react-native-tcp-socket: 7c7e53a07f122ecf00fb3626684bc0ca82c4f044
-  react-native-unity: 387983cba99f5a853bd943dc4bcb1b6aca0866a0
+  react-native-unity: 70447b22fe696ac2b8ea5254383c94fb582add05
   react-native-vector-icons-entypo: 9b3015a5b28f681c668cb3c4c7b4e18ddfac63a3
   react-native-vector-icons-feather: b669f5bc4981f53aaa25d0e0135ae9a7d5c1bbd5
   react-native-vector-icons-fontawesome6: 7464629872b702957385275b62cff2f6c28199cc
