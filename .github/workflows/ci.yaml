@@ -23,7 +23,7 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
-      - uses: wearerequired/lint-action@v2
+      - uses: wearerequired/lint-action@v3
         with:
           eslint: true
           eslint_extensions: js,jsx,ts,tsx
