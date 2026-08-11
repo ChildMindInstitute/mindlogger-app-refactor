@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { CacheManager } from '@georstat/react-native-image-cache';
 
 import { getDefaultLogger } from '../services/loggerInstance';
-import { getFilePath } from '../utils/file';
+import { getFileUri } from '../utils/file';
 
 export function useCachedImage(uri?: string) {
   const [source, setSource] = useState<string | null>(uri ?? null);
@@ -18,7 +18,7 @@ export function useCachedImage(uri?: string) {
         const path = await CacheManager.get(uri, {}).getPath();
 
         if (path) {
-          setSource(getFilePath(path));
+          setSource(getFileUri(path));
         } else {
           getDefaultLogger().warn(
             `[useCachedImage] No cache entry was found for uri:${uri}`,
