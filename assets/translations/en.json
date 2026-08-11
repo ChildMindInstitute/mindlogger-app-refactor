@@ -18,6 +18,8 @@
     "please_wait": "Please wait",
     "activity_all_items_hidden": "\"{{entityName}}\" cannot be started because all items inside the activity are hidden",
     "flow_all_items_hidden": "\"{{entityName}}\" cannot be started because it contains an activity in which all items are hidden",
+    "flow_completed": "Flow Completed",
+    "flow_completed_elsewhere_message": "This flow was completed on another device. Refreshing to sync the latest data.",
     "progress": {
       "upload_files": "Uploading your files...",
       "encrypt_answers": "Encrypting your answers...",

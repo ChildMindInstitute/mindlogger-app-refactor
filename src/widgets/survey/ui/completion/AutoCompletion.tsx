@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useQueueProcessing } from '@app/entities/activity/lib/hooks/useQueueProcessing';
 import { useRetryUpload } from '@app/entities/activity/lib/hooks/useRetryUpload';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
+import { getMutexDefaultInstanceManager } from '@app/shared/lib/utils/mutexDefaultInstanceManagerInstance';
 
 import { AnswersSubmitted } from './AnswersSubmitted';
 import { SubScreenContainer } from './containers';
@@ -32,9 +33,31 @@ export const AutoCompletion: FC = () => {
   const { process: processWithAutocompletion } = useAutoCompletion();
 
   const processAnswers = async () => {
+    // Wait for any ongoing auto-completion to finish
+    const mutex = getMutexDefaultInstanceManager().getAutoCompletionMutex();
+    const uploadObservable = getDefaultUploadObservable();
+
+    // If mutex is busy, wait a bit for it to be released
+    if (mutex.isBusy()) {
+      // Wait up to 2 seconds for mutex to be released
+      const maxWaitTime = 2000;
+      const checkInterval = 100;
+      let waited = 0;
+
+      while (mutex.isBusy() && waited < maxWaitTime) {
+        await new Promise(resolve => setTimeout(resolve, checkInterval));
+        waited += checkInterval;
+      }
+
+      // After waiting, check if everything is already done
+      if (uploadObservable.isCompleted) {
+        return;
+      }
+    }
+
     const success = await processWithAutocompletion();
 
-    if (getDefaultUploadObservable().isPostponed) {
+    if (uploadObservable.isPostponed) {
       goBack();
     }
 

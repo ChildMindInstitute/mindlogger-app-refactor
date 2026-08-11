@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
 import { ReduxPersistor } from '@app/shared/lib/redux-state/store';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
+import { getAppletCompletedEntitiesKey } from '@app/shared/lib/utils/reactQueryHelpers';
 import { Box } from '@app/shared/ui/base';
 import { FinishReason } from '@widgets/survey/model/IPipelineBuilder';
 
@@ -156,7 +157,9 @@ export function FinishItem({
     if (!success) {
       openRetryAlert();
     } else {
+      // Invalidate queries to update the activity list
       queryClient.invalidateQueries(['activity_analytics']);
+      queryClient.invalidateQueries(getAppletCompletedEntitiesKey(appletId));
     }
   }
 

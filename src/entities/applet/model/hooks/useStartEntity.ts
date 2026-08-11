@@ -8,8 +8,13 @@ import {
   EvaluateAvailableTo,
   LookupEntityInput,
 } from '@app/abstract/lib/types/entity';
-import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
+import {
+  EntityProgression,
+  EntityProgressionInProgress,
+} from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import { reduxStore } from '@app/app/ui/AppProvider/ReduxProvider';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import {
   ActivityFlowRecordDto,
@@ -63,7 +68,8 @@ type FailReason =
   | 'all-items-hidden'
   | 'not-available'
   | 'mutex-busy'
-  | 'expired-while-alert-opened';
+  | 'expired-while-alert-opened'
+  | 'completed-elsewhere';
 
 type StartResult = {
   fromScratch?: boolean;
@@ -110,6 +116,8 @@ export function useStartEntity({
   const queryClient = useQueryClient();
 
   const { getName: getAppletDisplayName } = useAppletInfo();
+
+  const { mutateAsync: refresh } = useRefreshMutation();
 
   const logger: ILogger = getDefaultLogger();
 
@@ -201,12 +209,15 @@ export function useStartEntity({
     entityType: EntityType,
     targetSubjectId: string | null,
   ): Promise<{ isEntityInProgress: boolean; availableTo: number | null }> {
+    const freshProgressions: EntityProgression[] =
+      selectAppletsEntityProgressions(reduxStore.getState());
+
     const progression = getEntityProgression(
       appletId,
       entityId,
       eventId,
       targetSubjectId,
-      entityProgressions,
+      freshProgressions,
     );
 
     let evaluatedIsInProgress = isEntityProgressionInProgress(progression);
@@ -221,7 +232,7 @@ export function useStartEntity({
 
     const readyForAutocompletion = isProgressionReadyForAutocompletion(
       entityPath,
-      entityProgressions,
+      freshProgressions,
     );
 
     if (readyForAutocompletion) {
@@ -345,6 +356,8 @@ export function useStartEntity({
 
     try {
       mutex.setBusy();
+
+      await refresh();
 
       if (
         !(await checkAvailability(entityName, {
@@ -471,6 +484,19 @@ export function useStartEntity({
               return resolve({ failReason: 'expired-while-alert-opened' });
             }
 
+            // Clear FlowState to ensure clean restart
+            const flowStateKey = getFlowRecordKey(
+              flowId,
+              appletId,
+              eventId,
+              targetSubjectId,
+            );
+            const flowStorage =
+              getDefaultStorageInstanceManager().getFlowProgressStorage();
+            flowStorage.delete(flowStateKey);
+
+            logger.log(`[useStartEntity.onRestart] Cleared FlowState`);
+
             for (let i = 0; i < flowActivities.length; i++) {
               // TODO: it should be based on progress record
               cleanUpMediaFiles({
@@ -514,8 +540,28 @@ export function useStartEntity({
             const storage =
               getDefaultStorageInstanceManager().getFlowProgressStorage();
 
-            const flowState =
-              (JSON.parse(storage.getString(key) || '') as FlowState) || {};
+            let flowState: FlowState | undefined;
+            try {
+              const storedValue = storage.getString(key);
+              if (storedValue) {
+                flowState = JSON.parse(storedValue) as FlowState;
+              }
+            } catch (error) {
+              logger.error(
+                `[useStartEntity.onResume] Failed to parse flow state: ${error}`,
+              );
+            }
+
+            if (
+              !flowState ||
+              !flowState.pipeline ||
+              flowState.pipeline.length === 0
+            ) {
+              logger.warn(
+                '[useStartEntity.onResume] No valid flow state found, starting from scratch',
+              );
+              return resolve({ fromScratch: true });
+            }
 
             trackResumeFlow({
               ...logParams,
@@ -565,6 +611,47 @@ export function useStartEntity({
 
     try {
       mutex.setBusy();
+
+      // Capture pre-refresh state to detect cross-device completion
+      const preRefreshProgressions: EntityProgression[] =
+        selectAppletsEntityProgressions(reduxStore.getState());
+      const preRefreshProgression = getEntityProgression(
+        appletId,
+        flowId,
+        eventId,
+        targetSubjectId,
+        preRefreshProgressions,
+      );
+      const wasInProgress = isEntityProgressionInProgress(
+        preRefreshProgression,
+      );
+      const preRefreshSubmitId = wasInProgress
+        ? (preRefreshProgression as EntityProgressionInProgress).submitId
+        : null;
+
+      await refresh();
+
+      // Check if the flow we started was completed on another device
+      if (wasInProgress && preRefreshSubmitId) {
+        const postRefreshProgressions: EntityProgression[] =
+          selectAppletsEntityProgressions(reduxStore.getState());
+        const postRefreshProgression = getEntityProgression(
+          appletId,
+          flowId,
+          eventId,
+          targetSubjectId,
+          postRefreshProgressions,
+        );
+
+        const isNowCompleted = postRefreshProgression?.status === 'completed';
+        const submitIdsMatch =
+          postRefreshProgression?.submitId === preRefreshSubmitId;
+
+        // SAME submitId completed elsewhere - show alert and block
+        if (isNowCompleted && submitIdsMatch) {
+          return { failed: true, failReason: 'completed-elsewhere' };
+        }
+      }
 
       if (
         !(await checkAvailability(entityName, {

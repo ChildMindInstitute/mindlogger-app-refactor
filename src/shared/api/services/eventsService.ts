@@ -6,6 +6,8 @@ import {
 import { httpService } from './httpService';
 import {
   AllEventsResponse,
+  AppletCompletedEntitiesRequest,
+  AppletCompletedEntitiesResponse,
   CompletedEntitiesRequest,
   CompletedEntitiesResponse,
   IEventsService,
@@ -28,6 +30,20 @@ export function eventsService(): IEventsService {
           {
             params: {
               fromDate: request.fromDate,
+              includeInProgress: request.includeInProgress ?? false,
+            },
+          },
+        );
+      return callApiWithRetry(withDataExtraction(apiCall));
+    },
+    getAppletCompletedEntities(request: AppletCompletedEntitiesRequest) {
+      const apiCall = () =>
+        httpService.get<AppletCompletedEntitiesResponse>(
+          `/answers/applet/${request.appletId}/completions`,
+          {
+            params: {
+              fromDate: request.fromDate,
+              includeInProgress: request.includeInProgress ?? false,
             },
           },
         );
