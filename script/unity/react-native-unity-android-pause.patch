@@ -1,0 +1,23 @@
+--- ReactNativeUnityViewManager.java
++++ ReactNativeUnityViewManager.java
+@@ -140,8 +140,9 @@
+ 
+   @Override
+   public void unloadUnity(ReactNativeUnityView view) {
++    // react-native-unity 1.1.1: pause() instead of unload() to avoid crash on reload
+     if (isUnityReady()) {
+-      unload();
++      ReactNativeUnity.pause();
+     }
+   }
+ 
+@@ -321,7 +322,8 @@
+       handler.postDelayed(new Runnable() {
+         @Override
+         public void run() {
+-          if (getPlayer() != null) {
++          // react-native-unity 1.1.1: re-check isUnityPaused() to handle resumed Unity
++          if (isUnityPaused() && getPlayer() != null) {
+             getPlayer().pause();
+           }
+         }
