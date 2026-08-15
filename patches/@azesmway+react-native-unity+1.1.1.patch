@@ -1,0 +1,179 @@
+diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
+index 5d3401f..4de5796 100644
+--- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
++++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
+@@ -293,8 +293,25 @@ public class ReactNativeUnity {
+         }
+ 
+         final Activity activity = ((Activity) unityPlayer.getContextPlayer());
+-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(1, 1);
+-        activity.addContentView(frame, layoutParams);
++        // PATCHED (Mindlogger): park full-size, not 1x1. With a 1x1 surface URP's
++        // render targets round down to zero ("RenderTextureDesc width must be
++        // greater than zero" -> "Render Graph Execution error") and a scene reload
++        // running while parked dies mid-init — the Unity app then drops every later
++        // LoadConfigFile with an NRE and never sends UnityStarted (frozen loading
++        // screen on the next mount).
++        //
++        // PATCHED (Mindlogger): insert at the BOTTOM of the content stack instead of
++        // addContentView(), which appends on top — a full-size frame on top overlays
++        // the whole app and swallows every touch after exiting Unity (app appeared
++        // frozen). At the bottom it draws behind the opaque RN content and only sees
++        // touches RN declines.
++        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT);
++        ViewGroup content = activity.findViewById(android.R.id.content);
++        if (content != null) {
++            content.addView(frame, 0, layoutParams);
++        } else {
++            activity.addContentView(frame, layoutParams);
++        }
+     }
+ 
+     public static void addUnityViewToGroup(ViewGroup group) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+@@ -317,6 +334,13 @@ public class ReactNativeUnity {
+         unityPlayer.windowFocusChanged(true);
+         unityPlayer.requestFocusPlayer();
+         unityPlayer.resume();
++        // PATCHED (Mindlogger): clear the pause flag set when the previous view detached
++        // (keep-alive parking in ReactNativeUnityView.onDetachedFromWindow), otherwise
++        // restoreUnityUserState() re-pauses the engine ~300ms after this reattach and
++        // the Unity app freezes.
++        Log.i(TAG, "[RNUnityDiag] addUnityViewToGroup: reattached + resumed engine (wasPaused="
++            + _isUnityPaused + ")");
++        _isUnityPaused = false;
+     }
+ 
+     public interface UnityPlayerCallback {
+diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
+index bc4e473..acf6232 100644
+--- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
++++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
+@@ -6,6 +6,8 @@ import android.content.Context;
+ 
+ import android.annotation.SuppressLint;
+ import android.content.res.Configuration;
++import android.os.Handler;
++import android.os.Looper;
+ import android.util.Log;
+ import android.widget.FrameLayout;
+ 
+@@ -15,6 +17,15 @@ import java.lang.reflect.InvocationTargetException;
+ public class ReactNativeUnityView extends FrameLayout {
+   private static final String TAG = "ReactNativeUnityView";
+ 
++  // PATCHED (Mindlogger): grace period before pausing the parked engine (ms).
++  // The app sends `Reset` right before unmounting and the Unity app reloads its
++  // scene in response; pausing the engine mid-reload broke the Unity app (stuck loading
++  // screen + NullReferenceException on every later LoadConfigFile). Give the
++  // reload time to finish before pausing. A healthy on-screen reload takes ~3s
++  // from Reset to bridge-ready; parked reloads can be slower, so leave a wide
++  // margin.
++  private static final long PARKED_PAUSE_DELAY_MS = 3000;
++
+   private UPlayer view;
+   public boolean keepPlayerMounted = false;
+ 
+@@ -72,6 +83,27 @@ public class ReactNativeUnityView extends FrameLayout {
+             // the worst case without the move is a player left without a parent.
+             Log.e(TAG, "Failed to move the Unity view back to the background", e);
+         }
++
++        // PATCHED (Mindlogger): the engine cannot be unloaded on this Unity version —
++        // re-initializing graphics in the same process crashes ("Graphics device is
++        // null") — so it stays resident for the life of the process. Pause it while it
++        // is parked off-screen to stop rendering and audio; addUnityViewToGroup
++        // resumes it on the next mount. The pause is delayed so the post-Reset scene
++        // reload can finish first (see PARKED_PAUSE_DELAY_MS), and skipped entirely
++        // if a new view has reclaimed the engine in the meantime.
++        Log.i(TAG, "[RNUnityDiag] detach: engine parked off-screen, pause scheduled in "
++            + PARKED_PAUSE_DELAY_MS + "ms");
++        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
++            @Override
++            public void run() {
++                if (ReactNativeUnityViewManager.view == null) {
++                    Log.i(TAG, "[RNUnityDiag] delayed pause firing: no active view, pausing parked engine");
++                    ReactNativeUnity.pause();
++                } else {
++                    Log.i(TAG, "[RNUnityDiag] delayed pause skipped: a new view owns the engine");
++                }
++            }
++        }, PARKED_PAUSE_DELAY_MS);
+     }
+ 
+     super.onDetachedFromWindow();
+diff --git a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
+index 6406f64..4cfcfdc 100644
+--- a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
++++ b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
+@@ -97,12 +97,18 @@ - (void)layoutSubviews {
+    }
+ 
+    if([self unityIsInitialized] && self.ufw.appController.rootView != nil) {
++      // PATCHED (Mindlogger): detect a (re)attach BEFORE addSubview, and resume in
++      // that case too. The _pausedForRecycle flag lives on whichever old view
++      // instance paused the engine — which may not be this one — so trusting the
++      // flag alone left the engine paused (frozen frame) on the next mount.
++      BOOL reattaching = self.ufw.appController.rootView.superview != self;
++
+       self.ufw.appController.rootView.frame = self.bounds;
+       [self addSubview:self.ufw.appController.rootView];
+ 
+       // Coming back on screen after the view was recycled: resume the shared
+       // instance that prepareForRecycle paused (#180).
+-      if (_pausedForRecycle) {
++      if (reattaching || _pausedForRecycle) {
+          [[self ufw] pause:NO];
+          _pausedForRecycle = NO;
+       }
+@@ -197,7 +203,11 @@ - (void)prepareForRecycle {
+     // Unity-as-a-Library is a single instance per process: unloading it on Fabric view
+     // recycling kills the engine, and any later mount shows a black screen (#180).
+     // Pause instead — the next mount resumes the same instance.
+-    if ([self unityIsInitialized]) {
++    // PATCHED (Mindlogger): only pause if this view still owns Unity's root view.
++    // Under Fabric the next Unity view can mount and claim the engine BEFORE this
++    // one is recycled — pausing here froze the Unity app on the new view.
++    if ([self unityIsInitialized]
++        && self.ufw.appController.rootView.superview == self) {
+       [[self ufw] pause:true];
+       _pausedForRecycle = YES;
+     }
+@@ -207,6 +217,16 @@ + (ComponentDescriptorProvider)componentDescriptorProvider {
+     return concreteComponentDescriptorProvider<RNUnityViewComponentDescriptor>();
+ }
+ 
++// PATCHED (Mindlogger): opt out of Fabric view recycling. Recycled instances come
++// back from the pool with stale ivars (_unloaded, _pausedForRecycle, self.ufw) —
++// a stale _unloaded=YES disables the layoutSubviews retry loop, so the engine
++// boots (via updateProps) but its rootView is never attached: frozen loading on
++// every other mount. A fresh instance per mount makes every mount behave like the
++// first one.
+++ (BOOL)shouldBeRecycled {
++    return NO;
++}
++
+ - (instancetype)initWithFrame:(CGRect)frame {
+   if (self = [super initWithFrame:frame]) {
+     static const auto defaultProps = std::make_shared<const RNUnityViewProps>();
+diff --git a/node_modules/@azesmway/react-native-unity/src/UnityView.tsx b/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
+index 87e6df6..bb3373a 100644
+--- a/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
++++ b/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
+@@ -65,6 +65,17 @@ export default class UnityView extends React.Component<RNUnityViewProps> {
+   }
+ 
+   componentWillUnmount() {
++    // PATCHED (Mindlogger): never unload on Android. Unity 6 cannot
++    // re-initialize its graphics device in the same process after
++    // unloadApplication() — the next UnityPlayer crashes ~1s in with
++    // "Graphics device is null" (SIGTRAP). Keep the engine alive instead:
++    // the native view pauses and parks it off-screen on detach
++    // (ReactNativeUnityView.onDetachedFromWindow), and the next mount
++    // reattaches and resumes it via createPlayer's existing-player path.
++    if (Platform.OS === 'android') {
++      return;
++    }
++
+     // Full React unmount is a permanent teardown, so we unload the engine here.
+     // This is intentionally different from Fabric view *recycling*
+     // (RNUnityView.prepareForRecycle), which only pauses the shared instance so
