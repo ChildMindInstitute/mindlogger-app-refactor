@@ -1,4 +1,4 @@
-import { useMemo, PropsWithChildren } from 'react';
+import { useEffect, useMemo, PropsWithChildren } from 'react';
 import { Linking, SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -56,6 +56,10 @@ export function ActivitySectionList({
   const { navigate, isFocused } = useNavigation();
 
   const { isUploading } = useUploadObservable();
+
+  useEffect(() => {
+    console.log('[TapDebug] isUploading:', isUploading);
+  }, [isUploading]);
 
   const sections = useMemo(
     () =>
@@ -213,6 +217,12 @@ export function ActivitySectionList({
               disabled={isUploading || (!isWebOnly && !supportsApp)}
               isWebOnly={isWebOnly}
               onPress={() => {
+                console.log(
+                  '[TapDebug] onPress:',
+                  item.name,
+                  'isFocused:',
+                  isFocused(),
+                );
                 if (isFocused()) {
                   startActivityOrFlow(item).catch(console.error);
                 }
