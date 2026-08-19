@@ -56,6 +56,14 @@ export const ActivityCard: FC<Props> = ({
     <AnimatedTouchable
       aria-label={accessibilityLabel}
       onPress={onPress}
+      onPressIn={() =>
+        console.log(
+          '[TapDebug] pressIn:',
+          activity.name,
+          'disabled:',
+          isDisabled,
+        )
+      }
       disabled={isDisabled}
       style={{ borderRadius: 16 }}
     >
