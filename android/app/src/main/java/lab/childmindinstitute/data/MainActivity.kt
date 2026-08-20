@@ -29,8 +29,28 @@ class MainActivity : ReactActivity() {
       super.onCreate(null)
   }
 
+  /**
+   * Ignore orientation requests the Unity engine makes while no Unity screen
+   * is mounted. The parked engine re-asserts landscape while hidden behind the
+   * Activities list, breaking touch handling.
+   */
   override fun setRequestedOrientation(requestedOrientation: Int) {
-      Log.w("OrientationDebug", "requested: $requestedOrientation", Throwable())
+      val fromUnity = Throwable().stackTrace.any {
+          it.className.startsWith("com.unity3d.player")
+      }
+      if (fromUnity && !unityScreenMounted()) {
+          Log.w("OrientationDebug", "ignored hidden-Unity request: $requestedOrientation")
+          return
+      }
       super.setRequestedOrientation(requestedOrientation)
+  }
+
+  // Reflection because the Unity library is unlinked in non-Unity builds.
+  private fun unityScreenMounted(): Boolean = try {
+      Class.forName("com.azesmwayreactnativeunity.ReactNativeUnityViewManager")
+          .getMethod("hasActiveView")
+          .invoke(null) as Boolean
+  } catch (e: Exception) {
+      false
   }
 }
