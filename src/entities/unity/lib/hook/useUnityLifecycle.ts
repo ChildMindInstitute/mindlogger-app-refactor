@@ -346,17 +346,10 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
           taskData: mediaFiles,
         });
 
-        // Android: skip the Reset here — its scene reload would run while the
-        // engine is parked behind the activity list, hogging the main thread
-        // for ~10-15s and eating taps. The keep-alive remount effect sends
-        // Reset on the next mount instead, and the parked engine gets paused
-        // by the native delayed-pause with no reload left in flight.
-        if (Platform.OS !== 'android') {
-          await sendMessageToUnity({
-            m_sId: uuidv4(),
-            m_sKey: 'Reset',
-          });
-        }
+        await sendMessageToUnity({
+          m_sId: uuidv4(),
+          m_sKey: 'Reset',
+        });
       } catch (err) {
         logger.error(`[UnityView] EndUnity handler failed: ${err}`);
       }
