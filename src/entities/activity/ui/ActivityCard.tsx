@@ -1,10 +1,10 @@
 import { FC } from 'react';
+import { Pressable } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
-import { AnimatedTouchable } from '@app/shared/ui/AnimatedTouchable';
 import { Box, XStack, YStack } from '@app/shared/ui/base';
 import { CardThumbnail } from '@app/shared/ui/CardThumbnail';
 import { Chip } from '@app/shared/ui/Chip';
@@ -53,7 +53,7 @@ export const ActivityCard: FC<Props> = ({
     : `activity-${activity.name}`;
 
   return (
-    <AnimatedTouchable
+    <Pressable
       aria-label={accessibilityLabel}
       onPress={onPress}
       onPressIn={() =>
@@ -64,8 +64,14 @@ export const ActivityCard: FC<Props> = ({
           isDisabled,
         )
       }
+      onPressOut={() => console.log('[TapDebug] pressOut:', activity.name)}
       disabled={isDisabled}
-      style={{ borderRadius: 16 }}
+      style={({ pressed }) => ({
+        borderRadius: 16,
+        backgroundColor: pressed
+          ? palette.neutral99_and_neutral10_012
+          : palette.surface,
+      })}
     >
       <XStack p={16} gap={8} ai="center">
         <YStack gap={8} flex={1}>
@@ -139,6 +145,6 @@ export const ActivityCard: FC<Props> = ({
           <ChevronRightIcon color={palette.on_surface} size={18} />
         </Box>
       </XStack>
-    </AnimatedTouchable>
+    </Pressable>
   );
 };
