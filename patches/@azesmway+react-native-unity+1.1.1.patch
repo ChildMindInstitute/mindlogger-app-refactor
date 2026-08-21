@@ -77,19 +77,19 @@ index 0000000..3c73678
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$1.dex differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.dex b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.dex
 new file mode 100644
-index 0000000..ba2516d
+index 0000000..a35f4e8
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.dex differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.dex b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.dex
 new file mode 100644
-index 0000000..1380e9e
+index 0000000..6054c37
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.dex differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.dex b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.dex
 new file mode 100644
-index 0000000..9da362c
+index 0000000..f8b9e08
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.dex differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.dex b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.dex
 new file mode 100644
-index 0000000..5b2d608
+index 0000000..5ce25f0
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.dex differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManagerSpec.dex b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/azesmwayreactnativeunity/ReactNativeUnityViewManagerSpec.dex
 new file mode 100644
@@ -117,7 +117,7 @@ index 0000000..897870b
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/bundleLibRuntimeToDirDebug_dex/com/facebook/react/viewmanagers/RNUnityViewManagerInterface.dex differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin
 new file mode 100644
-index 0000000..641f85c
+index 0000000..b2f583b
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/8e073bcd564ac7b45e5f2ebcc7eb9fd3/transformed/bundleLibRuntimeToDirDebug/desugar_graph.bin differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/98018ab49fbf3d06d44624a3c6a96bff/results.bin b/node_modules/@azesmway/react-native-unity/android/build/.transforms/98018ab49fbf3d06d44624a3c6a96bff/results.bin
 new file mode 100644
@@ -128,7 +128,7 @@ index 0000000..0d259dd
 +o/classes
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/.transforms/98018ab49fbf3d06d44624a3c6a96bff/transformed/classes/classes_dex/classes.dex b/node_modules/@azesmway/react-native-unity/android/build/.transforms/98018ab49fbf3d06d44624a3c6a96bff/transformed/classes/classes_dex/classes.dex
 new file mode 100644
-index 0000000..4497081
+index 0000000..3fb2f7a
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/.transforms/98018ab49fbf3d06d44624a3c6a96bff/transformed/classes/classes_dex/classes.dex differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/generated/source/buildConfig/debug/com/azesmwayreactnativeunity/BuildConfig.java b/node_modules/@azesmway/react-native-unity/android/build/generated/source/buildConfig/debug/com/azesmwayreactnativeunity/BuildConfig.java
 new file mode 100644
@@ -787,7 +787,7 @@ index 0000000..9e26dfe
 \ No newline at end of file
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar b/node_modules/@azesmway/react-native-unity/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar
 new file mode 100644
-index 0000000..c93e763
+index 0000000..5a2b062
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar b/node_modules/@azesmway/react-native-unity/android/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar
 new file mode 100644
@@ -877,19 +877,19 @@ index 0000000..99d359f
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$1.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.class
 new file mode 100644
-index 0000000..645898f
+index 0000000..648f0b1
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.class
 new file mode 100644
-index 0000000..34a7289
+index 0000000..e5675a0
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.class
 new file mode 100644
-index 0000000..d191211
+index 0000000..f53f9d2
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.class
 new file mode 100644
-index 0000000..406addc
+index 0000000..aaa65e1
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManagerSpec.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/azesmwayreactnativeunity/ReactNativeUnityViewManagerSpec.class
 new file mode 100644
@@ -1004,19 +1004,19 @@ index 0000000..99d359f
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$1.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.class
 new file mode 100644
-index 0000000..645898f
+index 0000000..648f0b1
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$2.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.class
 new file mode 100644
-index 0000000..34a7289
+index 0000000..e5675a0
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$3.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.class
 new file mode 100644
-index 0000000..d191211
+index 0000000..f53f9d2
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager$UnityViewEvent.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.class
 new file mode 100644
-index 0000000..406addc
+index 0000000..aaa65e1
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManagerSpec.class b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/azesmwayreactnativeunity/ReactNativeUnityViewManagerSpec.class
 new file mode 100644
@@ -1044,7 +1044,7 @@ index 0000000..dfb848d
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_dir/debug/bundleLibRuntimeToDirDebug/com/facebook/react/viewmanagers/RNUnityViewManagerInterface.class differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar
 new file mode 100644
-index 0000000..06517ae
+index 0000000..3e31705
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt b/node_modules/@azesmway/react-native-unity/android/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt
 new file mode 100644
@@ -1740,9 +1740,41 @@ index 0000000..0c627e7
 +
 +</body>
 +</html>
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityView$1.class.uniqueId1 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityView$1.class.uniqueId1
+new file mode 100644
+index 0000000..381240d
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityView$1.class.uniqueId1 differ
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityView.class.uniqueId6 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityView.class.uniqueId6
+new file mode 100644
+index 0000000..ea566d3
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityView.class.uniqueId6 differ
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$1.class.uniqueId4 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$1.class.uniqueId4
+new file mode 100644
+index 0000000..99d359f
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$1.class.uniqueId4 differ
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$2.class.uniqueId0 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$2.class.uniqueId0
+new file mode 100644
+index 0000000..645898f
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$2.class.uniqueId0 differ
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$3.class.uniqueId2 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$3.class.uniqueId2
+new file mode 100644
+index 0000000..34a7289
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$3.class.uniqueId2 differ
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$UnityViewEvent.class.uniqueId7 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$UnityViewEvent.class.uniqueId7
+new file mode 100644
+index 0000000..d191211
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager$UnityViewEvent.class.uniqueId7 differ
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager.class.uniqueId5 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager.class.uniqueId5
+new file mode 100644
+index 0000000..406addc
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewManager.class.uniqueId5 differ
+diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewPackage.class.uniqueId3 b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewPackage.class.uniqueId3
+new file mode 100644
+index 0000000..d2950fe
+Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/compileTransaction/stash-dir/ReactNativeUnityViewPackage.class.uniqueId3 differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin
 new file mode 100644
-index 0000000..9cc8d00
+index 0000000..f8457c0
 Binary files /dev/null and b/node_modules/@azesmway/react-native-unity/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin differ
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
 index 5d3401f..d05ec43 100644
@@ -1781,7 +1813,7 @@ index 5d3401f..d05ec43 100644
  
      public interface UnityPlayerCallback {
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
-index bc4e473..b17f0b3 100644
+index bc4e473..69db3cb 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
 +++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
 @@ -6,6 +6,8 @@ import android.content.Context;
@@ -1793,18 +1825,19 @@ index bc4e473..b17f0b3 100644
  import android.util.Log;
  import android.widget.FrameLayout;
  
-@@ -15,6 +17,10 @@ import java.lang.reflect.InvocationTargetException;
+@@ -15,6 +17,11 @@ import java.lang.reflect.InvocationTargetException;
  public class ReactNativeUnityView extends FrameLayout {
    private static final String TAG = "ReactNativeUnityView";
  
-+  // Grace period before pausing the parked engine: a Reset is sent right before
-+  // unmount, and pausing mid scene-reload leaves the reload permanently stuck.
-+  private static final long PARKED_PAUSE_DELAY_MS = 3000;
++  // Pause the parked engine as soon as it's parked. RN waits for Unity to ack
++  // the end-of-task Reset before unmounting, so no reload is in flight by the
++  // time the view detaches.
++  private static final long PARKED_PAUSE_DELAY_MS = 0;
 +
    private UPlayer view;
    public boolean keepPlayerMounted = false;
  
-@@ -72,6 +78,24 @@ public class ReactNativeUnityView extends FrameLayout {
+@@ -72,6 +79,24 @@ public class ReactNativeUnityView extends FrameLayout {
              // the worst case without the move is a player left without a parent.
              Log.e(TAG, "Failed to move the Unity view back to the background", e);
          }
@@ -1830,7 +1863,7 @@ index bc4e473..b17f0b3 100644
  
      super.onDetachedFromWindow();
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java
-index d4eae6f..c7ee2bf 100644
+index d4eae6f..c47ae30 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java
 +++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java
 @@ -178,6 +178,11 @@ public class ReactNativeUnityViewManager extends ReactNativeUnityViewManagerSpec
@@ -1845,6 +1878,17 @@ index d4eae6f..c7ee2bf 100644
    /**
     * Deliver a view event to JS defensively.
     *
+@@ -291,6 +296,10 @@ public class ReactNativeUnityViewManager extends ReactNativeUnityViewManagerSpec
+   @Override
+   public void onHostResume() {
+     if (isUnityReady()) {
++      if (view == null) {
++        // No Unity screen mounted — keep the parked engine frozen.
++        return;
++      }
+       assert getPlayer() != null;
+       getPlayer().resume();
+       restoreUnityUserState();
 diff --git a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
 index 6406f64..61d7e5d 100644
 --- a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
