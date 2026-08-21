@@ -30,7 +30,28 @@ export const ONEUP_HEALTH_SYSTEM_SEARCH_API_URL =
   Config.ONEUP_HEALTH_SYSTEM_SEARCH_API_URL as string;
 export const MIXPANEL_TOKEN = Config.MIXPANEL_TOKEN;
 
-export const STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
+/**
+ * Legacy build-time MMKV encryption key. Kept only to migrate (recrypt)
+ * stores created by older app versions to the random per-device key, and as
+ * a last-resort fallback when the hardware keystore is unavailable.
+ * TODO: Remove this env var and its usages once the install base has migrated to per-device keys.
+ */
+export const LEGACY_STORE_ENCRYPTION_KEY = Config.STORE_ENCRYPTION_KEY;
+
+// Keychain entry holding the random per-device MMKV encryption key
+export const STORAGE_ENCRYPTION_KEYCHAIN_SERVICE =
+  'org.mindlogger.mmkv-encryption-key';
+export const STORAGE_ENCRYPTION_KEYCHAIN_USERNAME = 'mmkv';
+
+/**
+ * Cipher for stores encrypted with the per-device key. AES-256 makes MMKV
+ * consume all 32 bytes of the hex-encoded key; the AES-128 default would
+ * only use the first 16 characters (64 bits of entropy).
+ */
+export const STORAGE_ENCRYPTION_TYPE = 'AES-256';
+
+// Id of the plain (unencrypted) MMKV store holding app-level flags
+export const SYSTEM_STORAGE_ID = 'system';
 
 export const LAUNCHDARKLY_MOBILE_KEY = Config.LAUNCHDARKLY_MOBILE_KEY as string;
 

@@ -166,7 +166,7 @@ The above scripts run the app using Debug configuration and for Curious's `dev`
 | `API_URL`                            | yes      | `http://localhost:8000`                                     | Curious Backend API base URL                                             |
 | `DEEP_LINK_PREFIXES`                 | yes      | `https://web-dev.cmiml.net`                                 | Deep link prefixes for the app, comma-delimited if multiple              |
 | `MIXPANEL_TOKEN`                     | no       | null                                                        | Mixpanel analytics token                                                 |
-| `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                                         | Secure storage encryption key                                            |
+| `STORE_ENCRYPTION_KEY`               | yes      | `my-encryption-key`                                         | Legacy storage encryption key (migration/fallback only)                  |
 | `LAUNCHDARKLY_MOBILE_KEY`            | yes      | `my-env-mobile-key`                                         | LaunchDarkly mobile key, refer to Confluence for correct environment key |
 | `ONEUP_HEALTH_CLIENT_ID`             | yes\*    | null                                                        | 1UpHealth client ID                                                      |
 | `ONEUP_HEALTH_SYSTEM_SEARCH_API_URL` | yes\*    | `https://system-search.1up.health/api`                      | 1UpHealth System Search API URL                                          |

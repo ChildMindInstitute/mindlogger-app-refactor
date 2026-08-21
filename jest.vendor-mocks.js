@@ -288,6 +288,8 @@ jest.mock('react-native-mmkv', () => {
   } = require('react-native-mmkv/lib/createMMKV/createMockMMKV');
   return {
     createMMKV: createMockMMKV,
+    existsMMKV: jest.fn(() => false),
+    deleteMMKV: jest.fn(() => true),
     useMMKVObject: jest.fn(() => [undefined, jest.fn()]),
     useMMKVString: jest.fn(() => [undefined, jest.fn()]),
     useMMKVNumber: jest.fn(() => [undefined, jest.fn()]),
@@ -296,3 +298,17 @@ jest.mock('react-native-mmkv', () => {
     useMMKV: jest.fn(),
   };
 });
+
+jest.mock('react-native-keychain', () => ({
+  getGenericPassword: jest.fn(() => Promise.resolve(false)),
+  setGenericPassword: jest.fn(() =>
+    Promise.resolve({ service: 'mock', storage: 'mock' }),
+  ),
+  resetGenericPassword: jest.fn(() => Promise.resolve(true)),
+  ACCESSIBLE: {
+    WHEN_UNLOCKED_THIS_DEVICE_ONLY: 'AccessibleWhenUnlockedThisDeviceOnly',
+  },
+  STORAGE_TYPE: {
+    AES_GCM_NO_AUTH: 'KeystoreAESGCM_NoAuth',
+  },
+}));
