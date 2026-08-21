@@ -36,6 +36,12 @@ export const ANDROID_REMOUNT_RESET_DELAY_MS = 300;
 // which is slower than just waiting out the reload.
 export const ANDROID_REMOUNT_HANDSHAKE_DELAY_MS = 5000;
 
+// Android keep-alive: how long to wait for Unity to acknowledge the
+// end-of-task Reset ("Loaded Successfully") before unmounting anyway (ms).
+// Waiting lets the scene reload finish on-screen instead of hidden behind the
+// Activities list; a healthy reload acks in ~2-3s.
+export const END_RESET_ACK_TIMEOUT_MS = 10000;
+
 // Android keep-alive: interval between LoadConfigFile attempts (ms). After Reset
 // the Unity app reloads its scene; that reload can be paused mid-flight by the
 // unmount and resumes on the next mount, so a LoadConfigFile sent too early lands
