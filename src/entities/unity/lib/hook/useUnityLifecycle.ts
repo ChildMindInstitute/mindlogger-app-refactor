@@ -27,6 +27,7 @@ import {
   ANDROID_REMOUNT_HANDSHAKE_DELAY_MS,
   ANDROID_REMOUNT_RESET_DELAY_MS,
   CONFIG_LOAD_TIMEOUT_MS,
+  END_RESET_ACK_TIMEOUT_MS,
   LOAD_CONFIG_RETRY_INTERVAL_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
@@ -339,17 +340,44 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
         logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
 
-        onResponse?.({
-          responseType: 'unity',
-          // TODO: Figure out what this should be
-          startTime: 0,
-          taskData: mediaFiles,
-        });
+        const respond = () =>
+          onResponse?.({
+            responseType: 'unity',
+            // TODO: Figure out what this should be
+            startTime: 0,
+            taskData: mediaFiles,
+          });
 
-        await sendMessageToUnity({
-          m_sId: uuidv4(),
-          m_sKey: 'Reset',
-        });
+        const sendReset = () =>
+          sendMessageToUnity({
+            m_sId: uuidv4(),
+            m_sKey: 'Reset',
+          });
+
+        if (Platform.OS === 'android') {
+          // Wait for Unity to ack the Reset ("Loaded Successfully") before
+          // responding (which unmounts the view), so the scene reload runs
+          // on-screen instead of hidden behind the Activities list.
+          const ack = await Promise.race([
+            sendReset(),
+            new Promise<'timeout'>(resolve =>
+              setTimeout(() => resolve('timeout'), END_RESET_ACK_TIMEOUT_MS),
+            ),
+          ]);
+          if (ack === 'timeout') {
+            logger.warn(
+              `[UnityView] End-of-task Reset not acknowledged within ${END_RESET_ACK_TIMEOUT_MS}ms — proceeding with unmount`,
+            );
+          } else {
+            logger.log(
+              '[UnityView] End-of-task Reset acknowledged — scene reloaded on-screen',
+            );
+          }
+          respond();
+        } else {
+          respond();
+          await sendReset();
+        }
       } catch (err) {
         logger.error(`[UnityView] EndUnity handler failed: ${err}`);
       }
