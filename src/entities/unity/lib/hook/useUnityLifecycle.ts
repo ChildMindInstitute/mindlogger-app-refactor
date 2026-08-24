@@ -38,12 +38,11 @@ import {
   UnityEventUnityStarted,
 } from '../types/unityMessage';
 
+// State that must survive across mounts of the Unity screen.
 const unityRuntimeState = {
   quitInProcess: false,
-  // Android keep-alive: Unity cannot be unloaded and re-created in the same
-  // process (graphics re-init crashes), so the engine stays resident after the
-  // first boot and never sends UnityStarted again. When this is true, a
-  // (re)mounted Unity view must drive the handshake itself.
+  // True once the Android engine has booted; it stays alive for the rest of
+  // the process and never sends UnityStarted again.
   engineAliveAndroid: false,
 };
 
@@ -78,11 +77,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({
     sendMessageToUnity,
     onFirstFailure: () => setIsUnityUnresponsive(true),
-    // A later Echo acked, so Unity is alive — hide the "unresponsive" overlay
-    // shown by onFirstFailure. A single miss is often a false alarm: Unity's
-    // main thread can be saturated by a task scene load long enough (>3s) to
-    // delay the ack; without this the overlay stayed up forever and blocked
-    // all touches ("stuck loading spinner").
+    // Unity answered again, so hide the "unresponsive" overlay.
     onRecovered: () => setIsUnityUnresponsive(false),
     onMaxFailuresReached: () => triggerFailureRef.current(),
   });
@@ -107,22 +102,17 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     triggerFailureRef.current = triggerFailure;
   }, [triggerFailure]);
 
-  // Monotonic token for the LoadConfigFile retry loop. Bumping it cancels any
-  // in-flight loop (unmount, restart, EndUnity, or a newer loop superseding an
-  // older one) — each loop only keeps going while the token still matches the
-  // value it started with.
+  // Token for the LoadConfigFile retry loop. Bumping it cancels any loop
+  // that is still running.
   const loadConfigRunRef = useRef(0);
 
+  // Send the task config to Unity and wait for it to be acknowledged.
   const handleUnityReady = useCallback(async () => {
     const runId = ++loadConfigRunRef.current;
     try {
-      // Android keep-alive: after Reset the Unity app reloads its scene, and
-      // that reload can resume concurrently with this handshake — a
-      // LoadConfigFile landing mid-reload is dropped by Unity (NRE in its
-      // bridge) and never acknowledged, so resend until Unity responds. On iOS the
-      // engine boots fresh and signals UnityStarted, so a single send
-      // suffices (last attempt awaits the ack with no retry timeout, which
-      // keeps iOS behavior identical to before).
+      // On Android, Unity can silently drop a LoadConfigFile that arrives
+      // while its scene is still reloading, so resend until acknowledged.
+      // On iOS a single send is enough.
       const maxAttempts =
         Platform.OS === 'android'
           ? Math.max(
@@ -169,7 +159,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       }
 
       if (!acknowledged) {
-        // The config load timeout below will surface the failure.
+        // The config load timeout will surface the failure.
         return;
       }
 
@@ -186,6 +176,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     }
   }, [payloadFile, logger, sendMessageToUnity, triggerFailure]);
 
+  // Tear down the Unity view and remount it fresh.
   const handleRestartActivity = useCallback(() => {
     logger.log('[UnityView] Restarting Unity activity');
     loadConfigRunRef.current++;
@@ -201,11 +192,11 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       configLoadTimerRef.current = null;
     }
 
-    // Step 1: fully remove RNUnityView from the tree
+    // Remove RNUnityView from the tree.
     setUnityViewKey(null);
 
-    // Step 2: after a delay, remount with a fresh key so the native layer
-    // has time to tear down before the new view triggers Unity to boot again.
+    // Remount with a fresh key after the native layer has had time to
+    // tear down.
     if (restartTimerRef.current) {
       clearTimeout(restartTimerRef.current);
     }
@@ -217,10 +208,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     }, 1000);
   }, [logger, resetFailureState, stopHeartbeat]);
 
-  // Run the app side of the startup handshake (heartbeat + LoadConfigFile).
-  // Normally triggered by the `UnityStarted` event; on Android keep-alive
-  // remounts the engine is already running and never sends UnityStarted, so
-  // this is also driven manually from the remount effect below.
+  // Start the app side of the startup handshake: heartbeat plus LoadConfigFile.
   const beginUnityHandshake = useCallback(async () => {
     if (!unityReadyHandled.current) {
       unityReadyHandled.current = true;
@@ -232,8 +220,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       setIsUnityUnresponsive(false);
       startHeartbeat();
 
-      // Start config load timeout — if handleUnityReady doesn't complete
-      // within the deadline, surface the error modal.
+      // Surface the error modal if the config does not load in time.
       configLoadTimerRef.current = setTimeout(() => {
         logger.warn(
           `[UnityView] Config did not load within ${CONFIG_LOAD_TIMEOUT_MS}ms — triggering failure`,
@@ -257,12 +244,11 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     beginUnityHandshakeRef.current = beginUnityHandshake;
   }, [beginUnityHandshake]);
 
-  // Register Unity ready handler via the `UnityStarted` event.
+  // Start the handshake when Unity reports it has booted.
   const handleUnityStarted =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       if (Platform.OS === 'android') {
-        // The engine booted; it now stays resident for the life of the process
-        // (see keep-alive notes on unityRuntimeState.engineAliveAndroid).
+        // The engine stays alive for the rest of the process.
         unityRuntimeState.engineAliveAndroid = true;
       }
       await beginUnityHandshake();
@@ -271,17 +257,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  // Android keep-alive remounts: the resident engine parks off-screen between
-  // mounts, and any scene reload interrupted by the unmount is permanently
-  // stuck (the message pump still runs, but the reload never resumes — every
-  // LoadConfigFile into that scene is dropped with an NRE). So instead of
-  // handshaking with the stuck scene, send `Reset` to force a fresh reload
-  // that runs entirely on-screen (the Unity app acks it "Loaded Successfully"
-  // even from a stuck scene). The Unity app does NOT send `UnityStarted` after reloads
-  // (fresh boot only), so once the reload has had time to finish we drive the
-  // handshake (heartbeat + LoadConfigFile) ourselves. beginUnityHandshake is
-  // a no-op if UnityStarted did arrive first, so the two paths cannot double
-  // up. If everything is dropped, the startup timeout surfaces the failure.
+  // Android remounts reuse the already-running engine, which never sends
+  // UnityStarted again. Send Reset to reload the scene, then drive the
+  // handshake ourselves once the reload has had time to finish.
   useEffect(() => {
     if (
       Platform.OS !== 'android' ||
@@ -320,6 +298,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     };
   }, [logger, unityViewKey]);
 
+  // The task is done: collect the exported files, reset Unity, and hand the
+  // result back to the survey flow.
   const handleEndUnity =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
       try {
@@ -355,9 +335,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
           });
 
         if (Platform.OS === 'android') {
-          // Wait for Unity to ack the Reset ("Loaded Successfully") before
-          // responding (which unmounts the view), so the scene reload runs
-          // on-screen instead of hidden behind the Activities list.
+          // Wait for Unity to acknowledge the Reset before unmounting, so the scene
+          // reload finishes on-screen.
           const ack = await Promise.race([
             sendReset(),
             new Promise<'timeout'>(resolve =>
@@ -386,6 +365,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
 
+  // Collect the file paths Unity exports during the task.
   const handleDataExport = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
       if (msg.m_sKey === UnityEventDataExport) {
@@ -434,6 +414,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     };
   }, [handleSetOrientation, registerEventHandler]);
 
+  // If Unity already quit earlier in this process (iOS), do not trust the
+  // remount and start probing with heartbeats instead.
   useEffect(() => {
     if (
       unityRuntimeState.quitInProcess &&
@@ -450,15 +432,12 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {
-    // (Re)generate a new react key for the RN Unity view so it gets
-    // reinitialized when this container view is rendered for the first time.
-    // This ensure we can consistently get a Unity startup message.
+    // Mount the Unity view with a fresh key so it fully reinitializes.
     const key = uuidv4();
     logger.log(`[UnityView] Mounting Unity view (key=${key})`);
     setUnityViewKey(key);
 
-    // Startup timeout: if UnityStarted is not received within the deadline,
-    // assume Unity failed to boot and surface the error modal.
+    // Surface the error modal if Unity does not start in time.
     startupTimerRef.current = setTimeout(() => {
       if (!unityReadyHandled.current) {
         logger.warn(
@@ -488,9 +467,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stopHeartbeat, suppressErrors]);
 
+  // The native player was unloaded, so the next mount needs a fresh boot.
   const handlePlayerUnload = useCallback(() => {
     logger.log('[UnityView] Native player unload received');
-    // The engine is gone — a future mount must wait for a fresh UnityStarted.
     unityRuntimeState.engineAliveAndroid = false;
     if (restartInProgressRef.current) {
       return;
@@ -499,6 +478,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     setIsUnityUnresponsive(true);
   }, [logger]);
 
+  // The native player quit entirely; show the spinner and let the heartbeat
+  // decide whether to surface the error.
   const handlePlayerQuit = useCallback(() => {
     unityRuntimeState.quitInProcess = true;
     unityRuntimeState.engineAliveAndroid = false;
