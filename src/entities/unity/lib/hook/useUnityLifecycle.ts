@@ -150,6 +150,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
         if (response !== 'no-ack') {
           acknowledged = true;
+          logger.log(
+            `[UnityView] LoadConfigFile acknowledged (attempt ${attempt}/${maxAttempts})`,
+          );
           break;
         }
 
@@ -370,9 +373,17 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     msg => {
       if (msg.m_sKey === UnityEventDataExport) {
         unityPaths.current = [...unityPaths.current, ...msg.m_listDataPaths];
+
+        sendMessageToUnity({
+          m_sId: uuidv4(),
+          m_sKey: 'DataExportReceived',
+          m_sAdditionalInfo: msg.m_sId,
+        }).catch((err: unknown) => {
+          logger.error(`[UnityView] DataExportReceived send failed: ${err}`);
+        });
       }
     },
-    [logger],
+    [logger, sendMessageToUnity],
   );
   useEffect(() => {
     registerEventHandler(UnityEventDataExport, handleDataExport);
