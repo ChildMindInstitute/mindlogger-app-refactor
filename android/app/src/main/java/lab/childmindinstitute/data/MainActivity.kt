@@ -45,6 +45,18 @@ class MainActivity : ReactActivity() {
       super.setRequestedOrientation(requestedOrientation)
   }
 
+  // Log every touch so we can tell whether a dead tap is cancelled natively
+  // or delivered cleanly and dropped by RN.
+  override fun dispatchTouchEvent(ev: android.view.MotionEvent): Boolean {
+      when (ev.actionMasked) {
+          android.view.MotionEvent.ACTION_DOWN,
+          android.view.MotionEvent.ACTION_UP,
+          android.view.MotionEvent.ACTION_CANCEL ->
+              Log.i("TouchDebug", "${android.view.MotionEvent.actionToString(ev.actionMasked)} x=${ev.x} y=${ev.y}")
+      }
+      return super.dispatchTouchEvent(ev)
+  }
+
   // Reflection because the Unity library is unlinked in non-Unity builds.
   private fun unityScreenMounted(): Boolean = try {
       Class.forName("com.azesmwayreactnativeunity.ReactNativeUnityViewManager")
