@@ -17,7 +17,7 @@ jest.mock('@app/shared/lib/services/loggerInstance', () => ({
 
 describe('useUnityHeartbeat', () => {
   const mockSendMessage = jest.fn();
-  const mockOnFirstFailure = jest.fn();
+  const mockOnRecovered = jest.fn();
   const mockOnMaxFailuresReached = jest.fn();
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe('useUnityHeartbeat', () => {
     renderHook(() =>
       useUnityHeartbeat({
         sendMessageToUnity: mockSendMessage,
-        onFirstFailure: mockOnFirstFailure,
+        onRecovered: mockOnRecovered,
         onMaxFailuresReached: mockOnMaxFailuresReached,
       }),
     );
@@ -68,7 +68,7 @@ describe('useUnityHeartbeat', () => {
     expect(mockSendMessage).toHaveBeenCalledTimes(1);
   });
 
-  test('calls onFirstFailure after first Echo timeout', async () => {
+  test('a single Echo timeout does not reach max failures', async () => {
     mockSendMessage.mockReturnValue(new Promise(() => {})); // never resolves
 
     const { result } = renderHeartbeat();
@@ -81,7 +81,6 @@ describe('useUnityHeartbeat', () => {
     // Wait for timeout
     act(() => jest.advanceTimersByTime(HEARTBEAT_TIMEOUT_MS));
 
-    expect(mockOnFirstFailure).toHaveBeenCalledTimes(1);
     expect(mockOnMaxFailuresReached).not.toHaveBeenCalled();
 
     act(() => result.current.stopHeartbeat());
@@ -99,7 +98,6 @@ describe('useUnityHeartbeat', () => {
       act(() => jest.advanceTimersByTime(HEARTBEAT_TIMEOUT_MS));
     }
 
-    expect(mockOnFirstFailure).toHaveBeenCalledTimes(1);
     expect(mockOnMaxFailuresReached).toHaveBeenCalledTimes(1);
   });
 
@@ -118,7 +116,6 @@ describe('useUnityHeartbeat', () => {
     // 1st Echo → timeout → failure #1
     act(() => jest.advanceTimersByTime(HEARTBEAT_INTERVAL_MS));
     act(() => jest.advanceTimersByTime(HEARTBEAT_TIMEOUT_MS));
-    expect(mockOnFirstFailure).toHaveBeenCalledTimes(1);
 
     // 2nd Echo → advance just enough to trigger the interval tick,
     // then flush microtasks so the Promise.resolve .then() runs
@@ -127,12 +124,13 @@ describe('useUnityHeartbeat', () => {
       jest.advanceTimersByTime(HEARTBEAT_INTERVAL_MS - HEARTBEAT_TIMEOUT_MS);
     });
 
+    // The successful Echo after a failure reports recovery and resets the count
+    expect(mockOnRecovered).toHaveBeenCalledTimes(1);
+
     // 3rd Echo → timeout → failure count should be 1 again (not 2)
     act(() => jest.advanceTimersByTime(HEARTBEAT_INTERVAL_MS));
     act(() => jest.advanceTimersByTime(HEARTBEAT_TIMEOUT_MS));
 
-    // onFirstFailure called again (count was reset to 0, now back to 1)
-    expect(mockOnFirstFailure).toHaveBeenCalledTimes(2);
     // Should NOT have reached max because count was reset between failures
     expect(mockOnMaxFailuresReached).not.toHaveBeenCalled();
 

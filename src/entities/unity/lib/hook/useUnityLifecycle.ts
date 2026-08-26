@@ -76,7 +76,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const { startHeartbeat, stopHeartbeat } = useUnityHeartbeat({
     sendMessageToUnity,
-    onFirstFailure: () => setIsUnityUnresponsive(true),
     // Unity answered again, so hide the "unresponsive" overlay.
     onRecovered: () => setIsUnityUnresponsive(false),
     onMaxFailuresReached: () => triggerFailureRef.current(),
@@ -360,6 +359,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
           respond();
           await sendReset();
         }
+
       } catch (err) {
         logger.error(`[UnityView] EndUnity handler failed: ${err}`);
       }
