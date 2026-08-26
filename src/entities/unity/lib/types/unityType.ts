@@ -28,7 +28,6 @@ export type UseUnityFailureHandlerResult = {
 
 export type UseUnityHeartbeatOptions = {
   sendMessageToUnity: (message: RN2UMessage) => Promise<U2RNMessage | null>;
-  onFirstFailure?: () => void;
   onRecovered?: () => void;
   onMaxFailuresReached?: () => void;
 };
