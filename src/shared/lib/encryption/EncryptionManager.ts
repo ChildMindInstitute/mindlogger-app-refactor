@@ -93,19 +93,33 @@ export class EncryptionManager implements IEncryptionManager {
     return Array.from(crypto.createHash('sha256').update(secretKey).digest());
   };
 
-  public encryptData = ({ text, key }: EncryptDataProps): string => {
+  public encryptData = async ({
+    text,
+    key,
+  }: EncryptDataProps): Promise<string> => {
     const CHUNK_SIZE = 10240;
+    // Yield to the event loop after this much continuous work so queued
+    // events (touches in particular) are not starved while a large payload
+    // is encrypted on the JS thread.
+    const YIELD_AFTER_MS = 8;
     const iv: Buffer = this.getRandomBytes();
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
 
-    let encrypted: Buffer = Buffer.alloc(0);
+    const parts: Buffer[] = [];
+    let sliceStart = Date.now();
 
     for (let i = 0; i < text.length; i += CHUNK_SIZE) {
-      const chunk = text.slice(i, i + CHUNK_SIZE);
-      encrypted = Buffer.concat([encrypted, cipher.update(chunk)]);
+      parts.push(cipher.update(text.slice(i, i + CHUNK_SIZE)));
+
+      if (Date.now() - sliceStart >= YIELD_AFTER_MS) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+        sliceStart = Date.now();
+      }
     }
 
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    parts.push(cipher.final());
+    const encrypted = Buffer.concat(parts);
+
     return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
   };
 

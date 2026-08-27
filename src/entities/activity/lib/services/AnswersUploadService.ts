@@ -445,7 +445,9 @@ export class AnswersUploadService implements IAnswersUploadService {
     }
   }
 
-  private encryptAnswers(data: SendAnswersInput): ActivityAnswersRequest {
+  private async encryptAnswers(
+    data: SendAnswersInput,
+  ): Promise<ActivityAnswersRequest> {
     const { appletEncryption } = data;
     const userPrivateKey = this.userPrivateKeyRecord.get();
 
@@ -458,11 +460,15 @@ export class AnswersUploadService implements IAnswersUploadService {
       privateKey: userPrivateKey,
     });
 
-    const encryptedAnswers = encrypt(JSON.stringify(data.answers));
+    const encryptedAnswers = await encrypt(JSON.stringify(data.answers));
 
-    const encryptedUserActions = encrypt(JSON.stringify(data.userActions));
+    const encryptedUserActions = await encrypt(
+      JSON.stringify(data.userActions),
+    );
 
-    const identifier = data.userIdentifier && encrypt(data.userIdentifier);
+    const identifier = data.userIdentifier
+      ? await encrypt(data.userIdentifier)
+      : data.userIdentifier;
 
     const eventHistoryId = data.eventVersion
       ? `${data.eventId}_${data.eventVersion}`
@@ -621,7 +627,7 @@ export class AnswersUploadService implements IAnswersUploadService {
       'encrypt_answers',
     );
 
-    const encryptedData = this.encryptAnswers(modifiedBody);
+    const encryptedData = await this.encryptAnswers(modifiedBody);
 
     this.logger.log(
       '[UploadAnswersService.sendAnswers] executing upload answers',

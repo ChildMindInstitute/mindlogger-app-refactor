@@ -86,7 +86,7 @@ describe('Encryption', () => {
   });
 
   describe('encryptData', () => {
-    it('should return an encrypted string', () => {
+    it('should return an encrypted string', async () => {
       const text = 'Hello, world!';
 
       const aesKey = encryptionManager.getAESKey({
@@ -96,7 +96,7 @@ describe('Encryption', () => {
         appletBase,
       });
 
-      const encryptedText = encryptionManager.encryptData({
+      const encryptedText = await encryptionManager.encryptData({
         text,
         key: aesKey,
       });
@@ -107,7 +107,7 @@ describe('Encryption', () => {
   });
 
   describe('decryptData', () => {
-    it('should return the decrypted text', () => {
+    it('should return the decrypted text', async () => {
       const text = 'Hello, world!';
 
       const aesKey = encryptionManager.getAESKey({
@@ -117,7 +117,7 @@ describe('Encryption', () => {
         appletBase,
       });
 
-      const encryptedText = encryptionManager.encryptData({
+      const encryptedText = await encryptionManager.encryptData({
         text,
         key: aesKey,
       });
@@ -158,7 +158,7 @@ describe('Encryption', () => {
   });
 
   describe('encrypt AnswerRequest', () => {
-    it('should return an encrypted string of real answer request', () => {
+    it('should return an encrypted string of real answer request', async () => {
       const text = JSON.stringify(answerRequestExample);
 
       const aesKey = encryptionManager.getAESKey({
@@ -168,7 +168,7 @@ describe('Encryption', () => {
         appletBase,
       });
 
-      const encryptedText = encryptionManager.encryptData({
+      const encryptedText = await encryptionManager.encryptData({
         text,
         key: aesKey,
       });
@@ -185,7 +185,7 @@ describe('Encryption', () => {
   });
 
   describe('decrypt AnswerRequest', () => {
-    it('should return the decrypted answer Request', () => {
+    it('should return the decrypted answer Request', async () => {
       const originalText = JSON.stringify(answerRequestExample);
 
       const aesKey = encryptionManager.getAESKey({
@@ -195,7 +195,7 @@ describe('Encryption', () => {
         appletBase,
       });
 
-      const encryptedText = encryptionManager.encryptData({
+      const encryptedText = await encryptionManager.encryptData({
         text: originalText,
         key: aesKey,
       });
