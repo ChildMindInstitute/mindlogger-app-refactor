@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Pressable } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
@@ -45,12 +45,6 @@ export const ActivityCard: FC<Props> = ({
     targetSubjectId: activity.targetSubjectId,
   });
 
-  useEffect(() => {
-    console.log('[TapDebug] mounted:', activity.name);
-    return () => console.log('[TapDebug] unmounted:', activity.name);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const isDisabled = disabled || activity.status === ActivityStatus.Scheduled;
   const hasDescription = `${activity.description || ''}`.trim().length > 0;
 
@@ -62,39 +56,15 @@ export const ActivityCard: FC<Props> = ({
     <Pressable
       aria-label={accessibilityLabel}
       onPress={onPress}
-      onPressIn={e =>
+      onPressIn={() =>
         console.log(
           '[TapDebug] pressIn:',
           activity.name,
           'disabled:',
           isDisabled,
-          'pageY:',
-          e.nativeEvent.pageY,
         )
       }
-      onPressOut={e =>
-        console.log(
-          '[TapDebug] pressOut:',
-          activity.name,
-          'pageY:',
-          e.nativeEvent.pageY,
-        )
-      }
-      onLongPress={() => console.log('[TapDebug] longPress:', activity.name)}
-      onTouchEnd={() => console.log('[TapDebug] touchEnd:', activity.name)}
-      onTouchCancel={() =>
-        console.log('[TapDebug] touchCancel:', activity.name)
-      }
-      onLayout={e =>
-        console.log(
-          '[TapDebug] layout:',
-          activity.name,
-          'y:',
-          e.nativeEvent.layout.y,
-          'h:',
-          e.nativeEvent.layout.height,
-        )
-      }
+      onPressOut={() => console.log('[TapDebug] pressOut:', activity.name)}
       disabled={isDisabled}
       style={({ pressed }) => ({
         borderRadius: 16,
