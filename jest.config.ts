@@ -41,6 +41,8 @@ const jestConfig: JestConfigWithTsJest = {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|html)$':
       '<rootDir>/assetsTransformer.js',
     '^uuid$': require.resolve('uuid'),
+    // Nitro native module is unavailable in Jest; crypto-browserify has the same Node crypto API
+    '^react-native-quick-crypto$': 'crypto-browserify',
   },
   restoreMocks: true,
   clearMocks: true,
