@@ -420,9 +420,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   useEffect(() => {
     registerEventHandler(UnityEventSetOrientation, handleSetOrientation);
     RNOrientationDirector.unlock();
-    return () => {
-      RNOrientationDirector.lockTo(Orientation.portrait);
-    };
   }, [handleSetOrientation, registerEventHandler]);
 
   // If Unity already quit earlier in this process (iOS), do not trust the
