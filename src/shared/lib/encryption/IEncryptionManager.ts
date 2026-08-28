@@ -29,7 +29,7 @@ export type EncryptDataProps = { text: string; key: number[] };
 export type DecryptDataProps = { text: string; key: number[] };
 
 export interface IEncryptionService {
-  encrypt: (input: string) => Promise<string>;
+  encrypt: (input: string) => string;
   decrypt: (input: string) => string;
 }
 
@@ -38,6 +38,6 @@ export interface IEncryptionManager {
   getPrivateKey: (options: GetPrivateKeyProps) => number[];
   getPublicKey: (options: GetPublicKeyProps) => number[];
   getAESKey: (options: GetAESKeyProps) => number[];
-  encryptData: (options: EncryptDataProps) => Promise<string>;
+  encryptData: (options: EncryptDataProps) => string;
   decryptData: (options: DecryptDataProps) => string;
 }
