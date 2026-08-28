@@ -87,7 +87,23 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
 }) => {
   return (
     <TouchableOpacity
-      onPress={!disabled ? onPress : undefined}
+      onPress={
+        !disabled
+          ? () => {
+              console.log(
+                '[TapDebug] SubmitButton onPress:',
+                accessibilityLabel,
+              );
+              onPress?.();
+            }
+          : undefined
+      }
+      onPressIn={() =>
+        console.log('[TapDebug] SubmitButton pressIn:', accessibilityLabel)
+      }
+      onPressOut={() =>
+        console.log('[TapDebug] SubmitButton pressOut:', accessibilityLabel)
+      }
       disabled={disabled || isLoading}
       accessibilityLabel={accessibilityLabel}
       testID="submit-button"
