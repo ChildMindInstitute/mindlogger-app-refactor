@@ -259,7 +259,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  // Android remounts reuse the already-running engine, which never sends
+  // Android remounts reuse the already-running engine, which may not send
   // UnityStarted again. Send Reset to reload the scene, then drive the
   // handshake ourselves once the reload has had time to finish.
   useEffect(() => {
@@ -359,7 +359,6 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
           respond();
           await sendReset();
         }
-
       } catch (err) {
         logger.error(`[UnityView] EndUnity handler failed: ${err}`);
       }
@@ -420,6 +419,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   );
   useEffect(() => {
     registerEventHandler(UnityEventSetOrientation, handleSetOrientation);
+    RNOrientationDirector.unlock();
     return () => {
       RNOrientationDirector.lockTo(Orientation.portrait);
     };
