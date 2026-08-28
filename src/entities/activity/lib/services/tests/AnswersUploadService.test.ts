@@ -433,7 +433,7 @@ describe('AnswersUploadService', () => {
     expect(mockSendActivityAnswers).not.toHaveBeenCalled();
   });
 
-  it('should handle missing private key', async () => {
+  it('should handle missing private key', () => {
     const data = {
       appletEncryption: {
         prime: 'prime123',
@@ -446,7 +446,7 @@ describe('AnswersUploadService', () => {
 
     jest.spyOn(userPrivateKeyRecord, 'get').mockReturnValue(undefined);
 
-    await expect(answersUploadService.encryptAnswers(data)).rejects.toThrow(
+    expect(() => answersUploadService.encryptAnswers(data)).toThrow(
       'Error occurred while preparing answers',
     );
   });
