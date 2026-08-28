@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import crypto from 'crypto-browserify';
+import quickCrypto from 'react-native-quick-crypto';
 
 import {
   DecryptDataProps,
@@ -11,6 +11,10 @@ import {
   InputProps,
 } from './IEncryptionManager';
 import { IV_LENGTH } from '../constants';
+
+// quick-crypto's typings use its own Buffer class, but at runtime it accepts
+// the 'buffer' package's Buffer too, so treat it as Node's crypto API
+const crypto = quickCrypto as unknown as typeof import('crypto');
 
 export class EncryptionManager implements IEncryptionManager {
   private getRandomBytes(): Buffer {
@@ -102,7 +106,7 @@ export class EncryptionManager implements IEncryptionManager {
 
     for (let i = 0; i < text.length; i += CHUNK_SIZE) {
       const chunk = text.slice(i, i + CHUNK_SIZE);
-      encrypted = Buffer.concat([encrypted, cipher.update(chunk)]);
+      encrypted = Buffer.concat([encrypted, cipher.update(chunk, 'utf8')]);
     }
 
     encrypted = Buffer.concat([encrypted, cipher.final()]);
