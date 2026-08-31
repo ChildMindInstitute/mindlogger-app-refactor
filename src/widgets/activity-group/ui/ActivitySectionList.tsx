@@ -5,7 +5,7 @@ import {
   useState,
   PropsWithChildren,
 } from 'react';
-import { Linking, SectionList, StyleSheet } from 'react-native';
+import { Dimensions, Linking, SectionList, StyleSheet } from 'react-native';
 
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -62,20 +62,6 @@ export function ActivitySectionList({
   const { navigate, isFocused } = useNavigation();
 
   const { isUploading } = useUploadObservable();
-
-  // Remount the list whenever this screen regains focus (e.g. after a Unity
-  // task) so any stale touch state is discarded.
-  const [reloadKey, setReloadKey] = useState(0);
-  useFocusEffect(
-    useCallback(() => {
-      setReloadKey(k => k + 1);
-      console.log('[TapDebug] Activities focused, remounting list');
-    }, []),
-  );
-
-  useEffect(() => {
-    console.log('[TapDebug] isUploading:', isUploading);
-  }, [isUploading]);
 
   const sections = useMemo(
     () =>
@@ -201,7 +187,6 @@ export function ActivitySectionList({
   return (
     <>
       <SectionList
-        key={reloadKey}
         sections={sections}
         renderSectionHeader={({ section }) => (
           <SectionHeader>{t(section.name)}</SectionHeader>
