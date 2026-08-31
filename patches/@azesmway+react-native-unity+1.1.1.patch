@@ -1,18 +1,19 @@
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
-index 5d3401f..643d33a 100644
+index 5d3401f..39bcbc1 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
 +++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
 @@ -293,8 +293,118 @@ public class ReactNativeUnity {
          }
  
          final Activity activity = ((Activity) unityPlayer.getContextPlayer());
-+        // Park at 1x1 so the parked surface cannot cover or intercept anything.
-+        // The engine is paused immediately on park and no reload runs while
-+        // parked, so the URP render targets are not zeroed by the tiny surface.
-+        // Insert at the bottom of the content stack so the frame sits behind the
-+        // RN content.
-         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(1, 1);
+-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(1, 1);
 -        activity.addContentView(frame, layoutParams);
++        // Park full-screen behind the RN content (index 0, z=-1). The frame is
++        // fully covered by the RN UI, so it stays invisible; keeping the real
++        // size avoids resizing Unity's surface/render targets while parked.
++        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
++            ViewGroup.LayoutParams.MATCH_PARENT,
++            ViewGroup.LayoutParams.MATCH_PARENT);
 +        ViewGroup content = activity.findViewById(android.R.id.content);
 +        if (content != null) {
 +            content.addView(frame, 0, layoutParams);
