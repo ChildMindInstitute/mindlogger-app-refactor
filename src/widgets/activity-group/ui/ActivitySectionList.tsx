@@ -25,7 +25,6 @@ import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { DEEP_LINK_PREFIXES } from '@app/shared/lib/constants';
-import { getDefaultEncryptionManager } from '@app/shared/lib/encryption/encryptionManagerInstance';
 import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -77,26 +76,6 @@ export function ActivitySectionList({
   useEffect(() => {
     console.log('[TapDebug] isUploading:', isUploading);
   }, [isUploading]);
-
-  // TEMP [DeadTapEmu]: run the real answer encryption on a large payload 10s
-  // after mount to check whether encryption alone causes dead taps. Start
-  // tapping cards right before the start log and keep tapping until after the
-  // end log. Remove once the dead-tap cause is confirmed.
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const payload = JSON.stringify(
-        new Array(12000).fill({ value: 'x'.repeat(1024), type: 'unity' }),
-      );
-      const key = Array.from({ length: 32 }, (_, i) => i);
-
-      console.log('[DeadTapEmu] encrypt start, chars:', payload.length);
-      const start = Date.now();
-      getDefaultEncryptionManager().encryptData({ text: payload, key });
-      console.log('[DeadTapEmu] encrypt end after', Date.now() - start, 'ms');
-    }, 10000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const sections = useMemo(
     () =>
