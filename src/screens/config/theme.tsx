@@ -16,6 +16,7 @@ import { DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 import { AppletDetailsParamList } from './types';
 import { HeaderTitle } from '../ui/HeaderTitle';
+import { TabBarButton } from '../ui/TabBarButton';
 
 type BottomScreenOptions = BottomTabScreenProps<AppletDetailsParamList>;
 
@@ -74,6 +75,7 @@ export const getAppletDetailsScreenOptions = (paddingBottom: number) => {
 
     return {
       headerShown: false,
+      tabBarButton: TabBarButton,
       tabBarItemStyle: {
         ...(IS_TABLET
           ? {
