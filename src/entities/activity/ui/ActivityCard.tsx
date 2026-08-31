@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable } from 'react-native-gesture-handler';
 
 import { useTranslation } from 'react-i18next';
 
@@ -21,6 +21,7 @@ import {
   ActivityStatus,
   ActivityType,
 } from '../lib/types/activityListItem';
+import { AnimatedTouchable } from '@app/shared/ui/AnimatedTouchable';
 
 type Props = {
   activity: ActivityListItem;
@@ -53,7 +54,7 @@ export const ActivityCard: FC<Props> = ({
     : `activity-${activity.name}`;
 
   return (
-    <Pressable
+    <AnimatedTouchable
       aria-label={accessibilityLabel}
       onPress={onPress}
       onPressIn={() =>
@@ -66,12 +67,6 @@ export const ActivityCard: FC<Props> = ({
       }
       onPressOut={() => console.log('[TapDebug] pressOut:', activity.name)}
       disabled={isDisabled}
-      style={({ pressed }) => ({
-        borderRadius: 16,
-        backgroundColor: pressed
-          ? palette.neutral99_and_neutral10_012
-          : palette.surface,
-      })}
     >
       <XStack p={16} gap={8} ai="center">
         <YStack gap={8} flex={1}>
@@ -145,6 +140,6 @@ export const ActivityCard: FC<Props> = ({
           <ChevronRightIcon color={palette.on_surface} size={18} />
         </Box>
       </XStack>
-    </Pressable>
+    </AnimatedTouchable>
   );
 };
