@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 import Toast, { ToastConfigParams } from 'react-native-toast-message';
 
 import { palette } from '@app/shared/lib/constants/palette';
+import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 
 type ToastConfigProps = {
   content: string | React.JSX.Element;
