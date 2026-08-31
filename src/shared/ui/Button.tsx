@@ -1,10 +1,7 @@
 import { PropsWithChildren } from 'react';
-import {
-  TouchableOpacity,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { StyleSheet, StyleProp, ViewStyle } from 'react-native';
+
+import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
 
 import { Box, BoxProps, TextProps } from './base';
 import { Center } from './Center';
