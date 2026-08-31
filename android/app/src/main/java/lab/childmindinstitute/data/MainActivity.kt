@@ -45,6 +45,11 @@ class MainActivity : ReactActivity() {
       super.setRequestedOrientation(requestedOrientation)
   }
 
+  override fun onWindowFocusChanged(hasFocus: Boolean) {
+      Log.i("TouchDebug", "windowFocus=$hasFocus")
+      super.onWindowFocusChanged(hasFocus)
+  }
+
   // Log every touch so we can tell whether a dead tap is cancelled natively
   // or delivered cleanly and dropped by RN.
   override fun dispatchTouchEvent(ev: android.view.MotionEvent): Boolean {

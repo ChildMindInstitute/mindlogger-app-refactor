@@ -26,6 +26,15 @@
       android:largeHeap="true"
       android:appCategory="productivity"
       tools:replace="android:appCategory">
+      <!-- Unity's exported manifest enables auto-set-game-state, which makes the
+           runtime report an active game session to the OS (GameManager.setGameState).
+           Samsung's Game Optimizing Service reacts to that signal process-wide with
+           touch/perf interventions that persist over the RN UI while the engine is
+           parked. Force it off; tools:node="replace" wins over the unityLibrary value. -->
+      <meta-data
+        android:name="unity.auto-set-game-state"
+        android:value="false"
+        tools:node="replace" />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
