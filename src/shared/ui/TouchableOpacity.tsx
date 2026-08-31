@@ -7,9 +7,9 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { Pressable } from 'react-native-gesture-handler';
+import { Pressable, type PressableProps } from 'react-native-gesture-handler';
 
-type Props = PropsWithChildren<TouchableOpacityProps>;
+type Props = PressableProps & PropsWithChildren<TouchableOpacityProps>;
 
 export function TouchableOpacity({
   children,
