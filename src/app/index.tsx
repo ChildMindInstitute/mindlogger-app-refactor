@@ -26,6 +26,7 @@ import {
 } from '@shared/lib/constants';
 
 import { AppProvider } from './ui/AppProvider';
+import { NavigationBarScrim } from './ui/NavigationBarScrim';
 
 const hideIosSimulatorErrorWarningBadges = true;
 
@@ -87,6 +88,7 @@ const App = () => {
         <Animated.View layout={LinearTransition} style={styles.container}>
           <RootNavigator />
         </Animated.View>
+        <NavigationBarScrim />
       </AppProvider>
     </DatadogProvider>
   );
