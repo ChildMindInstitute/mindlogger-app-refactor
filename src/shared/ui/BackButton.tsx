@@ -24,6 +24,7 @@ export function BackButton<TRouteName extends keyof RootParamList>(
   // fallbackParams is of any type here if we use object destructuring
   // @ts-ignore
   const { children, fallbackRoute, fallbackParams, ...styledProps } = props;
+  const boxProps = styledProps as BoxProps;
   const navigation = useNavigation();
 
   const back = () => {
@@ -37,7 +38,7 @@ export function BackButton<TRouteName extends keyof RootParamList>(
   };
 
   return (
-    <Box {...styledProps}>
+    <Box {...boxProps}>
       <TouchableOpacity onPress={back} hitSlop={40}>
         {children}
       </TouchableOpacity>
