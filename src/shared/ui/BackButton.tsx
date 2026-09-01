@@ -1,6 +1,5 @@
 import { PropsWithChildren } from 'react';
-
-import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
+import { TouchableOpacity } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -24,7 +23,6 @@ export function BackButton<TRouteName extends keyof RootParamList>(
   // fallbackParams is of any type here if we use object destructuring
   // @ts-ignore
   const { children, fallbackRoute, fallbackParams, ...styledProps } = props;
-  const boxProps = styledProps as BoxProps;
   const navigation = useNavigation();
 
   const back = () => {
@@ -38,7 +36,7 @@ export function BackButton<TRouteName extends keyof RootParamList>(
   };
 
   return (
-    <Box {...boxProps}>
+    <Box {...styledProps}>
       <TouchableOpacity onPress={back} hitSlop={40}>
         {children}
       </TouchableOpacity>
