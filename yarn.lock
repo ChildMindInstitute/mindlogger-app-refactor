@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@azesmway/react-native-unity@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@azesmway/react-native-unity/-/react-native-unity-1.0.11.tgz#ec4ff504dcd3cdc6a602ee9462c0959ae66d0bb9"
-  integrity sha512-2rANRnCgAvtUXzBCNvMO9M18WAe7BrDnDYL3FeFhHw/jW9NOKKWxJcEaBPHtl4yBTUy7DNU+V5Rl9QcstCgsMA==
+"@azesmway/react-native-unity@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@azesmway/react-native-unity/-/react-native-unity-1.1.1.tgz#1004ab8fbb3dfc0e70789cef36f472666a71fde7"
+  integrity sha512-/J7uMW3aAl8FlUCKTZ4Q04vSJm/ryaPYXWzgNI0lhrmWddpbt2Z+HaebHYEKb0C2czGn0PlRVNeZQWfUlHPaag==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.28.6", "@babel/code-frame@^7.29.0":
   version "7.29.0"
@@ -9178,7 +9178,7 @@ react-native-progress@^5.0.1:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-reanimated@^4.4.0:
+react-native-reanimated@4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-4.4.1.tgz#245ae96981542e939409a5871b696e0a616cadc9"
   integrity sha512-WCVBfhLE+AYI2l4inL6PC1vcfNOfmVYRSVSBkPiD12N3jvzByipnygwVpmunyhaNqbiSEDrFYcl7cOJnbHKykw==
@@ -9242,10 +9242,10 @@ react-native-video-player@^0.16.3:
   resolved "https://registry.yarnpkg.com/react-native-video-player/-/react-native-video-player-0.16.3.tgz#7ac6057f4ff4db32b08f3b12422be983e7006d04"
   integrity sha512-7FMPl2uO9HRkklAaAGqtuAx+8qphbluacWTxyOhV19AOLc0GC4hkD0FrQoj6ksmgrwFJEXIkBlWkkfu1GS1YyA==
 
-react-native-video@^6.14.1:
-  version "6.19.0"
-  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.19.0.tgz#828887010291259fef1367fb53a2de01886876fc"
-  integrity sha512-JVojWIxwuH5C3RjVrF4UyuweuOH/Guq/W2xeN9zugePXZI8Xn/j6/oU94gCWHaFzkR/HGeJpqMq+l9aEHSnpIQ==
+react-native-video@^6.19.2:
+  version "6.19.2"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-6.19.2.tgz#91065e087f90bc653b312ff2347903345c4f2411"
+  integrity sha512-gh5dBMGSHywKr8+p4azRXrFQgT+QTmS1tI4sz6kVRjSENORfsrGGLQzmyo/7S9m+ZOTLWQJ3h8ONaXxR4F2Fcw==
 
 react-native-webview@^13.14.1:
   version "13.16.1"
@@ -9255,10 +9255,10 @@ react-native-webview@^13.14.1:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"
 
-react-native-worklets@0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/react-native-worklets/-/react-native-worklets-0.9.1.tgz#a220942e3447559cb5edb183c1814484bc407900"
-  integrity sha512-kb6lGtBI5Ap41tvBPM09Np472r2GXuJ+jRApIFy1eXBk699eChG3U+lyqRC2/wz/VDpaJAy6i5XPcceNOoH3mA==
+react-native-worklets@^0.9.0:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/react-native-worklets/-/react-native-worklets-0.9.3.tgz#fec5c73c9da6b9d9c12022d87f29b725c821a3ef"
+  integrity sha512-2CylR2ruyvx8RKDbUtWZiUO5UTZcijbwnKFYT4WuVbTq2gzFUoJHeSFMFgA6HTY84sm6nTjXHT1OCCZjhyAVmg==
   dependencies:
     "@babel/plugin-transform-arrow-functions" "^7.27.1"
     "@babel/plugin-transform-class-properties" "^7.28.6"
@@ -9269,6 +9269,7 @@ react-native-worklets@0.9.1:
     "@babel/plugin-transform-template-literals" "^7.27.1"
     "@babel/plugin-transform-unicode-regex" "^7.27.1"
     "@babel/preset-typescript" "^7.28.5"
+    "@babel/types" "^7.27.1"
     convert-source-map "^2.0.0"
     semver "^7.7.4"
 
