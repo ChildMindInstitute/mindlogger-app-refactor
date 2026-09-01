@@ -1,5 +1,6 @@
 import { PropsWithChildren, useCallback } from 'react';
 import {
+  Pressable,
   TouchableOpacityProps,
   PressableStateCallbackType,
   StyleProp,
@@ -7,9 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { Pressable, type PressableProps } from 'react-native-gesture-handler';
-
-type Props = PressableProps & PropsWithChildren<TouchableOpacityProps>;
+type Props = PropsWithChildren<TouchableOpacityProps>;
 
 export function TouchableOpacity({
   children,
