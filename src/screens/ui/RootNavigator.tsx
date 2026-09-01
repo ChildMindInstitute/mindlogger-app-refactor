@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { useBackHandler } from '@react-native-community/hooks';
 import { useNavigation } from '@react-navigation/native';
@@ -43,7 +44,6 @@ import { XStack } from '@app/shared/ui/base';
 import { ChevronLeftIcon, UserProfileIcon } from '@app/shared/ui/icons';
 import { HomeIcon } from '@app/shared/ui/icons/HomeIcon';
 import { Text } from '@app/shared/ui/Text';
-import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 import { useAvailabilityEvaluator } from '@app/widgets/activity-group/model/hooks/useAvailabilityEvaluator';
 import { useAutoCompletion } from '@app/widgets/survey/model/hooks/useAutoCompletion';
 import { useAutoCompletionExecute } from '@app/widgets/survey/model/hooks/useAutoCompletionExecute';

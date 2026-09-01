@@ -1,10 +1,8 @@
 import { PropsWithChildren, FC } from 'react';
-import { AccessibilityProps, StyleSheet } from 'react-native';
+import { AccessibilityProps, StyleSheet, TouchableOpacity } from 'react-native';
 import { StyleProp, ViewStyle } from 'react-native';
 
 import { Stack, styled, StackStyle, TextProps } from '@tamagui/core';
-
-import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
 
 import { Box } from './base';
 import { Spinner } from './Spinner';
@@ -89,23 +87,7 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
 }) => {
   return (
     <TouchableOpacity
-      onPress={
-        !disabled
-          ? () => {
-              console.log(
-                '[TapDebug] SubmitButton onPress:',
-                accessibilityLabel,
-              );
-              onPress?.();
-            }
-          : undefined
-      }
-      onPressIn={() =>
-        console.log('[TapDebug] SubmitButton pressIn:', accessibilityLabel)
-      }
-      onPressOut={() =>
-        console.log('[TapDebug] SubmitButton pressOut:', accessibilityLabel)
-      }
+      onPress={!disabled ? onPress : undefined}
       disabled={disabled || isLoading}
       accessibilityLabel={accessibilityLabel}
       testID="submit-button"
