@@ -1,13 +1,7 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  PropsWithChildren,
-} from 'react';
-import { Dimensions, Linking, SectionList, StyleSheet } from 'react-native';
+import { useMemo, PropsWithChildren } from 'react';
+import { Linking, SectionList, StyleSheet } from 'react-native';
 
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
@@ -219,12 +213,6 @@ export function ActivitySectionList({
               disabled={isUploading || (!isWebOnly && !supportsApp)}
               isWebOnly={isWebOnly}
               onPress={() => {
-                console.log(
-                  '[TapDebug] onPress:',
-                  item.name,
-                  'isFocused:',
-                  isFocused(),
-                );
                 if (isFocused()) {
                   startActivityOrFlow(item).catch(console.error);
                 }
@@ -246,13 +234,6 @@ export function ActivitySectionList({
         ItemSeparatorComponent={ItemSeparator}
         stickySectionHeadersEnabled={false}
         contentContainerStyle={styles.sectionList}
-        scrollEventThrottle={16}
-        onScroll={e =>
-          console.log(
-            '[TapDebug] scroll offsetY:',
-            e.nativeEvent.contentOffset.y,
-          )
-        }
       />
       <GradientOverlay position="top" />
       <GradientOverlay position="bottom" />

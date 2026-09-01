@@ -1,9 +1,9 @@
 import { PropsWithChildren, useCallback, useContext } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { useThrottledCallback } from 'use-debounce';
 
 import { palette } from '@app/shared/lib/constants/palette';
-import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
 
 import { HandlersContext } from './contexts';
 import { RightArrowIcon } from '../icons';

@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { XStackProps } from '@tamagui/stacks';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,6 @@ import { useTCPSocket } from '@app/shared/lib/tcp/useTCPSocket';
 import { XStack } from '@app/shared/ui/base';
 import { EditIcon } from '@app/shared/ui/icons';
 import { Text } from '@app/shared/ui/Text';
-import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 
 import { ConnectionModal } from './ConnectionModal';
 

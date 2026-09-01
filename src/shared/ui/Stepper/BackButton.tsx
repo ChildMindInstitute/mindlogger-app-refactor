@@ -1,7 +1,7 @@
 import { PropsWithChildren, useContext } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { palette } from '@app/shared/lib/constants/palette';
-import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
 
 import { HandlersContext } from './contexts';
 import { LeftArrowIcon } from '../icons';

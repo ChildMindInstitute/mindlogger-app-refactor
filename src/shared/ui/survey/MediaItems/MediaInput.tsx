@@ -1,10 +1,13 @@
 import { ReactNode, FC, JSX } from 'react';
-import { Alert, StyleSheet, useWindowDimensions } from 'react-native';
+import {
+  Alert,
+  TouchableOpacity,
+  StyleSheet,
+  useWindowDimensions,
+} from 'react-native';
 
 import { styled } from '@tamagui/core';
 import { useTranslation } from 'react-i18next';
-
-import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
 
 import { Box, BoxProps } from '../../base';
 import { Center } from '../../Center';
