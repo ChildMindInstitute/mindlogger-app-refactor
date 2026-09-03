@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from '@app/shared/ui/TouchableOpacity';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -9,13 +9,13 @@ type RootParamList = ReactNavigation.RootParamList;
 
 type Props<RouteName extends keyof RootParamList> =
   undefined extends RootParamList[RouteName]
-    ?
-        | { fallbackRoute?: RouteName }
-        | {
-            fallbackRoute: RouteName;
-            fallbackParams: RootParamList[RouteName];
-          }
-    : { fallbackRoute: RouteName; fallbackParams: RootParamList[RouteName] };
+  ?
+  | { fallbackRoute?: RouteName }
+  | {
+    fallbackRoute: RouteName;
+    fallbackParams: RootParamList[RouteName];
+  }
+  : { fallbackRoute: RouteName; fallbackParams: RootParamList[RouteName] };
 
 export function BackButton<TRouteName extends keyof RootParamList>(
   props: PropsWithChildren<Props<TRouteName>> & BoxProps,
