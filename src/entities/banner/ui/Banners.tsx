@@ -64,6 +64,7 @@ export const Banners = () => {
       style={[
         animatedStyles,
         {
+          // Add top inset here instead of letting react-native-screens 4.17+ pad the header
           paddingTop: top,
           // There's weird white space on Android 15 and above because of the safe area insets
           // We can remove this negative bottom margin when this issue is resolved:
