@@ -6,7 +6,10 @@ import { CacheManager } from '@georstat/react-native-image-cache';
 import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+} from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 import { LocalizationProvider } from '@app/entities/localization/ui/LocalizationProvider';
@@ -66,7 +69,9 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                       <FontLanguageProvider>
                         <NavigationProvider>
                           <PortalProvider>
-                            <SafeAreaProvider>
+                            <SafeAreaProvider
+                              initialMetrics={initialWindowMetrics}
+                            >
                               <SplashProvider isLoading={isBootingUp}>
                                 {children}
                               </SplashProvider>
