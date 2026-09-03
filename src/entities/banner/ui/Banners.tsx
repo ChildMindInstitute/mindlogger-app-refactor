@@ -76,6 +76,7 @@ export const Banners = () => {
       duration: IS_IOS ? 320 : 270,
       easing: Easing.out(Easing.ease),
     }),
+    // Add top inset here instead of letting react-native-screens 4.17+ pad the header
     paddingTop: withTiming(isHidden ? 0 : top, COLLAPSE_TIMING),
     marginBottom: withTiming(isHidden ? 0 : insetCorrection, COLLAPSE_TIMING),
   }));
