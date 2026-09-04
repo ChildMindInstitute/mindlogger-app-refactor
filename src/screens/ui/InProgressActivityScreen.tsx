@@ -4,7 +4,7 @@ import { StatusBar as RNStatusBar } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Animated, {
   useAnimatedStyle,
-  useSharedValue
+  useSharedValue,
 } from 'react-native-reanimated';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
