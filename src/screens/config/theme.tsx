@@ -25,6 +25,9 @@ export const getScreenOptions = (): NativeStackNavigationOptions => {
       backgroundColor: DEFAULT_BG,
     },
     headerShadowVisible: false,
+    // Allow Banners app component to own padding for top inset
+    // Disable react-native-screens 4.17+ from adding top inset
+    unstable_headerInsets: { top: false },
     headerTitle: HeaderTitle,
     headerTitleAlign: 'center',
     headerBackVisible: false,
