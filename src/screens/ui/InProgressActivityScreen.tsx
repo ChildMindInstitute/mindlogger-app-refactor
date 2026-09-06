@@ -1,11 +1,6 @@
 import { FC, useEffect } from 'react';
-import { StatusBar as RNStatusBar } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue
-} from 'react-native-reanimated';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
@@ -42,15 +37,6 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
 
   useEffect(() => {
     const callback = navigation.addListener('beforeRemove', () => {
-      // Restore the status bar before the back transition starts so the
-      // resulting layout shift is masked by the transition animation instead
-      // of happening after the previous screen is already visible.
-      // Android-only: on iOS this mid-transition restore makes UIKit re-lay
-      // out the incoming screen's native header, shifting its content down.
-      if (IS_ANDROID) {
-        // RNStatusBar.setHidden(false, 'fade');
-      }
-
       Emitter.emit<AutocompletionEventOptions>('autocomplete', {
         checksToExclude: ['in-progress-activity'],
         logTrigger: 'close-entity',
