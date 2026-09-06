@@ -1,6 +1,9 @@
 import { renderHook } from '@testing-library/react-native';
 
-import { useStableTopInset } from './useStableTopInset';
+import {
+  resetStableTopInsetCache,
+  useStableTopInset,
+} from './useStableTopInset';
 
 const mockUseSafeAreaInsets = jest.fn();
 const mockUseWindowDimensions = jest.fn();
@@ -24,6 +27,7 @@ const setLandscape = () =>
 
 describe('useStableTopInset', () => {
   beforeEach(() => {
+    resetStableTopInsetCache();
     setPortrait();
   });
 
@@ -88,6 +92,19 @@ describe('useStableTopInset', () => {
     rerender(undefined);
 
     expect(result.current).toBe(0);
+  });
+
+  it('should share the cached inset with components that mount while the status bar is hidden', () => {
+    setTopInset(47);
+
+    // e.g. Banners mounts at app start and captures the real inset
+    renderHook(() => useStableTopInset());
+
+    // e.g. the stepper mounts later, after the status bar is already hidden
+    setTopInset(0);
+    const { result } = renderHook(() => useStableTopInset());
+
+    expect(result.current).toBe(47);
   });
 
   it('should ratchet independently after returning to portrait', () => {
