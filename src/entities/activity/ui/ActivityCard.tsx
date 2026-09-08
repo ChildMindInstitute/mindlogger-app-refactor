@@ -57,6 +57,10 @@ export const ActivityCard: FC<Props> = ({
       aria-label={accessibilityLabel}
       onPress={onPress}
       disabled={isDisabled}
+      style={{
+        borderRadius: 16,
+        opacity: disabled ? 0.5 : 1,
+      }}
     >
       <XStack p={16} gap={8} ai="center">
         <YStack gap={8} flex={1}>
