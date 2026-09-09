@@ -2,12 +2,12 @@ buildscript {
     ext {
         buildToolsVersion = "35.0.0"
         minSdkVersion = 25
-        compileSdkVersion = 35
+        compileSdkVersion = 36
         targetSdkVersion = 35
         ndkVersion = "27.1.12297006"
         kotlinVersion = "2.0.21"
-        // Explicitly set AGP version for 16KB page size support
-        AGP_VERSION = "8.7.3"
+        // Match the AGP version required by RN 0.81 (also needed for compileSdk 36 and 16KB page size support)
+        AGP_VERSION = "8.12.0"
     }
     repositories {
         google()
