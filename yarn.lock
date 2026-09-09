@@ -9312,11 +9312,6 @@ react-native-progress@^5.0.1:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-quick-base64@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-quick-base64/-/react-native-quick-base64-3.0.1.tgz#d6eb0e316856aa6f68399729d56aceba38d585cc"
-  integrity sha512-EjUP2U7WqKmlMmoY7XGyHomy8bM0q4+yCDCRg4ZezQ6zedYRwc7yVk4V2O/iSftKaLEzhuW98lpyPMdk1iPHXQ==
-
 react-native-reanimated@4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-4.4.1.tgz#245ae96981542e939409a5871b696e0a616cadc9"
