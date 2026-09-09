@@ -58,8 +58,7 @@ export const ActivityCard: FC<Props> = ({
       onPress={onPress}
       disabled={isDisabled}
       style={{
-        borderRadius: 16,
-        opacity: disabled ? 0.5 : 1,
+        borderRadius: 16
       }}
     >
       <XStack p={16} gap={8} ai="center">
