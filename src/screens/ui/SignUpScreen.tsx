@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SignUpForm } from '@app/features/sign-up/ui/SignUpForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
-import { IS_SMALL_HEIGHT_SCREEN } from '@app/shared/lib/constants';
+import { IS_IOS, IS_SMALL_HEIGHT_SCREEN } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
@@ -28,6 +28,9 @@ export const SignUpScreen: FC = () => {
 
   return (
     <KeyboardAvoidingView
+      // Android already pans up via `adjustPan` -- avoid shifting again
+      // which pushes fields up under the header on tall keyboards (M2-11126)
+      enabled={IS_IOS}
       contentContainerStyle={{ flex: 1 }}
       flex={1}
       keyboardVerticalOffset={-120}
