@@ -3,10 +3,6 @@ buildscript {
         buildToolsVersion = "35.0.0"
         minSdkVersion = 25
         compileSdkVersion = 36
-        // Play Store requires app updates to target API 36 from Aug 31, 2026.
-        // Targeting 36 opts into Android 16 behavior: edge-to-edge opt-outs are
-        // ignored and predictive back is on by default — re-verify inset and
-        // Unity fullscreen paths when touching this.
         targetSdkVersion = 36
         ndkVersion = "27.1.12297006"
         kotlinVersion = "2.0.21"
