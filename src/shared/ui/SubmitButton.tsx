@@ -1,8 +1,10 @@
 import { PropsWithChildren, FC } from 'react';
-import { AccessibilityProps, StyleSheet, TouchableOpacity } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 import { StyleProp, ViewStyle } from 'react-native';
 
 import { Stack, styled, StackStyle, TextProps } from '@tamagui/core';
+
+import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
 
 import { Box } from './base';
 import { Spinner } from './Spinner';

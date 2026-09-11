@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 
 import Animated, {
   FadeInUp,
@@ -7,7 +7,6 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   IS_ANDROID,
@@ -15,6 +14,7 @@ import {
   OS_MAJOR_VERSION,
 } from '@app/shared/lib/constants';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useStableTopInset } from '@app/shared/lib/hooks/useStableTopInset';
 import { DEFAULT_BG } from '@entities/banner/lib/constants';
 
 import { Banner, BannerProps } from './Banner';
@@ -25,6 +25,18 @@ import {
   bannersSelector,
 } from '../model/selectors';
 import { BannerType } from '../model/slice';
+
+const styles = StyleSheet.create({
+  strip: {
+    zIndex: 1000,
+    overflow: 'hidden',
+  },
+});
+
+const COLLAPSE_TIMING = {
+  duration: 250,
+  easing: Easing.out(Easing.ease),
+};
 
 const handleClose = (
   removeBanner: (key: BannerType) => void,
@@ -40,9 +52,22 @@ export const Banners = () => {
   const banners = useAppSelector(bannersSelector);
   const bannersBg = useAppSelector(bannersBgSelector) ?? DEFAULT_BG;
   const isHidden = useAppSelector(bannersHiddenSelector);
-  const { top } = useSafeAreaInsets();
+  // Use a stable inset so the banners strip keeps reserving the status bar
+  // space while the status bar is hidden during an activity. This prevents
+  // the whole app layout from shifting when the status bar hides/shows.
+  const top = useStableTopInset();
 
-  // Animate top safe area background color to match native header background color transition
+  // There's weird white space on Android 15 and above because of the safe
+  // area insets. We can remove this negative bottom margin when this issue
+  // is resolved:
+  // https://github.com/react-navigation/react-navigation/issues/12608
+  const insetCorrection = IS_ANDROID && OS_MAJOR_VERSION >= 15 ? -top : 0;
+
+  // Animate top safe area background color to match native header background
+  // color transition. The strip's padding also animates to 0 when Unity takes
+  // over the full screen (isHidden), instead of unmounting and causing a
+  // layout jump. The strip stays mounted so re-expanding on Unity exit is
+  // also smooth.
   const animatedStyles = useAnimatedStyle(() => ({
     backgroundColor: withTiming(bannersBg, {
       // Duration is based on native header transition duration for each OS
@@ -51,28 +76,14 @@ export const Banners = () => {
       duration: IS_IOS ? 320 : 270,
       easing: Easing.out(Easing.ease),
     }),
+    paddingTop: withTiming(isHidden ? 0 : top, COLLAPSE_TIMING),
+    marginBottom: withTiming(isHidden ? 0 : insetCorrection, COLLAPSE_TIMING),
   }));
-
-  if (isHidden) {
-    return null;
-  }
 
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
 
   return (
-    <Animated.View
-      style={[
-        animatedStyles,
-        {
-          paddingTop: top,
-          // There's weird white space on Android 15 and above because of the safe area insets
-          // We can remove this negative bottom margin when this issue is resolved:
-          // https://github.com/react-navigation/react-navigation/issues/12608
-          marginBottom: IS_ANDROID && OS_MAJOR_VERSION >= 15 ? -top : 0,
-          zIndex: 1000,
-        },
-      ]}
-    >
+    <Animated.View style={[styles.strip, animatedStyles]}>
       <StatusBar
         barStyle="dark-content"
         translucent

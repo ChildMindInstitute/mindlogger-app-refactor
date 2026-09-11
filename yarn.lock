@@ -9265,10 +9265,10 @@ react-native-modal-datetime-picker@^17.1.0:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-nitro-modules@0.35.6:
-  version "0.35.6"
-  resolved "https://registry.npmjs.org/react-native-nitro-modules/-/react-native-nitro-modules-0.35.6.tgz"
-  integrity sha512-3Cb7s+O5tpZ6RdIiPOB/wi3IMfBxD6tl6VDF8gJ5zvM/BEGTWxwMMLjzmWmsYPKekdbYBznF6qp2d2SxixPy8g==
+react-native-nitro-modules@^0.37.1:
+  version "0.37.1"
+  resolved "https://registry.yarnpkg.com/react-native-nitro-modules/-/react-native-nitro-modules-0.37.1.tgz#368bda3038ebe796b219d98e0a364f9166e2cc7c"
+  integrity sha512-KpW6EQVQ/bfegpCGxN9Be+ndvsfj56t4IESEvCASu9gWpJa/NDfHpIeIwCOvZQ3eXmLEj6YD4wCLqcC1FJPr2w==
 
 react-native-nitro-sound@^0.2.15:
   version "0.2.15"
@@ -9389,7 +9389,7 @@ react-native-webview@^13.14.1:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"
 
-react-native-worklets@^0.9.1:
+react-native-worklets@^0.9.0:
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/react-native-worklets/-/react-native-worklets-0.9.3.tgz#fec5c73c9da6b9d9c12022d87f29b725c821a3ef"
   integrity sha512-2CylR2ruyvx8RKDbUtWZiUO5UTZcijbwnKFYT4WuVbTq2gzFUoJHeSFMFgA6HTY84sm6nTjXHT1OCCZjhyAVmg==
