@@ -1,6 +1,7 @@
 import { FC, useRef } from 'react';
 import { ScrollView as RNScrollView } from 'react-native';
 
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
@@ -8,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SignUpForm } from '@app/features/sign-up/ui/SignUpForm';
 import { openUrl } from '@app/screens/lib/utils/helpers';
-import { IS_IOS, IS_SMALL_HEIGHT_SCREEN } from '@app/shared/lib/constants';
+import { IS_SMALL_HEIGHT_SCREEN } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
@@ -20,6 +21,7 @@ export const SignUpScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
   const scrollViewRef = useRef<RNScrollView>(null);
 
   let marginTop: string | number = '$8';
@@ -28,13 +30,11 @@ export const SignUpScreen: FC = () => {
 
   return (
     <KeyboardAvoidingView
-      // Android already pans up via `adjustPan` -- avoid shifting again
-      // which pushes fields up under the header on tall keyboards (M2-11126)
-      enabled={IS_IOS}
-      contentContainerStyle={{ flex: 1 }}
       flex={1}
-      keyboardVerticalOffset={-120}
-      behavior="position"
+      // Shrink padding instead of shifting position so fields remain in view (M2-11126)
+      behavior="padding"
+      // Offset by header less 120 to allow terms & privacy to be covered by keyboard
+      keyboardVerticalOffset={headerHeight - 120}
     >
       <Box flex={1} px={isTablet() ? '$20' : 0}>
         <Box flex={1} px="$8">
