@@ -2,6 +2,7 @@ import { useCallback, useRef } from 'react';
 
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { ENV } from '@shared/lib/constants';
 
 import { newEchoMessage } from './useRNUnityCommBridge';
 import {
@@ -62,7 +63,9 @@ export const useUnityHeartbeat = ({
     intervalRef.current = setInterval(() => {
       const echoPayload = `heartbeat-${Date.now()}`;
       const echoMsg = newEchoMessage(echoPayload);
-      logger.log('[Heartbeat] sending Echo tick');
+      if (ENV === 'dev' || ENV === 'uat') {
+        logger.log('[Heartbeat] sending Echo tick');
+      }
 
       const timeoutId = setTimeout(() => {
         handleFailure(`Echo timed out after ${HEARTBEAT_TIMEOUT_MS}ms`);
