@@ -20,7 +20,7 @@ import { Text } from '../Text';
 const audioSetConfig: AudioSet = {
   AVNumberOfChannelsKeyIOS: 1,
 };
-const androidCacheDir = Dirs.CacheDir;
+const cacheDir = Dirs.CacheDir;
 
 type Response = {
   uri: string;
@@ -71,9 +71,12 @@ export const AudioRecorderItem: FC<Props> = ({
 
   const generateNewFilePath = async () => {
     const randomString = uuidv4();
+    // react-native-nitro-sound requires an absolute path: a bare file name
+    // resolves against the app process working directory, which is not
+    // writable on iOS.
     const newFilePath = IS_ANDROID
-      ? `${androidCacheDir}/${randomString}.mp4`
-      : `${randomString}.m4a`;
+      ? `${cacheDir}/${randomString}.mp4`
+      : `${cacheDir}/${randomString}.m4a`;
 
     await unlinkOldRecordingFile();
 
