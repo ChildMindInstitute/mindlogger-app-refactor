@@ -301,6 +301,7 @@ export const RootNavigator = () => {
             component={InProgressActivityScreen}
             options={{
               headerShown: false,
+              gestureEnabled: false, // disable swipe back from anywhere on screen in iOS 26+ (M2-11137)
             }}
           />
 
