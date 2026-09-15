@@ -10,6 +10,7 @@ import { IS_ANDROID } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { useMicrophonePermissions } from '@app/shared/lib/hooks/useMicrophonePermissions';
 import { requestMicrophonePermissions } from '@app/shared/lib/permissions/microphonePermissions';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { isLocalFileUrl } from '@app/shared/lib/utils/file';
 
 import { XStack, YStack } from '../base';
@@ -107,7 +108,12 @@ export const AudioRecorderItem: FC<Props> = ({
     } catch (e) {
       setErrorDescription(t('audio_recorder:record_error'));
       destroy();
-      console.error(e);
+      // Route through the app logger so the underlying reason (from the
+      // native recorder's rejection) reaches Datadog and the log files in
+      // release builds; a plain console.error is invisible there.
+      getDefaultLogger().error(
+        `[AudioRecorderItem] startRecorder failed: ${String(e)}`,
+      );
     }
   };
 
