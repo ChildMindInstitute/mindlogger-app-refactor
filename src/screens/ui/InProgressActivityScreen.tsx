@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useLayoutEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -25,7 +25,13 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
   const { data, isLoading } = useBaseInfo(appletId);
   const { responseTypes, title } = data || {};
   const entityResponseTypes = responseTypes?.[entityId];
+  const hasUnityItem = !!entityResponseTypes?.includes('unity');
   const isAppSupportedEntity = entityResponseTypes?.every(getSupportsMobile);
+
+  // Disable swipe back on Unity which tears down Unity without a clean Reset (M2-11135)
+  useLayoutEffect(() => {
+    navigation.setOptions({ gestureEnabled: !hasUnityItem });
+  }, [hasUnityItem, navigation]);
 
   useEffect(() => {
     if (!isAppSupportedEntity && !isLoading) {
