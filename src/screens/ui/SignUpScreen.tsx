@@ -1,6 +1,11 @@
 import { FC, useRef } from 'react';
-import { ScrollView as RNScrollView } from 'react-native';
+import {
+  HostInstance,
+  ScrollView as RNScrollView,
+  TextInput,
+} from 'react-native';
 
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { isTablet } from 'react-native-device-info';
@@ -20,7 +25,27 @@ export const SignUpScreen: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
+  const headerHeight = useHeaderHeight();
   const scrollViewRef = useRef<RNScrollView>(null);
+  const passwordInputRef = useRef<HostInstance | null>(null);
+
+  const isPasswordFocused = () =>
+    !!passwordInputRef.current &&
+    passwordInputRef.current === TextInput.State.currentlyFocusedInput();
+
+  // Scroll password input to top so password requirements remain visible
+  const scrollPasswordInputToTop = () => {
+    const scrollView = scrollViewRef.current?.getNativeScrollRef();
+    if (!passwordInputRef.current || !scrollView) return;
+
+    // measureLayout ignores the scroll offset, so y is the content offset
+    passwordInputRef.current.measureLayout(scrollView, (_x, y) =>
+      scrollViewRef.current?.scrollTo({
+        y: Math.max(y - 16, 0), // reduce offset by 16 for GradientOverlay
+        animated: true,
+      }),
+    );
+  };
 
   let marginTop: string | number = '$8';
   if (IS_SMALL_HEIGHT_SCREEN) marginTop = '$5';
@@ -28,10 +53,11 @@ export const SignUpScreen: FC = () => {
 
   return (
     <KeyboardAvoidingView
-      contentContainerStyle={{ flex: 1 }}
       flex={1}
-      keyboardVerticalOffset={-120}
-      behavior="position"
+      // Shrink padding instead of shifting position so fields remain in view (M2-11126)
+      behavior="padding"
+      // Offset by header less 120 to allow terms & privacy to be covered by keyboard
+      keyboardVerticalOffset={headerHeight - 120}
     >
       <Box flex={1} px={isTablet() ? '$20' : 0}>
         <Box flex={1} px="$8">
@@ -41,6 +67,8 @@ export const SignUpScreen: FC = () => {
               flex={1}
               keyboardShouldPersistTaps="always"
               showsVerticalScrollIndicator={false}
+              // Scroll again if viewport changes after keyboard opens
+              onLayout={() => isPasswordFocused() && scrollPasswordInputToTop()}
             >
               <Box mt={marginTop} mb={isTablet() ? 0 : 12}>
                 <Text
@@ -54,9 +82,11 @@ export const SignUpScreen: FC = () => {
               <Box mt={30}>
                 <SignUpForm
                   onLoginSuccess={() => navigate('Applets')}
-                  onPasswordFocus={() =>
-                    scrollViewRef.current?.scrollToEnd({ animated: true })
-                  }
+                  onPasswordFocus={() => {
+                    passwordInputRef.current =
+                      TextInput.State.currentlyFocusedInput();
+                    scrollPasswordInputToTop();
+                  }}
                 />
               </Box>
             </ScrollView>
