@@ -29,6 +29,8 @@ export const getScreenOptions = (): NativeStackNavigationOptions => {
     // Allow Banners app component to own padding for top inset
     // Disable react-native-screens 4.17+ from adding top inset
     unstable_headerInsets: { top: false },
+    // Disable full-screen swipe back to avoid interfering with drawings or sliders (M2-11137)
+    fullScreenGestureEnabled: false,
     headerTitle: HeaderTitle,
     headerTitleAlign: 'center',
     headerBackVisible: false,
