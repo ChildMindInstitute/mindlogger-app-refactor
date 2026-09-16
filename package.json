@@ -143,7 +143,7 @@
     "react-native-mmkv": "4.3.1",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-nitro-modules": "^0.37.1",
-    "react-native-nitro-sound": "^0.2.15",
+    "react-native-nitro-sound": "^0.2.20",
     "react-native-notify-kit": "^10.4.6",
     "react-native-orientation-director": "^2.6.5",
     "react-native-permissions": "^4.0.1",
