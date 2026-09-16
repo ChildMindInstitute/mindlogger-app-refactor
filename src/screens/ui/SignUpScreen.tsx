@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react';
+import { FC, useRef, useState } from 'react';
 import {
   HostInstance,
   ScrollView as RNScrollView,
@@ -26,6 +26,7 @@ export const SignUpScreen: FC = () => {
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
+  const [footerHeight, setFooterHeight] = useState(0);
   const scrollViewRef = useRef<RNScrollView>(null);
   const passwordInputRef = useRef<HostInstance | null>(null);
 
@@ -56,8 +57,8 @@ export const SignUpScreen: FC = () => {
       flex={1}
       // Shrink padding instead of shifting position so fields remain in view (M2-11126)
       behavior="padding"
-      // Offset by header less 120 to allow terms & privacy to be covered by keyboard
-      keyboardVerticalOffset={headerHeight - 120}
+      // Offset by header less footer so terms & privacy are hidden under the keyboard
+      keyboardVerticalOffset={headerHeight - footerHeight}
     >
       <Box flex={1} px={isTablet() ? '$20' : 0}>
         <Box flex={1} px="$8">
@@ -95,7 +96,11 @@ export const SignUpScreen: FC = () => {
             <GradientOverlay position="bottom" color={palette.surface} />
           </Box>
 
-          <Box justifyContent="center" alignItems="center">
+          <Box
+            justifyContent="center"
+            alignItems="center"
+            onLayout={e => setFooterHeight(e.nativeEvent.layout.height)}
+          >
             <Box
               flexDirection="row"
               flexWrap="wrap"
