@@ -15,12 +15,15 @@ import {
 } from 'react-native';
 
 import { MotiView } from 'moti';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  KeyboardAwareScrollView,
+  KeyboardAwareScrollViewRef,
+} from 'react-native-keyboard-controller';
 import { useDebounce } from 'use-debounce';
 
 import { Box } from './base';
 import { ScrollButton } from './ScrollButton';
-import { IS_SMALL_WIDTH_SCREEN } from '../lib/constants';
+import { IS_IOS, IS_SMALL_WIDTH_SCREEN } from '../lib/constants';
 import { ScrollViewContext } from '../lib/contexts/ScrollViewContext';
 
 type Props = {
@@ -29,6 +32,14 @@ type Props = {
 } & PropsWithChildren;
 
 const PaddingToBottom = IS_SMALL_WIDTH_SCREEN ? 30 : 40;
+
+// Gap kept between the caret and the top of the keyboard while typing.
+const KeyboardBottomOffset = 24;
+
+// Keyboard-aware scroll on iOS only: Android relies on windowSoftInputMode="adjustPan"
+const ScrollableContentScrollView = (
+  IS_IOS ? KeyboardAwareScrollView : ScrollView
+) as typeof KeyboardAwareScrollView;
 
 export const ScrollableContent: FC<Props> = ({
   children,
@@ -48,7 +59,7 @@ export const ScrollableContent: FC<Props> = ({
 
   const [showScrollButton, setShowScrollButton] = useState(false);
 
-  const scrollViewRef = useRef<ScrollView>(undefined);
+  const scrollViewRef = useRef<KeyboardAwareScrollViewRef>(null);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (endOfContentReachedOnce) {
@@ -117,10 +128,9 @@ export const ScrollableContent: FC<Props> = ({
         }}
       >
         <Box flex={1}>
-          <KeyboardAwareScrollView
-            innerRef={ref => {
-              scrollViewRef.current = ref as unknown as ScrollView;
-            }}
+          <ScrollableContentScrollView
+            ref={scrollViewRef}
+            bottomOffset={KeyboardBottomOffset}
             contentContainerStyle={styles.scrollView}
             onContentSizeChange={(_, contentHeight) => {
               setScrollContentHeight(contentHeight);
@@ -128,7 +138,7 @@ export const ScrollableContent: FC<Props> = ({
             scrollEnabled={scrollEnabled}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
-            keyboardOpeningTime={0}
+            keyboardDismissMode="interactive"
             scrollEventThrottle={scrollEventThrottle}
             onScroll={onScroll}
             overScrollMode="never"
@@ -137,7 +147,7 @@ export const ScrollableContent: FC<Props> = ({
             {...panResponder.panHandlers}
           >
             {children}
-          </KeyboardAwareScrollView>
+          </ScrollableContentScrollView>
         </Box>
 
         <MotiView

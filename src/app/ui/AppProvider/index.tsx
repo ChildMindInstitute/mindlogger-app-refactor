@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useState } from 'react';
+import { FC, Fragment, PropsWithChildren, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { DdSdkReactNative } from '@datadog/mobile-react-native';
@@ -6,6 +6,7 @@ import { CacheManager } from '@georstat/react-native-image-cache';
 import { PortalProvider } from '@tamagui/portal';
 import { Dirs } from 'react-native-file-access';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
   initialWindowMetrics,
   SafeAreaProvider,
@@ -15,6 +16,7 @@ import Toast from 'react-native-toast-message';
 import { LocalizationProvider } from '@app/entities/localization/ui/LocalizationProvider';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
+import { IS_IOS } from '@app/shared/lib/constants';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { selectUserId } from '@entities/identity/model/selectors';
 
@@ -38,6 +40,9 @@ CacheManager.config = {
   thumbnailAnimationDuration: 1000,
 };
 
+// Keyboard-aware scroll on iOS only: Android relies on windowSoftInputMode="adjustPan"
+const KeyboardProviderOnIOS = IS_IOS ? KeyboardProvider : Fragment;
+
 export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   const [isBootingUp, setIsBootingUp] = useState(true);
 
@@ -58,37 +63,39 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <GestureHandlerRootView style={styles.gestureHandlerView}>
-      <SystemBootUpProvider onLoadingFinished={onLoadingFinished}>
-        <FeatureFlagsProvider>
-          <AnalyticsProvider>
-            <ReactQueryProvider>
-              <ReduxProvider>
-                <StorageMigrationProvider>
-                  <LocalizationProvider>
-                    <TamaguiProvider>
-                      <FontLanguageProvider>
-                        <NavigationProvider>
-                          <PortalProvider>
-                            <SafeAreaProvider
-                              initialMetrics={initialWindowMetrics}
-                            >
-                              <SplashProvider isLoading={isBootingUp}>
-                                {children}
-                              </SplashProvider>
+      <KeyboardProviderOnIOS>
+        <SystemBootUpProvider onLoadingFinished={onLoadingFinished}>
+          <FeatureFlagsProvider>
+            <AnalyticsProvider>
+              <ReactQueryProvider>
+                <ReduxProvider>
+                  <StorageMigrationProvider>
+                    <LocalizationProvider>
+                      <TamaguiProvider>
+                        <FontLanguageProvider>
+                          <NavigationProvider>
+                            <PortalProvider>
+                              <SafeAreaProvider
+                                initialMetrics={initialWindowMetrics}
+                              >
+                                <SplashProvider isLoading={isBootingUp}>
+                                  {children}
+                                </SplashProvider>
 
-                              <Toast config={ToastConfig} topOffset={0} />
-                            </SafeAreaProvider>
-                          </PortalProvider>
-                        </NavigationProvider>
-                      </FontLanguageProvider>
-                    </TamaguiProvider>
-                  </LocalizationProvider>
-                </StorageMigrationProvider>
-              </ReduxProvider>
-            </ReactQueryProvider>
-          </AnalyticsProvider>
-        </FeatureFlagsProvider>
-      </SystemBootUpProvider>
+                                <Toast config={ToastConfig} topOffset={0} />
+                              </SafeAreaProvider>
+                            </PortalProvider>
+                          </NavigationProvider>
+                        </FontLanguageProvider>
+                      </TamaguiProvider>
+                    </LocalizationProvider>
+                  </StorageMigrationProvider>
+                </ReduxProvider>
+              </ReactQueryProvider>
+            </AnalyticsProvider>
+          </FeatureFlagsProvider>
+        </SystemBootUpProvider>
+      </KeyboardProviderOnIOS>
     </GestureHandlerRootView>
   );
 };
