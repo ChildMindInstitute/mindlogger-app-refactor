@@ -14,6 +14,10 @@ jest.mock('react-native-file-access', () => {
   };
 });
 
+jest.mock('react-native-keyboard-controller', () =>
+  require('react-native-keyboard-controller/jest'),
+);
+
 // Reanimated v4 removed the jestUtils.ts setup file that v3 provided,
 // so we manually mock the default export (Animated.View, etc.) and named exports
 // (LinearTransition, setUpTests, createAnimatedComponent) that tests depend on.
