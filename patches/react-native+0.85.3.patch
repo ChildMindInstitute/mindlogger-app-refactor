@@ -73,17 +73,3 @@ index cbbc402..93929ea 100644
  - (void)_setMultiline:(BOOL)multiline
  {
    [_backedTextInputView removeFromSuperview];
-diff --git a/node_modules/react-native/ReactCommon/react/renderer/textlayoutmanager/platform/ios/react/renderer/textlayoutmanager/RCTTextLayoutManager.mm b/node_modules/react-native/ReactCommon/react/renderer/textlayoutmanager/platform/ios/react/renderer/textlayoutmanager/RCTTextLayoutManager.mm
-index 5fed44e..196aad4 100644
---- a/node_modules/react-native/ReactCommon/react/renderer/textlayoutmanager/platform/ios/react/renderer/textlayoutmanager/RCTTextLayoutManager.mm
-+++ b/node_modules/react-native/ReactCommon/react/renderer/textlayoutmanager/platform/ios/react/renderer/textlayoutmanager/RCTTextLayoutManager.mm
-@@ -386,6 +386,9 @@ static NSLineBreakMode RCTNSLineBreakModeFromEllipsizeMode(EllipsizeMode ellipsi
-       enumeratedLinesHeight += layoutManager.extraLineFragmentUsedRect.size.height;
-     }
-     size.height = enumeratedLinesHeight;
-+  } else {
-+    // If maximumNumberOfLines is not set, a trailing newline is also left out of height measurement
-+    size.height += layoutManager.extraLineFragmentUsedRect.size.height;
-   }
- 
-   size = (CGSize){ceil(size.width * layoutContext.pointScaleFactor) / layoutContext.pointScaleFactor,
