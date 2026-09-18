@@ -6,7 +6,6 @@ Applied via [patch-package](https://github.com/ds300/patch-package).
 
 - Disable font leading in multiline `TextInput` (similar to react/react-native#45268).
 - Scroll as multiline `TextInput` grows in iOS (same fix as react/react-native#58520).
-- Include trailing newline in multiline `TextInput` height in iOS.
 - Added in pull request #1183.
 
 ## @azesmway+react-native-unity+1.1.1.patch
