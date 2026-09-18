@@ -4,10 +4,9 @@ Applied via [patch-package](https://github.com/ds300/patch-package).
 
 ## react-native+0.85.3.patch
 
-- Scroll `ScrollView` to cursor when multiline `TextInput` grows while typing.
+- Scroll as multiline `TextInput` grows in iOS (same fix as react/react-native#58520).
+- Include trailing newline in multiline `TextInput` height in iOS.
 - Added in pull request #1183.
-- Same fix as pull request facebook/react-native#58520.
-- Remove after upgrading to react-native version that incorporates upstream fix.
 
 ## @azesmway+react-native-unity+1.1.1.patch
 
