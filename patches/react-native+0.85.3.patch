@@ -1,3 +1,24 @@
+diff --git a/node_modules/react-native/Libraries/Text/TextInput/Multiline/RCTUITextView.mm b/node_modules/react-native/Libraries/Text/TextInput/Multiline/RCTUITextView.mm
+index cbda377..e18fe5f 100644
+--- a/node_modules/react-native/Libraries/Text/TextInput/Multiline/RCTUITextView.mm
++++ b/node_modules/react-native/Libraries/Text/TextInput/Multiline/RCTUITextView.mm
+@@ -54,6 +54,16 @@ static UIColor *defaultPlaceholderColor(void)
+     self.textColor = [UIColor blackColor];
+     // This line actually removes 5pt (default value) left and right padding in UITextView.
+     self.textContainer.lineFragmentPadding = 0;
++    // Lay out text without font leading to match RCTTextLayoutManager measurement
++    if (@available(iOS 16.0, *)) {
++      if (self.textLayoutManager != nil) {
++        self.textLayoutManager.usesFontLeading = NO;
++      } else {
++        self.layoutManager.usesFontLeading = NO;
++      }
++    } else {
++      self.layoutManager.usesFontLeading = NO;
++    }
+ #if !TARGET_OS_TV
+     self.scrollsToTop = NO;
+ #endif
 diff --git a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputComponentView.mm b/node_modules/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputComponentView.mm
 index cbbc402..93929ea 100644
 --- a/node_modules/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputComponentView.mm
