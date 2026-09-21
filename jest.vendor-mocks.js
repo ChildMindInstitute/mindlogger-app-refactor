@@ -259,6 +259,7 @@ class MockReactNativeLDClient {
   init() {}
   identify() {}
   boolVariation() {}
+  jsonVariation() {}
   on() {}
 }
 
