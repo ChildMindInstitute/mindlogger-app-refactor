@@ -4,7 +4,11 @@ import {
   ReactNativeLDClient,
 } from '@launchdarkly/react-native-client-sdk';
 
-import { LD_KIND_PREFIX, FeatureFlagKeyDefaults } from './FeatureFlags.const';
+import {
+  LD_KIND_PREFIX,
+  FeatureFlagKeyDefaults,
+  FeatureFlagArrayDefaults,
+} from './FeatureFlags.const';
 import { IFeatureFlagsService } from './IFeatureFlagsService';
 import { LAUNCHDARKLY_MOBILE_KEY } from '../constants';
 import { ILogger } from '../types/logger';
@@ -70,6 +74,23 @@ export class FeatureFlagsService implements IFeatureFlagsService {
 
     // Use LaunchDarkly value with our default as fallback
     return this.client.boolVariation(flag, defaultValue);
+  }
+
+  evaluateStringArrayFlag(flag: string): string[] {
+    const defaultValue = FeatureFlagArrayDefaults[flag] ?? [];
+
+    if (!this.client) {
+      return defaultValue;
+    }
+
+    const value = this.client.jsonVariation(flag, defaultValue);
+
+    // LaunchDarkly can return any JSON shape, so only trust an array of strings
+    if (!Array.isArray(value)) {
+      return defaultValue;
+    }
+
+    return value.filter((item): item is string => typeof item === 'string');
   }
 
   setChangeHandler(fn: (ctx: LDContext, changedKeys: string[]) => void): void {
