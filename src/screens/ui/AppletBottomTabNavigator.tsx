@@ -11,6 +11,7 @@ import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletD
 import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { palette } from '@app/shared/lib/constants/palette';
+import { useDataTabHidden } from '@app/shared/lib/featureFlags/useDataTabHidden';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 
@@ -29,6 +30,8 @@ export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
   const dispatch = useAppDispatch();
 
   const { title, appletId } = route.params;
+
+  const dataTabHidden = useDataTabHidden(appletId);
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
     select: o => mapAppletDetailsFromDto(o.data.result),
@@ -70,14 +73,16 @@ export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
         initialParams={route.params}
       />
 
-      <Tab.Screen
-        name="Data"
-        options={{
-          title: t('applet_footer:data'),
-        }}
-        component={AppletDataScreen}
-        initialParams={route.params}
-      />
+      {!dataTabHidden && (
+        <Tab.Screen
+          name="Data"
+          options={{
+            title: t('applet_footer:data'),
+          }}
+          component={AppletDataScreen}
+          initialParams={route.params}
+        />
+      )}
 
       <Tab.Screen
         name="About"

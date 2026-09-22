@@ -18,6 +18,7 @@ class TestLaunchDarklyClient {
   init() {}
   identify() {}
   boolVariation() {}
+  jsonVariation() {}
   on() {}
 }
 
@@ -98,6 +99,38 @@ describe('Test FeatureFlagsService', () => {
 
     expect(boolVariationSpy).toHaveBeenCalledTimes(1);
     expect(boolVariationSpy).toHaveBeenCalledWith('my-flag', false);
+  });
+
+  it('Should resolve string array', () => {
+    const jsonVariationSpy = jest
+      .spyOn(service.client, 'jsonVariation')
+      .mockReturnValue(['applet-1', 'applet-2']);
+
+    const flagValue = service.evaluateStringArrayFlag('hide-data-tab-applets');
+
+    expect(flagValue).toEqual(['applet-1', 'applet-2']);
+
+    expect(jsonVariationSpy).toHaveBeenCalledTimes(1);
+    expect(jsonVariationSpy).toHaveBeenCalledWith('hide-data-tab-applets', []);
+  });
+
+  it('Should fall back to the default when the flag value is not an array', () => {
+    jest.spyOn(service.client, 'jsonVariation').mockReturnValue(true);
+
+    expect(service.evaluateStringArrayFlag('hide-data-tab-applets')).toEqual(
+      [],
+    );
+  });
+
+  it('Should drop non-string entries from the flag value', () => {
+    jest
+      .spyOn(service.client, 'jsonVariation')
+      .mockReturnValue(['applet-1', 1, null, 'applet-2']);
+
+    expect(service.evaluateStringArrayFlag('hide-data-tab-applets')).toEqual([
+      'applet-1',
+      'applet-2',
+    ]);
   });
 
   it('Should set onChange handler', () => {

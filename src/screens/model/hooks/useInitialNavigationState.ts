@@ -6,6 +6,7 @@ import { NavigationState } from '@react-navigation/routers';
 import { RootStackParamList } from '@app/screens/config/types';
 import { NavigationServiceScopes } from '@app/screens/lib/INavigationService';
 import { getDefaultNavigationService } from '@app/screens/lib/navigationServiceInstance';
+import { dropAppletDetailsTabState } from '@app/screens/lib/utils/normalizeInitialNavigationState';
 
 export const useInitialNavigationState = () => {
   const [initialNavigationState, setInitialNavigationState] = useState<
@@ -58,7 +59,7 @@ export const useInitialNavigationState = () => {
           NavigationServiceScopes.Default,
         );
 
-        setInitialNavigationState(state);
+        setInitialNavigationState(dropAppletDetailsTabState(state));
       }
     };
 
