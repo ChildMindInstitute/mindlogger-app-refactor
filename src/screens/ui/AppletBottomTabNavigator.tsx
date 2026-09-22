@@ -11,9 +11,7 @@ import { useAppletDetailsQuery } from '@app/entities/applet/api/hooks/useAppletD
 import { mapAppletDetailsFromDto } from '@app/entities/applet/model/mappers';
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { palette } from '@app/shared/lib/constants/palette';
-import { FeatureFlagArrayKeys } from '@app/shared/lib/featureFlags/FeatureFlags.types';
-import { getDefaultFeatureFlagsService } from '@app/shared/lib/featureFlags/featureFlagsServiceInstance';
-import { isDataTabHidden } from '@app/shared/lib/featureFlags/isDataTabHidden';
+import { useDataTabHidden } from '@app/shared/lib/featureFlags/useDataTabHidden';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 
@@ -33,12 +31,7 @@ export const AppletBottomTabNavigator = ({ route, navigation }: Props) => {
 
   const { title, appletId } = route.params;
 
-  const dataTabHidden = isDataTabHidden(
-    getDefaultFeatureFlagsService().evaluateStringArrayFlag(
-      FeatureFlagArrayKeys.hideDataTabApplets,
-    ),
-    appletId,
-  );
+  const dataTabHidden = useDataTabHidden(appletId);
 
   const { data: applet } = useAppletDetailsQuery(appletId, {
     select: o => mapAppletDetailsFromDto(o.data.result),
