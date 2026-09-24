@@ -280,7 +280,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   }, [logger, unityViewKey]);
 
   // Collect and return exported files now that the Unity task is done
-  // Unity resets itself before sending EndUnity, so no Reset is sent here
+  // Unity resets itself before sending EndUnity, so no need to send a Reset message
   const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
     try {
       loadConfigRunRef.current++;
