@@ -24,10 +24,6 @@ export const ANDROID_REMOUNT_RESET_DELAY_MS = 300;
 // early is dropped by Unity.
 export const ANDROID_REMOUNT_HANDSHAKE_DELAY_MS = 5000;
 
-// Android: how long to wait for Unity to acknowledge the end-of-task Reset
-// before unmounting anyway (ms). Lets the scene reload finish on-screen.
-export const END_RESET_ACK_TIMEOUT_MS = 10000;
-
 // Android: interval between LoadConfigFile attempts (ms). Unity drops configs
 // that arrive while its scene is still reloading, so resend until acknowledged.
 export const LOAD_CONFIG_RETRY_INTERVAL_MS = 5000;
