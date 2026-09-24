@@ -9312,10 +9312,10 @@ react-native-progress@^5.0.1:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-reanimated@4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-4.4.1.tgz#245ae96981542e939409a5871b696e0a616cadc9"
-  integrity sha512-WCVBfhLE+AYI2l4inL6PC1vcfNOfmVYRSVSBkPiD12N3jvzByipnygwVpmunyhaNqbiSEDrFYcl7cOJnbHKykw==
+react-native-reanimated@4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-4.4.3.tgz#a238f19c82bddb82aea041327b466895b89e0b33"
+  integrity sha512-nTNhiJB6fcJnKMEi2XH9YES8hbpBnBp2r20oNbNdnrq69f+jM8PIbThMJSrGZlahVO2yzF8dt+0xzd3swOVk0A==
   dependencies:
     react-native-is-edge-to-edge "^1.3.1"
     semver "^7.7.3"
