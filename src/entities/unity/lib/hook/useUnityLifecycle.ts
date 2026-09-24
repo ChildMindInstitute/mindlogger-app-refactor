@@ -27,7 +27,6 @@ import {
   ANDROID_REMOUNT_HANDSHAKE_DELAY_MS,
   ANDROID_REMOUNT_RESET_DELAY_MS,
   CONFIG_LOAD_TIMEOUT_MS,
-  END_RESET_ACK_TIMEOUT_MS,
   LOAD_CONFIG_RETRY_INTERVAL_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
@@ -300,69 +299,37 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     };
   }, [logger, unityViewKey]);
 
-  // The task is done: collect the exported files, reset Unity, and hand the
-  // result back to the survey flow.
-  const handleEndUnity =
-    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
-      try {
-        loadConfigRunRef.current++;
-        stopHeartbeat();
-        logger.log(
-          `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
-        );
-        const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
-          const fileName = path.split('/').pop() ?? '';
+  // Collect and return exported files now that the Unity task is done
+  // Unity resets itself before sending EndUnity, so no Reset is sent here
+  const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
+    try {
+      loadConfigRunRef.current++;
+      stopHeartbeat();
+      logger.log(
+        `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
+      );
+      const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
+        const fileName = path.split('/').pop() ?? '';
 
-          return {
-            uri: `file://${path}`,
-            type: mime.lookup(fileName) || '',
-            fileName,
-          };
-        });
+        return {
+          uri: `file://${path}`,
+          type: mime.lookup(fileName) || '',
+          fileName,
+        };
+      });
 
-        logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
+      logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
 
-        const respond = () =>
-          onResponse?.({
-            responseType: 'unity',
-            // TODO: Figure out what this should be
-            startTime: 0,
-            taskData: mediaFiles,
-          });
-
-        const sendReset = () =>
-          sendMessageToUnity({
-            m_sId: uuidv4(),
-            m_sKey: 'Reset',
-          });
-
-        if (Platform.OS === 'android') {
-          // Wait for Unity to acknowledge the Reset before unmounting, so the scene
-          // reload finishes on-screen.
-          const ack = await Promise.race([
-            sendReset(),
-            new Promise<'timeout'>(resolve =>
-              setTimeout(() => resolve('timeout'), END_RESET_ACK_TIMEOUT_MS),
-            ),
-          ]);
-          if (ack === 'timeout') {
-            logger.warn(
-              `[UnityView] End-of-task Reset not acknowledged within ${END_RESET_ACK_TIMEOUT_MS}ms — proceeding with unmount`,
-            );
-          } else {
-            logger.log(
-              '[UnityView] End-of-task Reset acknowledged — scene reloaded on-screen',
-            );
-          }
-          respond();
-        } else {
-          respond();
-          await sendReset();
-        }
-      } catch (err) {
-        logger.error(`[UnityView] EndUnity handler failed: ${err}`);
-      }
-    }, [logger, onResponse, sendMessageToUnity, stopHeartbeat]);
+      onResponse?.({
+        responseType: 'unity',
+        // TODO: Figure out what this should be
+        startTime: 0,
+        taskData: mediaFiles,
+      });
+    } catch (err) {
+      logger.error(`[UnityView] EndUnity handler failed: ${err}`);
+    }
+  }, [logger, onResponse, stopHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);
