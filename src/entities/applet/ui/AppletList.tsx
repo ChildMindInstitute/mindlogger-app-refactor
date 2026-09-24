@@ -97,7 +97,6 @@ const AppletListView: FC<Props> = ({
         ListFooterComponent={ListFooterComponent}
         ListFooterComponentStyle={styles.listFooterComponent}
         refreshControl={refreshControl}
-        removeClippedSubviews={true}
         updateCellsBatchingPeriod={12}
         ListEmptyComponent={
           !isRefreshing ? (
