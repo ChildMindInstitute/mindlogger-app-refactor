@@ -15,13 +15,8 @@ export const STARTUP_TIMEOUT_MS = 30000;
 // Maximum time to wait for LoadConfigFile to complete after UnityStarted (ms).
 export const CONFIG_LOAD_TIMEOUT_MS = 30000;
 
-// Android: delay after remounting the Unity view before sending `Reset` to
-// the already-running engine (ms). Covers the native reattach and resume.
-export const ANDROID_REMOUNT_RESET_DELAY_MS = 300;
-
-// Android: delay after the remount `Reset` before driving the handshake
-// ourselves (ms). Gives the scene reload time to finish; a config sent too
-// early is dropped by Unity.
+// Android: time to wait for UnityStarted event after remounting before driving
+// the handshake ourselves (ms).
 export const ANDROID_REMOUNT_HANDSHAKE_DELAY_MS = 5000;
 
 // Android: interval between LoadConfigFile attempts (ms). Unity drops configs
