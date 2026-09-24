@@ -38,7 +38,7 @@ export const SplashScreen = () => {
 
 const style = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: DEFAULT_BG,
     alignItems: 'center',
     justifyContent: 'center',

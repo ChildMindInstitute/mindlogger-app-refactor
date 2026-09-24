@@ -8,6 +8,9 @@ module.exports = {
     ...(process.env.NO_FLIPPER
       ? { 'react-native-flipper': { platforms: { ios: null } } }
       : {}),
+    ...(!process.env.BUILD_WITH_UNITY
+      ? { '@azesmway/react-native-unity': { platforms: { android: null } } }
+      : {}),
   },
   assets: ['./assets/fonts/'],
   androidAssets: ['./assets/fonts/'],

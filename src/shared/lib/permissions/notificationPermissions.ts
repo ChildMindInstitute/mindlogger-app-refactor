@@ -2,7 +2,7 @@ import notifee, {
   AuthorizationStatus,
   AndroidNotificationSetting,
   NotificationSettings,
-} from '@notifee/react-native';
+} from 'react-native-notify-kit';
 
 export type NotificationPermissionStatus =
   | 'AUTHORIZED'
