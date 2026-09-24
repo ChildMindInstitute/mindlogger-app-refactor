@@ -195,6 +195,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     // Remove RNUnityView from the tree.
     setUnityViewKey(null);
 
+    // Lock to portrait again so the restarted Unity loads like a fresh start
+    RNOrientationDirector.lockTo(Orientation.portrait);
+
     // Remount with a fresh key after the native layer has had time to
     // tear down.
     if (restartTimerRef.current) {
