@@ -25,9 +25,7 @@ import { useUnityFailureHandler } from './useUnityFailureHandler';
 import { useUnityHeartbeat } from './useUnityHeartbeat';
 import {
   ANDROID_REMOUNT_HANDSHAKE_DELAY_MS,
-  ANDROID_REMOUNT_RESET_DELAY_MS,
   CONFIG_LOAD_TIMEOUT_MS,
-  END_RESET_ACK_TIMEOUT_MS,
   LOAD_CONFIG_RETRY_INTERVAL_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
@@ -236,11 +234,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     }
   }, [handleUnityReady, logger, startHeartbeat]);
 
-  // Keep refs in sync so timers always call the latest versions.
-  const sendMessageToUnityRef = useRef(sendMessageToUnity);
-  useEffect(() => {
-    sendMessageToUnityRef.current = sendMessageToUnity;
-  }, [sendMessageToUnity]);
+  // Keep the ref in sync so the timer always calls the latest version.
   const beginUnityHandshakeRef = useRef(beginUnityHandshake);
   useEffect(() => {
     beginUnityHandshakeRef.current = beginUnityHandshake;
@@ -259,9 +253,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  // Android remounts reuse the already-running engine, which may not send
-  // UnityStarted again. Send Reset to reload the scene, then drive the
-  // handshake ourselves once the reload has had time to finish.
+  // Android remounts reuse the already-running engine, which resets its own
+  // scene at the end of each task and re-sends UnityStarted on resume. Drive
+  // the handshake ourselves only if that does not happen in time.
   useEffect(() => {
     if (
       Platform.OS !== 'android' ||
@@ -271,98 +265,51 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       return;
     }
 
-    logger.log(
-      '[UnityView] Android keep-alive remount: engine already running, sending Reset to reload the scene on-screen',
-    );
-    const resetTimer = setTimeout(() => {
-      sendMessageToUnityRef
-        .current({
-          m_sId: uuidv4(),
-          m_sKey: 'Reset',
-        })
-        .catch((err: unknown) => {
-          logger.error(`[UnityView] Keep-alive remount Reset failed: ${err}`);
-        });
-    }, ANDROID_REMOUNT_RESET_DELAY_MS);
-
     const handshakeTimer = setTimeout(() => {
       logger.log(
-        '[UnityView] Keep-alive remount: reload should be done, driving handshake',
+        '[UnityView] Keep-alive remount: UnityStarted not received, driving handshake',
       );
       beginUnityHandshakeRef.current().catch((err: unknown) => {
         logger.error(`[UnityView] Keep-alive handshake failed: ${err}`);
       });
-    }, ANDROID_REMOUNT_RESET_DELAY_MS + ANDROID_REMOUNT_HANDSHAKE_DELAY_MS);
+    }, ANDROID_REMOUNT_HANDSHAKE_DELAY_MS);
 
     return () => {
-      clearTimeout(resetTimer);
       clearTimeout(handshakeTimer);
     };
   }, [logger, unityViewKey]);
 
-  // The task is done: collect the exported files, reset Unity, and hand the
-  // result back to the survey flow.
-  const handleEndUnity =
-    useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
-      try {
-        loadConfigRunRef.current++;
-        stopHeartbeat();
-        logger.log(
-          `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
-        );
-        const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
-          const fileName = path.split('/').pop() ?? '';
+  // Collect and return exported files now that the Unity task is done
+  // Unity resets itself before sending EndUnity, so no need to send a Reset message
+  const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
+    try {
+      loadConfigRunRef.current++;
+      stopHeartbeat();
+      logger.log(
+        `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
+      );
+      const mediaFiles: MediaFile[] = unityPaths.current.map(path => {
+        const fileName = path.split('/').pop() ?? '';
 
-          return {
-            uri: `file://${path}`,
-            type: mime.lookup(fileName) || '',
-            fileName,
-          };
-        });
+        return {
+          uri: `file://${path}`,
+          type: mime.lookup(fileName) || '',
+          fileName,
+        };
+      });
 
-        logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
+      logger.log(`[UnityView] mediaFiles: ${JSON.stringify(mediaFiles)}`);
 
-        const respond = () =>
-          onResponse?.({
-            responseType: 'unity',
-            // TODO: Figure out what this should be
-            startTime: 0,
-            taskData: mediaFiles,
-          });
-
-        const sendReset = () =>
-          sendMessageToUnity({
-            m_sId: uuidv4(),
-            m_sKey: 'Reset',
-          });
-
-        if (Platform.OS === 'android') {
-          // Wait for Unity to acknowledge the Reset before unmounting, so the scene
-          // reload finishes on-screen.
-          const ack = await Promise.race([
-            sendReset(),
-            new Promise<'timeout'>(resolve =>
-              setTimeout(() => resolve('timeout'), END_RESET_ACK_TIMEOUT_MS),
-            ),
-          ]);
-          if (ack === 'timeout') {
-            logger.warn(
-              `[UnityView] End-of-task Reset not acknowledged within ${END_RESET_ACK_TIMEOUT_MS}ms — proceeding with unmount`,
-            );
-          } else {
-            logger.log(
-              '[UnityView] End-of-task Reset acknowledged — scene reloaded on-screen',
-            );
-          }
-          respond();
-        } else {
-          respond();
-          await sendReset();
-        }
-      } catch (err) {
-        logger.error(`[UnityView] EndUnity handler failed: ${err}`);
-      }
-    }, [logger, onResponse, sendMessageToUnity, stopHeartbeat]);
+      onResponse?.({
+        responseType: 'unity',
+        // TODO: Figure out what this should be
+        startTime: 0,
+        taskData: mediaFiles,
+      });
+    } catch (err) {
+      logger.error(`[UnityView] EndUnity handler failed: ${err}`);
+    }
+  }, [logger, onResponse, stopHeartbeat]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);

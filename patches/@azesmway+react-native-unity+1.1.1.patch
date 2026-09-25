@@ -241,10 +241,10 @@ index d4eae6f..c47ae30 100644
        getPlayer().resume();
        restoreUnityUserState();
 diff --git a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
-index 6406f64..61d7e5d 100644
+index 6406f64..705a429 100644
 --- a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
 +++ b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
-@@ -97,12 +97,16 @@ - (void)layoutSubviews {
+@@ -97,12 +97,16 @@ NSDictionary* appLaunchOpts;
     }
  
     if([self unityIsInitialized] && self.ufw.appController.rootView != nil) {
@@ -262,7 +262,19 @@ index 6406f64..61d7e5d 100644
           [[self ufw] pause:NO];
           _pausedForRecycle = NO;
        }
-@@ -197,7 +201,10 @@ - (void)prepareForRecycle {
+@@ -132,6 +136,11 @@ NSDictionary* appLaunchOpts;
+ }
+ 
+ - (void)unloadUnity {
++    // Idempotent so invalidate can call unloadUnity in addition to
++    // UnityView.componentWillUnmount
++    if (_unloaded) {
++        return;
++    }
+     _unloaded = YES;
+     _pausedForRecycle = NO;
+     UIWindow * main = [[[UIApplication sharedApplication] delegate] window];
+@@ -197,16 +206,32 @@ NSDictionary* appLaunchOpts;
      // Unity-as-a-Library is a single instance per process: unloading it on Fabric view
      // recycling kills the engine, and any later mount shows a black screen (#180).
      // Pause instead — the next mount resumes the same instance.
@@ -274,7 +286,16 @@ index 6406f64..61d7e5d 100644
        [[self ufw] pause:true];
        _pausedForRecycle = YES;
      }
-@@ -207,6 +214,12 @@ + (ComponentDescriptorProvider)componentDescriptorProvider {
+ }
+ 
++// Unload here to catch cases where Fabric drops the unloadUnity command from
++// UnityView.componentWillUnmount
++- (void)invalidate {
++    [super invalidate];
++    [self unloadUnity];
++}
++
+ + (ComponentDescriptorProvider)componentDescriptorProvider {
      return concreteComponentDescriptorProvider<RNUnityViewComponentDescriptor>();
  }
  
