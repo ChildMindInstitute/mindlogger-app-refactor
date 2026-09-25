@@ -195,6 +195,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     // Remove RNUnityView from the tree.
     setUnityViewKey(null);
 
+    // Lock to portrait again so the restarted Unity loads like a fresh start
+    RNOrientationDirector.lockTo(Orientation.portrait);
+
     // Remount with a fresh key after the native layer has had time to
     // tear down.
     if (restartTimerRef.current) {
@@ -335,7 +338,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     registerEventHandler(UnityEventDataExport, handleDataExport);
   }, [handleDataExport, registerEventHandler]);
 
-  // Handle orientation change requests from Unity, re-lock to portrait on unmount.
+  // Handle orientation change requests from Unity
+  // - Keep portrait lock from app mount until Unity sends SetOrientation
+  // - Lock to portrait again when Unity unmounts
   const handleSetOrientation = useCallback<RNUnityCommBridgeUnityEventHandler>(
     msg => {
       if (msg.m_sKey === UnityEventSetOrientation) {
@@ -354,6 +359,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
         const orientation = orientationMap[orientationValue];
         if (orientation !== undefined) {
+          // Lock to orientation specified by Unity in SetOrientation
           RNOrientationDirector.lockTo(orientation);
         } else {
           logger.warn(
@@ -366,8 +372,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   );
   useEffect(() => {
     registerEventHandler(UnityEventSetOrientation, handleSetOrientation);
-    RNOrientationDirector.unlock();
     return () => {
+      // Lock to portrait again when Unity unmounts
       RNOrientationDirector.lockTo(Orientation.portrait);
     };
   }, [handleSetOrientation, registerEventHandler]);
