@@ -24,9 +24,9 @@ import {
 import { useUnityFailureHandler } from './useUnityFailureHandler';
 import { useUnityHeartbeat } from './useUnityHeartbeat';
 import {
-  ANDROID_REMOUNT_HANDSHAKE_DELAY_MS,
   CONFIG_LOAD_TIMEOUT_MS,
   LOAD_CONFIG_RETRY_INTERVAL_MS,
+  REMOUNT_HANDSHAKE_DELAY_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
 import {
@@ -39,9 +39,9 @@ import {
 // State that must survive across mounts of the Unity screen.
 const unityRuntimeState = {
   quitInProcess: false,
-  // True once the Android engine has booted; it stays alive for the rest of
-  // the process and never sends UnityStarted again.
-  engineAliveAndroid: false,
+  // True once the engine has booted. It stays alive for the rest of the
+  // process, paused between mounts, and does not boot again on remount.
+  engineAlive: false,
 };
 
 type UseUnityLifecycleOptions = {
@@ -243,25 +243,19 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   // Start the handshake when Unity reports it has booted.
   const handleUnityStarted =
     useCallback<RNUnityCommBridgeUnityEventHandler>(async () => {
-      if (Platform.OS === 'android') {
-        // The engine stays alive for the rest of the process.
-        unityRuntimeState.engineAliveAndroid = true;
-      }
+      // The engine stays alive for the rest of the process.
+      unityRuntimeState.engineAlive = true;
       await beginUnityHandshake();
     }, [beginUnityHandshake]);
   useEffect(() => {
     registerEventHandler(UnityEventUnityStarted, handleUnityStarted);
   }, [handleUnityStarted, registerEventHandler]);
 
-  // Android remounts reuse the already-running engine, which resets its own
-  // scene at the end of each task and re-sends UnityStarted on resume. Drive
-  // the handshake ourselves only if that does not happen in time.
+  // Remounts reuse the already-running engine, which resets its own scene at
+  // the end of each task and re-sends UnityStarted on resume. Drive the
+  // handshake ourselves only if that does not happen in time.
   useEffect(() => {
-    if (
-      Platform.OS !== 'android' ||
-      !unityViewKey ||
-      !unityRuntimeState.engineAliveAndroid
-    ) {
+    if (!unityViewKey || !unityRuntimeState.engineAlive) {
       return;
     }
 
@@ -272,7 +266,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       beginUnityHandshakeRef.current().catch((err: unknown) => {
         logger.error(`[UnityView] Keep-alive handshake failed: ${err}`);
       });
-    }, ANDROID_REMOUNT_HANDSHAKE_DELAY_MS);
+    }, REMOUNT_HANDSHAKE_DELAY_MS);
 
     return () => {
       clearTimeout(handshakeTimer);
@@ -428,7 +422,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   // The native player was unloaded, so the next mount needs a fresh boot.
   const handlePlayerUnload = useCallback(() => {
     logger.log('[UnityView] Native player unload received');
-    unityRuntimeState.engineAliveAndroid = false;
+    unityRuntimeState.engineAlive = false;
     if (restartInProgressRef.current) {
       return;
     }
@@ -440,7 +434,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   // decide whether to surface the error.
   const handlePlayerQuit = useCallback(() => {
     unityRuntimeState.quitInProcess = true;
-    unityRuntimeState.engineAliveAndroid = false;
+    unityRuntimeState.engineAlive = false;
     quitObservedInThisMountRef.current = true;
     setFailureMode('quit');
     logger.warn(
