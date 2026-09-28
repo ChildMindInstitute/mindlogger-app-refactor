@@ -241,7 +241,7 @@ index d4eae6f..c47ae30 100644
        getPlayer().resume();
        restoreUnityUserState();
 diff --git a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
-index 6406f64..705a429 100644
+index 6406f64..48ebc96 100644
 --- a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
 +++ b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
 @@ -97,12 +97,16 @@ NSDictionary* appLaunchOpts;
@@ -262,19 +262,7 @@ index 6406f64..705a429 100644
           [[self ufw] pause:NO];
           _pausedForRecycle = NO;
        }
-@@ -132,6 +136,11 @@ NSDictionary* appLaunchOpts;
- }
- 
- - (void)unloadUnity {
-+    // Idempotent so invalidate can call unloadUnity in addition to
-+    // UnityView.componentWillUnmount
-+    if (_unloaded) {
-+        return;
-+    }
-     _unloaded = YES;
-     _pausedForRecycle = NO;
-     UIWindow * main = [[[UIApplication sharedApplication] delegate] window];
-@@ -197,16 +206,32 @@ NSDictionary* appLaunchOpts;
+@@ -197,16 +201,36 @@ NSDictionary* appLaunchOpts;
      // Unity-as-a-Library is a single instance per process: unloading it on Fabric view
      // recycling kills the engine, and any later mount shows a black screen (#180).
      // Pause instead — the next mount resumes the same instance.
@@ -288,11 +276,15 @@ index 6406f64..705a429 100644
      }
  }
  
-+// Unload here to catch cases where Fabric drops the unloadUnity command from
-+// UnityView.componentWillUnmount
++// Fabric calls this on unmount. Pause Unity rather than unloading.
 +- (void)invalidate {
 +    [super invalidate];
-+    [self unloadUnity];
++    if ([self unityIsInitialized]) {
++        if (self.ufw.appController.rootView.superview == self) {
++            [[self ufw] pause:YES];
++        }
++        [[self ufw] unregisterFrameworkListener:self];
++    }
 +}
 +
  + (ComponentDescriptorProvider)componentDescriptorProvider {
@@ -309,20 +301,24 @@ index 6406f64..705a429 100644
    if (self = [super initWithFrame:frame]) {
      static const auto defaultProps = std::make_shared<const RNUnityViewProps>();
 diff --git a/node_modules/@azesmway/react-native-unity/src/UnityView.tsx b/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
-index 87e6df6..0965ff1 100644
+index 87e6df6..71d7d89 100644
 --- a/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
 +++ b/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
-@@ -65,6 +65,13 @@ export default class UnityView extends React.Component<RNUnityViewProps> {
+@@ -65,13 +65,10 @@ export default class UnityView extends React.Component<RNUnityViewProps> {
    }
  
    componentWillUnmount() {
-+    // Never unload on Android: Unity 6 cannot re-initialize its graphics device
-+    // in the same process after unloadApplication(). The native view pauses and
-+    // parks the engine on detach, and the next mount reattaches and resumes it.
-+    if (Platform.OS === 'android') {
-+      return;
-+    }
-+
-     // Full React unmount is a permanent teardown, so we unload the engine here.
-     // This is intentionally different from Fabric view *recycling*
-     // (RNUnityView.prepareForRecycle), which only pauses the shared instance so
+-    // Full React unmount is a permanent teardown, so we unload the engine here.
+-    // This is intentionally different from Fabric view *recycling*
+-    // (RNUnityView.prepareForRecycle), which only pauses the shared instance so
+-    // it can be reused on the next mount. See issue #180.
+-    if (this.ref.current) {
+-      Commands.unloadUnity(this.ref.current);
+-    }
++    // Do not unload. The native view pauses Unity and next mount will resume.
++    // - Android: Unity 6 cannot re-initialize after unloadApplication().
++    // - iOS: Unload can leave objects stranded and cause crash on next boot.
++    // - unloadUnity() remains available for an explicit unload.
+   }
+ 
+   render() {
