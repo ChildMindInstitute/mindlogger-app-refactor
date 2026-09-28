@@ -237,10 +237,23 @@ index d4eae6f..52cd771 100644
        getPlayer().resume();
        restoreUnityUserState();
 diff --git a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
-index 6406f64..48ebc96 100644
+index 6406f64..f2c8059 100644
 --- a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
 +++ b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
-@@ -97,12 +97,16 @@ NSDictionary* appLaunchOpts;
+@@ -56,6 +56,12 @@ NSDictionary* appLaunchOpts;
+         [self setUfw: UnityFrameworkLoad()];
+         [[self ufw] registerFrameworkListener: self];
+ 
++        // Try to reuse previously mounted Unity. layoutSubviews resumes the paused Unity.
++        if ([[self ufw] appController]) {
++            [NSClassFromString(@"FrameworkLibAPI") registerAPIforNativeCalls:self];
++            return;
++        }
++
+         unsigned count = (int) [[[NSProcessInfo processInfo] arguments] count];
+         char **array = (char **)malloc((count + 1) * sizeof(char*));
+ 
+@@ -97,12 +103,16 @@ NSDictionary* appLaunchOpts;
     }
  
     if([self unityIsInitialized] && self.ufw.appController.rootView != nil) {
@@ -258,7 +271,7 @@ index 6406f64..48ebc96 100644
           [[self ufw] pause:NO];
           _pausedForRecycle = NO;
        }
-@@ -197,16 +201,36 @@ NSDictionary* appLaunchOpts;
+@@ -197,16 +207,36 @@ NSDictionary* appLaunchOpts;
      // Unity-as-a-Library is a single instance per process: unloading it on Fabric view
      // recycling kills the engine, and any later mount shows a black screen (#180).
      // Pause instead — the next mount resumes the same instance.
