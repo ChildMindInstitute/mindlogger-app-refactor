@@ -63,7 +63,7 @@ export const useUnityHeartbeat = ({
     intervalRef.current = setInterval(() => {
       const echoPayload = `heartbeat-${Date.now()}`;
       const echoMsg = newEchoMessage(echoPayload);
-      if (ENV === 'dev' || ENV === 'uat') {
+      if (ENV !== 'production') {
         logger.log('[Heartbeat] sending Echo tick');
       }
 
