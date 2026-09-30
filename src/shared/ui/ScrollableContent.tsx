@@ -50,16 +50,20 @@ export const ScrollableContent: FC<Props> = ({
 
   const scrollViewRef = useRef<ScrollView>(undefined);
 
+  // Bottom edge of the visible area, updated on scroll
+  const visibleBottomRef = useRef(0);
+
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+
+    visibleBottomRef.current = layoutMeasurement.height + contentOffset.y;
+
     if (endOfContentReachedOnce) {
       return;
     }
 
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-
     const endReached =
-      layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - PaddingToBottom;
+      visibleBottomRef.current >= contentSize.height - PaddingToBottom;
 
     if (endReached) {
       setShowScrollButton(false);
@@ -103,10 +107,19 @@ export const ScrollableContent: FC<Props> = ({
     }
 
     if (debouncedScrollContentHeight - PaddingToBottom > containerHeight) {
-      setShowScrollButton(true);
       setAreaScrollable(true);
+
+      // Don't show the button once the end was reached, or while already at
+      // the bottom (e.g. content grew because the user is typing)
+      const isAtBottom =
+        visibleBottomRef.current >=
+        debouncedScrollContentHeight - PaddingToBottom;
+
+      if (!endOfContentReachedOnce && !isAtBottom) {
+        setShowScrollButton(true);
+      }
     }
-  }, [containerHeight, debouncedScrollContentHeight]);
+  }, [containerHeight, debouncedScrollContentHeight, endOfContentReachedOnce]);
 
   return (
     <ScrollViewContext.Provider value={context}>
