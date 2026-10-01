@@ -72,5 +72,15 @@ abstract_target 'MindloggerMobileCommonPods' do
 
     puts '[Local Dev] Removing .xcode.env.local'
     %x(rm -f #{Pod::Config.instance.installation_root}/.xcode.env.local)
+   
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # Raise pods below 15.0 (Xcode 27 minimum) without lowering newer ones
+        current = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+        if current.nil? || Gem::Version.new(current) < Gem::Version.new('15.0')
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+        end
+      end
+    end
   end
 end
