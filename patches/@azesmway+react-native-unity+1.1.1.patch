@@ -1,3 +1,22 @@
+diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java
+index d4eae6f..9517c6d 100644
+--- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java
++++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityViewManager.java
+@@ -275,6 +275,14 @@
+     protected WritableMap getEventData() {
+       return eventData;
+     }
++
++    // Avoid `canCoalesce()` default `true` which drops earlier events of the same type when multiple are queued
++    // - Dropped events surface as "Unity Error" or "Unity Build Failed" popups (M2-11083)
++    // - Same fix as https://github.com/wonday/react-native-pdf/pull/1011
++    @Override
++    public boolean canCoalesce() {
++      return false;
++    }
+   }
+ 
+   @Override
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
 index 5d3401f..39bcbc1 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
