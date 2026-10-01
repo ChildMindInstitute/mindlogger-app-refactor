@@ -44,10 +44,12 @@ export const styles = StyleSheet.create({
     left: 10,
     backgroundColor: 'white',
   },
+  // No background and no children, so the mask is invisible without opacity.
+  // Do not add opacity: 0 — the New Architecture hit-tests natively, and
+  // zero-alpha views are skipped as touch targets.
   controlBarMask: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-    opacity: 0,
   },
 });
