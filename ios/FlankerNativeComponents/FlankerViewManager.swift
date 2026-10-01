@@ -35,14 +35,24 @@ class FlankerViewManager: RCTViewManager {
 
   @objc
   func startGame(_ isFirst: Bool, isLast: Bool) {
-    if isFirst {
-      flankerView!.typeResult = .ok
-      flankerView!.isLast = false // todo - review if we need to use this
-    } else if isLast {
-      flankerView!.typeResult = .finish
-    } else {
-      flankerView!.typeResult = .next
+    // This instance may not be the one that created the view (new
+    // architecture), so fall back to FlankerView.current.
+    DispatchQueue.main.async { [weak self] in
+      guard let flankerView = self?.flankerView ?? FlankerView.current else {
+        assertionFailure(
+          "[FlankerViewManager] startGame called with no live FlankerView")
+        return
+      }
+
+      if isFirst {
+        flankerView.typeResult = .ok
+        flankerView.isLast = false // todo - review if we need to use this
+      } else if isLast {
+        flankerView.typeResult = .finish
+      } else {
+        flankerView.typeResult = .next
+      }
+      flankerView.parameterGame()
     }
-    flankerView!.parameterGame()
   }
 }
