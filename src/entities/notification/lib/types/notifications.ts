@@ -1,11 +1,11 @@
+import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import {
   EventDetail,
   EventType,
   InitialNotification,
   Notification,
   TriggerNotification,
-} from '@notifee/react-native';
-import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+} from 'react-native-notify-kit';
 
 type NotificationEventCallback = (eventDetail: LocalEventDetail) => void;
 
