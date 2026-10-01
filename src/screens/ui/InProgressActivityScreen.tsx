@@ -1,18 +1,18 @@
 import { FC, useEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
+import { useStableTopInset } from '@app/shared/lib/hooks/useStableTopInset';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
-import { Box } from '@app/shared/ui/base';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { StatusBar } from '@app/shared/ui/StatusBar';
 import { useBaseInfo } from '@app/widgets/activity-group/model/hooks/useBaseInfo';
 import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
 import { IS_ANDROID, OS_MAJOR_VERSION } from '@shared/lib/constants';
+import { Box } from '@shared/ui/base';
 
 import { RootStackParamList } from '../config/types';
 
@@ -48,14 +48,16 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     };
   }, [navigation]);
 
-  const { top } = useSafeAreaInsets();
+  // Stable inset: does not collapse to 0 when this screen hides the status
+  // bar, so the layout below stays put for the lifetime of the screen.
+  const top = useStableTopInset();
 
   return (
     // There's weird white space on Android because of the safe area insets
     // We can remove this top margin when this issue is resolved:
     // https://github.com/react-navigation/react-navigation/issues/12608
     <Box flex={1} marginTop={IS_ANDROID && OS_MAJOR_VERSION >= 15 ? top : 0}>
-      <StatusBar hidden />
+      <StatusBar hidden animated />
 
       {isLoading || !isAppSupportedEntity ? (
         <Spinner withOverlay />
