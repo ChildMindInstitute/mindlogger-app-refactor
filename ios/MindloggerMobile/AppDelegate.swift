@@ -42,12 +42,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _ application: UIApplication,
     supportedInterfaceOrientationsFor window: UIWindow?
   ) -> UIInterfaceOrientationMask {
-    // Unity's window keeps a static mask so it can't crash on relaunch into a
+    // The main window (constrained by OrientationAwareRootViewController) and
+    // Unity's window keep a static mask so Unity can't crash on relaunch into a
     // landscape activity (M2-10056)
-    if isUnityWindow(window) {
+    if window === self.window || isUnityWindow(window) {
       return [.portrait, .landscapeLeft, .landscapeRight]
     }
-    // Other windows (app, alerts, system prompts) follow orientation-director.
+    // Other windows (alerts, system prompts) follow orientation-director.
     // Before JS locks, the director holds Info.plist's full set, so treat any
     // mask containing portrait as portrait-only.
     let mask = OrientationDirector.getSupportedInterfaceOrientationsForWindow()
