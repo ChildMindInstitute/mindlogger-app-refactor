@@ -16,3 +16,8 @@ export const bannersHiddenSelector = createSelector(
   selectBanners,
   banners => banners.bannersHidden,
 );
+
+export const bannersExpandingSelector = createSelector(
+  selectBanners,
+  banners => banners.bannersExpanding,
+);
