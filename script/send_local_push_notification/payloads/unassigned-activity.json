@@ -1,0 +1,19 @@
+{
+  "aps": {
+    "alert": {
+      "title": "Time for: unassigned activity (2)",
+      "body": "Tap to start the activity"
+    },
+    "sound": "default",
+    "badge": 1
+  },
+  "type": "schedule-event-alert",
+  "appletId": "67e4d762-7216-4c29-8914-c1c437cf7b17",
+  "activityId": "1bad31ab-757b-4835-a22d-7cee48ecb982",
+  "eventId": "40f8fac5-9452-43c7-a868-da1117e656a0",
+  "entityName": "unassigned activity (2)",
+  "targetSubjectId": null,
+  "isLocal": "true",
+  "scheduledAt": 1730318400000,
+  "scheduledAtString": "2025-10-30T17:00:00.000Z"
+}
