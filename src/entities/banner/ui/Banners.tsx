@@ -63,10 +63,11 @@ export const Banners = () => {
   }, [dispatch]);
 
   // Animate top safe area background color to match native header background
-  // color transition. The strip's padding also animates to 0 when Unity takes
-  // over the full screen (isHidden), instead of unmounting and causing a
-  // layout jump. The strip stays mounted so re-expanding on Unity exit is
-  // also smooth.
+  // color transition. The strip's padding drops to 0 immediately when Unity
+  // takes over full screen (isHidden) so the screen is already full height when
+  // the native transition starts. Otherwise, iOS 26+ draws it with rounded
+  // corners below the status bar for a split second before transitioning to
+  // full screen (M2-11164).
   const animatedStyles = useAnimatedStyle(() => ({
     backgroundColor: withTiming(bannersBg, {
       // Duration is based on native header transition duration for each OS
@@ -76,11 +77,13 @@ export const Banners = () => {
       easing: Easing.out(Easing.ease),
     }),
     // Add top inset here instead of letting react-native-screens 4.17+ pad the header
-    paddingTop: withTiming(isHidden ? 0 : top, COLLAPSE_TIMING, finished => {
-      if (finished && isExpanding && !isHidden) {
-        runOnJS(handleExpanded)();
-      }
-    }),
+    paddingTop: isHidden
+      ? 0
+      : withTiming(top, COLLAPSE_TIMING, finished => {
+          if (finished && isExpanding) {
+            runOnJS(handleExpanded)();
+          }
+        }),
   }));
 
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
