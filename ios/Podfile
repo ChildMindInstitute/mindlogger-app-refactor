@@ -53,6 +53,10 @@ abstract_target 'MindloggerMobileCommonPods' do
 
   $RNFirebaseAsStaticFramework = true
 
+  # Build React Native from source to include react-native+0.85.3.patch
+  # Drop this option to use prebuilt React Native when patch is removed
+  ENV['RCT_USE_PREBUILT_RNCORE'] = '0'
+
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
