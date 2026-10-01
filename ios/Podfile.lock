@@ -205,7 +205,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - NitroSound (0.2.15):
+  - NitroSound (0.2.20):
     - hermes-engine
     - NitroModules
     - RCTRequired
@@ -3233,14 +3233,14 @@ SPEC CHECKSUMS:
   FirebaseSessions: f5c6bfeb66a7202deaf33352017bb6365e395820
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 4f2618a4a1e762a1ee134a1e2323bba9843e06da
-  hermes-engine: 8a9a1c88e014da778e6b4f75038b2ff370410f0d
+  hermes-engine: 455fefc8fae65f8e83bde584966f78b7c668161d
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 37259ace491ca9d927c0f81498e6577a32a69f43
   MMKVCore: 3d16ce9f7d411e135020915fde98a056859a1efa
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NitroMmkv: 4b4f95387a15161b346a6a93b9c7072c179e0e88
   NitroModules: 38f8754287858ff1294e43fd43f614a664e54050
-  NitroSound: b34bf12cd3f2771560fd923fa953ec2f3f1a73e5
+  NitroSound: 7365cda0a1417064cc15a132787855f4061545e4
   OpenTelemetrySwiftApi: aaee576ed961e0c348af78df58b61300e95bd104
   PLCrashReporter: db59ef96fa3d25f3650040d02ec2798cffee75f2
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
@@ -3253,7 +3253,7 @@ SPEC CHECKSUMS:
   React: e2dc35338068bbd299c66f043ae0d7f25de8499e
   React-callinvoker: 28b25d21b124c26cebaea713ba7d801b9351dc48
   React-Core: 02ed7d2ffb70437bdf2aba074a13078a7b0b9ff0
-  React-Core-prebuilt: bdc91db8c541225a419864ce30cc5c34b773324d
+  React-Core-prebuilt: 86ed372578997ef35290f0952f8e1fd8d38e9fd5
   React-CoreModules: b3a5a42dadcde3b5d47b325bd912eb2ced89e146
   React-cxxreact: fe8f88dda044e5905e99a00f41b7a874c3908716
   React-debug: 92944dc4d89f56d640e75498266cbde557a48189
@@ -3333,7 +3333,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 25c9c516839be2c5e3d3344f95dc7da5f7e63fc2
   ReactCodegen: c8f81e6c6f762dcf442a6203a1fb58f7dafc8014
   ReactCommon: 7dfc3250793bf36cf221096ff59e1179e13eef7f
-  ReactNativeDependencies: 996e02ddda0f8759cd69fdd1cfd1dc3039dd970e
+  ReactNativeDependencies: d7b6373e6e0e3f10988c2be06b57bc06c2bd79f6
   ReactNativeFileAccess: 20f24f5dae50db8802d7161b999f14fc76a9cf8d
   RNBackgroundFetch: a5c9975c270d869a666364ade366d92f7435dd74
   RNCAsyncStorage: 2ad919e88b8bc2cd80e8697ce66d04d006743283
