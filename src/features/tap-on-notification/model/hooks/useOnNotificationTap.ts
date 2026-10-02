@@ -16,6 +16,10 @@ import {
 } from '@app/abstract/lib/types/entity';
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
 import { ActivityRecordKeyParams } from '@app/abstract/lib/types/storage';
+import {
+  beginEntityStart,
+  isLatestEntityStart,
+} from '@app/entities/applet/lib/entityStartToken';
 import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
@@ -182,6 +186,8 @@ export function useOnNotificationTap({
         return;
       }
 
+      const startToken = beginEntityStart();
+
       setTimeout(
         () => {
           startEntity(
@@ -191,6 +197,7 @@ export function useOnNotificationTap({
             eventId!,
             entityName!,
             targetSubjectId ?? null,
+            startToken,
           );
         },
         executing ? GoBackDuration : WorkaroundDuration,
@@ -266,7 +273,11 @@ export function useOnNotificationTap({
     eventId: string,
     entityName: string,
     targetSubjectId: string | null,
+    startToken: number,
   ) => {
+    // The user started another activity while this tap was pending
+    const isSuperseded = () => !isLatestEntityStart(startToken);
+
     const queryUtils = new QueryDataUtils(queryClient);
 
     // Check if notification eventId exists in cache (might be stale/filtered by API)
@@ -348,6 +359,10 @@ export function useOnNotificationTap({
 
     const responseTypes = getResponseTypesMap(baseInfo);
 
+    if (isSuperseded()) {
+      return;
+    }
+
     if (entityType === 'flow') {
       const result = await startFlow(
         appletId,
@@ -363,7 +378,7 @@ export function useOnNotificationTap({
         return autocomplete();
       }
 
-      if (result.failed) {
+      if (result.failed || isSuperseded()) {
         return;
       }
 
@@ -393,7 +408,7 @@ export function useOnNotificationTap({
         return autocomplete();
       }
 
-      if (result.failed) {
+      if (result.failed || isSuperseded()) {
         return;
       }
 

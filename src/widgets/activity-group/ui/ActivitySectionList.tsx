@@ -15,6 +15,10 @@ import { ActivityListItem } from '@app/entities/activity/lib/types/activityListI
 import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
 import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
 import { ActivityCard } from '@app/entities/activity/ui/ActivityCard';
+import {
+  beginEntityStart,
+  isLatestEntityStart,
+} from '@app/entities/applet/lib/entityStartToken';
 import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
@@ -107,6 +111,9 @@ export function ActivitySectionList({
       return;
     }
 
+    // Supersede any pending notification-tap start (and vice versa)
+    const startToken = beginEntityStart();
+
     const responseTypes = activityResponseTypes[flowId || activityId];
     const isWebOnly = responseTypes.some(getIsWebOnly);
 
@@ -142,7 +149,7 @@ export function ActivitySectionList({
         return autocomplete();
       }
 
-      if (result.failed) {
+      if (result.failed || !isLatestEntityStart(startToken)) {
         return;
       }
 
@@ -166,7 +173,7 @@ export function ActivitySectionList({
         return autocomplete();
       }
 
-      if (result.failed) {
+      if (result.failed || !isLatestEntityStart(startToken)) {
         return;
       }
 
