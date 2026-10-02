@@ -19,6 +19,7 @@ export class ProgressDataCollector implements IProgressDataCollector {
 
     return await getDefaultEventsService().getAllCompletedEntities({
       fromDate,
+      includeInProgress: true,
     });
   }
 

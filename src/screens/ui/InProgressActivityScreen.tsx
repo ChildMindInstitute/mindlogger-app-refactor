@@ -4,8 +4,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
+import { useTargetedSync } from '@app/entities/applet/model/hooks/useTargetedSync';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
+import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
 import { Emitter } from '@app/shared/lib/services/Emitter';
+import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
 import { Box } from '@app/shared/ui/base';
 import { Spinner } from '@app/shared/ui/Spinner';
@@ -23,6 +26,17 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     route.params;
 
   useUpcomingNotificationsObserver(eventId, entityId, targetSubjectId);
+
+  const { syncApplet, isRefreshing } = useTargetedSync();
+
+  // Sync when screen mounts/focuses
+  useOnFocus(() => {
+    syncApplet(appletId).catch(err =>
+      getDefaultLogger().error(
+        `[InProgressActivityScreen] Sync failed: ${err}`,
+      ),
+    );
+  });
 
   const { data, isLoading } = useBaseInfo(appletId);
   const { responseTypes, title } = data || {};
@@ -57,7 +71,7 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     <Box flex={1} marginTop={IS_ANDROID && OS_MAJOR_VERSION >= 15 ? top : 0}>
       <StatusBar hidden />
 
-      {isLoading || !isAppSupportedEntity ? (
+      {isRefreshing || isLoading || !isAppSupportedEntity ? (
         <Spinner withOverlay />
       ) : (
         <FlowSurvey

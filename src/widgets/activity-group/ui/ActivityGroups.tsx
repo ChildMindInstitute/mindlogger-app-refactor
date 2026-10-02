@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+import { ScrollViewProps } from 'react-native';
 
 import { useIsFetching } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +24,7 @@ type Props = {
   appletId: string;
   completeEntity: CompleteEntityIntoUploadToQueue;
   checkAvailability: CheckAvailability;
+  refreshControl: ScrollViewProps['refreshControl'];
 } & BoxProps;
 
 export const ActivityGroups: FC<Props> = props => {
@@ -106,6 +108,7 @@ export const ActivityGroups: FC<Props> = props => {
                       groups={validGroups}
                       completeEntity={props.completeEntity}
                       checkAvailability={props.checkAvailability}
+                      refreshControl={props.refreshControl}
                     />
                   ) : (
                     <EmptyState

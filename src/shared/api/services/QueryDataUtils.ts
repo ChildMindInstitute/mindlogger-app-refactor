@@ -16,6 +16,7 @@ import {
   AppletDetailsResponse,
   AppletDto,
   AppletsResponse,
+  AppletRespondentMetaDto,
   AssignmentDto,
 } from './IAppletService';
 import { AppletEventsResponse, ScheduleEventDto } from './IEventsService';
@@ -34,6 +35,15 @@ export class QueryDataUtils {
     );
 
     return result?.result ?? null;
+  }
+
+  getRespondentMeta(appletId: string): AppletRespondentMetaDto | null {
+    const result = getDataFromQuery<AppletDetailsResponse>(
+      getAppletDetailsKey(appletId),
+      this.queryClient,
+    );
+
+    return result?.respondentMeta ?? null;
   }
 
   getBaseInfo(appletId: string): AppletBaseInfoResponse | null {

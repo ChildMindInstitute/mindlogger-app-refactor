@@ -349,6 +349,13 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
+      answer: {
+        startTime: 1000,
+        endTime: 2000,
+        localEndDate: '2023-01-01',
+        localEndTime: '12:00:00',
+        tzOffset: -300,
+      },
     } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(false);
@@ -380,6 +387,13 @@ describe('AnswersUploadService', () => {
       activityId: 'activity123',
       appletId: 'applet123',
       flowId: 'flow123',
+      answer: {
+        startTime: 1000,
+        endTime: 2000,
+        localEndDate: '2023-01-01',
+        localEndTime: '12:00:00',
+        tzOffset: -300,
+      },
     } as ActivityAnswersRequest;
 
     const mockCheckIfAnswersUploaded = jest.fn().mockResolvedValueOnce(false);
