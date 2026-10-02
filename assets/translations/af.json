@@ -250,7 +250,8 @@
   "login_form": {
     "login": "Meld aan",
     "email_placeholder": "E-pos",
-    "password": "Wagwoord"
+    "password": "Wagwoord",
+    "invalid_credentials": "Ongeldige e-pos of wagwoord"
   },
   "logout_warning": {
     "warning": "Afmeld-waarskuwing",

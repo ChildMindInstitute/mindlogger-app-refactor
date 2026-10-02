@@ -250,7 +250,8 @@
   "login_form": {
     "login": "Ngena",
     "email_placeholder": "I-imeyile",
-    "password": "Inombolo yokuvula"
+    "password": "Inombolo yokuvula",
+    "invalid_credentials": "I-imeyile okanye igama eliyimfihlo elingasebenziyo"
   },
   "logout_warning": {
     "warning": "Phuma Isilumkiso",
