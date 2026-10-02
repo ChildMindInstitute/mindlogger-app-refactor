@@ -4,6 +4,8 @@ import {
   BackgroundTaskOptions,
   IBackgroundWorkerBuilder,
 } from './IBackgroundWorkerBuilder';
+import { getDefaultLogger } from './loggerInstance';
+import { initializeStorageEncryption } from '../storages/mmkvEncryptionKeyManager';
 
 const MINIMUM_ALLOWED_BG_TASK_INTERVAL_MINUTES = 15;
 
@@ -27,9 +29,22 @@ export function BackgroundWorkerBuilder(): IBackgroundWorkerBuilder {
         enableHeadless: true,
       },
       async taskId => {
-        await Promise.resolve(callback());
+        try {
+          // Tasks may run before the app UI has booted (e.g. the app was
+          // launched in the background), so the MMKV encryption key must be
+          // resolved first. This can fail while the device is still locked
+          // (the key is only readable after the first unlock) - in that
+          // case, skip this run and let the next scheduled background fetch retry.
+          await initializeStorageEncryption();
 
-        BackgroundFetch.finish(taskId);
+          await Promise.resolve(callback());
+        } catch (error) {
+          getDefaultLogger().warn(
+            `[BackgroundWorkerBuilder.setTask]: Error: ${String(error)}`,
+          );
+        } finally {
+          BackgroundFetch.finish(taskId);
+        }
       },
       onTimeout,
     ).catch(console.error);
@@ -44,9 +59,18 @@ export function BackgroundWorkerBuilder(): IBackgroundWorkerBuilder {
         return;
       }
 
-      await Promise.resolve(callback());
+      try {
+        // See the comment in setTask above.
+        await initializeStorageEncryption();
 
-      BackgroundFetch.finish(taskId);
+        await Promise.resolve(callback());
+      } catch (error) {
+        getDefaultLogger().warn(
+          `[BackgroundWorkerBuilder.setAndroidHeadlessTask]: Error: ${String(error)}`,
+        );
+      } finally {
+        BackgroundFetch.finish(taskId);
+      }
     }
 
     BackgroundFetch.registerHeadlessTask(headlessTask);

@@ -1,11 +1,10 @@
 import { MMKV } from 'react-native-mmkv';
 
-import { STORE_ENCRYPTION_KEY } from '@app/shared/lib/constants';
-import { throwError } from '@app/shared/lib/services/errorService';
 import {
   createSecureStorage,
   createStorage,
 } from '@app/shared/lib/storages/createStorage';
+import { getStorageEncryptionConfigSync } from '@app/shared/lib/storages/mmkvEncryptionKeyManager';
 
 import { MigrationPrefix, SecureStoragesArray, Storages } from './types';
 
@@ -38,24 +37,20 @@ export const getMigrationStorageName = (storage: Storages): string => {
   return `${MigrationPrefix}--${storage}`;
 };
 
-const getStoreEncryptionKey = () => {
-  if (!STORE_ENCRYPTION_KEY) {
-    throwError(
-      '[createSecureStorage]: STORE_ENCRYPTION_KEY has not been provided',
-    );
-  }
-  return STORE_ENCRYPTION_KEY as string;
+const createSecureStorageWithDeviceKey = (storageName: string): MMKV => {
+  const { encryptionKey, encryptionType } = getStorageEncryptionConfigSync();
+  return createSecureStorage(storageName, encryptionKey, encryptionType);
 };
 
 export const createMigrationStorage = (storageName: Storages): MMKV => {
   const migrationStorageName = getMigrationStorageName(storageName);
   return SecureStoragesArray.includes(storageName)
-    ? createSecureStorage(migrationStorageName, getStoreEncryptionKey())
+    ? createSecureStorageWithDeviceKey(migrationStorageName)
     : createStorage(migrationStorageName);
 };
 
 export const createRegularStorage = (storageName: Storages): MMKV => {
   return SecureStoragesArray.includes(storageName)
-    ? createSecureStorage(storageName, getStoreEncryptionKey())
+    ? createSecureStorageWithDeviceKey(storageName)
     : createStorage(storageName);
 };
