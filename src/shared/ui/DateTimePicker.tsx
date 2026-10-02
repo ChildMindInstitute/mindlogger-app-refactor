@@ -1,5 +1,5 @@
 import { useState, FC, JSX } from 'react';
-import { AccessibilityProps } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 
 import { Button } from '@tamagui/button';
 import { styled } from '@tamagui/core';
@@ -80,7 +80,16 @@ export const DateTimePicker: FC<Props & AccessibilityProps> = ({
           confirm(utcDate);
         }}
         onCancel={hideDatePicker}
+        // On the New Architecture the iOS picker sizes to its wheels and
+        // otherwise sits left-aligned in the modal
+        pickerStyleIOS={styles.pickerIOS}
       />
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  pickerIOS: {
+    alignItems: 'center',
+  },
+});
