@@ -249,7 +249,8 @@
   "login_form": {
     "login": "Connexion",
     "email_placeholder": "E-mail",
-    "password": "Mot de passe"
+    "password": "Mot de passe",
+    "invalid_credentials": "E-mail ou mot de passe invalide"
   },
   "logout_warning": {
     "warning": "Avertissement de déconnexion",
