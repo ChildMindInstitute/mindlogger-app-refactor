@@ -1,5 +1,11 @@
 import { useMemo, PropsWithChildren } from 'react';
-import { Linking, SectionList, StyleSheet } from 'react-native';
+import {
+  Alert,
+  Linking,
+  ScrollViewProps,
+  SectionList,
+  StyleSheet,
+} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +21,9 @@ import { ActivityListItem } from '@app/entities/activity/lib/types/activityListI
 import { getDefaultItemsVisibilityValidator } from '@app/entities/activity/model/services/itemsVisibilityValidatorInstsance';
 import { getDefaultMediaLookupService } from '@app/entities/activity/model/services/mediaLookupServiceInstance';
 import { ActivityCard } from '@app/entities/activity/ui/ActivityCard';
+import { onFlowCompletedElsewhere } from '@app/entities/applet/lib/alerts';
 import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
+import { useRefreshMutation } from '@app/entities/applet/model/hooks/useRefreshMutation';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { DEEP_LINK_PREFIXES } from '@app/shared/lib/constants';
@@ -42,6 +50,7 @@ type Props = {
   groups: Array<ActivityListGroup>;
   completeEntity: CompleteEntityIntoUploadToQueue;
   checkAvailability: CheckAvailability;
+  refreshControl: ScrollViewProps['refreshControl'];
 };
 
 export function ActivitySectionList({
@@ -50,6 +59,7 @@ export function ActivitySectionList({
   checkAvailability,
   completeEntity,
   groups,
+  refreshControl,
 }: Props) {
   const { t } = useTranslation();
 
@@ -75,6 +85,8 @@ export function ActivitySectionList({
     completeEntityIntoUploadToQueue: completeEntity,
     checkAvailability,
   });
+
+  const { mutate: triggerRefresh } = useRefreshMutation();
 
   function navigateSurvey(
     entityId: string,
@@ -138,6 +150,13 @@ export function ActivitySectionList({
         responseTypes,
       );
 
+      if (result.failReason === 'completed-elsewhere') {
+        onFlowCompletedElsewhere(() => {
+          triggerRefresh();
+        });
+        return;
+      }
+
       if (result.failReason === 'expired-while-alert-opened') {
         return autocomplete();
       }
@@ -182,6 +201,7 @@ export function ActivitySectionList({
     <>
       <SectionList
         sections={sections}
+        refreshControl={refreshControl}
         renderSectionHeader={({ section }) => (
           <SectionHeader>{t(section.name)}</SectionHeader>
         )}

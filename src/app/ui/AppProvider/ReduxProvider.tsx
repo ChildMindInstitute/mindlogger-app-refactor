@@ -54,6 +54,14 @@ const persistedReducer = persistReducer(
 
 export const reduxStore = configureStore({
   reducer: persistedReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore redux-persist actions (they contain non-serializable functions)
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+        ignoredPaths: ['register'],
+      },
+    }),
   enhancers: getDefaultEnhancers => {
     const enhancers = getDefaultEnhancers();
 

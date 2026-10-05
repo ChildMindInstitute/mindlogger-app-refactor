@@ -15,6 +15,7 @@ export const appletDetailsResponse: AppletDetailsResponse = {
   // @ts-ignore
   result: undefined,
   respondentMeta: {
+    subjectId: 'mock-subject-id',
     nickname: 'Some nick',
   },
 };
@@ -27,6 +28,8 @@ export const completedEntityDto: CompletedEntityDto = {
   targetSubjectId: '4',
   localEndDate: '2020-04-04',
   localEndTime: '20:00',
+  startTime: 1586026800000,
+  endTime: 1586026800000,
 };
 
 // @ts-expect-error

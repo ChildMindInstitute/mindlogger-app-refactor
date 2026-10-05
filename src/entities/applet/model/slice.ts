@@ -51,8 +51,17 @@ export type UpsertEntityProgressionPayload = {
   entityId: string;
   eventId: string | null;
   targetSubjectId: string | null;
-  endAt: Date;
+  endAt: number; // timestamp, not Date (Redux can't serialize Date objects)
   submitId: string;
+  isInProgress?: boolean;
+  activityFlowOrder?: number;
+  currentActivityId?: string;
+  currentActivityName?: string;
+  currentActivityDescription?: string;
+  currentActivityImage?: string | null;
+  currentActivityStartAt?: number | null; // timestamp when current activity started
+  totalActivitiesInPipeline?: number;
+  availableUntilTimestamp?: number | null; // timestamp when entity expires
 };
 
 type Consents = {
@@ -275,39 +284,158 @@ const slice = createSlice({
       state,
       action: PayloadAction<UpsertEntityProgressionPayload>,
     ) => {
+      const { payload } = action;
+
       const existingProgression = (state.entityProgressions || []).find(
         entityProgressionFinder({
-          appletId: action.payload.appletId,
-          entityType: action.payload.entityType,
-          entityId: action.payload.entityId,
-          eventId: action.payload.eventId,
-          targetSubjectId: action.payload.targetSubjectId,
+          appletId: payload.appletId,
+          entityType: payload.entityType,
+          entityId: payload.entityId,
+          eventId: payload.eventId,
+          targetSubjectId: payload.targetSubjectId,
         }),
       );
 
-      const endedAtTimestamp = action.payload.endAt.getTime();
+      // Handle in-progress flows from server (matches web's useEntitiesSync)
+      if (payload.isInProgress && payload.entityType === 'activityFlow') {
+        const serverPipelineActivityOrder = payload.activityFlowOrder ?? 0;
+        const localPipelineActivityOrder =
+          (existingProgression as EntityProgressionInProgressActivityFlow)
+            ?.pipelineActivityOrder ?? 0;
+
+        const serverSubmitId = payload.submitId;
+        const localSubmitId = existingProgression?.submitId;
+
+        // Same submitId: keep furthest progress
+        if (localSubmitId === serverSubmitId) {
+          if (localPipelineActivityOrder >= serverPipelineActivityOrder) {
+            return;
+          }
+        } else {
+          // Different submitIds: local in-progress or completed takes precedence
+          if (
+            existingProgression &&
+            existingProgression.status === 'in-progress' &&
+            localPipelineActivityOrder >= serverPipelineActivityOrder
+          ) {
+            return;
+          }
+          if (
+            existingProgression &&
+            existingProgression.status === 'completed'
+          ) {
+            const localEndAt =
+              (existingProgression as EntityProgressionCompleted)
+                .endedAtTimestamp ?? 0;
+            if (localEndAt >= payload.endAt) {
+              return;
+            }
+          }
+        }
+
+        const pipelineActivityOrder = serverPipelineActivityOrder;
+
+        // Create or update in-progress flow with furthest progress
+        const inProgressFlow: EntityProgressionInProgressActivityFlow = {
+          status: 'in-progress',
+          appletId: payload.appletId,
+          entityType: 'activityFlow',
+          entityId: payload.entityId,
+          eventId: payload.eventId,
+          targetSubjectId: payload.targetSubjectId,
+          startedAtTimestamp:
+            existingProgression?.startedAtTimestamp ?? payload.endAt,
+          availableUntilTimestamp:
+            payload.availableUntilTimestamp ??
+            existingProgression?.availableUntilTimestamp ??
+            null,
+          submitId: payload.submitId,
+          pipelineActivityOrder,
+          totalActivitiesInPipeline: payload.totalActivitiesInPipeline || 1,
+          currentActivityId: payload.currentActivityId || '',
+          currentActivityName: payload.currentActivityName || '',
+          currentActivityDescription: payload.currentActivityDescription || '',
+          currentActivityImage: payload.currentActivityImage || null,
+          currentActivityStartAt: payload.currentActivityStartAt ?? null,
+        };
+
+        // Remove existing and add updated one
+        if (existingProgression) {
+          state.entityProgressions = (state.entityProgressions || []).filter(
+            p => p !== existingProgression,
+          );
+        }
+
+        state.entityProgressions = state.entityProgressions || [];
+        state.entityProgressions.push(inProgressFlow);
+
+        return;
+      }
+
+      // Handle completed entities (existing logic)
+      const endedAtTimestamp = payload.endAt; // Already a timestamp
 
       if (existingProgression) {
         if (existingProgression.status === 'completed') {
           const existingCompletion =
             existingProgression as EntityProgressionCompleted;
 
+          // Don't update endedAtTimestamp if it would be BEFORE the startedAtTimestamp
+          // This can happen if user restarted a completed flow but we haven't fully synced yet
+          if (
+            existingCompletion.startedAtTimestamp &&
+            endedAtTimestamp < existingCompletion.startedAtTimestamp
+          ) {
+            // Server's completion is older than local start - ignore it
+            return;
+          }
+
           if (endedAtTimestamp > (existingCompletion.endedAtTimestamp ?? 0)) {
             existingCompletion.endedAtTimestamp = endedAtTimestamp;
           }
+        } else if (existingProgression.status === 'in-progress') {
+          // If existing is in-progress but server says completed:
+          // Only convert to completed if the server's completion happened AFTER the local start
+          // This prevents converting a restarted flow back to completed
+          const localStartedAt = existingProgression.startedAtTimestamp;
+
+          if (localStartedAt && endedAtTimestamp < localStartedAt) {
+            // Server's completed record is OLDER than the local restart - ignore it
+            return;
+          }
+
+          // Server completion is newer - update local state to mark as completed
+          const completedProgression: EntityProgressionCompleted = {
+            status: 'completed',
+            appletId: payload.appletId,
+            entityType: payload.entityType,
+            entityId: payload.entityId,
+            eventId: payload.eventId,
+            targetSubjectId: payload.targetSubjectId,
+            availableUntilTimestamp: null,
+            startedAtTimestamp: existingProgression.startedAtTimestamp,
+            endedAtTimestamp,
+            submitId: payload.submitId,
+          };
+
+          // Remove in-progress and add completed
+          state.entityProgressions = (state.entityProgressions || []).filter(
+            p => p !== existingProgression,
+          );
+          state.entityProgressions.push(completedProgression);
         }
       } else {
         const newCompletion: EntityProgressionCompleted = {
           status: 'completed',
-          appletId: action.payload.appletId,
-          entityType: action.payload.entityType,
-          entityId: action.payload.entityId,
-          eventId: action.payload.eventId,
-          targetSubjectId: action.payload.targetSubjectId,
+          appletId: payload.appletId,
+          entityType: payload.entityType,
+          entityId: payload.entityId,
+          eventId: payload.eventId,
+          targetSubjectId: payload.targetSubjectId,
           availableUntilTimestamp: null,
           startedAtTimestamp: 0,
           endedAtTimestamp,
-          submitId: action.payload.submitId,
+          submitId: payload.submitId,
         };
         state.entityProgressions = state.entityProgressions ?? [];
         state.entityProgressions.push(newCompletion);
