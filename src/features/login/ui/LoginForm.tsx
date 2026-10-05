@@ -182,6 +182,11 @@ export const LoginForm: FC<Props> = props => {
     },
   });
 
+  // Backend returns this error in English only, so translate it on the app side
+  const isInvalidCredentials =
+    (error?.response?.data as { error_code?: string } | undefined)
+      ?.error_code === 'AUTH.INVALID_CREDENTIALS';
+
   const { form, submit } = useAppForm(LoginFormSchema, {
     defaultValues: {
       email: '',
@@ -235,7 +240,11 @@ export const LoginForm: FC<Props> = props => {
             <ErrorMessage
               mode="light"
               accessibilityLabel="login-error-message"
-              error={{ message: error.evaluatedMessage ?? '' }}
+              error={{
+                message: isInvalidCredentials
+                  ? t('login_form:invalid_credentials')
+                  : (error.evaluatedMessage ?? ''),
+              }}
             />
           )}
         </YStack>

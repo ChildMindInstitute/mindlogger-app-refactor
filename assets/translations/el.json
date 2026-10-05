@@ -212,7 +212,8 @@
   "login_form": {
     "login": "Σύνδεση",
     "email_placeholder": "Email",
-    "password": "Κωδικός πρόσβασης"
+    "password": "Κωδικός πρόσβασης",
+    "invalid_credentials": "Λανθασμένο email ή κωδικός πρόσβασης."
   },
   "logout_warning": {
     "warning": "Προειδοποίηση αποσύνδεσης",

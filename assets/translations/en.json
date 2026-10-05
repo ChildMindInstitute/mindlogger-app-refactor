@@ -250,7 +250,8 @@
   "login_form": {
     "login": "Log In",
     "email_placeholder": "Email",
-    "password": "Password"
+    "password": "Password",
+    "invalid_credentials": "Invalid email or password"
   },
   "logout_warning": {
     "warning": "Logout Warning",
