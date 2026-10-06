@@ -53,9 +53,15 @@ jest.mock('react-native-reanimated', () => {
 jest.mock('react-native-background-fetch', () =>
   jest.mock('react-native-background-fetch'),
 );
+
 jest.mock('@react-native-firebase/messaging', () =>
   jest.mock('@react-native-firebase/messaging'),
 );
+
+jest.mock('react-native-gesture-handler', () => ({
+  ...jest.requireActual('react-native-gesture-handler'),
+  Pressable: require('react-native').Pressable,
+}));
 
 jest.mock('@georstat/react-native-image-cache', () =>
   jest.mock('@georstat/react-native-image-cache'),
