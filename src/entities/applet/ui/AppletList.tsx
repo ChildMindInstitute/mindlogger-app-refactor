@@ -2,8 +2,10 @@ import { FC, JSX, memo, useCallback } from 'react';
 import {
   FlatList,
   ListRenderItem,
+  Platform,
   ScrollViewProps,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
 
 import { XStack, YStack } from '@tamagui/stacks';
@@ -53,6 +55,7 @@ const AppletListView: FC<Props> = ({
     select: response => mapApplets(response.data.result),
   });
   const { bottom } = useSafeAreaInsets();
+  const { width: windowWidth } = useWindowDimensions();
 
   const isRefreshing = useIsMutating(['refresh']);
 
@@ -88,6 +91,9 @@ const AppletListView: FC<Props> = ({
   return (
     <Box {...styledProps}>
       <FlatList
+        // Rebuild native cells and cached offsets after Unity rotates Android.
+        // Height-only changes from system bars should not reset the list.
+        key={Platform.OS === 'android' ? windowWidth : 'applet-list'}
         contentContainerStyle={[styles.flatList, { paddingBottom: bottom }]}
         accessibilityLabel="applet-list"
         data={applets ?? []}
