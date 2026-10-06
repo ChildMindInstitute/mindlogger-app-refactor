@@ -12,11 +12,11 @@ import Animated, {
 
 import { IS_IOS } from '@app/shared/lib/constants';
 import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
-import { useStableTopInset } from '@app/shared/lib/hooks/useStableTopInset';
 import { DEFAULT_BG } from '@entities/banner/lib/constants';
 
 import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
+import { useBannersTopInset } from '../lib/hooks/useBannersTopInset';
 import {
   bannersBgSelector,
   bannersExpandingSelector,
@@ -53,10 +53,7 @@ export const Banners = () => {
   const isHidden = useAppSelector(bannersHiddenSelector);
   const isExpanding = useAppSelector(bannersExpandingSelector);
   const dispatch = useAppDispatch();
-  // Use a stable inset so the banners strip keeps reserving the status bar
-  // space while the status bar is hidden during an activity. This prevents
-  // the whole app layout from shifting when the status bar hides/shows.
-  const top = useStableTopInset();
+  const top = useBannersTopInset();
 
   const handleExpanded = useCallback(() => {
     dispatch(bannerActions.setBannersExpanded());
