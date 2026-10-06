@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import notifee from '@notifee/react-native';
+import notifee from 'react-native-notify-kit';
 
 import { IS_ANDROID } from '@app/shared/lib/constants';
 

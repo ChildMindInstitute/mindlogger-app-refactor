@@ -1,0 +1,54 @@
+diff --git a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
+index 6406f64..3c02368 100644
+--- a/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
++++ b/node_modules/@azesmway/react-native-unity/ios/RNUnityView.mm
+@@ -97,12 +97,18 @@ - (void)layoutSubviews {
+    }
+ 
+    if([self unityIsInitialized] && self.ufw.appController.rootView != nil) {
++      // PATCHED (Mindlogger): detect a (re)attach BEFORE addSubview, and resume in
++      // that case too. The _pausedForRecycle flag lives on whichever old view
++      // instance paused the engine — which may not be this one — so trusting the
++      // flag alone left the engine paused (frozen frame) on the next mount.
++      BOOL reattaching = self.ufw.appController.rootView.superview != self;
++
+       self.ufw.appController.rootView.frame = self.bounds;
+       [self addSubview:self.ufw.appController.rootView];
+ 
+       // Coming back on screen after the view was recycled: resume the shared
+       // instance that prepareForRecycle paused (#180).
+-      if (_pausedForRecycle) {
++      if (reattaching || _pausedForRecycle) {
+          [[self ufw] pause:NO];
+          _pausedForRecycle = NO;
+       }
+@@ -197,7 +203,11 @@ - (void)prepareForRecycle {
+     // Unity-as-a-Library is a single instance per process: unloading it on Fabric view
+     // recycling kills the engine, and any later mount shows a black screen (#180).
+     // Pause instead — the next mount resumes the same instance.
+-    if ([self unityIsInitialized]) {
++    // PATCHED (Mindlogger): only pause if this view still owns Unity's root view.
++    // Under Fabric the next Unity view can mount and claim the engine BEFORE this
++    // one is recycled — pausing here froze the game on the new view.
++    if ([self unityIsInitialized]
++        && self.ufw.appController.rootView.superview == self) {
+       [[self ufw] pause:true];
+       _pausedForRecycle = YES;
+     }
+@@ -207,6 +217,16 @@ + (ComponentDescriptorProvider)componentDescriptorProvider {
+     return concreteComponentDescriptorProvider<RNUnityViewComponentDescriptor>();
+ }
+ 
++// PATCHED (Mindlogger): opt out of Fabric view recycling. Recycled instances come
++// back from the pool with stale ivars (_unloaded, _pausedForRecycle, self.ufw) —
++// a stale _unloaded=YES disables the layoutSubviews retry loop, so the engine
++// boots (via updateProps) but its rootView is never attached: frozen loading on
++// every other mount. A fresh instance per mount makes every mount behave like the
++// first one.
+++ (BOOL)shouldBeRecycled {
++    return NO;
++}
++
+ - (instancetype)initWithFrame:(CGRect)frame {
+   if (self = [super initWithFrame:frame]) {
+     static const auto defaultProps = std::make_shared<const RNUnityViewProps>();
