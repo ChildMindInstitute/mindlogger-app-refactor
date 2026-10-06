@@ -2326,7 +2326,7 @@ PODS:
   - RNFileLogger (0.4.1):
     - CocoaLumberjack
     - React
-  - RNGestureHandler (2.32.0):
+  - RNGestureHandler (3.3.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2346,6 +2346,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
+    - RNWorklets (>= 0.8.0)
     - Yoga
   - RNLocalize (3.5.4):
     - hermes-engine
@@ -3193,7 +3194,7 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: c3bb5533f9957eddc88f3ea383583309a4ce9f89
   RNFBMessaging: 0f0498a95c605e3afcf13ac5f349d0b201ea65f6
   RNFileLogger: 25252ae3e0c8104b8e4dc29ff1f027d3c70f0b5c
-  RNGestureHandler: 46909532a858b6639175044b6082b4076a6cae11
+  RNGestureHandler: c82bd618bee87fad23f8dca67d97cec292965d2d
   RNLocalize: 9bb642e376f2072dc0062d8c0ffd848c75c6dcc7
   RNNotifee: 94b71a160c65ff4b9a7d00780cf61f5283de1608
   RNPermissions: 2db78a433593a36cb38d2090d2960a4f72dcaea8
