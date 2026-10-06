@@ -17,4 +17,4 @@ Applied via [patch-package](https://github.com/ds300/patch-package).
 ## moti+0.30.0.patch
 
 - Use `Pressable` from react-native-gesture-handler for `MotiPressable`.
-- Added in pull request #1155.
+- Added in pull request #1164.
