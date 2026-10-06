@@ -21,12 +21,14 @@ type InitialState = {
   banners: Banner[];
   bannersBg?: string;
   bannersHidden: boolean;
+  bannersExpanding: boolean;
 };
 
 const initialState: InitialState = {
   banners: [],
   bannersBg: undefined,
   bannersHidden: false,
+  bannersExpanding: false,
 };
 
 const bannerSlice = createSlice({
@@ -49,7 +51,13 @@ const bannerSlice = createSlice({
       state.bannersBg = action.payload;
     },
     setBannersHidden: (state, action: PayloadAction<boolean>) => {
+      if (state.bannersHidden && !action.payload) {
+        state.bannersExpanding = true;
+      }
       state.bannersHidden = action.payload;
+    },
+    setBannersExpanded: state => {
+      state.bannersExpanding = false;
     },
   },
 });

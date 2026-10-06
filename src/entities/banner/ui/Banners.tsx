@@ -1,15 +1,17 @@
+import { useCallback } from 'react';
 import { StatusBar, StyleSheet } from 'react-native';
 
 import Animated, {
   FadeInUp,
   FadeOutUp,
+  runOnJS,
   useAnimatedStyle,
   withTiming,
   Easing,
 } from 'react-native-reanimated';
 
 import { IS_IOS } from '@app/shared/lib/constants';
-import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useStableTopInset } from '@app/shared/lib/hooks/useStableTopInset';
 import { DEFAULT_BG } from '@entities/banner/lib/constants';
 
@@ -17,10 +19,11 @@ import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
 import {
   bannersBgSelector,
+  bannersExpandingSelector,
   bannersHiddenSelector,
   bannersSelector,
 } from '../model/selectors';
-import { BannerType } from '../model/slice';
+import { bannerActions, BannerType } from '../model/slice';
 
 const styles = StyleSheet.create({
   strip: {
@@ -48,10 +51,16 @@ export const Banners = () => {
   const banners = useAppSelector(bannersSelector);
   const bannersBg = useAppSelector(bannersBgSelector) ?? DEFAULT_BG;
   const isHidden = useAppSelector(bannersHiddenSelector);
+  const isExpanding = useAppSelector(bannersExpandingSelector);
+  const dispatch = useAppDispatch();
   // Use a stable inset so the banners strip keeps reserving the status bar
   // space while the status bar is hidden during an activity. This prevents
   // the whole app layout from shifting when the status bar hides/shows.
   const top = useStableTopInset();
+
+  const handleExpanded = useCallback(() => {
+    dispatch(bannerActions.setBannersExpanded());
+  }, [dispatch]);
 
   // Animate top safe area background color to match native header background
   // color transition. The strip's padding also animates to 0 when Unity takes
@@ -67,7 +76,11 @@ export const Banners = () => {
       easing: Easing.out(Easing.ease),
     }),
     // Add top inset here instead of letting react-native-screens 4.17+ pad the header
-    paddingTop: withTiming(isHidden ? 0 : top, COLLAPSE_TIMING),
+    paddingTop: withTiming(isHidden ? 0 : top, COLLAPSE_TIMING, finished => {
+      if (finished && isExpanding && !isHidden) {
+        runOnJS(handleExpanded)();
+      }
+    }),
   }));
 
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
