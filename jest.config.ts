@@ -17,7 +17,8 @@ const jestConfig: JestConfigWithTsJest = {
   testPathIgnorePatterns: ['\\.snap$', '<rootDir>/node_modules/'],
   cacheDirectory: '.jest/cache',
   transformIgnorePatterns: [
-    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux|immer|moti/.*|@tamagui/animations-moti/.*|uuid)',
+    // The patched sanitize-html pulls in htmlparser2, whose chain ships ESM only
+    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux|immer|moti/.*|@tamagui/animations-moti/.*|uuid|htmlparser2|dom-serializer|domelementtype|domhandler|domutils|entities)',
   ],
   setupFiles: [
     '<rootDir>/jest.vendor-mocks.js',
