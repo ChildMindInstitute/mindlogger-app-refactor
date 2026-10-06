@@ -3,7 +3,9 @@ import { FC, useEffect, useLayoutEffect } from 'react';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
 import { Spinner } from '@app/shared/ui/Spinner';
@@ -21,6 +23,8 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     route.params;
 
   useUpcomingNotificationsObserver(eventId, entityId, targetSubjectId);
+
+  const dispatch = useAppDispatch();
 
   const { data, isLoading } = useBaseInfo(appletId);
   const { responseTypes, title } = data || {};
@@ -51,6 +55,32 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
       navigation.removeListener('beforeRemove', callback);
     };
   }, [navigation]);
+
+  // Reserve space outside of activities and during transitions in/out of activities
+  useEffect(() => {
+    const removeTransitionEnd = navigation.addListener('transitionEnd', e => {
+      // Release space when transitions into activities end (M2-11193)
+      if (!e.data.closing) {
+        dispatch(bannerActions.setBannersReserveStatusBar(false));
+      }
+    });
+    const removeTransitionStart = navigation.addListener(
+      'transitionStart',
+      e => {
+        // Reserve space when transitions out of activities begin
+        if (e.data.closing) {
+          dispatch(bannerActions.setBannersReserveStatusBar(true));
+        }
+      },
+    );
+
+    return () => {
+      removeTransitionEnd();
+      removeTransitionStart();
+      // Reserve space outside of in-progress activities
+      dispatch(bannerActions.setBannersReserveStatusBar(true));
+    };
+  }, [dispatch, navigation]);
 
   return (
     <Box flex={1}>
