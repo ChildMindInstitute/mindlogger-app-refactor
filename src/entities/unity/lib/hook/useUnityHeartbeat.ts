@@ -16,7 +16,7 @@ import { UseUnityHeartbeatOptions } from '../types/unityType';
 // Call startHeartbeat after Unity is ready; stopHeartbeat on unmount or activity end.
 export const useUnityHeartbeat = ({
   sendMessageToUnity,
-  onFirstFailure,
+  onRecovered,
   onMaxFailuresReached,
 }: UseUnityHeartbeatOptions) => {
   const logger: ILogger = getDefaultLogger();
@@ -46,10 +46,6 @@ export const useUnityHeartbeat = ({
         `[Heartbeat] failure #${failureCountRef.current}/${MAX_HEARTBEAT_FAILURES}: ${reason}`,
       );
 
-      if (failureCountRef.current === 1) {
-        onFirstFailure?.();
-      }
-
       if (
         failureCountRef.current >= MAX_HEARTBEAT_FAILURES &&
         !firedRef.current
@@ -74,6 +70,16 @@ export const useUnityHeartbeat = ({
       sendMessageToUnity(echoMsg)
         .then(() => {
           clearTimeout(timeoutId);
+          // A missed Echo can be a false alarm (e.g. Unity's main thread
+          // saturated by a scene load or save delays the ack past the timeout).
+          // Report the recovery so consumers can hide the "unresponsive"
+          // overlay shown by the explicit failure paths.
+          if (failureCountRef.current > 0 && !firedRef.current) {
+            logger.log(
+              '[Heartbeat] recovered: Echo acked after previous failure(s)',
+            );
+            onRecovered?.();
+          }
           failureCountRef.current = 0;
         })
         .catch(err => {
@@ -85,7 +91,7 @@ export const useUnityHeartbeat = ({
     logger,
     sendMessageToUnity,
     stopHeartbeat,
-    onFirstFailure,
+    onRecovered,
     onMaxFailuresReached,
   ]);
 
