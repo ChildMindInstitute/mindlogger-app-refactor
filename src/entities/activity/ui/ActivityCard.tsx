@@ -26,6 +26,7 @@ type Props = {
   activity: ActivityListItem;
   disabled: boolean;
   onPress?: (...args: unknown[]) => void;
+  onPressIn?: () => void;
   isWebOnly?: boolean;
   sectionName?: string;
 };
@@ -35,6 +36,7 @@ export const ActivityCard: FC<Props> = ({
   disabled,
   isWebOnly = false,
   onPress,
+  onPressIn,
   sectionName,
 }) => {
   const { t } = useTranslation();
@@ -56,6 +58,7 @@ export const ActivityCard: FC<Props> = ({
     <AnimatedTouchable
       aria-label={accessibilityLabel}
       onPress={onPress}
+      onPressIn={onPressIn}
       disabled={isDisabled}
       style={{
         borderRadius: 16,

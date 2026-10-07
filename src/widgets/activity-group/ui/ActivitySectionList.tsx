@@ -1,4 +1,4 @@
-import { useMemo, PropsWithChildren } from 'react';
+import { useMemo, useRef, PropsWithChildren } from 'react';
 import { Linking, SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -60,6 +60,18 @@ export function ActivitySectionList({
   const { navigate, isFocused } = useNavigation();
 
   const { isUploading } = useUploadObservable();
+
+  // Track whether list is scrolling
+  const isScrolling = useRef(false);
+
+  // Track whether press should be ignored (M2-11189)
+  // - Ignore press if press begins while list is scrolling
+  // - Ignore press if scroll occurs after press begins
+  const ignorePress = useRef(false);
+
+  const onCardPressIn = () => {
+    ignorePress.current = isScrolling.current; // Ignore press if press begins while list is scrolling
+  };
 
   const sections = useMemo(
     () =>
@@ -188,6 +200,23 @@ export function ActivitySectionList({
   return (
     <>
       <SectionList
+        onMomentumScrollBegin={() => {
+          isScrolling.current = true; // Begin scrolling
+          ignorePress.current = true; // Ignore press if scroll occurs after press begins
+        }}
+        onMomentumScrollEnd={() => {
+          isScrolling.current = false; // End scrolling
+        }}
+        onScrollBeginDrag={() => {
+          isScrolling.current = true; // Begin scrolling
+          ignorePress.current = true; // Ignore press if scroll occurs after press begins
+        }}
+        onScrollEndDrag={() => {
+          isScrolling.current = false; // End scrolling
+        }}
+        onScroll={() => {
+          ignorePress.current = true; // Ignore press if scroll occurs after press begins
+        }}
         sections={sections}
         renderSectionHeader={({ section }) => (
           <SectionHeader>{t(section.name)}</SectionHeader>
@@ -219,8 +248,9 @@ export function ActivitySectionList({
               activity={item}
               disabled={isUploading || (!isWebOnly && !supportsApp)}
               isWebOnly={isWebOnly}
+              onPressIn={onCardPressIn}
               onPress={() => {
-                if (isFocused()) {
+                if (isFocused() && !ignorePress.current) {
                   startActivityOrFlow(item).catch(console.error);
                 }
               }}
