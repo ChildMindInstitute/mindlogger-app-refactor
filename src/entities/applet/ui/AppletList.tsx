@@ -1,4 +1,4 @@
-import { FC, JSX, memo, useCallback } from 'react';
+import { FC, JSX, memo, useCallback, useRef } from 'react';
 import {
   FlatList,
   ListRenderItem,
@@ -65,19 +65,35 @@ const AppletListView: FC<Props> = ({
 
   const hasError = !!refreshError || !!getAppletsError;
 
+  // Track whether list is scrolling
+  const isScrolling = useRef(false);
+
+  // Track whether press should be ignored (M2-11189)
+  // - Ignore press if press begins while list is scrolling
+  // - Ignore press if scroll occurs after press begins
+  const ignorePress = useRef(false);
+
+  const onCardPressIn = useCallback(() => {
+    ignorePress.current = isScrolling.current; // Ignore press if press begins while list is scrolling
+  }, []);
+
   const renderItem: ListRenderItem<Applet> = useCallback(
     ({ item, index }) => (
       <AppletCard
         accessibilityLabel={`applet-${item.displayName}`}
         applet={item}
         disabled={!!isRefreshing || isUploading}
-        onPress={() =>
-          onAppletPress({ id: item.id, displayName: item.displayName })
-        }
+        onPressIn={onCardPressIn}
+        onPress={() => {
+          if (ignorePress.current) {
+            return;
+          }
+          onAppletPress({ id: item.id, displayName: item.displayName });
+        }}
         thumbnailColor={THUMBNAIL_BG_COLORS[index % THUMBNAIL_BG_COLORS.length]}
       />
     ),
-    [isRefreshing, isUploading, onAppletPress],
+    [isRefreshing, isUploading, onAppletPress, onCardPressIn],
   );
 
   if (hasError) {
@@ -91,6 +107,23 @@ const AppletListView: FC<Props> = ({
   return (
     <Box {...styledProps}>
       <FlatList
+        onMomentumScrollBegin={() => {
+          isScrolling.current = true; // Begin scrolling
+          ignorePress.current = true; // Ignore press if scroll occurs after press begins
+        }}
+        onMomentumScrollEnd={() => {
+          isScrolling.current = false; // End scrolling
+        }}
+        onScrollBeginDrag={() => {
+          isScrolling.current = true; // Begin scrolling
+          ignorePress.current = true; // Ignore press if scroll occurs after press begins
+        }}
+        onScrollEndDrag={() => {
+          isScrolling.current = false; // End scrolling
+        }}
+        onScroll={() => {
+          ignorePress.current = true; // Ignore press if scroll occurs after press begins
+        }}
         // Rebuild native cells and cached offsets after Unity rotates Android.
         // Height-only changes from system bars should not reset the list.
         key={Platform.OS === 'android' ? windowWidth : 'applet-list'}
