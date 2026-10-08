@@ -50,20 +50,19 @@ export const ScrollableContent: FC<Props> = ({
 
   const scrollViewRef = useRef<ScrollView>(undefined);
 
-  // Bottom edge of the visible area, updated on scroll
-  const visibleBottomRef = useRef(0);
+  // Whether the button visibility was decided from the initial layout
+  const initialOverflowCheckedRef = useRef(false);
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-
-    visibleBottomRef.current = layoutMeasurement.height + contentOffset.y;
-
     if (endOfContentReachedOnce) {
       return;
     }
 
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+
     const endReached =
-      visibleBottomRef.current >= contentSize.height - PaddingToBottom;
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - PaddingToBottom;
 
     if (endReached) {
       setShowScrollButton(false);
@@ -106,20 +105,26 @@ export const ScrollableContent: FC<Props> = ({
       return;
     }
 
-    if (debouncedScrollContentHeight - PaddingToBottom > containerHeight) {
+    const isOverflowing =
+      debouncedScrollContentHeight - PaddingToBottom > containerHeight;
+
+    if (isOverflowing) {
       setAreaScrollable(true);
-
-      // Don't show the button once the end was reached, or while already at
-      // the bottom (e.g. content grew because the user is typing)
-      const isAtBottom =
-        visibleBottomRef.current >=
-        debouncedScrollContentHeight - PaddingToBottom;
-
-      if (!endOfContentReachedOnce && !isAtBottom) {
-        setShowScrollButton(true);
-      }
     }
-  }, [containerHeight, debouncedScrollContentHeight, endOfContentReachedOnce]);
+
+    // Only show the button when the content overflows on initial layout.
+    // Content that grows later (e.g. a long text answer being typed) must not
+    // bring it back
+    if (initialOverflowCheckedRef.current) {
+      return;
+    }
+
+    initialOverflowCheckedRef.current = true;
+
+    if (isOverflowing) {
+      setShowScrollButton(true);
+    }
+  }, [containerHeight, debouncedScrollContentHeight]);
 
   return (
     <ScrollViewContext.Provider value={context}>
