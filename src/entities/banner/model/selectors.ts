@@ -21,3 +21,8 @@ export const bannersExpandingSelector = createSelector(
   selectBanners,
   banners => banners.bannersExpanding,
 );
+
+export const bannersReserveStatusBarSelector = createSelector(
+  selectBanners,
+  banners => banners.bannersReserveStatusBar,
+);

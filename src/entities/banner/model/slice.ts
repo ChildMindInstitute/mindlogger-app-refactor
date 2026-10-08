@@ -22,6 +22,7 @@ type InitialState = {
   bannersBg?: string;
   bannersHidden: boolean;
   bannersExpanding: boolean;
+  bannersReserveStatusBar: boolean;
 };
 
 const initialState: InitialState = {
@@ -29,6 +30,7 @@ const initialState: InitialState = {
   bannersBg: undefined,
   bannersHidden: false,
   bannersExpanding: false,
+  bannersReserveStatusBar: true,
 };
 
 const bannerSlice = createSlice({
@@ -58,6 +60,12 @@ const bannerSlice = createSlice({
     },
     setBannersExpanded: state => {
       state.bannersExpanding = false;
+    },
+    setBannersReserveStatusBar: (state, action: PayloadAction<boolean>) => {
+      if (!state.bannersReserveStatusBar && action.payload) {
+        state.bannersExpanding = true;
+      }
+      state.bannersReserveStatusBar = action.payload;
     },
   },
 });
