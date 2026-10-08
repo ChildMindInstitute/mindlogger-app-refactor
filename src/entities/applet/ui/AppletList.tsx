@@ -13,6 +13,7 @@ import { useIsMutating } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useOnMutationCacheChange } from '@app/shared/api/hooks/useOnMutationCacheChange';
+import { useIgnorePressOnScroll } from '@app/shared/lib/hooks/useIgnorePressOnScroll';
 import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
 import { Box, BoxProps } from '@app/shared/ui/base';
 import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
@@ -65,19 +66,25 @@ const AppletListView: FC<Props> = ({
 
   const hasError = !!refreshError || !!getAppletsError;
 
+  const { ignorePress, ignorePressOnScrollProps, onCardPressIn } =
+    useIgnorePressOnScroll();
+
   const renderItem: ListRenderItem<Applet> = useCallback(
     ({ item, index }) => (
       <AppletCard
         accessibilityLabel={`applet-${item.displayName}`}
         applet={item}
         disabled={!!isRefreshing || isUploading}
-        onPress={() =>
-          onAppletPress({ id: item.id, displayName: item.displayName })
-        }
+        onPressIn={onCardPressIn}
+        onPress={() => {
+          if (!ignorePress.current) {
+            onAppletPress({ id: item.id, displayName: item.displayName });
+          }
+        }}
         thumbnailColor={THUMBNAIL_BG_COLORS[index % THUMBNAIL_BG_COLORS.length]}
       />
     ),
-    [isRefreshing, isUploading, onAppletPress],
+    [ignorePress, isRefreshing, isUploading, onAppletPress, onCardPressIn],
   );
 
   if (hasError) {
@@ -91,6 +98,7 @@ const AppletListView: FC<Props> = ({
   return (
     <Box {...styledProps}>
       <FlatList
+        {...ignorePressOnScrollProps}
         // Rebuild native cells and cached offsets after Unity rotates Android.
         // Height-only changes from system bars should not reset the list.
         key={Platform.OS === 'android' ? windowWidth : 'applet-list'}

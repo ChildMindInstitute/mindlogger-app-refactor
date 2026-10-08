@@ -23,6 +23,7 @@ import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { DEEP_LINK_PREFIXES } from '@app/shared/lib/constants';
+import { useIgnorePressOnScroll } from '@app/shared/lib/hooks/useIgnorePressOnScroll';
 import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -60,6 +61,9 @@ export function ActivitySectionList({
   const { navigate, isFocused } = useNavigation();
 
   const { isUploading } = useUploadObservable();
+
+  const { ignorePress, ignorePressOnScrollProps, onCardPressIn } =
+    useIgnorePressOnScroll();
 
   const sections = useMemo(
     () =>
@@ -188,6 +192,7 @@ export function ActivitySectionList({
   return (
     <>
       <SectionList
+        {...ignorePressOnScrollProps}
         sections={sections}
         renderSectionHeader={({ section }) => (
           <SectionHeader>{t(section.name)}</SectionHeader>
@@ -219,8 +224,9 @@ export function ActivitySectionList({
               activity={item}
               disabled={isUploading || (!isWebOnly && !supportsApp)}
               isWebOnly={isWebOnly}
+              onPressIn={onCardPressIn}
               onPress={() => {
-                if (isFocused()) {
+                if (isFocused() && !ignorePress.current) {
                   startActivityOrFlow(item).catch(console.error);
                 }
               }}
