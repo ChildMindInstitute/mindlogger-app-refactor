@@ -73,10 +73,15 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
         }
       },
     );
+    const removeGestureCancel = navigation.addListener('gestureCancel', () => {
+      // Release space again if swipe back out of activities is cancelled
+      dispatch(bannerActions.setBannersReserveStatusBar(false));
+    });
 
     return () => {
       removeTransitionEnd();
       removeTransitionStart();
+      removeGestureCancel();
       // Reserve space outside of in-progress activities
       dispatch(bannerActions.setBannersReserveStatusBar(true));
     };
