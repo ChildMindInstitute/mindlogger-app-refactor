@@ -1,4 +1,4 @@
-import { useMemo, useRef, PropsWithChildren } from 'react';
+import { useMemo, PropsWithChildren } from 'react';
 import { Linking, SectionList, StyleSheet } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +23,7 @@ import { clearStorageRecords } from '@app/entities/applet/lib/storage/helpers';
 import { useStartEntity } from '@app/entities/applet/model/hooks/useStartEntity';
 import { ResponseType } from '@app/shared/api/services/ActivityItemDto';
 import { DEEP_LINK_PREFIXES } from '@app/shared/lib/constants';
+import { useIgnorePressOnScroll } from '@app/shared/lib/hooks/useIgnorePressOnScroll';
 import { useUploadObservable } from '@app/shared/lib/hooks/useUploadObservable';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
@@ -61,17 +62,8 @@ export function ActivitySectionList({
 
   const { isUploading } = useUploadObservable();
 
-  // Track whether list is scrolling
-  const isScrolling = useRef(false);
-
-  // Track whether press should be ignored (M2-11189)
-  // - Ignore press if press begins while list is scrolling
-  // - Ignore press if scroll occurs after press begins
-  const ignorePress = useRef(false);
-
-  const onCardPressIn = () => {
-    ignorePress.current = isScrolling.current; // Ignore press if press begins while list is scrolling
-  };
+  const { ignorePress, ignorePressOnScrollProps, onCardPressIn } =
+    useIgnorePressOnScroll();
 
   const sections = useMemo(
     () =>
@@ -200,23 +192,7 @@ export function ActivitySectionList({
   return (
     <>
       <SectionList
-        onMomentumScrollBegin={() => {
-          isScrolling.current = true; // Begin scrolling
-          ignorePress.current = true; // Ignore press if scroll occurs after press begins
-        }}
-        onMomentumScrollEnd={() => {
-          isScrolling.current = false; // End scrolling
-        }}
-        onScrollBeginDrag={() => {
-          isScrolling.current = true; // Begin scrolling
-          ignorePress.current = true; // Ignore press if scroll occurs after press begins
-        }}
-        onScrollEndDrag={() => {
-          isScrolling.current = false; // End scrolling
-        }}
-        onScroll={() => {
-          ignorePress.current = true; // Ignore press if scroll occurs after press begins
-        }}
+        {...ignorePressOnScrollProps}
         sections={sections}
         renderSectionHeader={({ section }) => (
           <SectionHeader>{t(section.name)}</SectionHeader>
