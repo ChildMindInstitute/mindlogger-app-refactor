@@ -3,7 +3,10 @@ import { StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import DeviceInfo from 'react-native-device-info';
 import Animated, { FadeOut } from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import { DEFAULT_BG } from '@app/entities/banner/lib/constants';
 import { Text } from '@app/shared/ui/Text';
@@ -16,6 +19,7 @@ const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 export const SplashScreen = () => {
   const buildNumber = DeviceInfo.getBuildNumber();
   const { t } = useTranslation();
+  const { bottom } = useSafeAreaInsets();
 
   const appVersion = ENV
     ? `${APP_VERSION} (${buildNumber}) ${ENV}`
@@ -29,7 +33,7 @@ export const SplashScreen = () => {
     >
       <Spinner />
 
-      <Text position="absolute" bottom={30} color="$outline">
+      <Text position="absolute" bottom={bottom + 30} color="$outline">
         {t('splash:version')} {appVersion}
       </Text>
     </AnimatedSafeAreaView>
