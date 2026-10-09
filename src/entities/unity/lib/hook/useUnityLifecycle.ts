@@ -27,6 +27,8 @@ import {
   CONFIG_LOAD_TIMEOUT_MS,
   LOAD_CONFIG_RETRY_INTERVAL_MS,
   REMOUNT_HANDSHAKE_DELAY_MS,
+  REMOUNT_RESET_DELAY_MS,
+  REMOUNT_RESET_ACK_TIMEOUT_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
 import {
@@ -38,10 +40,15 @@ import {
 
 // State that must survive across mounts of the Unity screen.
 const unityRuntimeState = {
-  quitInProcess: false,
+  // True from the time we send the task config until Unity ends the task. If
+  // still true on remount, the task was left in-progress and needs to be reset
+  // before proceeding with the new Unity start.
+  taskInProgress: false,
   // True once the engine has booted. It stays alive for the rest of the
   // process, paused between mounts, and does not boot again on remount.
   engineAlive: false,
+  // True if Unity already quit earlier in this process
+  quitInProcess: false,
 };
 
 type UseUnityLifecycleOptions = {
@@ -99,6 +106,12 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     triggerFailureRef.current = triggerFailure;
   }, [triggerFailure]);
 
+  // Keep the ref in sync so timers always call the latest version.
+  const sendMessageToUnityRef = useRef(sendMessageToUnity);
+  useEffect(() => {
+    sendMessageToUnityRef.current = sendMessageToUnity;
+  }, [sendMessageToUnity]);
+
   // Token for the LoadConfigFile retry loop. Bumping it cancels any loop
   // that is still running.
   const loadConfigRunRef = useRef(0);
@@ -119,6 +132,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
               ),
             )
           : 1;
+
+      unityRuntimeState.taskInProgress = true;
 
       let acknowledged = false;
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -262,9 +277,68 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       return;
     }
 
+    // If previous Unity task was left in-progress without a chance to reset,
+    // e.g. tapping a notification for a different activity (M2-11203), Unity
+    // needs to be reset before proceeding with the new Unity start.
+    if (unityRuntimeState.taskInProgress) {
+      let cancelled = false;
+      let ackTimer: ReturnType<typeof setTimeout> | undefined;
+
+      // Send Reset after short delay to allow native reattach and resume
+      const resetTimer = setTimeout(() => {
+        logger.log(
+          '[UnityView] Keep-alive remount: previous task left mid-run, sending Reset',
+        );
+
+        // If Unity does not reply to Reset, proceed with Unity start after a
+        // longer timeout. This handles cases where Unity hit a hard error and
+        // the user is trying to restart.
+        const ackTimeout = new Promise<'timeout'>(resolve => {
+          ackTimer = setTimeout(
+            () => resolve('timeout'),
+            REMOUNT_RESET_ACK_TIMEOUT_MS,
+          );
+        });
+
+        Promise.race([
+          sendMessageToUnityRef.current({ m_sId: uuidv4(), m_sKey: 'Reset' }),
+          ackTimeout,
+        ])
+          .then(
+            response => {
+              if (response === 'timeout') {
+                logger.warn(
+                  `[UnityView] Keep-alive remount: Reset not acknowledged within ${REMOUNT_RESET_ACK_TIMEOUT_MS}ms, driving handshake anyway`,
+                );
+              } else {
+                unityRuntimeState.taskInProgress = false;
+              }
+            },
+            (err: unknown) => {
+              logger.error(`[UnityView] Keep-alive Reset failed: ${err}`);
+            },
+          )
+          .finally(() => {
+            clearTimeout(ackTimer);
+            if (cancelled) {
+              return;
+            }
+            beginUnityHandshakeRef.current().catch((err: unknown) => {
+              logger.error(`[UnityView] Keep-alive handshake failed: ${err}`);
+            });
+          });
+      }, REMOUNT_RESET_DELAY_MS);
+
+      return () => {
+        cancelled = true;
+        clearTimeout(resetTimer);
+        clearTimeout(ackTimer);
+      };
+    }
+
     const handshakeTimer = setTimeout(() => {
       logger.log(
-        '[UnityView] Keep-alive remount: UnityStarted not received, driving handshake',
+        `[UnityView] Keep-alive remount: UnityStarted not received within ${REMOUNT_HANDSHAKE_DELAY_MS}ms, driving handshake`,
       );
       beginUnityHandshakeRef.current().catch((err: unknown) => {
         logger.error(`[UnityView] Keep-alive handshake failed: ${err}`);
@@ -281,6 +355,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
     try {
       loadConfigRunRef.current++;
+      unityRuntimeState.taskInProgress = false;
       stopHeartbeat();
       logger.log(
         `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
@@ -429,6 +504,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handlePlayerUnload = useCallback(() => {
     logger.log('[UnityView] Native player unload received');
     unityRuntimeState.engineAlive = false;
+    unityRuntimeState.taskInProgress = false;
     if (restartInProgressRef.current) {
       return;
     }
@@ -441,6 +517,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handlePlayerQuit = useCallback(() => {
     unityRuntimeState.quitInProcess = true;
     unityRuntimeState.engineAlive = false;
+    unityRuntimeState.taskInProgress = false;
     quitObservedInThisMountRef.current = true;
     setFailureMode('quit');
     logger.warn(

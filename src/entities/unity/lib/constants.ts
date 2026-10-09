@@ -15,6 +15,14 @@ export const STARTUP_TIMEOUT_MS = 30000;
 // Maximum time to wait for LoadConfigFile to complete after UnityStarted (ms).
 export const CONFIG_LOAD_TIMEOUT_MS = 30000;
 
+// Delay after remounting the Unity view before sending `Reset` to the
+// already-running engine (ms). Covers the native reattach and resume.
+export const REMOUNT_RESET_DELAY_MS = 300;
+
+// How long to wait for Unity to acknowledge the remount `Reset` before driving
+// the handshake anyway (ms). Covers restarting after a Unity error.
+export const REMOUNT_RESET_ACK_TIMEOUT_MS = 10000;
+
 // Time to wait for UnityStarted event after remounting onto the kept-alive
 // engine before driving the handshake ourselves (ms).
 export const REMOUNT_HANDSHAKE_DELAY_MS = 5000;
