@@ -12,6 +12,7 @@ import RNOrientationDirector, {
   Orientation,
 } from 'react-native-orientation-director';
 
+import { ResumeRestartPromptHost } from '@app/entities/applet/ui/ResumeRestartPrompt';
 import { Banners } from '@app/entities/banner/ui/Banners';
 import { RootNavigator } from '@app/screens/ui/RootNavigator';
 import { jobRunner } from '@app/shared/lib/services/jobManagement';
@@ -88,6 +89,7 @@ const App = () => {
           <RootNavigator />
         </NavigatorContainer>
         <NavigationBarScrim />
+        <ResumeRestartPromptHost />
       </AppProvider>
     </DatadogProvider>
   );
