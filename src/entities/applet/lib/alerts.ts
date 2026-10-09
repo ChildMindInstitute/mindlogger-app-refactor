@@ -2,30 +2,28 @@ import { Alert } from 'react-native';
 
 import i18n from 'i18next';
 
+import { promptResumeRestart } from '../ui/ResumeRestartPrompt';
+
 type OnBeforeStartingActivityArgs = {
   onRestart: () => void;
   onResume: () => void;
+  onDismiss: () => void;
 };
 
 export function onBeforeStartingActivity({
   onRestart,
   onResume,
+  onDismiss,
 }: OnBeforeStartingActivityArgs) {
-  Alert.alert(
-    i18n.t('additional:resume_activity'),
-    i18n.t('additional:activity_resume_restart'),
-    [
-      {
-        text: i18n.t('additional:restart'),
-        onPress: onRestart,
-      },
-      {
-        text: i18n.t('additional:resume'),
-        onPress: onResume,
-      },
-    ],
-    { cancelable: false },
-  );
+  const handlers = {
+    resume: onResume,
+    restart: onRestart,
+    dismiss: onDismiss,
+  };
+
+  promptResumeRestart()
+    .then(choice => handlers[choice]())
+    .catch(onDismiss);
 }
 
 export function onMediaReferencesFound() {
