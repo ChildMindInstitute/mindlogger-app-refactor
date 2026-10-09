@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { LogBox, StyleSheet } from 'react-native';
+import { LogBox } from 'react-native';
 
 import {
   BatchSize,
@@ -11,8 +11,8 @@ import {
 import RNOrientationDirector, {
   Orientation,
 } from 'react-native-orientation-director';
-import Animated, { LinearTransition } from 'react-native-reanimated';
 
+import { ResumeRestartPromptHost } from '@app/entities/applet/ui/ResumeRestartPrompt';
 import { Banners } from '@app/entities/banner/ui/Banners';
 import { RootNavigator } from '@app/screens/ui/RootNavigator';
 import { jobRunner } from '@app/shared/lib/services/jobManagement';
@@ -26,6 +26,8 @@ import {
 } from '@shared/lib/constants';
 
 import { AppProvider } from './ui/AppProvider';
+import { NavigationBarScrim } from './ui/NavigationBarScrim';
+import { NavigatorContainer } from './ui/NavigatorContainer';
 
 const hideIosSimulatorErrorWarningBadges = true;
 
@@ -83,19 +85,14 @@ const App = () => {
     <DatadogProvider configuration={config}>
       <AppProvider>
         <Banners />
-        {/* Wrap RootNavigator with Animated.View for smooth banner transitions */}
-        <Animated.View layout={LinearTransition} style={styles.container}>
+        <NavigatorContainer>
           <RootNavigator />
-        </Animated.View>
+        </NavigatorContainer>
+        <NavigationBarScrim />
+        <ResumeRestartPromptHost />
       </AppProvider>
     </DatadogProvider>
   );
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
