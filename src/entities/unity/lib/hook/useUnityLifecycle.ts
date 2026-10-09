@@ -38,10 +38,15 @@ import {
 
 // State that must survive across mounts of the Unity screen.
 const unityRuntimeState = {
-  quitInProcess: false,
+  // True from the time we send the task config until Unity ends the task. If
+  // still true on remount, the task was left in-progress and needs to be reset
+  // before proceeding with the new Unity start.
+  taskInProgress: false,
   // True once the engine has booted. It stays alive for the rest of the
   // process, paused between mounts, and does not boot again on remount.
   engineAlive: false,
+  // True if Unity already quit earlier in this process
+  quitInProcess: false,
 };
 
 type UseUnityLifecycleOptions = {
@@ -119,6 +124,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
               ),
             )
           : 1;
+
+      unityRuntimeState.taskInProgress = true;
 
       let acknowledged = false;
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -281,6 +288,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handleEndUnity = useCallback<RNUnityCommBridgeUnityEventHandler>(() => {
     try {
       loadConfigRunRef.current++;
+      unityRuntimeState.taskInProgress = false;
       stopHeartbeat();
       logger.log(
         `[UnityView] unityPaths: ${JSON.stringify(unityPaths.current)}`,
@@ -429,6 +437,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handlePlayerUnload = useCallback(() => {
     logger.log('[UnityView] Native player unload received');
     unityRuntimeState.engineAlive = false;
+    unityRuntimeState.taskInProgress = false;
     if (restartInProgressRef.current) {
       return;
     }
@@ -441,6 +450,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const handlePlayerQuit = useCallback(() => {
     unityRuntimeState.quitInProcess = true;
     unityRuntimeState.engineAlive = false;
+    unityRuntimeState.taskInProgress = false;
     quitObservedInThisMountRef.current = true;
     setFailureMode('quit');
     logger.warn(
