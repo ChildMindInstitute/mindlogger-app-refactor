@@ -27,6 +27,8 @@ import {
   CONFIG_LOAD_TIMEOUT_MS,
   LOAD_CONFIG_RETRY_INTERVAL_MS,
   REMOUNT_HANDSHAKE_DELAY_MS,
+  REMOUNT_RESET_DELAY_MS,
+  REMOUNT_RESET_ACK_TIMEOUT_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
 import {
@@ -103,6 +105,12 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   useEffect(() => {
     triggerFailureRef.current = triggerFailure;
   }, [triggerFailure]);
+
+  // Keep the ref in sync so timers always call the latest version.
+  const sendMessageToUnityRef = useRef(sendMessageToUnity);
+  useEffect(() => {
+    sendMessageToUnityRef.current = sendMessageToUnity;
+  }, [sendMessageToUnity]);
 
   // Token for the LoadConfigFile retry loop. Bumping it cancels any loop
   // that is still running.
@@ -269,9 +277,68 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       return;
     }
 
+    // If previous Unity task was left in-progress without a chance to reset,
+    // e.g. tapping a notification for a different activity (M2-11203), Unity
+    // needs to be reset before proceeding with the new Unity start.
+    if (unityRuntimeState.taskInProgress) {
+      let cancelled = false;
+      let ackTimer: ReturnType<typeof setTimeout> | undefined;
+
+      // Send Reset after short delay to allow native reattach and resume
+      const resetTimer = setTimeout(() => {
+        logger.log(
+          '[UnityView] Keep-alive remount: previous task left mid-run, sending Reset',
+        );
+
+        // If Unity does not reply to Reset, proceed with Unity start after a
+        // longer timeout. This handles cases where Unity hit a hard error and
+        // the user is trying to restart.
+        const ackTimeout = new Promise<'timeout'>(resolve => {
+          ackTimer = setTimeout(
+            () => resolve('timeout'),
+            REMOUNT_RESET_ACK_TIMEOUT_MS,
+          );
+        });
+
+        Promise.race([
+          sendMessageToUnityRef.current({ m_sId: uuidv4(), m_sKey: 'Reset' }),
+          ackTimeout,
+        ])
+          .then(
+            response => {
+              if (response === 'timeout') {
+                logger.warn(
+                  `[UnityView] Keep-alive remount: Reset not acknowledged within ${REMOUNT_RESET_ACK_TIMEOUT_MS}ms, driving handshake anyway`,
+                );
+              } else {
+                unityRuntimeState.taskInProgress = false;
+              }
+            },
+            (err: unknown) => {
+              logger.error(`[UnityView] Keep-alive Reset failed: ${err}`);
+            },
+          )
+          .finally(() => {
+            clearTimeout(ackTimer);
+            if (cancelled) {
+              return;
+            }
+            beginUnityHandshakeRef.current().catch((err: unknown) => {
+              logger.error(`[UnityView] Keep-alive handshake failed: ${err}`);
+            });
+          });
+      }, REMOUNT_RESET_DELAY_MS);
+
+      return () => {
+        cancelled = true;
+        clearTimeout(resetTimer);
+        clearTimeout(ackTimer);
+      };
+    }
+
     const handshakeTimer = setTimeout(() => {
       logger.log(
-        '[UnityView] Keep-alive remount: UnityStarted not received, driving handshake',
+        `[UnityView] Keep-alive remount: UnityStarted not received within ${REMOUNT_HANDSHAKE_DELAY_MS}ms, driving handshake`,
       );
       beginUnityHandshakeRef.current().catch((err: unknown) => {
         logger.error(`[UnityView] Keep-alive handshake failed: ${err}`);
