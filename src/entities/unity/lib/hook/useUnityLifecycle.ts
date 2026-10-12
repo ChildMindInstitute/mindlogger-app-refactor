@@ -18,6 +18,7 @@ import {
 import { MediaFile } from '@shared/ui/survey/MediaItems/types.ts';
 
 import {
+  newEchoMessage,
   useRNUnityCommBridge,
   RNUnityCommBridgeUnityEventHandler,
 } from './useRNUnityCommBridge';
@@ -25,6 +26,7 @@ import { useUnityFailureHandler } from './useUnityFailureHandler';
 import { useUnityHeartbeat } from './useUnityHeartbeat';
 import {
   CONFIG_LOAD_TIMEOUT_MS,
+  HEARTBEAT_TIMEOUT_MS,
   LOAD_CONFIG_RETRY_INTERVAL_MS,
   REMOUNT_HANDSHAKE_DELAY_MS,
   REMOUNT_RESET_DELAY_MS,
@@ -284,8 +286,45 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       let cancelled = false;
       let ackTimer: ReturnType<typeof setTimeout> | undefined;
 
-      // Send Reset after short delay to allow native reattach and resume
+      // Send Echo after short delay to allow native reattach and resume
       const resetTimer = setTimeout(() => {
+        logger.log(
+          '[UnityView] Keep-alive remount: previous task left mid-run, waiting for Echo before Reset',
+        );
+
+        // Wait for Unity to reply to an Echo, so we know the resumed engine is
+        // running again before it tears down the scene. Send Reset anyway if
+        // there is no reply in time.
+        const echoTimeout = new Promise<'timeout'>(resolve => {
+          ackTimer = setTimeout(() => resolve('timeout'), HEARTBEAT_TIMEOUT_MS);
+        });
+
+        Promise.race([
+          sendMessageToUnityRef.current(newEchoMessage('remount-reset')),
+          echoTimeout,
+        ])
+          .then(
+            response => {
+              if (response === 'timeout') {
+                logger.warn(
+                  `[UnityView] Keep-alive remount: Echo not acknowledged within ${HEARTBEAT_TIMEOUT_MS}ms, sending Reset anyway`,
+                );
+              }
+            },
+            (err: unknown) => {
+              logger.error(`[UnityView] Keep-alive Echo failed: ${err}`);
+            },
+          )
+          .finally(() => {
+            clearTimeout(ackTimer);
+            if (cancelled) {
+              return;
+            }
+            sendReset();
+          });
+      }, REMOUNT_RESET_DELAY_MS);
+
+      const sendReset = () => {
         logger.log(
           '[UnityView] Keep-alive remount: previous task left mid-run, sending Reset',
         );
@@ -327,7 +366,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
               logger.error(`[UnityView] Keep-alive handshake failed: ${err}`);
             });
           });
-      }, REMOUNT_RESET_DELAY_MS);
+      };
 
       return () => {
         cancelled = true;
