@@ -145,19 +145,22 @@ index 5d3401f..39bcbc1 100644
  
      public interface UnityPlayerCallback {
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
-index bc4e473..69db3cb 100644
+index bc4e473..effe1a5 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
 +++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
-@@ -6,6 +6,8 @@ import android.content.Context;
+@@ -5,7 +5,11 @@ import static com.azesmwayreactnativeunity.ReactNativeUnity.*;
+ import android.content.Context;
  
  import android.annotation.SuppressLint;
++import android.app.Activity;
++import android.content.pm.ActivityInfo;
  import android.content.res.Configuration;
 +import android.os.Handler;
 +import android.os.Looper;
  import android.util.Log;
  import android.widget.FrameLayout;
  
-@@ -15,6 +17,11 @@ import java.lang.reflect.InvocationTargetException;
+@@ -15,6 +19,11 @@ import java.lang.reflect.InvocationTargetException;
  public class ReactNativeUnityView extends FrameLayout {
    private static final String TAG = "ReactNativeUnityView";
  
@@ -169,7 +172,7 @@ index bc4e473..69db3cb 100644
    private UPlayer view;
    public boolean keepPlayerMounted = false;
  
-@@ -72,6 +79,24 @@ public class ReactNativeUnityView extends FrameLayout {
+@@ -72,6 +81,30 @@ public class ReactNativeUnityView extends FrameLayout {
              // the worst case without the move is a player left without a parent.
              Log.e(TAG, "Failed to move the Unity view back to the background", e);
          }
@@ -186,6 +189,12 @@ index bc4e473..69db3cb 100644
 +                if (ReactNativeUnityViewManager.view == null) {
 +                    Log.i(TAG, "[RNUnityDiag] delayed pause firing: no active view, pausing parked engine");
 +                    ReactNativeUnity.pause();
++                    // Restore portrait after pausing so Unity cannot override orientation with landscape
++                    UPlayer player = getPlayer();
++                    if (player != null) {
++                        ((Activity) player.getContextPlayer())
++                            .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
++                    }
 +                } else {
 +                    Log.i(TAG, "[RNUnityDiag] delayed pause skipped: a new view owns the engine");
 +                }
