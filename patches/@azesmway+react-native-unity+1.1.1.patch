@@ -145,7 +145,7 @@ index 5d3401f..39bcbc1 100644
  
      public interface UnityPlayerCallback {
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
-index bc4e473..effe1a5 100644
+index bc4e473..aebef69 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
 +++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
 @@ -5,7 +5,11 @@ import static com.azesmwayreactnativeunity.ReactNativeUnity.*;
@@ -164,8 +164,8 @@ index bc4e473..effe1a5 100644
  public class ReactNativeUnityView extends FrameLayout {
    private static final String TAG = "ReactNativeUnityView";
  
-+  // Pause the parked engine as soon as it's parked. RN waits for Unity to ack
-+  // the end-of-task Reset before unmounting, so no reload is in flight by the
++  // Pause the parked engine as soon as it's parked. Unity finishes its
++  // end-of-task reset before sending EndUnity, so no reload is in flight by the
 +  // time the view detaches.
 +  private static final long PARKED_PAUSE_DELAY_MS = 0;
 +
@@ -179,8 +179,8 @@ index bc4e473..effe1a5 100644
 +
 +        // The engine cannot be unloaded (Unity 6 cannot re-init graphics in the
 +        // same process), so pause the parked engine instead; addUnityViewToGroup
-+        // resumes it on the next mount. The pause is delayed so the post-Reset
-+        // reload can finish, and skipped if a new view has claimed the engine.
++        // resumes it on the next mount. Pause right after the detach finishes,
++        // but skip the pause if a new view has claimed the engine by then.
 +        Log.i(TAG, "[RNUnityDiag] detach: engine parked off-screen, pause scheduled in "
 +            + PARKED_PAUSE_DELAY_MS + "ms");
 +        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
