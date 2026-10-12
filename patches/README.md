@@ -12,6 +12,7 @@ Applied via [patch-package](https://github.com/ds300/patch-package).
 
 - Keeps the Unity engine alive across activity mounts.
 - Prevents Unity events from being coalesced and dropped.
+- Restores Android navigation bar and portrait orientation while Unity is paused.
 - Added in pull requests #1155, #1170, and #1193.
 
 ## moti+0.30.0.patch
