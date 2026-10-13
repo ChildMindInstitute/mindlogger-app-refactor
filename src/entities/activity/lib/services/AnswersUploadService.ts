@@ -159,15 +159,7 @@ export class AnswersUploadService implements IAnswersUploadService {
     logAnswerIndex: number,
     appletId: string,
   ): Promise<string> {
-    const localFileExists = await FileSystem.exists(getFilePath(mediaFile.uri));
-
     const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
-
-    if (!localFileExists) {
-      throw new Error(
-        `[UploadAnswersService.processFileUpload]: Local file ${logFileInfo} does not exist`,
-      );
-    }
 
     const uploadRecord = this.getUploadRecord(
       uploadChecks,
@@ -178,6 +170,21 @@ export class AnswersUploadService implements IAnswersUploadService {
       throw new Error(
         `[UploadAnswersService.processFileUpload]: uploadRecord does not exist, file: ${logFileInfo}`,
       );
+    }
+
+    // The local file is only needed if the server doesn't have it yet. It may
+    // already be cleaned up if a previous attempt uploaded it but was
+    // interrupted before the queue item was removed (M2-11197)
+    if (!uploadRecord.uploaded) {
+      const localFileExists = await FileSystem.exists(
+        getFilePath(mediaFile.uri),
+      );
+
+      if (!localFileExists) {
+        throw new Error(
+          `[UploadAnswersService.processFileUpload]: Local file ${logFileInfo} does not exist`,
+        );
+      }
     }
 
     try {
