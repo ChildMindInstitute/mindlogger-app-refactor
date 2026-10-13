@@ -15,7 +15,7 @@ export const STARTUP_TIMEOUT_MS = 30000;
 // Maximum time to wait for LoadConfigFile to complete after UnityStarted (ms).
 export const CONFIG_LOAD_TIMEOUT_MS = 30000;
 
-// Delay after remounting the Unity view before proceeding with `Reset` of the
+// Delay after remounting the Unity view before sending `Reset` to the
 // already-running engine (ms). Covers the native reattach and resume.
 export const REMOUNT_RESET_DELAY_MS = 300;
 
