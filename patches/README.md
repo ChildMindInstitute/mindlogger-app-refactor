@@ -10,10 +10,11 @@ Applied via [patch-package](https://github.com/ds300/patch-package).
 
 ## @azesmway+react-native-unity+1.1.1.patch
 
-- Keeps the Unity engine alive across activity mounts.
 - Prevents Unity events from being coalesced and dropped.
-- Restores Android navigation bar and portrait orientation while Unity is paused.
-- Added in pull requests #1155, #1170, and #1193.
+- Keeps the Unity engine alive across activity mounts.
+- Pauses the Unity engine before moving the Unity view off-screen on Android.
+- Restores navigation bar and portrait orientation while Unity is paused on Android.
+- Added in pull requests #1155, #1164, #1170, #1193, and #1216.
 
 ## moti+0.30.0.patch
 
