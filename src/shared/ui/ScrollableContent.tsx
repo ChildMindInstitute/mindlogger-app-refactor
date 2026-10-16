@@ -121,10 +121,11 @@ export const ScrollableContent: FC<Props> = ({
 
     initialOverflowCheckedRef.current = true;
 
-    if (isOverflowing) {
+    // The end may have been reached before the debounced height settled
+    if (isOverflowing && !endOfContentReachedOnce) {
       setShowScrollButton(true);
     }
-  }, [containerHeight, debouncedScrollContentHeight]);
+  }, [containerHeight, debouncedScrollContentHeight, endOfContentReachedOnce]);
 
   return (
     <ScrollViewContext.Provider value={context}>
