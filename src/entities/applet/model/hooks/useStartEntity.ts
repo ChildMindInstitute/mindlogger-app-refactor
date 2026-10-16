@@ -63,7 +63,8 @@ type FailReason =
   | 'all-items-hidden'
   | 'not-available'
   | 'mutex-busy'
-  | 'expired-while-alert-opened';
+  | 'expired-while-alert-opened'
+  | 'dismissed';
 
 type StartResult = {
   fromScratch?: boolean;
@@ -319,6 +320,7 @@ export function useStartEntity({
             trackResumeActivity(logParams);
             return resolve({ fromScratch: false });
           },
+          onDismiss: () => resolve({ failReason: 'dismissed' }),
         });
       } else {
         trackStartActivity(logParams);
@@ -524,6 +526,7 @@ export function useStartEntity({
 
             return resolve({ fromScratch: false });
           },
+          onDismiss: () => resolve({ failReason: 'dismissed' }),
         });
       } else {
         trackStartFlow({
