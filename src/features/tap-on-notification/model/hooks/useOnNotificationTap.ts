@@ -205,7 +205,7 @@ export function useOnNotificationTap({
     },
     'response-data-alert': () => {},
     'applet-update-alert': () => {
-      navigator.navigate('Applets');
+      navigator.navigate('Applets', undefined, { pop: true });
 
       refresh()
         .then(() => {
@@ -219,7 +219,7 @@ export function useOnNotificationTap({
         .then(() => getDefaultLogger().send());
     },
     'applet-delete-alert': () => {
-      navigator.navigate('Applets');
+      navigator.navigate('Applets', undefined, { pop: true });
 
       refresh()
         .then(() => {
@@ -233,7 +233,7 @@ export function useOnNotificationTap({
         .then(() => getDefaultLogger().send());
     },
     'schedule-updated': () => {
-      navigator.navigate('Applets');
+      navigator.navigate('Applets', undefined, { pop: true });
 
       refresh()
         .then(() => {
