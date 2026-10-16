@@ -38,4 +38,46 @@ describe('translations', () => {
       { type: 'missing-key', language: 'fr', key: 'farewell' },
     ]);
   });
+
+  it('distinguishes nested missing, blank, and exactly matching translations', () => {
+    const findings = validateTranslations(
+      {
+        en: {
+          buttons: {
+            login: 'Log in',
+            logout: 'Log out',
+            save: 'Save',
+            cancel: 'Cancel',
+            confirm: 'Confirm',
+            back: 'Back',
+            next: 'Next',
+          },
+        },
+        fr: {
+          buttons: {
+            logout: '',
+            save: 'Save',
+            cancel: ' \t\n',
+            confirm: 'Confirmer',
+            back: 'back',
+            next: 'Next ',
+            extra: 'Extra',
+          },
+        },
+        es: {},
+      },
+      'en',
+    );
+
+    expect(findings.filter(finding => finding.language === 'fr')).toEqual([
+      { type: 'missing-key', language: 'fr', key: 'buttons.login' },
+      { type: 'empty-value', language: 'fr', key: 'buttons.logout' },
+      { type: 'same-as-reference', language: 'fr', key: 'buttons.save' },
+      { type: 'empty-value', language: 'fr', key: 'buttons.cancel' },
+    ]);
+    expect(findings.filter(finding => finding.language === 'es')).toHaveLength(
+      7,
+    );
+    expect(findings.some(finding => finding.language === 'en')).toBe(false);
+  });
 });

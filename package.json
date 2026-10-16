@@ -21,6 +21,7 @@
     "react-native:start": "react-native start",
     "react-native:start:no-cache": "react-native start --reset-cache",
     "test": "jest",
+    "translations:missing": "node script/translations-missing.js",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",

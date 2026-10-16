@@ -155,6 +155,21 @@ The above scripts run the app using Debug configuration and for Curious's `dev`
 
 - `yarn test` - Runs the test suite
 
+### Translation report
+
+Run `yarn translations:missing` to compare every other JSON file in
+`assets/translations` against `en.json`. The report lists each key and its English
+text, grouped by language, with totals for:
+
+- **MISSING**: no string translation exists for the English key.
+- **EMPTY**: the translation is empty or contains only whitespace.
+- **SAME AS ENGLISH**: the translation exactly matches the English text.
+
+Identical strings can be intentional, such as language names or placeholders;
+review the matches before changing them. This is a manual developer command, not
+a CI check. It does not modify translation files and exits successfully even when
+findings exist. File read or JSON parsing errors produce a failing exit code.
+
 ### Linting
 
 - `yarn lint` - Check that source code follows eslint rules
