@@ -83,13 +83,22 @@ export function Stepper({
     async ({
       isForced,
       shouldAutoSubmit,
+      fromStep,
     }: {
       isForced: boolean;
       shouldAutoSubmit: boolean;
+      // Step that requested the move. Ignored if the stepper has already left it
+      fromStep?: number;
     }) => {
       const step = stepRef.current;
       const { stepShift, payload } =
         (await onBeforeNextRef.current?.(step)) ?? {};
+
+      // A late request from a previous step (e.g. a double tap on an
+      // auto-advancing item) must not move past the current step (M2-11199)
+      if (fromStep !== undefined && stepRef.current !== fromStep) {
+        return;
+      }
 
       // If stepShift is null, no step shift was requested
       if (stepShift === null) {
