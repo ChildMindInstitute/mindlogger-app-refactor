@@ -7,13 +7,24 @@ const {
   validateTranslations,
 } = require('../src/entities/localization/lib/validateTranslations.ts');
 
-const labels = {
-  'missing-key': 'MISSING',
-  'empty-value': 'EMPTY',
-  'same-as-reference': 'SAME AS ENGLISH',
+const reports = {
+  missing: { type: 'missing-key', label: 'MISSING', description: 'missing' },
+  empty: { type: 'empty-value', label: 'EMPTY', description: 'empty' },
+  same: {
+    type: 'same-as-reference',
+    label: 'SAME AS ENGLISH',
+    description: 'same as English',
+  },
 };
 
-function reportMissingTranslations() {
+function reportTranslations() {
+  const [category, ...extraArgs] = process.argv.slice(2);
+  if (!Object.hasOwn(reports, category) || extraArgs.length > 0) {
+    throw new Error(
+      'Usage: node script/translations-report.js <missing|empty|same>',
+    );
+  }
+  const report = reports[category];
   const directory = path.join(__dirname, '../assets/translations');
   const files = readdirSync(directory)
     .filter(file => file.endsWith('.json') && file !== 'en.json')
@@ -28,31 +39,29 @@ function reportMissingTranslations() {
   };
   const english = flattenTranslationStrings(resources.en);
   const findings = validateTranslations(resources, 'en').filter(
-    finding => finding.type !== 'malformed-list',
+    finding => finding.type === report.type,
   );
   const summaries = [];
 
   console.log(`Comparing ${files.length} languages against en.json\n`);
-  console.log(
-    'Identical text may be intentional (for example, language names); review each match.\n',
-  );
+  console.log(`Showing ${report.description} translations only.\n`);
+  if (category === 'same') {
+    console.log(
+      'Identical text may be intentional (for example, language names); review each match.\n',
+    );
+  }
 
   for (const file of files) {
     const language = path.basename(file, '.json');
     const current = findings.filter(finding => finding.language === language);
     console.log(`${language} (${file})`);
 
-    for (const type of Object.keys(labels)) {
-      for (const finding of current.filter(item => item.type === type)) {
-        console.log(`  ${labels[type]}  ${finding.key}`);
-        console.log(`    English: ${JSON.stringify(english.get(finding.key))}`);
-      }
+    for (const finding of current) {
+      console.log(`  ${report.label}  ${finding.key}`);
+      console.log(`    English: ${JSON.stringify(english.get(finding.key))}`);
     }
 
-    const counts = Object.keys(labels).map(
-      type => current.filter(finding => finding.type === type).length,
-    );
-    const summary = `${language}: ${counts[0]} missing, ${counts[1]} empty, ${counts[2]} same as English`;
+    const summary = `${language}: ${current.length} ${report.description}`;
     summaries.push(summary);
     console.log(`  ${summary}\n`);
   }
@@ -63,7 +72,7 @@ function reportMissingTranslations() {
 }
 
 try {
-  reportMissingTranslations();
+  reportTranslations();
 } catch (error) {
   console.error(`Unable to check translations: ${error.message}`);
   process.exitCode = 1;
