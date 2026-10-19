@@ -113,6 +113,7 @@ export function ActivityItem({
   );
 
   const { next } = useContext(HandlersContext);
+  const radioChangeIdRef = useRef(0);
 
   const stopScrolling = () => setScrollEnabled(false);
 
@@ -153,7 +154,12 @@ export function ActivityItem({
     ComponentProps<typeof RadioActivityItem>['onChange']
   >(
     async radioValue => {
+      const changeId = ++radioChangeIdRef.current;
       await wait(100);
+      if (changeId !== radioChangeIdRef.current) {
+        return;
+      }
+
       onResponse(radioValue);
       moveToNextItem();
     },
