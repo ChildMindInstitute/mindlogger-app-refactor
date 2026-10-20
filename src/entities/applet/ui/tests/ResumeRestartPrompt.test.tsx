@@ -8,6 +8,13 @@ import {
   ResumeRestartPromptHost,
 } from '../ResumeRestartPrompt';
 
+// Global gesture-handler mock has no components on this branch
+jest.mock('react-native-gesture-handler', () => {
+  const { Pressable, View } =
+    jest.requireActual<typeof import('react-native')>('react-native');
+  return { GestureHandlerRootView: View, Pressable };
+});
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));

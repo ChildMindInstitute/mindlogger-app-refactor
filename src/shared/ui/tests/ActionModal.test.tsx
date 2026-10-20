@@ -5,6 +5,13 @@ import { palette } from '@app/shared/lib/constants/palette';
 
 import { ActionModal } from '../ActionModal';
 
+// Global gesture-handler mock has no components on this branch
+jest.mock('react-native-gesture-handler', () => {
+  const { Pressable, View } =
+    jest.requireActual<typeof import('react-native')>('react-native');
+  return { GestureHandlerRootView: View, Pressable };
+});
+
 const handlers = () => ({
   onPrimary: jest.fn(),
   onSecondary: jest.fn(),
