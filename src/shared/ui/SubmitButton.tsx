@@ -31,6 +31,14 @@ const ButtonText = styled(Text, {
         color: '$on_secondary_container',
         fontWeight: '400',
       },
+      text: {
+        color: '$primary',
+        fontWeight: '400',
+      },
+      destructive: {
+        color: '$on_primary',
+        fontWeight: '700',
+      },
     },
   } as const,
 });
@@ -59,6 +67,12 @@ const Button = styled(Stack, {
       tonal: {
         backgroundColor: '$secondary_container',
       },
+      text: {
+        backgroundColor: 'transparent',
+      },
+      destructive: {
+        backgroundColor: '$error',
+      },
     },
   },
 });
@@ -68,9 +82,10 @@ type Props = PropsWithChildren<
     onPress?: () => void;
     isLoading?: boolean;
     disabled?: boolean;
-    mode?: 'primary' | 'secondary' | 'tonal';
+    mode?: 'primary' | 'secondary' | 'tonal' | 'text' | 'destructive';
     buttonStyle?: StyleProp<ViewStyle>;
     rightIcon?: React.ReactNode;
+    testID?: string;
   } & {
     textProps?: TextProps;
   } & StackStyle
@@ -86,6 +101,7 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
   isLoading = false,
   rightIcon,
   accessibilityLabel,
+  testID = 'submit-button',
   ...stylesProps
 }) => {
   return (
@@ -93,7 +109,7 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
       onPress={!disabled ? onPress : undefined}
       disabled={disabled || isLoading}
       accessibilityLabel={accessibilityLabel}
-      testID="submit-button"
+      testID={testID}
     >
       <Button
         style={buttonStyle}
@@ -121,7 +137,9 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
             <Spinner
               size={28}
               color={
-                mode === 'primary' ? palette.on_primary : palette.on_surface
+                mode === 'primary' || mode === 'destructive'
+                  ? palette.on_primary
+                  : palette.on_surface
               }
             />
           </Box>
