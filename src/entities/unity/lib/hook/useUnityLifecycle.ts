@@ -53,11 +53,11 @@ const unityRuntimeState = {
   viewMounted: false,
 };
 
-// True while a Unity task is on screen. Leaving Unity mid-task (e.g. tapping a
-// notification) leaves its old frame on screen on Android (M2-11216, M2-11217),
-// so callers should not navigate away while this is true.
-export const isUnityTaskOnScreen = () =>
-  unityRuntimeState.viewMounted && unityRuntimeState.taskInProgress;
+// True while the Unity screen is mounted, i.e. the user has started a Unity
+// task. Leaving Unity mid-task (e.g. tapping a notification) leaves its old
+// frame on screen on Android (M2-11216, M2-11217), so callers should not
+// navigate away while this is true.
+export const isUnityTaskOnScreen = () => unityRuntimeState.viewMounted;
 
 type UseUnityLifecycleOptions = {
   payloadFile: string | null | undefined;
