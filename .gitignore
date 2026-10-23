@@ -88,3 +88,6 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Generated translation reports
+/translation-reports/

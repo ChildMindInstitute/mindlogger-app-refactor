@@ -155,23 +155,27 @@ The above scripts run the app using Debug configuration and for Curious's `dev`
 
 - `yarn test` - Runs the test suite
 
-### Translation reports
+### Translation report
 
-These commands compare every other JSON file in `assets/translations` against
-`en.json`. Each command reports only its category, listing each key and its English
-text, grouped by language, with totals per language:
+Using Node 24 (`nvm use`), install dependencies with `yarn install`, then run
+`yarn translations:report` from the app directory.
+It compares `assets/translations/*.json` against `en.json`, including nested keys
+and individual plural forms, and creates a new folder under `translation-reports/`.
+The command prints the full output path.
 
-- `yarn translations:missing` — **MISSING**: no string translation exists for the
-  English key.
-- `yarn translations:empty` — **EMPTY**: the translation is empty or contains only
-  whitespace.
-- `yarn translations:same` — **SAME AS ENGLISH**: the translation exactly matches
-  the English text.
+Each folder contains only `translations-report.xlsx`, with four worksheets:
 
-Identical strings can be intentional, such as language names or placeholders;
-review the matches before changing them. These are manual developer commands, not
-CI checks. They do not modify translation files and exit successfully even when
-findings exist. File read or JSON parsing errors produce a failing exit code.
+- **Summary** — counts per language for each category.
+- **Missing** — English keys without a usable string translation.
+- **Empty** — translations that are blank or contain only whitespace.
+- **Same as English** — translations that exactly match the English text.
+
+Each category sheet includes all target languages, with columns for Language,
+File, Translation key, English text, and Current translation. Use the filter
+dropdown in the **Language** column header to show the language you need.
+
+Each run creates a separate folder so previous workbooks are preserved.
+Generated folders are ignored by Git.
 
 ### Linting
 
