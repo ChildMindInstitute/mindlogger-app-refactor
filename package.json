@@ -21,6 +21,7 @@
     "react-native:start": "react-native start",
     "react-native:start:no-cache": "react-native start --reset-cache",
     "test": "jest",
+    "translations:report": "node script/translations-report.js",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check": "yarn lint",
     "lint:fix": "yarn lint --fix",
@@ -221,7 +222,8 @@
     "rimraf": "^6.0.1",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "engines": {
     "node": ">=24"
