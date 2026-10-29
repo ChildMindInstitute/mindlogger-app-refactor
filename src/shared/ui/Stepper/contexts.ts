@@ -6,9 +6,11 @@ type Handlers = {
   next: ({
     isForced,
     shouldAutoSubmit,
+    fromStep,
   }: {
     isForced: boolean;
     shouldAutoSubmit: boolean;
+    fromStep?: number;
   }) => void;
   back: () => void;
   undo: () => void;
