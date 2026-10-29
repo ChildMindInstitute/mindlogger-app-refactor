@@ -163,12 +163,19 @@ describe('AnswersUploadService', () => {
   }));
 
   describe('processFileUpload function', () => {
-    it('should throw an error for non-existing local file', async () => {
+    it('should throw an error for non-existing local file that is not uploaded yet', async () => {
       jest.spyOn(FileSystem, 'exists').mockResolvedValue(false);
 
-      const mediaAnswer = { uri: 'file:///non/existing/file.jpg' } as MediaFile;
+      const mediaAnswer = {
+        uri: 'file:///non/existing/file.jpg',
+        fileName: 'file.jpg',
+      } as MediaFile;
       const uploadResults = [
-        { fileId: 'fileId1', uploaded: false, remoteUrl: null },
+        {
+          fileId: `${MOCK_CREATED_AT}/file.jpg`,
+          uploaded: false,
+          remoteUrl: null,
+        },
       ];
 
       await expect(
@@ -178,7 +185,36 @@ describe('AnswersUploadService', () => {
           0,
           'mock-applet-id',
         ),
-      ).rejects.toThrow(/does not exist/);
+      ).rejects.toThrow(/Local file .* does not exist/);
+    });
+
+    it('should use the remote url for an uploaded file even if the local file was cleaned up', async () => {
+      const existsSpy = jest
+        .spyOn(FileSystem, 'exists')
+        .mockResolvedValue(false);
+
+      const mediaAnswer = {
+        uri: 'file:///cleaned/up/drawing.svg',
+        fileName: 'drawing.svg',
+      } as MediaFile;
+      const uploadResults = [
+        {
+          fileId: `${MOCK_CREATED_AT}/drawing.svg`,
+          uploaded: true,
+          remoteUrl: 's3://bucket/drawing.svg',
+        },
+      ];
+
+      await expect(
+        answersUploadService.processFileUpload(
+          mediaAnswer,
+          uploadResults,
+          0,
+          'mock-applet-id',
+        ),
+      ).resolves.toBe('s3://bucket/drawing.svg');
+
+      expect(existsSpy).not.toHaveBeenCalled();
     });
 
     it('should throw an error for missing upload record', async () => {
