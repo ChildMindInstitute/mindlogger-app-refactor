@@ -31,7 +31,7 @@ export const withAdditionalInfo = (
   return additionalInfo ? `${message}: ${additionalInfo}` : message;
 };
 
-export class Logger implements ILogger {
+export class LoggerWithUpload implements ILogger {
   private mutex: IMutex;
 
   private abortController: AbortController;

@@ -5,7 +5,7 @@ import { getDefaultFileService } from '@app/shared/api/services/fileServiceInsta
 import { IFileService } from '@app/shared/api/services/IFileService';
 import { IMutex } from '@shared/lib/utils/IMutex';
 
-import { Logger } from './Logger';
+import { LoggerWithUpload } from './Logger';
 import { getDefaultLogger } from './loggerInstance';
 import { ILogger, NamePath } from '../types/logger';
 
@@ -35,12 +35,12 @@ jest.mock('react-native-file-logger', () => ({
 
 type TestLogger = ILogger & {
   mutex: IMutex;
-  withTime: Logger['withTime'];
-  checkIfFilesExist: Logger['checkIfFilesExist'];
-  getLogFiles: Logger['getLogFiles'];
-  onBeforeSendLogs: Logger['onBeforeSendLogs'];
-  sendInternal: Logger['sendInternal'];
-  isAppOnline: Logger['isAppOnline'];
+  withTime: LoggerWithUpload['withTime'];
+  checkIfFilesExist: LoggerWithUpload['checkIfFilesExist'];
+  getLogFiles: LoggerWithUpload['getLogFiles'];
+  onBeforeSendLogs: LoggerWithUpload['onBeforeSendLogs'];
+  sendInternal: LoggerWithUpload['sendInternal'];
+  isAppOnline: LoggerWithUpload['isAppOnline'];
 };
 
 describe('Logger: regular tests', () => {
