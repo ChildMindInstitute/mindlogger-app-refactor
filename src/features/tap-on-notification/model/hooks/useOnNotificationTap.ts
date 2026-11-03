@@ -188,17 +188,51 @@ export function useOnNotificationTap({
 
       const startToken = beginEntityStart();
 
+      // Wrapped so it can run now, or later once autocompletion finishes.
+      const start = () =>
+        startEntity(
+          appletId!,
+          entityId,
+          entityType,
+          eventId!,
+          entityName!,
+          targetSubjectId ?? null,
+          startToken,
+        );
+
       setTimeout(
         () => {
-          startEntity(
-            appletId!,
-            entityId,
-            entityType,
-            eventId!,
-            entityName!,
-            targetSubjectId ?? null,
-            startToken,
-          );
+          // Autocompletion may have opened during the delay, e.g. when the app
+          // comes back online at the same time as the tap. Starting the entity
+          // now would stack it on top of the Autocompletion screen, so wait
+          // until autocompletion is done.
+          if (getCurrentRoute() === 'Autocompletion') {
+            getDefaultLogger().log(
+              '[useOnNotificationTap]: Autocompletion opened before the entity start, postponing the start',
+            );
+
+            // Reuse the same postponer that already handles taps while autocompletion is open.
+            const postponer = postponerRef.current;
+            // Cancel any earlier pending tap so only this one runs.
+            postponer.reset();
+            // What to run once the Autocompletion screen is gone.
+            postponer.action = () => {
+              start().catch((error: unknown) => {
+                getDefaultLogger().warn(
+                  `[useOnNotificationTap]: Postponed entity start failed: ${String(error)}`,
+                );
+              });
+            };
+            // Retries every second while Autocompletion is open; false means it had to wait.
+            if (!postponer.tryExecute()) {
+              // Same message as the existing postponed-tap path, so the person knows why it's waiting.
+              toast.show(t('firebase_messaging:postponed_notification'));
+            }
+            return;
+          }
+
+          // No autocompletion in the way: open the activity right away.
+          start();
         },
         executing ? GoBackDuration : WorkaroundDuration,
       );
