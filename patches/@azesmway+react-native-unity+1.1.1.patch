@@ -151,7 +151,7 @@ index 5d3401f..2454d63 100644
  
      public interface UnityPlayerCallback {
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
-index bc4e473..26868c0 100644
+index bc4e473..3468eeb 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
 +++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnityView.java
 @@ -5,6 +5,8 @@ import static com.azesmwayreactnativeunity.ReactNativeUnity.*;
@@ -163,7 +163,7 @@ index bc4e473..26868c0 100644
  import android.content.res.Configuration;
  import android.util.Log;
  import android.widget.FrameLayout;
-@@ -64,8 +66,27 @@ public class ReactNativeUnityView extends FrameLayout {
+@@ -64,8 +66,31 @@ public class ReactNativeUnityView extends FrameLayout {
    @Override
    protected void onDetachedFromWindow() {
      if (!this.keepPlayerMounted) {
@@ -173,8 +173,12 @@ index bc4e473..26868c0 100644
 +        // engine does not render to the parked view, but skip the pause if a new
 +        // view has already claimed the engine.
 +        if (ReactNativeUnityViewManager.view == null || ReactNativeUnityViewManager.view == this) {
-+            Log.i(TAG, "[RNUnityDiag] detach: pausing engine before parking");
-+            ReactNativeUnity.pause();
++            Log.i(TAG, "[RNUnityDiag] detach: pausing engine before parking (wasPaused="
++                + _isUnityPaused + ")");
++            // Skip if already paused by componentWillUnmount
++            if (!_isUnityPaused) {
++                ReactNativeUnity.pause();
++            }
 +            // Restore portrait after pausing so Unity cannot override orientation with landscape
 +            UPlayer player = getPlayer();
 +            if (player != null) {
@@ -307,10 +311,10 @@ index 6406f64..f2c8059 100644
    if (self = [super initWithFrame:frame]) {
      static const auto defaultProps = std::make_shared<const RNUnityViewProps>();
 diff --git a/node_modules/@azesmway/react-native-unity/src/UnityView.tsx b/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
-index 87e6df6..f3fed77 100644
+index 87e6df6..d1b38a1 100644
 --- a/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
 +++ b/node_modules/@azesmway/react-native-unity/src/UnityView.tsx
-@@ -65,13 +65,10 @@ export default class UnityView extends React.Component<RNUnityViewProps> {
+@@ -65,12 +65,14 @@ export default class UnityView extends React.Component<RNUnityViewProps> {
    }
  
    componentWillUnmount() {
@@ -320,11 +324,14 @@ index 87e6df6..f3fed77 100644
 -    // it can be reused on the next mount. See issue #180.
 -    if (this.ref.current) {
 -      Commands.unloadUnity(this.ref.current);
--    }
 +    // Do not unload. The native view pauses Unity and next mount will resume.
 +    // - Android: Unity 6 cannot re-initialize after unloadApplication().
 +    // - iOS: Unload can leave objects stranded and cause crash on next boot.
 +    // - unloadUnity() remains available for an explicit unload.
++
++    // Unmounting while running can freeze Unity on Android. Pause Unity first.
++    if (Platform.OS === 'android') {
++      this.pauseUnity(true);
+     }
    }
  
-   render() {
