@@ -16,6 +16,7 @@ import { DEFAULT_BG } from '@entities/banner/lib/constants.tsx';
 
 import { AppletDetailsParamList } from './types';
 import { HeaderTitle } from '../ui/HeaderTitle';
+import { TabBarButton } from '../ui/TabBarButton';
 
 type BottomScreenOptions = BottomTabScreenProps<AppletDetailsParamList>;
 
@@ -25,6 +26,11 @@ export const getScreenOptions = (): NativeStackNavigationOptions => {
       backgroundColor: DEFAULT_BG,
     },
     headerShadowVisible: false,
+    // Allow Banners app component to own padding for top inset
+    // Disable react-native-screens 4.17+ from adding top inset
+    unstable_headerInsets: { top: false },
+    // Disable full-screen swipe back to avoid interfering with drawings or sliders (M2-11137)
+    fullScreenGestureEnabled: false,
     headerTitle: HeaderTitle,
     headerTitleAlign: 'center',
     headerBackVisible: false,
@@ -74,6 +80,7 @@ export const getAppletDetailsScreenOptions = (paddingBottom: number) => {
 
     return {
       headerShown: false,
+      tabBarButton: TabBarButton,
       tabBarItemStyle: {
         ...(IS_TABLET
           ? {

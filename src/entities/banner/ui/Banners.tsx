@@ -1,30 +1,41 @@
-import { StatusBar } from 'react-native';
+import { useCallback } from 'react';
+import { StatusBar, StyleSheet } from 'react-native';
 
 import Animated, {
   FadeInUp,
   FadeOutUp,
+  runOnJS,
   useAnimatedStyle,
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import {
-  IS_ANDROID,
-  IS_IOS,
-  OS_MAJOR_VERSION,
-} from '@app/shared/lib/constants';
-import { useAppSelector } from '@app/shared/lib/hooks/redux';
+import { IS_IOS } from '@app/shared/lib/constants';
+import { useAppDispatch, useAppSelector } from '@app/shared/lib/hooks/redux';
 import { DEFAULT_BG } from '@entities/banner/lib/constants';
 
 import { Banner, BannerProps } from './Banner';
 import { useBanners } from '../lib/hooks/useBanners';
+import { useBannersTopInset } from '../lib/hooks/useBannersTopInset';
 import {
   bannersBgSelector,
+  bannersExpandingSelector,
   bannersHiddenSelector,
   bannersSelector,
 } from '../model/selectors';
-import { BannerType } from '../model/slice';
+import { bannerActions, BannerType } from '../model/slice';
+
+const styles = StyleSheet.create({
+  strip: {
+    zIndex: 1000,
+    overflow: 'hidden',
+  },
+});
+
+const COLLAPSE_TIMING = {
+  duration: 250,
+  easing: Easing.out(Easing.ease),
+};
 
 const handleClose = (
   removeBanner: (key: BannerType) => void,
@@ -40,9 +51,20 @@ export const Banners = () => {
   const banners = useAppSelector(bannersSelector);
   const bannersBg = useAppSelector(bannersBgSelector) ?? DEFAULT_BG;
   const isHidden = useAppSelector(bannersHiddenSelector);
-  const { top } = useSafeAreaInsets();
+  const isExpanding = useAppSelector(bannersExpandingSelector);
+  const dispatch = useAppDispatch();
+  const top = useBannersTopInset();
 
-  // Animate top safe area background color to match native header background color transition
+  const handleExpanded = useCallback(() => {
+    dispatch(bannerActions.setBannersExpanded());
+  }, [dispatch]);
+
+  // Animate top safe area background color to match native header background
+  // color transition. The strip's padding drops to 0 immediately when Unity
+  // takes over full screen (isHidden) so the screen is already full height when
+  // the native transition starts. Otherwise, iOS 26+ draws it with rounded
+  // corners below the status bar for a split second before transitioning to
+  // full screen (M2-11164).
   const animatedStyles = useAnimatedStyle(() => ({
     backgroundColor: withTiming(bannersBg, {
       // Duration is based on native header transition duration for each OS
@@ -51,28 +73,20 @@ export const Banners = () => {
       duration: IS_IOS ? 320 : 270,
       easing: Easing.out(Easing.ease),
     }),
+    // Add top inset here instead of letting react-native-screens 4.17+ pad the header
+    paddingTop: isHidden
+      ? 0
+      : withTiming(top, COLLAPSE_TIMING, finished => {
+          if (finished && isExpanding) {
+            runOnJS(handleExpanded)();
+          }
+        }),
   }));
-
-  if (isHidden) {
-    return null;
-  }
 
   const sortedBanners = [...banners].sort((a, b) => a.order - b.order);
 
   return (
-    <Animated.View
-      style={[
-        animatedStyles,
-        {
-          paddingTop: top,
-          // There's weird white space on Android 15 and above because of the safe area insets
-          // We can remove this negative bottom margin when this issue is resolved:
-          // https://github.com/react-navigation/react-navigation/issues/12608
-          marginBottom: IS_ANDROID && OS_MAJOR_VERSION >= 15 ? -top : 0,
-          zIndex: 1000,
-        },
-      ]}
-    >
+    <Animated.View style={[styles.strip, animatedStyles]}>
       <StatusBar
         barStyle="dark-content"
         translucent

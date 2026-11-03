@@ -51,8 +51,8 @@ export const LineChart: FC<Props> = ({ data, config }) => {
       const currentWeekDayValues = data.map(dataItem =>
         areDatesEqual(dataItem.date, currentWeekDate) &&
         numberValueExists(dataItem.value) &&
-        dataItem.value! < maxValue
-          ? dataItem.value! * 2
+        dataItem.value < maxValue
+          ? dataItem.value * 2
           : null,
       );
 

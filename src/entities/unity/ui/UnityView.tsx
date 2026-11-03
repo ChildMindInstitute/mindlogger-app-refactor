@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useLayoutEffect } from 'react';
 import { UIManager } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
@@ -57,7 +57,7 @@ export const UnityView: FC<Props> = props => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(bannerActions.setBannersHidden(true));
     return () => {
       dispatch(bannerActions.setBannersHidden(false));

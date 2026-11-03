@@ -212,7 +212,8 @@
   "login_form": {
     "login": "Fazer login",
     "email_placeholder": "E-mail",
-    "password": "Senha"
+    "password": "Senha",
+    "invalid_credentials": "E-mail ou senha incorretos"
   },
   "logout_warning": {
     "warning": "Aviso de logout",

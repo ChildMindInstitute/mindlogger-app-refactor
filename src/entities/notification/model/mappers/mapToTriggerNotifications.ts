@@ -1,4 +1,7 @@
-import notifee, { TriggerType, AndroidImportance } from '@notifee/react-native';
+import notifee, {
+  TriggerType,
+  AndroidImportance,
+} from 'react-native-notify-kit';
 
 import { palette } from '@app/shared/lib/constants/palette';
 

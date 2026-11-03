@@ -1,18 +1,18 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useLayoutEffect } from 'react';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AutocompletionEventOptions } from '@app/abstract/lib/types/autocompletion';
+import { bannerActions } from '@app/entities/banner/model/slice';
 import { useUpcomingNotificationsObserver } from '@app/entities/notification/lib/hooks/useUpcomingNotificationsObserver';
+import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Emitter } from '@app/shared/lib/services/Emitter';
 import { getSupportsMobile } from '@app/shared/lib/utils/responseTypes';
-import { Box } from '@app/shared/ui/base';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { StatusBar } from '@app/shared/ui/StatusBar';
 import { useBaseInfo } from '@app/widgets/activity-group/model/hooks/useBaseInfo';
 import { FlowSurvey } from '@app/widgets/survey/ui/FlowSurvey';
-import { IS_ANDROID, OS_MAJOR_VERSION } from '@shared/lib/constants';
+import { Box } from '@shared/ui/base';
 
 import { RootStackParamList } from '../config/types';
 
@@ -24,10 +24,18 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
 
   useUpcomingNotificationsObserver(eventId, entityId, targetSubjectId);
 
+  const dispatch = useAppDispatch();
+
   const { data, isLoading } = useBaseInfo(appletId);
   const { responseTypes, title } = data || {};
   const entityResponseTypes = responseTypes?.[entityId];
+  const hasUnityItem = !!entityResponseTypes?.includes('unity');
   const isAppSupportedEntity = entityResponseTypes?.every(getSupportsMobile);
+
+  // Disable swipe back on Unity which tears down Unity without a clean Reset (M2-11135)
+  useLayoutEffect(() => {
+    navigation.setOptions({ gestureEnabled: !hasUnityItem });
+  }, [hasUnityItem, navigation]);
 
   useEffect(() => {
     if (!isAppSupportedEntity && !isLoading) {
@@ -48,14 +56,40 @@ export const InProgressActivityScreen: FC<Props> = ({ navigation, route }) => {
     };
   }, [navigation]);
 
-  const { top } = useSafeAreaInsets();
+  // Reserve space outside of activities and during transitions in/out of activities
+  useEffect(() => {
+    const removeTransitionEnd = navigation.addListener('transitionEnd', e => {
+      // Release space when transitions into activities end (M2-11193)
+      if (!e.data.closing) {
+        dispatch(bannerActions.setBannersReserveStatusBar(false));
+      }
+    });
+    const removeTransitionStart = navigation.addListener(
+      'transitionStart',
+      e => {
+        // Reserve space when transitions out of activities begin
+        if (e.data.closing) {
+          dispatch(bannerActions.setBannersReserveStatusBar(true));
+        }
+      },
+    );
+    const removeGestureCancel = navigation.addListener('gestureCancel', () => {
+      // Release space again if swipe back out of activities is cancelled
+      dispatch(bannerActions.setBannersReserveStatusBar(false));
+    });
+
+    return () => {
+      removeTransitionEnd();
+      removeTransitionStart();
+      removeGestureCancel();
+      // Reserve space outside of in-progress activities
+      dispatch(bannerActions.setBannersReserveStatusBar(true));
+    };
+  }, [dispatch, navigation]);
 
   return (
-    // There's weird white space on Android because of the safe area insets
-    // We can remove this top margin when this issue is resolved:
-    // https://github.com/react-navigation/react-navigation/issues/12608
-    <Box flex={1} marginTop={IS_ANDROID && OS_MAJOR_VERSION >= 15 ? top : 0}>
-      <StatusBar hidden />
+    <Box flex={1}>
+      <StatusBar hidden animated />
 
       {isLoading || !isAppSupportedEntity ? (
         <Spinner withOverlay />

@@ -212,7 +212,8 @@
   "login_form": {
     "login": "Iniciar sesión",
     "email_placeholder": "Correo electrónico",
-    "password": "Contraseña"
+    "password": "Contraseña",
+    "invalid_credentials": "Correo electrónico o contraseña incorrectos."
   },
   "logout_warning": {
     "warning": "Advertencia de cierre de sesión",

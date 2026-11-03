@@ -21,18 +21,12 @@ const AxisListItemContainer = styled(Center, {
 const AxisListItemText = styled(Text, {
   name: 'SingleSelectionPerRowAxisListItemText',
   fontSize: 12,
-  // I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now.
-  // This is a consequence of the react-native upgrade to version 0.79.2
-  // @ts-expect-error TS2322
   variants: {
     hasTooltip: {
       true: { color: '$secondary', textDecorationLine: 'underline' },
       false: { color: '$primary' },
     },
   } as const,
-  // I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now.
-  // This is a consequence of the react-native upgrade to version 0.79.2
-  // @ts-expect-error TS2322
   defaultVariants: { hasTooltip: false },
 }) as FC<TextProps & { hasTooltip?: boolean }>;
 

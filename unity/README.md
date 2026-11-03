@@ -6,6 +6,37 @@ which renders a Unity scene from an export from the Unity project.
 The `react-native-unity` also has some limitations related to iOS Simulator
 compatibility and requirements for exporting the Unity project itself.
 
+## Unity Setup
+
+1. Install Unity Hub
+   1. Go to unity.com
+   2. Click on Download Unity
+   3. Select the install for your system, i.e Apple Silicon, Linux, Windows, etc.
+2. Open Unity Hub
+3. Click on Installs in the left sidebar
+4. Click on the **Install Editor** button in the middle of the screen
+5. Install version 6000.3.13f1
+   1. Make sure both Android Build Support and iOS Build Support are both checked
+6. Open the project in Unity
+   1. If not open, Open Unity Hub
+   2. Click on Projects in the left toolbar
+   3. Click the Add dropdown and select, Add Project from Disk
+   4. Find the project, and add it
+   5. If you run into issues opening the project delete the Library folder and the Packages/packages-lock.json
+7. Build the project
+   1. Go to File > Build Profiles
+   2. Click on AndroidReactNative under Build profiles
+   3. If you see a button "Switch Profile" then click on that otherwise click on Export
+   4. Save the export in ./Builds/android
+   5. Copy the contents of ./Builds/android to the React Native Curious project at `<repo>/unity/builds/android/`
+8. Run the Curious app on Android (requires ARM64 emulator or physical device)
+   1. `export BUILD_WITH_UNITY=1`
+   2. `yarn install`
+   3. `yarn start` - this will start Metro
+      - Since Metro is running in the current terminal you'll need to open another terminal for the next commands
+   4. `export BUILD_WITH_UNITY=1`
+   5. `yarn android:dev`
+
 ## Compatibility Issues and Unity Export Requirements
 
 ### iOS Concerns

@@ -2,7 +2,7 @@ import { pathsToModuleNameMapper } from 'ts-jest';
 import type { JestConfigWithTsJest } from 'ts-jest';
 
 const jestConfig: JestConfigWithTsJest = {
-  preset: 'react-native',
+  preset: '@react-native/jest-preset',
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   transform: {
     '^.+\\.(js|jsx)$': '<rootDir>/node_modules/babel-jest',
@@ -17,12 +17,12 @@ const jestConfig: JestConfigWithTsJest = {
   testPathIgnorePatterns: ['\\.snap$', '<rootDir>/node_modules/'],
   cacheDirectory: '.jest/cache',
   transformIgnorePatterns: [
-    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux|immer|moti/.*|@tamagui/animations-moti/.*|uuid)',
+    // The patched sanitize-html pulls in htmlparser2, whose chain ships ESM only
+    'node_modules/(?!(jest-)?@?react-native|@react-native-community|@react-navigation|@react-native-device-info|@notifee|@miblanchard/react-native-slider|victory-*|@shopify/react-native-skia|react-native-reanimated|react-redux|immer|moti/.*|@tamagui/animations-moti/.*|uuid|htmlparser2|dom-serializer|domelementtype|domhandler|domutils|entities)',
   ],
   setupFiles: [
     '<rootDir>/jest.vendor-mocks.js',
     '<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js',
-    '<rootDir>/node_modules/react-native-reanimated/src/jestUtils.ts',
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleDirectories: ['node_modules', '<rootDir>'],

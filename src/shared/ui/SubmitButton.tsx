@@ -1,8 +1,10 @@
 import { PropsWithChildren, FC } from 'react';
-import { AccessibilityProps, StyleSheet, TouchableOpacity } from 'react-native';
+import { AccessibilityProps, StyleSheet } from 'react-native';
 import { StyleProp, ViewStyle } from 'react-native';
 
 import { Stack, styled, StackStyle, TextProps } from '@tamagui/core';
+
+import { TouchableOpacity } from '@shared/ui/TouchableOpacity';
 
 import { Box } from './base';
 import { Spinner } from './Spinner';
@@ -14,9 +16,6 @@ const ButtonText = styled(Text, {
   fontSize: 16,
   lineHeight: 20,
   letterSpacing: 0.15,
-  // I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now.
-  // This is a consequence of the react-native upgrade to version 0.79.2
-  // @ts-expect-error TS2322
   variants: {
     mode: {
       primary: {
@@ -119,8 +118,6 @@ export const SubmitButton: FC<Props & AccessibilityProps> = ({
         mode={mode}
         {...stylesProps}
       >
-        {/* I'm not sure why this is throwing a type error, but it works fine, so I'm suppressing it for now. */}
-        {/* This is a consequence of the react-native upgrade to version 0.79.2 */}
         {/* @ts-expect-error TS2322 */}
         <ButtonText mode={mode} {...textProps} opacity={isLoading ? 0 : 1}>
           {children}

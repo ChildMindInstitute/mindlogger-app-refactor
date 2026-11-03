@@ -250,7 +250,8 @@
   "login_form": {
     "login": "Ngena ngemvume",
     "email_placeholder": "I-imeyili",
-    "password": "Iphasiwedi"
+    "password": "Iphasiwedi",
+    "invalid_credentials": "I-imeyili noma iphasiwedi engavumelekile"
   },
   "logout_warning": {
     "warning": "Isexwayiso Sokuphuma",

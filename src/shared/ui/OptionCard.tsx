@@ -55,7 +55,7 @@ export function OptionCard({
     >
       {backdropShown && (
         <Animated.View
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           entering={FadeIn.duration(200).springify()}
           exiting={FadeOut.duration(200).springify()}
         >

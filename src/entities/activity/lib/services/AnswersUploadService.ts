@@ -22,7 +22,7 @@ import {
   formatToDtoDate,
   formatToDtoTime,
 } from '@app/shared/lib/utils/dateTime';
-import { isLocalFileUrl } from '@app/shared/lib/utils/file';
+import { getFilePath, isLocalFileUrl } from '@app/shared/lib/utils/file';
 import { MediaFile } from '@app/shared/ui/survey/MediaItems/types';
 import { IAnswersUploadService } from '@entities/activity/lib/services/IAnswersUploadService';
 import {
@@ -159,7 +159,7 @@ export class AnswersUploadService implements IAnswersUploadService {
     logAnswerIndex: number,
     appletId: string,
   ): Promise<string> {
-    const localFileExists = await FileSystem.exists(mediaFile.uri);
+    const localFileExists = await FileSystem.exists(getFilePath(mediaFile.uri));
 
     const logFileInfo = `(${mediaFile.type}, from answer #${logAnswerIndex})`;
 
@@ -181,7 +181,7 @@ export class AnswersUploadService implements IAnswersUploadService {
     }
 
     try {
-      let remoteUrl;
+      let remoteUrl: string;
 
       if (!uploadRecord.uploaded) {
         this.logger.log(
@@ -221,10 +221,10 @@ export class AnswersUploadService implements IAnswersUploadService {
           `[UploadAnswersService.processFileUpload] File ${logFileInfo} already uploaded`,
         );
 
-        remoteUrl = uploadRecord.remoteUrl;
+        remoteUrl = uploadRecord.remoteUrl!;
       }
 
-      return remoteUrl!;
+      return remoteUrl;
     } catch (error) {
       throw new Error(
         `[UploadAnswersService.processFileUpload]: Error occurred while file ${logFileInfo} uploading\n\n${error}`,

@@ -54,7 +54,7 @@ export const useAppletAnalytics = (appletId: string) => {
     }
 
     InteractionManager.runAfterInteractions(async () => {
-      // Add delay as the encryption blocks the JS thread causing a long loading.
+      // Delay encryption to avoid blocking the JS thread during tab transition.
       await wait(100);
 
       const encryptionService =

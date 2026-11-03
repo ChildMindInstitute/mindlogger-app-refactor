@@ -1,5 +1,6 @@
 package lab.childmindinstitute.data
 
+import android.content.pm.ActivityInfo
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
@@ -26,5 +27,19 @@ class MainActivity : ReactActivity() {
    */
   override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(null)
+  }
+
+  /**
+   * Set requested orientation only if Unity is mounted, else always set portrait.
+   */
+  override fun setRequestedOrientation(requestedOrientation: Int) {
+    val isUnityMounted = runCatching {
+      // Look up by name since react-native-unity is only linked when BUILD_WITH_UNITY=1
+      Class.forName("com.azesmwayreactnativeunity.ReactNativeUnityViewManager")
+          .getMethod("hasActiveView")
+          .invoke(null) as Boolean
+    }.getOrDefault(false)
+    super.setRequestedOrientation(
+        if (isUnityMounted) requestedOrientation else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
   }
 }

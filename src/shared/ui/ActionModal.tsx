@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrim: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: palette.on_surface_alpha30,
   },
 });

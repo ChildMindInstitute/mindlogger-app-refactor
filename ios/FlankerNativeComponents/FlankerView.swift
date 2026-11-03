@@ -11,7 +11,10 @@ import Foundation
 import React
 
 class FlankerView: UIView {
-  static let shared = FlankerView()
+  // The live view. On the new architecture, the manager that creates the view
+  // and the one that receives NativeModules calls are different instances, so
+  // the view is tracked here where both can reach it.
+  static weak var current: FlankerView?
   private lazy var textLabel: CustomText = {
     let label = CustomText()
     label.translatesAutoresizingMaskIntoConstraints = false
@@ -169,6 +172,7 @@ class FlankerView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
+    FlankerView.current = self
     firstDate = Date()
     firstCFTime = CACurrentMediaTime()
     setupConstraint()

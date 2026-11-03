@@ -30,8 +30,6 @@ export const CircleProgressStep = ({
           lineHeight={16}
           ls={0.5}
           numberOfLines={1}
-          adjustsFontSizeToFit
-          minimumFontScale={0.5}
         >
           {t('activity:step')}
         </Text>
@@ -42,8 +40,6 @@ export const CircleProgressStep = ({
           lineHeight={16}
           ls={0.5}
           numberOfLines={1}
-          adjustsFontSizeToFit
-          minimumFontScale={0.5}
         >
           {t('activity:stepCounter', { currentStep, totalSteps })}
         </Text>

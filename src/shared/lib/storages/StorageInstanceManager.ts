@@ -49,7 +49,7 @@ export class StorageInstanceManager implements IStorageInstanceManager {
       if (!this.instances[storageName]) {
         this.instances[storageName] = createStorage(storageName);
       }
-      return this.instances[storageName] as MMKV;
+      return this.instances[storageName];
     };
 
     return getter.bind(this);
@@ -71,7 +71,7 @@ export class StorageInstanceManager implements IStorageInstanceManager {
           storeEncryptionKey as string,
         );
       }
-      return this.securedInstances[storageName] as MMKV;
+      return this.securedInstances[storageName];
     };
 
     return getter.bind(this);

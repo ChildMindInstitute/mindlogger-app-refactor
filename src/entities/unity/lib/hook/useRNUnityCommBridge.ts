@@ -6,10 +6,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { withAdditionalInfo } from '@app/shared/lib/services/Logger';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
+import { ENV } from '@shared/lib/constants';
 
 import {
   RN2UMessage,
   U2RNMessage,
+  UnityCommandEcho,
   UnityEvent,
 } from '../../lib/types/unityMessage';
 
@@ -31,6 +33,8 @@ export const useRNUnityCommBridge = ({
   rnUnityViewRef,
 }: RNUnityCommBridgeOptions) => {
   const logger: ILogger = getDefaultLogger();
+  const shouldLogMessage = (message: RN2UMessage) =>
+    ENV !== 'production' || message.m_sKey !== UnityCommandEcho;
 
   const eventHandlersRef = useRef<
     Partial<Record<UnityEvent, RNUnityCommBridgeUnityEventHandler>>
@@ -67,13 +71,15 @@ export const useRNUnityCommBridge = ({
           ];
         }
 
-        logger.log(
-          withAdditionalInfo(
-            `[RNUnityCommBridge] Sending ${message.m_sKey} message to Unity`,
-            message.m_sAdditionalInfo,
-          ),
-          message,
-        );
+        if (shouldLogMessage(message)) {
+          logger.log(
+            withAdditionalInfo(
+              `[RNUnityCommBridge] Sending ${message.m_sKey} message to Unity`,
+              message.m_sAdditionalInfo,
+            ),
+            message,
+          );
+        }
         rnUnityViewRef.current.postMessage(
           'ReactCommunicationBridge',
           'ReceiveReactMessage',
@@ -97,13 +103,15 @@ export const useRNUnityCommBridge = ({
       }
 
       return promise.then(response => {
-        logger.log(
-          withAdditionalInfo(
-            `[RNUnityCommBridge] Sent ${message.m_sKey} message to Unity`,
-            response?.m_sAdditionalInfo,
-          ),
-          response ?? undefined,
-        );
+        if (shouldLogMessage(message)) {
+          logger.log(
+            withAdditionalInfo(
+              `[RNUnityCommBridge] Sent ${message.m_sKey} message to Unity`,
+              response?.m_sAdditionalInfo,
+            ),
+            response ?? undefined,
+          );
+        }
         return response;
       });
     },

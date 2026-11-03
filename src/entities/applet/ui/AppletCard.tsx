@@ -15,6 +15,7 @@ type Props = {
   applet: Applet;
   disabled: boolean;
   onPress?: (...args: any[]) => void;
+  onPressIn?: () => void;
   thumbnailColor?: string;
 };
 
@@ -22,6 +23,7 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
   applet,
   disabled,
   onPress,
+  onPressIn,
   thumbnailColor,
   accessibilityLabel,
 }) => {
@@ -31,6 +33,7 @@ export const AppletCard: FC<Props & AccessibilityProps> = ({
     <AnimatedTouchable
       aria-label={accessibilityLabel}
       onPress={onPress}
+      onPressIn={onPressIn}
       disabled={disabled}
       style={{
         borderRadius: 16,
