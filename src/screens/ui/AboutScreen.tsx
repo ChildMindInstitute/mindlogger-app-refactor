@@ -5,7 +5,7 @@ import { Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { MERIT_TAG } from '@app/shared/lib/constants';
+import { APP_VERSION, ENV, MERIT_TAG } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
@@ -50,11 +50,18 @@ export const AboutScreen: FC = () => {
           />
         </Box>
 
-        {MERIT_TAG ? (
-          <Text color="$outline" fontSize={12} textAlign="center" mb={32}>
-            {t('about_app:merit_version', { version: MERIT_TAG })}
+        <Box alignItems="center" mb={32}>
+          <Text color="$outline" fontSize={12}>
+            {t('about_app:curious_version', {
+              version: ENV ? `${APP_VERSION} ${ENV}` : APP_VERSION,
+            })}
           </Text>
-        ) : null}
+          {MERIT_TAG ? (
+            <Text color="$outline" fontSize={12}>
+              {t('about_app:merit_version', { version: MERIT_TAG })}
+            </Text>
+          ) : null}
+        </Box>
       </ScrollView>
       <GradientOverlay color={palette.surface} />
     </Box>

@@ -25,7 +25,7 @@ import { useAnalyticsAutoLogin } from '@app/features/login/model/useAnalyticsAut
 import { useFeatureFlagsAutoLogin } from '@app/features/login/model/useFeatureFlagsAutoLogin';
 import { useLogout } from '@app/features/logout/model/hooks';
 import { useOnNotificationTap } from '@app/features/tap-on-notification/model/hooks/useOnNotificationTap';
-import { APP_VERSION, ENV, IS_ANDROID } from '@app/shared/lib/constants';
+import { IS_ANDROID } from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAlarmPermissions } from '@app/shared/lib/hooks/useAlarmPermissions';
@@ -337,9 +337,7 @@ export const RootNavigator = () => {
         <Stack.Screen
           name="AboutApp"
           options={{
-            title: t('about_app:title_with_version', {
-              version: ENV ? `${APP_VERSION} ${ENV}` : APP_VERSION,
-            }),
+            title: t('about_app:title'),
           }}
           component={AboutScreen}
         />
