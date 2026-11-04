@@ -90,7 +90,7 @@
     "device_id": "Αναγνωριστικό συσκευής"
   },
   "about_app": {
-    "curious_version": "Curious έκδ.{{version}}",
+    "curious_version": "Curious {{version}}",
     "merit_version": "MERIT {{version}}",
     "title": "Τι είναι το Curious;",
     "subtitle": "Εκτός εάν αναφέρεται αλλού, τα εικονίδια προέρχονται από τα OpenMoji και NounProject.",

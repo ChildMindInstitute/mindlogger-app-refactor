@@ -90,7 +90,7 @@
     "device_id": "I-ID yesixhobo"
   },
   "about_app": {
-    "curious_version": "Curious v.{{version}}",
+    "curious_version": "Curious {{version}}",
     "merit_version": "MERIT {{version}}",
     "title": "Yintoni Curious?",
     "subtitle": "Ngaphandle kokuba kuchazwe kwenye indawo, ii-icon zizotywa kwi-OpenMoji kunye ne-NounProject.",

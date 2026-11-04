@@ -90,7 +90,7 @@
     "device_id": "Reference de l'appareil"
   },
   "about_app": {
-    "curious_version": "Curious v.{{version}}",
+    "curious_version": "Curious {{version}}",
     "merit_version": "MERIT {{version}}",
     "title": "Qu'est-ce que Curious?",
     "subtitle": "Sauf indication contraire, les icônes sont tirées de OpenMoji et Nounproject.",

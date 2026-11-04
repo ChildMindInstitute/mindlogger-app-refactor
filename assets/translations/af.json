@@ -90,7 +90,7 @@
     "device_id": "Toestel-ID"
   },
   "about_app": {
-    "curious_version": "Curious v.{{version}}",
+    "curious_version": "Curious {{version}}",
     "merit_version": "MERIT {{version}}",
     "title": "Wat is Curious?",
     "subtitle": "Tensy anders vermeld, is ikone geneem uit OpenMoji en NounProject.",

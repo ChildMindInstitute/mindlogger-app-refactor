@@ -90,7 +90,7 @@
     "device_id": "I-ID yedivayisi"
   },
   "about_app": {
-    "curious_version": "Curious v.{{version}}",
+    "curious_version": "Curious {{version}}",
     "merit_version": "MERIT {{version}}",
     "title": "Iyini i-Curious?",
     "subtitle": "Ngaphandle kwalapho kushiwo kwenye indawo, izithonjana zidwetshwa ku-OpenMoji naku-NounProject.",
