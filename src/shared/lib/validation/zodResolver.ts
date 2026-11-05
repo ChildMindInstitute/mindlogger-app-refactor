@@ -9,7 +9,7 @@ type FieldError = BaseFieldError & {
 };
 
 const parseErrorSchema = (
-  zodErrors: z.ZodIssue[],
+  zodErrors: z.core.$ZodIssue[],
   validateAllFieldCriteria: boolean,
 ) => {
   const errors: Record<string, FieldError> = {};
