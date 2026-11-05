@@ -91,6 +91,9 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     () => unityRuntimeState.engineAlive && unityRuntimeState.taskInProgress,
   );
   const [failureMode, setFailureMode] = useState<UnityFailureMode>('quit');
+  const [lockOrientation, setLockOrientation] = useState(
+    () => unityRuntimeState.engineAlive && unityRuntimeState.taskInProgress,
+  );
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
   const unityPaths = useRef<Array<string>>([]);
@@ -340,6 +343,11 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
           )
           .finally(() => {
             clearTimeout(ackTimer);
+
+            // Lock orientation until now to avoid restoring a previous Unity
+            // task's landscape during load and disrupting layout (M2-11215)
+            setLockOrientation(false);
+
             if (cancelled) {
               return;
             }
@@ -561,6 +569,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     logger.log('[UnityView] Native player unload received');
     unityRuntimeState.engineAlive = false;
     unityRuntimeState.taskInProgress = false;
+    setLockOrientation(false);
     if (restartInProgressRef.current) {
       return;
     }
@@ -585,6 +594,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   return {
     rnUnityViewRef,
     unityViewKey,
+    lockOrientation,
     isUnityUnresponsive,
     isStaleFrameCovered,
     failureMode,
