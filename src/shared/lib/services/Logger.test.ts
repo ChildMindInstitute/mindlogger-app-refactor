@@ -48,8 +48,8 @@ describe('Logger: regular tests', () => {
   let fileService: IFileService;
 
   beforeEach(() => {
-    logger = getDefaultLogger() as never as TestLogger;
     fileService = getDefaultFileService();
+    logger = new LoggerWithUpload(fileService) as never as TestLogger;
   });
 
   it('should add a timestamp to the message', async () => {
@@ -146,9 +146,12 @@ describe('Logger: regular tests', () => {
 
 describe('Logger: test sending files', () => {
   let logger: TestLogger;
+  let fileService: IFileService;
 
   beforeEach(() => {
-    logger = getDefaultLogger() as never as TestLogger;
+    // logger = getDefaultLogger() as never as TestLogger;
+    fileService = getDefaultFileService();
+    logger = new LoggerWithUpload(fileService) as never as TestLogger;
   });
 
   it('Should do 5 waiting mutex attempts (or 7 check if mutex is busy) when sending logs', async () => {
