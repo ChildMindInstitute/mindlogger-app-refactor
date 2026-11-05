@@ -8,14 +8,14 @@ import { z } from 'zod';
 
 import { zodResolver } from '../validation/zodResolver';
 
-export const useAppForm = <Schema extends z.ZodTypeAny>(
+export const useAppForm = <Schema extends z.ZodType<any, any>>(
   schema: Schema,
-  props: UseFormProps<z.input<Schema>> & {
+  props: UseFormProps<z.input<Schema>, unknown, z.output<Schema>> & {
     onSubmitSuccess: SubmitHandler<z.output<Schema>>;
     onSubmitFail?: SubmitErrorHandler<z.input<Schema>>;
   },
 ) => {
-  const form = useForm({
+  const form = useForm<z.input<Schema>, unknown, z.output<Schema>>({
     ...props,
     resolver: zodResolver(schema),
   });
