@@ -28,6 +28,7 @@ export const UnityView: FC<Props> = props => {
   const {
     rnUnityViewRef,
     unityViewKey,
+    lockOrientation,
     isUnityUnresponsive,
     failureMode,
     flowId,
@@ -97,6 +98,7 @@ export const UnityView: FC<Props> = props => {
         ref={rnUnityViewRef}
         // eslint-disable-next-line react-native/no-inline-styles
         style={{ flex: 1 }}
+        androidLockOrientation={lockOrientation}
         onPlayerUnload={handlePlayerUnload}
         onPlayerQuit={handlePlayerQuit}
         onUnityMessage={result => {
