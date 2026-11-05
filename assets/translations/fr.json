@@ -533,13 +533,13 @@
       "invalid_intersection_types": "Les résultats d'intersection n'ont pas pu être fusionnés",
       "not_multiple_of": "Nombre doit être multiple de {{multipleOf}}",
       "not_finite": "Nombre doit être fini",
-      "invalid_string": {
-        "email": "{{validation}} invalide",
-        "url": "{{validation}} invalide",
-        "uuid": "{{validation}} invalide",
-        "cuid": "{{validation}} invalide",
-        "regex": "{{validation}} invalide",
-        "datetime": "{{validation}} invalide",
+      "invalid_format": {
+        "email": "{{format}} invalide",
+        "url": "{{format}} invalide",
+        "uuid": "{{format}} invalide",
+        "cuid": "{{format}} invalide",
+        "regex": "{{format}} invalide",
+        "datetime": "{{format}} invalide",
         "startsWith": "Champ invalide: doit commencer par \"{{startsWith}}\"",
         "endsWith": "Champ invalide: doit se terminer par \"{{endsWith}}\""
       },
@@ -598,7 +598,7 @@
         }
       }
     },
-    "validations": {
+    "formats": {
       "email": "e-mail",
       "url": "lien",
       "uuid": "UUID",
