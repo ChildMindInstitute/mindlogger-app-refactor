@@ -46,7 +46,6 @@ export const useQueueProcessing = (): Result => {
 
   const processQueueWithSendingLogs = async (): Promise<boolean> => {
     const result = await queueProcessingService.process();
-    getDefaultLogger().send();
     return result;
   };
 

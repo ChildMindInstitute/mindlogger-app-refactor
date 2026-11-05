@@ -29,8 +29,6 @@ export function useOnNotificationRefresh(callback?: () => void) {
       getDefaultNotificationRefreshService()
         .refresh(queryClient, progressions, responseTimes, logTrigger!)
         .finally(() => {
-          getDefaultLogger().send();
-
           if (callbackRef.current) {
             callbackRef.current();
           }

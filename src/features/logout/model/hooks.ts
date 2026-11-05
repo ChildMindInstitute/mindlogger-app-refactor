@@ -27,8 +27,6 @@ export function useLogout() {
 
     Emitter.emit('logout');
 
-    await getDefaultLogger().send();
-
     try {
       getDefaultIdentityService().logout({
         deviceId: getDefaultSystemRecord().getDeviceId()!,

@@ -30,7 +30,6 @@ export const AppletsRefresh: FC<Props> = props => {
       responseTimes,
       LogTrigger.PullToRefresh,
     );
-    getDefaultLogger().send().catch(console.error);
   });
 
   return (

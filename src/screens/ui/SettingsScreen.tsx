@@ -97,12 +97,6 @@ export const SettingsScreen: FC = () => {
               title={t('language_screen:change_app_language')}
             />
 
-            <RowButton
-              onPress={navigateToAppLogs}
-              accessibilityLabel="upload_logs-button"
-              title={t('settings:upload_logs')}
-            />
-
             <LogoutRowButton />
           </YStack>
         </Box>

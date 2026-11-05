@@ -85,9 +85,6 @@ export const AppletsScreen: FC = () => {
         responseTimes,
         LogTrigger.FirstAppRun,
       );
-      getDefaultLogger()
-        .send()
-        .catch(err => getDefaultLogger().error(err as never));
     },
   );
 

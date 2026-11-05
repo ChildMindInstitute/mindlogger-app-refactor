@@ -217,7 +217,6 @@ export function useOnNotificationTap({
             LogTrigger.ScheduleUpdated,
           );
         })
-        .then(() => getDefaultLogger().send());
     },
     'applet-delete-alert': () => {
       navigator.navigate('Applets', undefined, { pop: true });
@@ -231,7 +230,6 @@ export function useOnNotificationTap({
             LogTrigger.AppletRemoved,
           );
         })
-        .then(() => getDefaultLogger().send());
     },
     'schedule-updated': () => {
       navigator.navigate('Applets', undefined, { pop: true });
@@ -245,7 +243,6 @@ export function useOnNotificationTap({
             LogTrigger.AppletUpdated,
           );
         })
-        .then(() => getDefaultLogger().send());
     },
   };
 
