@@ -1,9 +1,9 @@
 import { FieldValues, ResolverResult, ResolverOptions } from 'react-hook-form';
 import { z } from 'zod';
 
-export type Resolver = <T extends z.Schema<any, any>>(
+export type Resolver = <T extends z.ZodType<any, any>>(
   schema: T,
-  schemaOptions?: Partial<z.ParseParams>,
+  schemaOptions?: Parameters<T['parseAsync']>[1],
   factoryOptions?: {
     /**
      * @default async
