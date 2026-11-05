@@ -51,16 +51,20 @@ export const AboutScreen: FC = () => {
         </Box>
 
         <Box alignItems="center" mb={32}>
-          <Text color="$outline" fontSize={12}>
+          {/* Selectable text so long-press copies both versions */}
+          <Text
+            color="$outline"
+            fontSize={12}
+            textAlign="center"
+            userSelect="text"
+          >
             {t('about_app:curious_version', {
               version: ENV ? `${APP_VERSION} ${ENV}` : APP_VERSION,
             })}
+            {MERIT_TAG
+              ? `\n${t('about_app:merit_version', { version: MERIT_TAG })}`
+              : null}
           </Text>
-          {MERIT_TAG ? (
-            <Text color="$outline" fontSize={12}>
-              {t('about_app:merit_version', { version: MERIT_TAG })}
-            </Text>
-          ) : null}
         </Box>
       </ScrollView>
       <GradientOverlay color={palette.surface} />
