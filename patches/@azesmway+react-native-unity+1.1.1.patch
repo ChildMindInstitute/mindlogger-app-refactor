@@ -1,5 +1,5 @@
 diff --git a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
-index 5d3401f..2454d63 100644
+index 5d3401f..39bcbc1 100644
 --- a/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
 +++ b/node_modules/@azesmway/react-native-unity/android/src/main/java/com/azesmwayreactnativeunity/ReactNativeUnity.java
 @@ -293,8 +293,118 @@ public class ReactNativeUnity {
@@ -123,7 +123,7 @@ index 5d3401f..2454d63 100644
      }
  
      public static void addUnityViewToGroup(ViewGroup group) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-@@ -312,11 +422,26 @@ public class ReactNativeUnity {
+@@ -312,11 +422,20 @@ public class ReactNativeUnity {
              ((ViewGroup) unityPlayer.getParentPlayer()).removeView(frame);
          }
  
@@ -141,12 +141,6 @@ index 5d3401f..2454d63 100644
 +        Log.i(TAG, "[RNUnityDiag] addUnityViewToGroup: reattached + resumed engine (wasPaused="
 +            + _isUnityPaused + ")");
 +        _isUnityPaused = false;
-+
-+        // While paused, Unity can miss rotations from landscape back to portrait.
-+        // Reapplying current orientation and insets avoids stale layout (M2-11215).
-+        final Activity activity = ((Activity) unityPlayer.getContextPlayer());
-+        unityPlayer.configurationChanged(activity.getResources().getConfiguration());
-+        frame.requestApplyInsets();
      }
  
      public interface UnityPlayerCallback {
