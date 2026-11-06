@@ -12,9 +12,10 @@ Applied via [patch-package](https://github.com/ds300/patch-package).
 
 - Prevents Unity events from being coalesced and dropped.
 - Keeps the Unity engine alive across activity mounts.
-- Pauses the Unity engine before moving the Unity view off-screen on Android.
+- Pauses the Unity engine before unmounting or moving the Unity view off-screen on Android.
 - Restores navigation bar and portrait orientation while Unity is paused on Android.
-- Added in pull requests #1155, #1164, #1170, #1193, and #1216.
+- Defines `androidLockOrientation` to lock orientation on Android.
+- Added in pull requests #1155, #1164, #1170, #1193, #1216, and #1225.
 
 ## moti+0.30.0.patch
 

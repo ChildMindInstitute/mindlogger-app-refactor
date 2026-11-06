@@ -1,10 +1,11 @@
 import { FC, useLayoutEffect } from 'react';
-import { UIManager } from 'react-native';
+import { UIManager, useWindowDimensions } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
@@ -24,10 +25,12 @@ export const UnityView: FC<Props> = props => {
   const compiledWithRNUnityView = !!(
     UIManager as never as Record<string, unknown>
   ).RNUnityView;
+  const { width: windowWidth } = useWindowDimensions();
 
   const {
     rnUnityViewRef,
     unityViewKey,
+    lockOrientation,
     isUnityUnresponsive,
     failureMode,
     flowId,
@@ -96,14 +99,23 @@ export const UnityView: FC<Props> = props => {
         testID="merit-unity-view"
         ref={rnUnityViewRef}
         // eslint-disable-next-line react-native/no-inline-styles
-        style={{ flex: 1 }}
+        style={{
+          flex: 1,
+          // Shift offscreen until Reset to avoid flash of previous Unity task
+          transform: [{ translateX: lockOrientation ? windowWidth : 0 }],
+        }}
+        androidLockOrientation={lockOrientation}
         onPlayerUnload={handlePlayerUnload}
         onPlayerQuit={handlePlayerQuit}
         onUnityMessage={result => {
           handleMessageFromUnity(result.nativeEvent.message);
         }}
       />
-      <Spinner withOverlay isVisible={isUnityUnresponsive} />
+      <Spinner
+        withOverlay
+        overlayColor={lockOrientation ? palette.white : undefined}
+        isVisible={lockOrientation || isUnityUnresponsive}
+      />
       {errorModal}
     </>
   );
