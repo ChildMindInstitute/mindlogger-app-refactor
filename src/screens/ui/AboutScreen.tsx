@@ -3,10 +3,14 @@ import { StyleSheet } from 'react-native';
 import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
-import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { APP_VERSION, ENV, MERIT_TAG } from '@app/shared/lib/constants';
+import {
+  APP_VERSION,
+  BUILD_NUMBER,
+  ENV,
+  MERIT_TAG,
+} from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
@@ -63,7 +67,7 @@ export const AboutScreen: FC = () => {
               version: [
                 ENV !== 'production' && ENV?.toUpperCase(),
                 APP_VERSION,
-                `(${DeviceInfo.getBuildNumber()})`,
+                `(${BUILD_NUMBER})`,
               ]
                 .filter(Boolean)
                 .join(' '),
