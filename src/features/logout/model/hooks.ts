@@ -49,8 +49,6 @@ export function useLogout() {
     getDefaultUserInfoRecord().clear();
     getDefaultUserPrivateKeyRecord().clear();
 
-    getDefaultLogger().clearAllLogFiles();
-
     await queryClient.removeQueries(['applets']);
     await queryClient.removeQueries(['events']);
     await queryClient.removeQueries(['activities']);
