@@ -26,7 +26,4 @@ export interface ILogger {
   warn: (message: string, context?: object) => void;
   error: (message: string, context?: object) => void;
   configure: () => void;
-  send: () => Promise<boolean>;
-  cancelSending: () => void;
-  clearAllLogFiles: () => Promise<void>;
 }
