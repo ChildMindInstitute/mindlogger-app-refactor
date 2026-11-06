@@ -5,6 +5,7 @@ import RNUnityView from '@azesmway/react-native-unity';
 
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
@@ -105,7 +106,11 @@ export const UnityView: FC<Props> = props => {
           handleMessageFromUnity(result.nativeEvent.message);
         }}
       />
-      <Spinner withOverlay isVisible={isUnityUnresponsive} />
+      <Spinner
+        withOverlay
+        overlayColor={lockOrientation ? palette.white : undefined}
+        isVisible={lockOrientation || isUnityUnresponsive}
+      />
       {errorModal}
     </>
   );
