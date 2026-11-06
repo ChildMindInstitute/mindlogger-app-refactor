@@ -208,41 +208,38 @@ export function useOnNotificationTap({
     'applet-update-alert': () => {
       navigator.navigate('Applets', undefined, { pop: true });
 
-      refresh()
-        .then(() => {
-          getDefaultNotificationRefreshService().refresh(
-            queryClient,
-            progressions,
-            responseTimes,
-            LogTrigger.ScheduleUpdated,
-          );
-        })
+      refresh().then(() => {
+        getDefaultNotificationRefreshService().refresh(
+          queryClient,
+          progressions,
+          responseTimes,
+          LogTrigger.ScheduleUpdated,
+        );
+      });
     },
     'applet-delete-alert': () => {
       navigator.navigate('Applets', undefined, { pop: true });
 
-      refresh()
-        .then(() => {
-          getDefaultNotificationRefreshService().refresh(
-            queryClient,
-            progressions,
-            responseTimes,
-            LogTrigger.AppletRemoved,
-          );
-        })
+      refresh().then(() => {
+        getDefaultNotificationRefreshService().refresh(
+          queryClient,
+          progressions,
+          responseTimes,
+          LogTrigger.AppletRemoved,
+        );
+      });
     },
     'schedule-updated': () => {
       navigator.navigate('Applets', undefined, { pop: true });
 
-      refresh()
-        .then(() => {
-          getDefaultNotificationRefreshService().refresh(
-            queryClient,
-            progressions,
-            responseTimes,
-            LogTrigger.AppletUpdated,
-          );
-        })
+      refresh().then(() => {
+        getDefaultNotificationRefreshService().refresh(
+          queryClient,
+          progressions,
+          responseTimes,
+          LogTrigger.AppletUpdated,
+        );
+      });
     },
   };
 

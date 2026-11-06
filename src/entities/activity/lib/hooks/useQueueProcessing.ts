@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useForceUpdate } from '@app/shared/lib/hooks/useForceUpdate';
 import { getDefaultChangeQueueObservable } from '@app/shared/lib/observables/changeQueueObservableInstance';
 import { getDefaultUploadObservable } from '@app/shared/lib/observables/uploadObservableInstance';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { getDefaultAnswersQueueService } from '../services/answersQueueServiceInstance';
 import { getDefaultQueueProcessingService } from '../services/queueProcessingServiceInstance';

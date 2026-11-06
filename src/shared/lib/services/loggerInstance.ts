@@ -1,5 +1,3 @@
-import { getDefaultFileService } from '@app/shared/api/services/fileServiceInstance';
-
 import { ConsoleLogger } from './Logger';
 
 let instance: ConsoleLogger;

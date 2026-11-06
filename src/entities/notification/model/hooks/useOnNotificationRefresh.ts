@@ -9,7 +9,6 @@ import {
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { Emitter } from '@app/shared/lib/services/Emitter';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 
 import { getDefaultNotificationRefreshService } from '../notificationRefreshServiceInstance';
 
