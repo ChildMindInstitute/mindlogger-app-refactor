@@ -40,10 +40,6 @@ export const SettingsScreen: FC = () => {
     navigate('ChangePassword');
   };
 
-  const navigateToAppLogs = () => {
-    navigate('ApplicationLogs');
-  };
-
   const hashedDeviceId: string = useMemo(() => {
     const deviceId = getDefaultSystemRecord().getDeviceId()!;
 

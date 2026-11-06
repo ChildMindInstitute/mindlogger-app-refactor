@@ -28,7 +28,6 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   InProgressActivity: EntityPath & { fromActiveAssessmentLink?: boolean };
   ActivityPassedScreen: undefined;
-  ApplicationLogs: undefined;
   Autocompletion: undefined;
 };
 
@@ -47,7 +46,6 @@ export type RootStackNavigationProps =
   | NativeStackNavigationProp<RootStackParamList, 'ChangePassword'>
   | NativeStackNavigationProp<RootStackParamList, 'InProgressActivity'>
   | NativeStackNavigationProp<RootStackParamList, 'ActivityPassedScreen'>
-  | NativeStackNavigationProp<RootStackParamList, 'ApplicationLogs'>
   | NativeStackNavigationProp<RootStackParamList, 'Autocompletion'>;
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
