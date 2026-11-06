@@ -10,6 +10,11 @@ if (!process.env.CI) {
   )
     .toString()
     .trim();
+  // Current date to use as local version number
+  const now = new Date();
+  process.env.VERSION = [now.getFullYear(), now.getMonth() + 1, now.getDate()]
+    .map(n => String(n).padStart(2, '0'))
+    .join('.');
 }
 
 module.exports = {
