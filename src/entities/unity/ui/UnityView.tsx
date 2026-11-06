@@ -1,5 +1,5 @@
 import { FC, useLayoutEffect } from 'react';
-import { UIManager } from 'react-native';
+import { UIManager, useWindowDimensions } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
 
@@ -25,6 +25,7 @@ export const UnityView: FC<Props> = props => {
   const compiledWithRNUnityView = !!(
     UIManager as never as Record<string, unknown>
   ).RNUnityView;
+  const { width: windowWidth } = useWindowDimensions();
 
   const {
     rnUnityViewRef,
@@ -98,7 +99,11 @@ export const UnityView: FC<Props> = props => {
         testID="merit-unity-view"
         ref={rnUnityViewRef}
         // eslint-disable-next-line react-native/no-inline-styles
-        style={{ flex: 1 }}
+        style={{
+          flex: 1,
+          // Shift offscreen until Reset to avoid flash of previous Unity task
+          transform: [{ translateX: lockOrientation ? windowWidth : 0 }],
+        }}
         androidLockOrientation={lockOrientation}
         onPlayerUnload={handlePlayerUnload}
         onPlayerQuit={handlePlayerQuit}
