@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Image } from 'react-native';
 
 import { useTranslation } from 'react-i18next';
+import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { APP_VERSION, ENV, MERIT_TAG } from '@app/shared/lib/constants';
@@ -59,7 +60,13 @@ export const AboutScreen: FC = () => {
             userSelect="text"
           >
             {t('about_app:curious_version', {
-              version: ENV ? `${APP_VERSION} ${ENV}` : APP_VERSION,
+              version: [
+                ENV !== 'production' && ENV?.toUpperCase(),
+                APP_VERSION,
+                `(${DeviceInfo.getBuildNumber()})`,
+              ]
+                .filter(Boolean)
+                .join(' '),
             })}
             {MERIT_TAG
               ? `\n${t('about_app:merit_version', { version: MERIT_TAG })}`
