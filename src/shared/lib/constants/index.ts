@@ -46,6 +46,9 @@ export const DEEP_LINK_PREFIXES = (Config.DEEP_LINK_PREFIXES || '')
 // @ts-ignore
 export const APP_VERSION = process.env.VERSION;
 
+// MERIT build tag set by CI (empty when built without Unity)
+export const MERIT_TAG = Config.MERIT_TAG || '';
+
 export const META_APP_NAME = 'mindlogger-mobile';
 export const ONE_SECOND = 1000;
 export const ONE_MINUTE = ONE_SECOND * 60;
