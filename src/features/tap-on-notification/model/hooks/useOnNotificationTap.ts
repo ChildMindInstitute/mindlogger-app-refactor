@@ -37,6 +37,7 @@ import {
   PushNotificationType,
 } from '@app/entities/notification/lib/types/notifications';
 import { getDefaultNotificationRefreshService } from '@app/entities/notification/model/notificationRefreshServiceInstance';
+import { isUnityTaskOnScreen } from '@app/entities/unity/lib/hook/useUnityLifecycle';
 import { checkEntityAvailability } from '@app/screens/model/checkEntityAvailability';
 import { getDefaultAppletsService } from '@app/shared/api/services/appletsServiceInstance';
 import { LogTrigger } from '@app/shared/api/services/INotificationService';
@@ -428,6 +429,13 @@ export function useOnNotificationTap({
 
   const handleWithPostponer = useCallback(
     (notificationDetail: LocalEventDetail | LocalInitialNotification) => {
+      if (isUnityTaskOnScreen()) {
+        getDefaultLogger().log(
+          '[useOnNotificationTap]: Notification tap ignored as a Unity task is in progress (M2-11217)',
+        );
+        return;
+      }
+
       const postponer = postponerRef.current;
 
       postponer.reset();

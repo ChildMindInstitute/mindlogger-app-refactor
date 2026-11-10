@@ -429,17 +429,18 @@ export function ActivityStepper({
                         // TODO
                         // pipelineItem.type cannot be accepted as a valid type for some reason.
                         <ActivityItem
+                          step={index}
                           type={pipelineItem.type}
                           value={value}
                           pipelineItem={pipelineItem}
                           onResponse={response => {
-                            setAnswer(currentStep, response);
+                            setAnswer(index, response);
                             if (shouldPostProcessUserActions) {
                               postProcessUserActionsForCurrentItem();
                             }
                           }}
                           onAdditionalResponse={response => {
-                            setAdditionalAnswer(currentStep, response);
+                            setAdditionalAnswer(index, response);
                           }}
                           textVariableReplacer={replaceTextVariables}
                           onContextChange={setContext}

@@ -8,6 +8,8 @@ type JsonValue =
 
 export type TranslationFinding =
   | { type: 'missing-key'; language: string; key: string }
+  | { type: 'empty-value'; language: string; key: string }
+  | { type: 'same-as-reference'; language: string; key: string }
   | {
       type: 'malformed-list';
       language: string;
@@ -36,21 +38,25 @@ const flattenStrings = (
   }
 };
 
-// Reports keys missing in a language and list values whose segment count diverges from the reference.
+export const flattenTranslationStrings = (value: JsonValue) => {
+  const strings = new Map<string, string>();
+  flattenStrings(value, '', strings);
+  return strings;
+};
+
+// Reports missing, empty, identical, and malformed list translations.
 export const validateTranslations = (
   resources: Record<string, JsonValue>,
   referenceLanguage: string,
 ): TranslationFinding[] => {
   const findings: TranslationFinding[] = [];
 
-  const reference = new Map<string, string>();
-  flattenStrings(resources[referenceLanguage], '', reference);
+  const reference = flattenTranslationStrings(resources[referenceLanguage]);
 
   for (const [language, tree] of Object.entries(resources)) {
     if (language === referenceLanguage) continue;
 
-    const current = new Map<string, string>();
-    flattenStrings(tree, '', current);
+    const current = flattenTranslationStrings(tree);
 
     for (const [key, referenceValue] of reference) {
       const value = current.get(key);
@@ -58,6 +64,12 @@ export const validateTranslations = (
       if (value === undefined) {
         findings.push({ type: 'missing-key', language, key });
         continue;
+      }
+
+      if (value.trim() === '') {
+        findings.push({ type: 'empty-value', language, key });
+      } else if (value === referenceValue) {
+        findings.push({ type: 'same-as-reference', language, key });
       }
 
       if (referenceValue.includes(LIST_DELIMITER)) {

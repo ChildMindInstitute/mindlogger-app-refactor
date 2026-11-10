@@ -27,7 +27,10 @@ import { Dimensions } from '@app/shared/lib/types/space';
 import { wait } from '@app/shared/lib/utils/common';
 import { Box } from '@app/shared/ui/base';
 import { ScrollableContent } from '@app/shared/ui/ScrollableContent';
-import { HandlersContext } from '@app/shared/ui/Stepper/contexts';
+import {
+  HandlersContext,
+  ValuesContext,
+} from '@app/shared/ui/Stepper/contexts';
 import { AudioRecorderItem } from '@app/shared/ui/survey/AudioRecorderItem';
 import { AudioStimulusItem } from '@app/shared/ui/survey/AudioStimulusItem';
 import { CheckBoxActivityItem } from '@app/shared/ui/survey/CheckBox/CheckBoxActivity.item';
@@ -59,6 +62,7 @@ import { mapStreamEventToDto } from '../model/streamEventMapper';
 
 type Props = ActivityItemProps &
   PipelineItemAnswer & {
+    step: number;
     onResponse: (response: PipelineItemResponse) => void;
     onAdditionalResponse: (response: string) => void;
     textVariableReplacer: (markdown: string) => string;
@@ -69,6 +73,7 @@ type Props = ActivityItemProps &
   };
 
 export function ActivityItem({
+  step,
   type,
   value,
   pipelineItem,
@@ -114,6 +119,8 @@ export function ActivityItem({
 
   const { next } = useContext(HandlersContext);
 
+  const { getCurrentStep } = useContext(ValuesContext);
+
   const stopScrolling = () => setScrollEnabled(false);
 
   const releaseScrolling = () => setScrollEnabled(true);
@@ -126,10 +133,10 @@ export function ActivityItem({
 
     if (!pipelineItem.additionalText?.required && !autoAdvanceDisabled) {
       setImmediate(() =>
-        next({ isForced: true, shouldAutoSubmit: shouldAutoSubmit }),
+        next({ isForced: true, shouldAutoSubmit, fromStep: step }),
       );
     }
-  }, [next, pipelineItem]);
+  }, [next, pipelineItem, step]);
 
   const handleStabilityTrackerComplete = useCallback<
     ComponentProps<typeof StabilityTracker>['onComplete']
@@ -154,10 +161,18 @@ export function ActivityItem({
   >(
     async radioValue => {
       await wait(100);
+
+      // The stepper may have moved on during the delay (e.g. a double tap on
+      // an auto-advancing item). Drop the late tap so it can't answer or skip
+      // the item now shown (M2-11199)
+      if (getCurrentStep() !== step) {
+        return;
+      }
+
       onResponse(radioValue);
       moveToNextItem();
     },
-    [moveToNextItem, onResponse],
+    [getCurrentStep, moveToNextItem, onResponse, step],
   );
 
   const handleUnityComplete = useCallback(

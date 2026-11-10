@@ -49,7 +49,15 @@ const unityRuntimeState = {
   engineAlive: false,
   // True if Unity already quit earlier in this process
   quitInProcess: false,
+  // True while the Unity screen is mounted
+  viewMounted: false,
 };
+
+// True while the Unity screen is mounted, i.e. the user has started a Unity
+// task. Leaving Unity mid-task (e.g. tapping a notification) leaves its old
+// frame on screen on Android (M2-11216, M2-11217), so callers should not
+// navigate away while this is true.
+export const isUnityTaskOnScreen = () => unityRuntimeState.viewMounted;
 
 type UseUnityLifecycleOptions = {
   payloadFile: string | null | undefined;
@@ -462,6 +470,13 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       startHeartbeat();
     }
   }, [logger, startHeartbeat, unityViewKey]);
+
+  useEffect(() => {
+    unityRuntimeState.viewMounted = true;
+    return () => {
+      unityRuntimeState.viewMounted = false;
+    };
+  }, []);
 
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {

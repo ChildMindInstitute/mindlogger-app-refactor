@@ -11390,6 +11390,10 @@ xcode@^3.0.1:
     simple-plist "^1.1.0"
     uuid "^7.0.3"
 
+"xlsx@https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz":
+  version "0.20.3"
+  resolved "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz#992725af0bb69fa9733590fcb8ab4a57e10b929b"
+
 xml-naming@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/xml-naming/-/xml-naming-0.1.0.tgz"
