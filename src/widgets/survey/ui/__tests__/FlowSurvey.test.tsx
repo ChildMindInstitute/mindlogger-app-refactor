@@ -8,16 +8,27 @@ import { FlowSurvey } from '../FlowSurvey';
 
 // Stands in for a screen inside the activity, e.g. Unity, that subscribes.
 const mockTimeIsUpListener = jest.fn();
+let mockSetWaiting: (isWaiting: boolean) => void = () => {};
 jest.mock('../FlowElementSwitch', () => ({
   FlowElementSwitch: () => {
-    const { onTimeIsUp } = useActivityTimer();
+    const { onTimeIsUp, setWaiting } = useActivityTimer();
+    mockSetWaiting = setWaiting;
     useEffect(() => onTimeIsUp(mockTimeIsUpListener), [onTimeIsUp]);
     return null;
   },
 }));
 
+type TimeIsUpModalProps = {
+  onSubmit: () => void;
+  onShow?: () => void;
+  isLoading?: boolean;
+};
+let mockTimeIsUpModalProps: TimeIsUpModalProps | undefined;
 jest.mock('../TimeIsUpModal', () => ({
-  TimeIsUpModal: () => null,
+  TimeIsUpModal: (props: TimeIsUpModalProps) => {
+    mockTimeIsUpModalProps = props;
+    return null;
+  },
 }));
 
 let mockFinishEventTimer: () => void = () => {};
@@ -35,13 +46,14 @@ jest.mock('../../model/hooks/useAvailabilityTimer', () => ({
 }));
 
 const mockCanBeCompletedByTimer = jest.fn(() => true);
+const mockCompleteByTimer = jest.fn();
 jest.mock('../../model/hooks/useFlowStateActions', () => ({
   useFlowStateActions: () => ({
     next: jest.fn(),
     skipToStep: jest.fn(),
     back: jest.fn(),
     idleTimeoutNext: jest.fn(),
-    completeByTimer: jest.fn(),
+    completeByTimer: mockCompleteByTimer,
     clearFlowStorageRecord: jest.fn(),
     canBeCompletedByTimer: mockCanBeCompletedByTimer,
   }),
@@ -91,20 +103,30 @@ describe('FlowSurvey time is up (M2-10888)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockCanBeCompletedByTimer.mockReturnValue(true);
+    mockTimeIsUpModalProps = undefined;
   });
 
-  test('notifies subscribers when the schedule window ends', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test('notifies subscribers once the popup is showing after the schedule window ends', () => {
     renderFlowSurvey();
 
     act(() => mockFinishAvailabilityTimer());
+    // Not before the popup is on screen.
+    expect(mockTimeIsUpListener).not.toHaveBeenCalled();
+
+    act(() => mockTimeIsUpModalProps?.onShow?.());
 
     expect(mockTimeIsUpListener).toHaveBeenCalledTimes(1);
   });
 
-  test("notifies subscribers when the activity's time limit runs out", () => {
+  test("notifies subscribers once the popup is showing after the activity's time limit runs out", () => {
     renderFlowSurvey();
 
     act(() => mockFinishEventTimer());
+    act(() => mockTimeIsUpModalProps?.onShow?.());
 
     expect(mockTimeIsUpListener).toHaveBeenCalledTimes(1);
   });
@@ -115,6 +137,33 @@ describe('FlowSurvey time is up (M2-10888)', () => {
 
     act(() => mockFinishAvailabilityTimer());
 
+    // The popup never shows, so nobody is told.
+    expect(mockTimeIsUpModalProps).toBeUndefined();
     expect(mockTimeIsUpListener).not.toHaveBeenCalled();
+  });
+
+  test('OK submits right away when nothing is still saving', () => {
+    renderFlowSurvey();
+    act(() => mockFinishAvailabilityTimer());
+
+    act(() => mockTimeIsUpModalProps?.onSubmit());
+
+    expect(mockCompleteByTimer).toHaveBeenCalledWith('availability');
+  });
+
+  test('OK waits while a screen is still saving, then submits', () => {
+    renderFlowSurvey();
+    act(() => mockFinishAvailabilityTimer());
+    act(() => mockSetWaiting(true));
+
+    act(() => mockTimeIsUpModalProps?.onSubmit());
+
+    // Still saving: the OK button spins and nothing is submitted yet.
+    expect(mockTimeIsUpModalProps?.isLoading).toBe(true);
+    expect(mockCompleteByTimer).not.toHaveBeenCalled();
+
+    act(() => mockSetWaiting(false));
+
+    expect(mockCompleteByTimer).toHaveBeenCalledWith('availability');
   });
 });

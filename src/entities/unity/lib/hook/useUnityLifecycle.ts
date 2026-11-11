@@ -75,7 +75,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const logger: ILogger = getDefaultLogger();
   const { flowId } = useContext(ActivityIdentityContext);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { onTimeIsUp } = useActivityTimer();
+  const { onTimeIsUp, setWaiting } = useActivityTimer();
 
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const quitObservedInThisMountRef = useRef<boolean>(false);
@@ -374,21 +374,27 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   // Tell MERIT to end its task when the activity's time is up, from either the
   // schedule window or the activity's own time limit (M2-10888).
-  useEffect(
-    () =>
-      onTimeIsUp(() => {
-        if (!unityRuntimeState.taskInProgress) {
-          return;
-        }
-        logger.log('[UnityView] Time is up, sending Notification_EndMerit');
-        sendMessageToUnityRef
-          .current({ m_sId: uuidv4(), m_sKey: 'Notification_EndMerit' })
-          .catch((err: unknown) => {
-            logger.error(`[UnityView] Notification_EndMerit failed: ${err}`);
-          });
-      }),
-    [onTimeIsUp, logger],
-  );
+  useEffect(() => {
+    const unsubscribe = onTimeIsUp(() => {
+      if (!unityRuntimeState.taskInProgress) {
+        return;
+      }
+      logger.log('[UnityView] Time is up, sending Notification_EndMerit');
+      // Hold the activity's submit until MERIT has sent back its results.
+      setWaiting(true);
+      sendMessageToUnityRef
+        .current({ m_sId: uuidv4(), m_sKey: 'Notification_EndMerit' })
+        .catch((err: unknown) => {
+          logger.error(`[UnityView] Notification_EndMerit failed: ${err}`);
+          setWaiting(false);
+        });
+    });
+    return () => {
+      unsubscribe();
+      // Nothing more will come from MERIT once this screen is gone.
+      setWaiting(false);
+    };
+  }, [onTimeIsUp, setWaiting, logger]);
 
   // Collect and return exported files now that the Unity task is done
   // Unity resets itself before sending EndUnity, so no need to send a Reset message
@@ -420,8 +426,11 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       });
     } catch (err) {
       logger.error(`[UnityView] EndUnity handler failed: ${err}`);
+    } finally {
+      // MERIT's results are in, so a pending time-up submit can go ahead.
+      setWaiting(false);
     }
-  }, [logger, onResponse, stopHeartbeat]);
+  }, [logger, onResponse, stopHeartbeat, setWaiting]);
   useEffect(() => {
     registerEventHandler(UnityEventEndUnity, handleEndUnity);
   }, [handleEndUnity, registerEventHandler]);

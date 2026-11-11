@@ -213,6 +213,7 @@ describe('useUnityLifecycle stale frame cover (M2-11244)', () => {
 
 // Stands in for FlowSurvey: holds the time-is-up listeners and fires them.
 const timeIsUpListeners = new Set<() => void>();
+const mockSetWaiting = jest.fn<void, [boolean]>();
 const activityTimer = {
   onTimeIsUp: (listener: () => void) => {
     timeIsUpListeners.add(listener);
@@ -220,12 +221,15 @@ const activityTimer = {
       timeIsUpListeners.delete(listener);
     };
   },
+  setWaiting: mockSetWaiting,
 };
 const fireTimeIsUp = () => {
   act(() => {
     timeIsUpListeners.forEach(listener => listener());
   });
 };
+// Whether the Unity screen is currently holding the activity's submit.
+const isHoldingSubmit = () => mockSetWaiting.mock.calls.at(-1)?.[0] === true;
 const activityTimerWrapper = ({ children }: PropsWithChildren) =>
   createElement(
     ActivityTimerContext.Provider,
@@ -283,5 +287,37 @@ describe('useUnityLifecycle time is up (M2-10888)', () => {
     unmount();
 
     expect(timeIsUpListeners.size).toBe(0);
+  });
+
+  test('holds the submit until MERIT sends back its results', async () => {
+    renderLifecycle({ wrapper: activityTimerWrapper });
+    act(() => {
+      mockHandlers.UnityStarted({ m_sKey: 'UnityStarted' });
+    });
+    await flushPromises();
+
+    fireTimeIsUp();
+    expect(isHoldingSubmit()).toBe(true);
+
+    act(() => {
+      mockHandlers.EndUnity({ m_sKey: 'EndUnity' });
+    });
+
+    expect(isHoldingSubmit()).toBe(false);
+  });
+
+  test('stops holding the submit if the Unity screen closes first', async () => {
+    const { unmount } = renderLifecycle({ wrapper: activityTimerWrapper });
+    act(() => {
+      mockHandlers.UnityStarted({ m_sKey: 'UnityStarted' });
+    });
+    await flushPromises();
+
+    fireTimeIsUp();
+    expect(isHoldingSubmit()).toBe(true);
+
+    unmount();
+
+    expect(isHoldingSubmit()).toBe(false);
   });
 });

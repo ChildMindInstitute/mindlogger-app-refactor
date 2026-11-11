@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
@@ -60,6 +60,10 @@ export function FlowSurvey({
   // Unity (M2-10888).
   const timeIsUpListeners = useRef(new Set<() => void>()).current;
 
+  // True while a screen like Unity is still saving its work after time is up.
+  const [isWaiting, setWaiting] = useState(false);
+  const [isOkTapped, setIsOkTapped] = useState(false);
+
   // Stable, so subscribers never re-render because of it.
   const activityTimer = useMemo(
     () => ({
@@ -69,6 +73,7 @@ export function FlowSurvey({
           timeIsUpListeners.delete(listener);
         };
       },
+      setWaiting,
     }),
     [timeIsUpListeners],
   );
@@ -78,7 +83,6 @@ export function FlowSurvey({
       if (!canBeCompletedByTimer()) {
         return;
       }
-      timeIsUpListeners.forEach(listener => listener());
       setAutocompletionTimerType(timerType);
       setTimeIsUpModalVisible(true);
     },
@@ -86,14 +90,25 @@ export function FlowSurvey({
       setAutocompletionTimerType,
       setTimeIsUpModalVisible,
       canBeCompletedByTimer,
-      timeIsUpListeners,
     ],
   );
 
-  const onSubmitTimeUpModal = useCallback(() => {
-    setTimeIsUpModalVisible(false);
-    completeByTimer(autocompletionTimerType!);
-  }, [autocompletionTimerType, completeByTimer]);
+  // Let subscribers like Unity know only once the popup is on screen, so it
+  // covers whatever they show while wrapping up.
+  const onTimeIsUpModalShow = useCallback(() => {
+    timeIsUpListeners.forEach(listener => listener());
+  }, [timeIsUpListeners]);
+
+  const onSubmitTimeUpModal = useCallback(() => setIsOkTapped(true), []);
+
+  // Submit once OK is tapped and nothing is still saving.
+  useEffect(() => {
+    if (isOkTapped && !isWaiting) {
+      setIsOkTapped(false);
+      setTimeIsUpModalVisible(false);
+      completeByTimer(autocompletionTimerType!);
+    }
+  }, [isOkTapped, isWaiting, autocompletionTimerType, completeByTimer]);
 
   const event = useScheduledEvent({ appletId, eventId })!;
 
@@ -179,7 +194,13 @@ export function FlowSurvey({
 
   return (
     <ActivityTimerContext.Provider value={activityTimer}>
-      {timeIsUpModalVisible && <TimeIsUpModal onSubmit={onSubmitTimeUpModal} />}
+      {timeIsUpModalVisible && (
+        <TimeIsUpModal
+          onSubmit={onSubmitTimeUpModal}
+          onShow={onTimeIsUpModalShow}
+          isLoading={isOkTapped}
+        />
+      )}
       <FlowElementSwitch
         {...flowPipelineItem}
         event={event}
