@@ -11,6 +11,7 @@ import RNOrientationDirector, {
 import { v4 as uuidv4 } from 'uuid';
 
 import { ActivityIdentityContext } from '@app/features/pass-survey/lib/contexts/ActivityIdentityContext';
+import { useActivityTimer } from '@app/features/pass-survey/lib/contexts/ActivityTimerContext';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { ILogger } from '@app/shared/lib/types/logger';
 import {
@@ -74,6 +75,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const logger: ILogger = getDefaultLogger();
   const { flowId } = useContext(ActivityIdentityContext);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const { onTimeIsUp } = useActivityTimer();
 
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const quitObservedInThisMountRef = useRef<boolean>(false);
@@ -369,6 +371,24 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
       clearTimeout(handshakeTimer);
     };
   }, [logger, unityViewKey]);
+
+  // Tell MERIT to end its task when the activity's time is up, from either the
+  // schedule window or the activity's own time limit (M2-10888).
+  useEffect(
+    () =>
+      onTimeIsUp(() => {
+        if (!unityRuntimeState.taskInProgress) {
+          return;
+        }
+        logger.log('[UnityView] Time is up, sending Notification_EndMerit');
+        sendMessageToUnityRef
+          .current({ m_sId: uuidv4(), m_sKey: 'Notification_EndMerit' })
+          .catch((err: unknown) => {
+            logger.error(`[UnityView] Notification_EndMerit failed: ${err}`);
+          });
+      }),
+    [onTimeIsUp, logger],
+  );
 
   // Collect and return exported files now that the Unity task is done
   // Unity resets itself before sending EndUnity, so no need to send a Reset message

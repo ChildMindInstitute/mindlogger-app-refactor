@@ -1,9 +1,10 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { EntityPath } from '@app/abstract/lib/types/entity';
 import { EntityProgressionInProgress } from '@app/abstract/lib/types/entityProgress';
 import { useInProgressRecord } from '@app/entities/applet/model/hooks/useInProgressRecord';
 import { useScheduledEvent } from '@app/entities/event/model/hooks/useEvent';
+import { ActivityTimerContext } from '@app/features/pass-survey/lib/contexts/ActivityTimerContext';
 
 import { FlowElementSwitch } from './FlowElementSwitch';
 import { TimeIsUpModal } from './TimeIsUpModal';
@@ -55,11 +56,29 @@ export function FlowSurvey({
     targetSubjectId,
   });
 
+  // Screens inside the activity that need to react when time is up, e.g.
+  // Unity (M2-10888).
+  const timeIsUpListeners = useRef(new Set<() => void>()).current;
+
+  // Stable, so subscribers never re-render because of it.
+  const activityTimer = useMemo(
+    () => ({
+      onTimeIsUp: (listener: () => void) => {
+        timeIsUpListeners.add(listener);
+        return () => {
+          timeIsUpListeners.delete(listener);
+        };
+      },
+    }),
+    [timeIsUpListeners],
+  );
+
   const onTimeIsUp = useCallback(
     (timerType: TimerType) => {
       if (!canBeCompletedByTimer()) {
         return;
       }
+      timeIsUpListeners.forEach(listener => listener());
       setAutocompletionTimerType(timerType);
       setTimeIsUpModalVisible(true);
     },
@@ -67,6 +86,7 @@ export function FlowSurvey({
       setAutocompletionTimerType,
       setTimeIsUpModalVisible,
       canBeCompletedByTimer,
+      timeIsUpListeners,
     ],
   );
 
@@ -158,7 +178,7 @@ export function FlowSurvey({
   });
 
   return (
-    <>
+    <ActivityTimerContext.Provider value={activityTimer}>
       {timeIsUpModalVisible && <TimeIsUpModal onSubmit={onSubmitTimeUpModal} />}
       <FlowElementSwitch
         {...flowPipelineItem}
@@ -173,6 +193,6 @@ export function FlowSurvey({
         nextActivityName={nextActivityName}
         onSkipActivity={skipToNextActivity}
       />
-    </>
+    </ActivityTimerContext.Provider>
   );
 }

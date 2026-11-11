@@ -1,4 +1,8 @@
+import { createElement, PropsWithChildren } from 'react';
+
 import { renderHook, act } from '@testing-library/react-native';
+
+import { ActivityTimerContext } from '@app/features/pass-survey/lib/contexts/ActivityTimerContext';
 
 import {
   CONFIG_LOAD_TIMEOUT_MS,
@@ -89,13 +93,15 @@ const advance = async (ms: number) => {
   await flushPromises();
 };
 
-const renderLifecycle = () =>
-  renderHook(() =>
-    useUnityLifecycle({
-      payloadFile: 'config.json',
-      onResponse: jest.fn(),
-      onError: jest.fn(),
-    }),
+const renderLifecycle = (options?: Parameters<typeof renderHook>[1]) =>
+  renderHook(
+    () =>
+      useUnityLifecycle({
+        payloadFile: 'config.json',
+        onResponse: jest.fn(),
+        onError: jest.fn(),
+      }),
+    options,
   );
 
 // Unity's engine state outlives the hook, so put it back to "never booted".
@@ -202,5 +208,80 @@ describe('useUnityLifecycle stale frame cover (M2-11244)', () => {
 
     expect(result.current.showErrorModal).toBe(true);
     expect(result.current.isStaleFrameCovered).toBe(true);
+  });
+});
+
+// Stands in for FlowSurvey: holds the time-is-up listeners and fires them.
+const timeIsUpListeners = new Set<() => void>();
+const activityTimer = {
+  onTimeIsUp: (listener: () => void) => {
+    timeIsUpListeners.add(listener);
+    return () => {
+      timeIsUpListeners.delete(listener);
+    };
+  },
+};
+const fireTimeIsUp = () => {
+  act(() => {
+    timeIsUpListeners.forEach(listener => listener());
+  });
+};
+const activityTimerWrapper = ({ children }: PropsWithChildren) =>
+  createElement(
+    ActivityTimerContext.Provider,
+    { value: activityTimer },
+    children,
+  );
+
+const sentKeys = () =>
+  (mockSendMessageToUnity.mock.calls as [RN2UMessage][]).map(
+    ([message]) => message.m_sKey,
+  );
+
+describe('useUnityLifecycle time is up (M2-10888)', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+    configResponse = 'ack';
+    mockSendMessageToUnity.mockImplementation(respondLikeUnity);
+    resetEngine();
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test('sends Notification_EndMerit when time is up during a task', async () => {
+    renderLifecycle({ wrapper: activityTimerWrapper });
+    // Unity boots and the task config is acknowledged.
+    act(() => {
+      mockHandlers.UnityStarted({ m_sKey: 'UnityStarted' });
+    });
+    await flushPromises();
+
+    fireTimeIsUp();
+
+    expect(sentKeys()).toContain('Notification_EndMerit');
+  });
+
+  test('does nothing when no task has been started yet', () => {
+    renderLifecycle({ wrapper: activityTimerWrapper });
+
+    fireTimeIsUp();
+
+    expect(sentKeys()).not.toContain('Notification_EndMerit');
+  });
+
+  test('stops listening once the Unity screen unmounts', async () => {
+    const { unmount } = renderLifecycle({ wrapper: activityTimerWrapper });
+    act(() => {
+      mockHandlers.UnityStarted({ m_sKey: 'UnityStarted' });
+    });
+    await flushPromises();
+    expect(timeIsUpListeners.size).toBe(1);
+
+    unmount();
+
+    expect(timeIsUpListeners.size).toBe(0);
   });
 });
