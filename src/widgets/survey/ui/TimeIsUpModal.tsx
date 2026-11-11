@@ -18,13 +18,15 @@ const styles = StyleSheet.create({
 
 type Props = {
   onSubmit: () => void;
+  onShow?: () => void;
+  isLoading?: boolean;
 };
 
-export function TimeIsUpModal({ onSubmit }: Props) {
+export function TimeIsUpModal({ onSubmit, onShow, isLoading }: Props) {
   const { t } = useTranslation();
 
   return (
-    <Modal animationType="fade" transparent>
+    <Modal animationType="fade" transparent onShow={onShow}>
       <GestureHandlerRootView style={styles.root}>
         <Box flex={1} bg="$on_surface_alpha30" ai="center" jc="center">
           <Center>
@@ -40,7 +42,11 @@ export function TimeIsUpModal({ onSubmit }: Props) {
               </Text>
               <Text>{t('autocompletion:time_is_up_modal_description')}</Text>
               <Box alignItems="flex-end">
-                <SubmitButton mode="primary" onPress={onSubmit}>
+                <SubmitButton
+                  mode="primary"
+                  onPress={onSubmit}
+                  isLoading={isLoading}
+                >
                   {t('autocompletion:ok')}
                 </SubmitButton>
               </Box>

@@ -60,13 +60,15 @@ export const UnityCommandReset = 'Reset';
 export const UnityCommandLoadConfigFile = 'LoadConfigFile';
 export const UnityCommandLoadConfigFromJson = 'LoadConfigFromJson';
 export const UnityCommandDataExportReceived = 'DataExportReceived';
+export const UnityCommandNotificationEndMerit = 'Notification_EndMerit';
 
 export type UnityCommand =
   | typeof UnityCommandEcho
   | typeof UnityCommandReset
   | typeof UnityCommandLoadConfigFile
   | typeof UnityCommandLoadConfigFromJson
-  | typeof UnityCommandDataExportReceived;
+  | typeof UnityCommandDataExportReceived
+  | typeof UnityCommandNotificationEndMerit;
 
 type RN2UMessageBase<TUnityCommand extends UnityCommand> = {
   m_sId: string;
@@ -90,9 +92,14 @@ export type RN2UMessageDataExportReceived = RN2UMessageBase<
   typeof UnityCommandDataExportReceived
 >;
 
+export type RN2UMessageNotificationEndMerit = RN2UMessageBase<
+  typeof UnityCommandNotificationEndMerit
+>;
+
 export type RN2UMessage =
   | RN2UMessageEcho
   | RN2UMessageReset
   | RN2UMessageLoadConfigFile
   | RN2UMessageLoadConfigFromJson
-  | RN2UMessageDataExportReceived;
+  | RN2UMessageDataExportReceived
+  | RN2UMessageNotificationEndMerit;
