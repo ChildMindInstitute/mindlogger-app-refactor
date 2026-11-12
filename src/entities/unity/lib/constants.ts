@@ -19,6 +19,11 @@ export const CONFIG_LOAD_TIMEOUT_MS = 30000;
 // already-running engine (ms). Covers the native reattach and resume.
 export const REMOUNT_RESET_DELAY_MS = 300;
 
+// Longest to wait for the screen's slide-in to finish before attaching to a
+// kept-alive engine that still holds a previous task's frame (ms). Covers the
+// case where no screen transition is running.
+export const REMOUNT_TRANSITION_WAIT_MS = 1000;
+
 // How long to wait for Unity to acknowledge the remount `Reset` before driving
 // the handshake anyway (ms). Covers restarting after a Unity error.
 export const REMOUNT_RESET_ACK_TIMEOUT_MS = 10000;

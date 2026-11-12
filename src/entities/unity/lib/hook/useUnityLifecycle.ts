@@ -2,6 +2,8 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 
 import RNUnityView from '@azesmway/react-native-unity';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as mime from 'react-native-mime-types';
 import RNOrientationDirector, {
   Orientation,
@@ -29,6 +31,7 @@ import {
   REMOUNT_HANDSHAKE_DELAY_MS,
   REMOUNT_RESET_DELAY_MS,
   REMOUNT_RESET_ACK_TIMEOUT_MS,
+  REMOUNT_TRANSITION_WAIT_MS,
   STARTUP_TIMEOUT_MS,
 } from '../constants';
 import {
@@ -70,6 +73,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
   const logger: ILogger = getDefaultLogger();
   const { flowId } = useContext(ActivityIdentityContext);
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const rnUnityViewRef = useRef<RNUnityView | null>(null);
   const quitObservedInThisMountRef = useRef<boolean>(false);
@@ -80,6 +84,12 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   const configLoadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [unityViewKey, setUnityViewKey] = useState<string | null>(null);
   const [isUnityUnresponsive, setIsUnityUnresponsive] = useState(false);
+  // Remounting onto the kept-alive engine after a task was left mid-run shows
+  // that task's last frame until Unity resets and loads the new config, so
+  // cover the view until then (M2-11244).
+  const [isStaleFrameCovered, setIsStaleFrameCovered] = useState(
+    () => unityRuntimeState.engineAlive && unityRuntimeState.taskInProgress,
+  );
   const [failureMode, setFailureMode] = useState<UnityFailureMode>('quit');
   const { sendMessageToUnity, registerEventHandler, handleMessageFromUnity } =
     useRNUnityCommBridge({ rnUnityViewRef });
@@ -191,6 +201,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
         configLoadTimerRef.current = null;
       }
       setFailureMode('quit');
+      // Unity has loaded the new task, so the old frame is gone.
+      setIsStaleFrameCovered(false);
     } catch (err) {
       logger.error(`[UnityView] LoadConfigFile FAILED: ${err}`);
       if (loadConfigRunRef.current === runId) {
@@ -481,9 +493,36 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
   // IMPORTANT: DO NOT use this effect for anything else!
   useEffect(() => {
     // Mount the Unity view with a fresh key so it fully reinitializes.
-    const key = uuidv4();
-    logger.log(`[UnityView] Mounting Unity view (key=${key})`);
-    setUnityViewKey(key);
+    const mountUnityView = () => {
+      const key = uuidv4();
+      logger.log(`[UnityView] Mounting Unity view (key=${key})`);
+      setUnityViewKey(key);
+    };
+
+    // Unity draws on its own surface, which ignores the screen's slide-in fade,
+    // so a kept-alive engine still holding a previous task's frame shows it
+    // during the transition. Attach only once the slide-in has finished
+    // (M2-11244).
+    let removeTransitionListener: (() => void) | undefined;
+    let transitionWaitTimer: ReturnType<typeof setTimeout> | undefined;
+    if (isStaleFrameCovered) {
+      const mountOnce = () => {
+        removeTransitionListener?.();
+        clearTimeout(transitionWaitTimer);
+        mountUnityView();
+      };
+      removeTransitionListener = navigation.addListener('transitionEnd', e => {
+        // Ignore the screen sliding away, e.g. the user backing out.
+        if (!e.data.closing) {
+          mountOnce();
+        }
+      });
+      // No transition may be running, e.g. Unity is a later item in the
+      // activity, so don't wait for one forever.
+      transitionWaitTimer = setTimeout(mountOnce, REMOUNT_TRANSITION_WAIT_MS);
+    } else {
+      mountUnityView();
+    }
 
     // Surface the error modal if Unity does not start in time.
     startupTimerRef.current = setTimeout(() => {
@@ -499,6 +538,8 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
 
     return () => {
       logger.log('[UnityView] Unmounting Unity view');
+      removeTransitionListener?.();
+      clearTimeout(transitionWaitTimer);
       loadConfigRunRef.current++;
       suppressErrors();
       stopHeartbeat();
@@ -545,6 +586,7 @@ export const useUnityLifecycle = (options: UseUnityLifecycleOptions) => {
     rnUnityViewRef,
     unityViewKey,
     isUnityUnresponsive,
+    isStaleFrameCovered,
     failureMode,
     flowId,
     showErrorModal,

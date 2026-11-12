@@ -5,6 +5,7 @@ import RNUnityView from '@azesmway/react-native-unity';
 
 import { bannerActions } from '@app/entities/banner/model/slice';
 import { UnityPipelineItem } from '@app/features/pass-survey/lib/types/payload';
+import { palette } from '@app/shared/lib/constants/palette';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
@@ -29,6 +30,7 @@ export const UnityView: FC<Props> = props => {
     rnUnityViewRef,
     unityViewKey,
     isUnityUnresponsive,
+    isStaleFrameCovered,
     failureMode,
     flowId,
     showErrorModal,
@@ -43,6 +45,15 @@ export const UnityView: FC<Props> = props => {
     onResponse: props.onResponse,
     onError: props.onError,
   });
+
+  // Opaque, so a previous task's last frame can't show through (M2-11244).
+  const staleFrameCover = (
+    <Spinner
+      withOverlay
+      isVisible={isStaleFrameCovered}
+      overlayColor={palette.surface}
+    />
+  );
 
   const errorModal = (
     <UnityErrorModal
@@ -77,7 +88,14 @@ export const UnityView: FC<Props> = props => {
   }
 
   if (!unityViewKey) {
-    return errorModal;
+    // No Unity view yet: first render, restarting, or waiting to attach to the
+    // kept-alive engine (M2-11244).
+    return (
+      <>
+        {staleFrameCover}
+        {errorModal}
+      </>
+    );
   }
 
   if (isQuitBeforeMount) {
@@ -103,6 +121,7 @@ export const UnityView: FC<Props> = props => {
           handleMessageFromUnity(result.nativeEvent.message);
         }}
       />
+      {staleFrameCover}
       <Spinner withOverlay isVisible={isUnityUnresponsive} />
       {errorModal}
     </>
