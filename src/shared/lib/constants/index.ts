@@ -1,7 +1,11 @@
 import { Platform, Dimensions } from 'react-native';
 
 import Config from 'react-native-config';
-import { getSystemVersion, isTablet } from 'react-native-device-info';
+import {
+  getBuildNumber,
+  getSystemVersion,
+  isTablet,
+} from 'react-native-device-info';
 import { CameraOptions, ImageLibraryOptions } from 'react-native-image-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 
@@ -45,6 +49,13 @@ export const DEEP_LINK_PREFIXES = (Config.DEEP_LINK_PREFIXES || '')
 
 // @ts-ignore
 export const APP_VERSION = process.env.VERSION;
+
+// Git revision on local builds, native build number on CI
+export const BUILD_NUMBER: string =
+  process.env.GIT_REVISION || getBuildNumber();
+
+// MERIT build tag set by CI (empty when built without Unity)
+export const MERIT_TAG = Config.MERIT_TAG || '';
 
 export const META_APP_NAME = 'mindlogger-mobile';
 export const ONE_SECOND = 1000;
