@@ -4,9 +4,9 @@ Applied via [patch-package](https://github.com/ds300/patch-package).
 
 ## react-native+0.85.3.patch
 
-- Disable font leading in multiline `TextInput` (similar to react/react-native#45268).
-- Scroll as multiline `TextInput` grows in iOS (same fix as react/react-native#58520).
-- Remove `setNativeProps` race to avoid `EXC_BAD_ACCESS` crash (same fix as react/react-native#52646).
+- Disable font leading in multiline `TextInput` (similar to react/react-native#45268 unfixed upstream as of 2026-11-13).
+- Scroll as multiline `TextInput` grows in iOS (same fix as react/react-native#58520 unmerged upstream as of 2026-11-13).
+- Remove `setNativeProps` race to avoid `EXC_BAD_ACCESS` crash (same fix as react/react-native#52646 merged upstream in 0.86.1+).
 - Added in pull request #1183.
 
 ## @azesmway+react-native-unity+1.1.1.patch
