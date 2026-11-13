@@ -15,6 +15,7 @@ declare module '@azesmway/react-native-unity' {
   type UnityViewContentUpdateEvent = Readonly<{ message: string }>;
 
   export interface UnityViewProps extends ViewProps {
+    androidLockOrientation?: boolean;
     onUnityMessage?: DirectEventHandler<UnityViewContentUpdateEvent>;
     onPlayerUnload?: DirectEventHandler<UnityViewContentUpdateEvent>;
     onPlayerQuit?: DirectEventHandler<UnityViewContentUpdateEvent>;
