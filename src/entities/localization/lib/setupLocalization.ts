@@ -20,7 +20,7 @@ declare module 'i18next' {
   }
 }
 
-z.setErrorMap(zodI18nMap);
+z.config({ customError: zodI18nMap });
 
 const resources = {
   en,
