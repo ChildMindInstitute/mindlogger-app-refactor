@@ -1,11 +1,9 @@
-import { getDefaultFileService } from '@app/shared/api/services/fileServiceInstance';
+import { ConsoleLogger } from './Logger';
 
-import { Logger } from './Logger';
-
-let instance: Logger;
+let instance: ConsoleLogger;
 export const getDefaultLogger = () => {
   if (!instance) {
-    instance = new Logger(getDefaultFileService());
+    instance = new ConsoleLogger();
   }
   return instance;
 };

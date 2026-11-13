@@ -25,9 +25,6 @@ const createMockLogger = (): ILogger => ({
   warn: jest.fn(),
   error: jest.fn(),
   configure: jest.fn(),
-  send: jest.fn().mockResolvedValue(true),
-  cancelSending: jest.fn(),
-  clearAllLogFiles: jest.fn(),
 });
 
 // Test data factories

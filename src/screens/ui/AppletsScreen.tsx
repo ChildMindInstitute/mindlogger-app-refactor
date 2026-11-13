@@ -25,7 +25,6 @@ import { palette } from '@app/shared/lib/constants/palette';
 import { useAppSelector } from '@app/shared/lib/hooks/redux';
 import { useAppDispatch } from '@app/shared/lib/hooks/redux';
 import { useOnFocus } from '@app/shared/lib/hooks/useOnFocus';
-import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { Box, XStack } from '@app/shared/ui/base';
 import { Spinner } from '@app/shared/ui/Spinner';
 import { Text } from '@app/shared/ui/Text';
@@ -85,9 +84,6 @@ export const AppletsScreen: FC = () => {
         responseTimes,
         LogTrigger.FirstAppRun,
       );
-      getDefaultLogger()
-        .send()
-        .catch(err => getDefaultLogger().error(err as never));
     },
   );
 
