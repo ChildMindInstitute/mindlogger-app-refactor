@@ -7,7 +7,7 @@ export const SignUpFormSchema = z.object({
     .string()
     .trim()
     .min(1, 'form_item:required')
-    .email('sign_up_form:email_looks_incomplete'),
+    .check(z.email('sign_up_form:email_looks_incomplete')),
   password: z
     .string()
     .min(1, 'form_item:required')

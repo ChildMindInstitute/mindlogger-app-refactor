@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const ConnectionFormSchema = z.object({
-  ipAddress: z.string().ip(),
+  ipAddress: z.union([z.ipv4(), z.ipv6()]),
   port: z
     .string()
     .transform(x => parseInt(x, 10))

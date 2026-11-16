@@ -9,7 +9,7 @@ type FieldError = BaseFieldError & {
 };
 
 const parseErrorSchema = (
-  zodErrors: z.ZodIssue[],
+  zodErrors: z.core.$ZodIssue[],
   validateAllFieldCriteria: boolean,
 ) => {
   const errors: Record<string, FieldError> = {};
@@ -20,8 +20,8 @@ const parseErrorSchema = (
     const _path = path.join('.');
 
     if (!errors[_path]) {
-      if ('unionErrors' in error) {
-        const unionError = error.unionErrors[0].errors[0];
+      if (error.code === 'invalid_union' && error.errors[0]?.[0]) {
+        const unionError = error.errors[0][0];
 
         errors[_path] = {
           message: unionError.message,
@@ -33,9 +33,12 @@ const parseErrorSchema = (
       }
     }
 
-    if ('unionErrors' in error) {
-      error.unionErrors.forEach(unionError =>
-        unionError.errors.forEach(e => zodErrors.push(e)),
+    // zod 4 union issues have paths relative to the union
+    if (error.code === 'invalid_union') {
+      error.errors.forEach(unionErrors =>
+        unionErrors.forEach(e =>
+          zodErrors.push({ ...e, path: [...path, ...e.path] }),
+        ),
       );
     }
 
@@ -89,7 +92,7 @@ export const zodResolver: Resolver = (
           values: {},
           errors: toNestErrors(
             parseErrorSchema(
-              error.errors,
+              error.issues,
               !options.shouldUseNativeValidation &&
                 options.criteriaMode === 'all',
             ),

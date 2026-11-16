@@ -15,6 +15,6 @@ export const PasswordRecoveryFormSchema = z
       .min(1, 'password_recovery_form:password_confirmation_required'),
   })
   .refine(data => data.newPassword === data.confirmPassword, {
-    message: 'password_recovery_form:passwords_do_not_match',
+    error: 'password_recovery_form:passwords_do_not_match',
     path: ['confirmPassword'],
   });

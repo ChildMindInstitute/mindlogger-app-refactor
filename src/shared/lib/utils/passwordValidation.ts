@@ -164,7 +164,7 @@ export const passwordSuperRefine = (): ((
 
     if (!result.meetsCharTypeRequirement) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: PasswordErrorKey.MUST_INCLUDE,
         params: {
           minLength: PASSWORD_MIN_LENGTH,
@@ -175,7 +175,7 @@ export const passwordSuperRefine = (): ((
 
     if (!result.meetsLength) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: PasswordErrorKey.MIN_LENGTH,
         params: {
           minLength: PASSWORD_MIN_LENGTH,
@@ -185,14 +185,14 @@ export const passwordSuperRefine = (): ((
 
     if (!result.hasNoSpaces) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: PasswordErrorKey.NO_BLANK_SPACES,
       });
     }
 
     if (!result.hasNoEmoji) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: PasswordErrorKey.NO_EMOJI,
       });
     }
@@ -208,25 +208,25 @@ export const passwordSuperRefine = (): ((
     } else {
       if (!result.hasUppercase) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: PasswordErrorKey.MUST_INCLUDE_UPPERCASE,
         });
       }
       if (!result.hasLowercase) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: PasswordErrorKey.MUST_INCLUDE_LOWERCASE,
         });
       }
       if (!result.hasDigit) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: PasswordErrorKey.MUST_INCLUDE_DIGITS,
         });
       }
       if (!result.hasSymbol) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           message: PasswordErrorKey.MUST_INCLUDE_SYMBOL,
         });
       }
