@@ -42,6 +42,9 @@ export function setupLocalization() {
     fallbackLng: 'en',
     resources,
     returnNull: false,
+    interpolation: {
+      escapeValue: false,
+    },
   });
 
   // @todo - automatically detect language of the device
