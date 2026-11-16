@@ -65,7 +65,6 @@ jest.mock('@app/shared/lib/services/loggerInstance', () => ({
   getDefaultLogger: () => ({
     log: jest.fn(),
     info: jest.fn(),
-    send: jest.fn(),
   }),
 }));
 

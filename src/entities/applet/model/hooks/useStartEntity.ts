@@ -281,8 +281,6 @@ export function useStartEntity({
         return;
       }
 
-      logger.cancelSending();
-
       const logParams: TrackActivityActionParams = {
         activityId,
         appletId,
@@ -450,8 +448,6 @@ export function useStartEntity({
         resolve({ failReason: 'all-items-hidden' });
         return;
       }
-
-      logger.cancelSending();
 
       const logParams: Omit<TrackFlowActionParams, 'activityId'> = {
         flowId,

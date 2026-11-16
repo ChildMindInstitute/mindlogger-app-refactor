@@ -40,10 +40,6 @@ export const SettingsScreen: FC = () => {
     navigate('ChangePassword');
   };
 
-  const navigateToAppLogs = () => {
-    navigate('ApplicationLogs');
-  };
-
   const hashedDeviceId: string = useMemo(() => {
     const deviceId = getDefaultSystemRecord().getDeviceId()!;
 
@@ -95,12 +91,6 @@ export const SettingsScreen: FC = () => {
               onPress={navigateToAppLanguage}
               accessibilityLabel="change_language-button"
               title={t('language_screen:change_app_language')}
-            />
-
-            <RowButton
-              onPress={navigateToAppLogs}
-              accessibilityLabel="upload_logs-button"
-              title={t('settings:upload_logs')}
             />
 
             <LogoutRowButton />

@@ -138,6 +138,5 @@ export class MigrationProcessor {
         '[MigrationProcessor] Error occurred: \n\n' + error,
       );
     }
-    await getDefaultLogger().send();
   }
 }

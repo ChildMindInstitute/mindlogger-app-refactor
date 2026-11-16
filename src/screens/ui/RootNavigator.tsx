@@ -52,7 +52,6 @@ import { useOnAutoCompletion } from '@app/widgets/survey/model/hooks/useOnAutoCo
 import { AboutScreen } from './AboutScreen';
 import { AppletBottomTabNavigator } from './AppletBottomTabNavigator';
 import { AppletsScreen } from './AppletsScreen';
-import { ApplicationLogsScreen } from './ApplicationLogsScreen';
 import { AutocompletionScreen } from './AutocompletionScreen';
 import { ChangeLanguageScreen } from './ChangeLanguageScreen';
 import { ChangePasswordScreen } from './ChangePasswordScreen';
@@ -265,14 +264,6 @@ export const RootNavigator = () => {
               title: t('settings:change_pass'),
             }}
             component={ChangePasswordScreen}
-          />
-
-          <Stack.Screen
-            name="ApplicationLogs"
-            options={{
-              title: t('settings:upload_logs'),
-            }}
-            component={ApplicationLogsScreen}
           />
 
           <Stack.Screen
