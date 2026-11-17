@@ -30,16 +30,16 @@ class MainActivity : ReactActivity() {
   }
 
   /**
-   * Set requested orientation only if Unity is mounted, else always set portrait.
+   * Set requested orientation only if Unity allows it, else always set portrait.
    */
   override fun setRequestedOrientation(requestedOrientation: Int) {
-    val isUnityMounted = runCatching {
+    val allowsOrientation = runCatching {
       // Look up by name since react-native-unity is only linked when BUILD_WITH_UNITY=1
       Class.forName("com.azesmwayreactnativeunity.ReactNativeUnityViewManager")
-          .getMethod("hasActiveView")
-          .invoke(null) as Boolean
+          .getMethod("allowsOrientation", Int::class.javaPrimitiveType)
+          .invoke(null, requestedOrientation) as Boolean
     }.getOrDefault(false)
     super.setRequestedOrientation(
-        if (isUnityMounted) requestedOrientation else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        if (allowsOrientation) requestedOrientation else ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
   }
 }

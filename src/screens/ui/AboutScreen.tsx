@@ -5,6 +5,12 @@ import { Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import {
+  APP_VERSION,
+  BUILD_NUMBER,
+  ENV,
+  MERIT_TAG,
+} from '@app/shared/lib/constants';
 import { palette } from '@app/shared/lib/constants/palette';
 import { Box } from '@app/shared/ui/base';
 import { GradientOverlay } from '@app/shared/ui/GradientOverlay';
@@ -47,6 +53,29 @@ export const AboutScreen: FC = () => {
               height: 70,
             }}
           />
+        </Box>
+
+        <Box alignItems="center" mb={32}>
+          {/* Selectable text so long-press copies both versions */}
+          <Text
+            color="$outline"
+            fontSize={12}
+            textAlign="center"
+            userSelect="text"
+          >
+            {t('about_app:curious_version', {
+              version: [
+                ENV !== 'production' && ENV?.toUpperCase(),
+                APP_VERSION,
+                `(${BUILD_NUMBER})`,
+              ]
+                .filter(Boolean)
+                .join(' '),
+            })}
+            {MERIT_TAG
+              ? `\n${t('about_app:merit_version', { version: MERIT_TAG })}`
+              : null}
+          </Text>
         </Box>
       </ScrollView>
       <GradientOverlay color={palette.surface} />

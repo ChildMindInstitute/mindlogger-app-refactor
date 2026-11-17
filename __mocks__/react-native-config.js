@@ -10,4 +10,5 @@ export default {
   DATADOG_CLIENT_TOKEN: '',
   DATADOG_APPLICATION_ID: '',
   DEEP_LINK_PREFIXES: '',
+  MERIT_TAG: '',
 };

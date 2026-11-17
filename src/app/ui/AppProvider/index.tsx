@@ -15,6 +15,7 @@ import Toast from 'react-native-toast-message';
 import { LocalizationProvider } from '@app/entities/localization/ui/LocalizationProvider';
 import { getDefaultAnalyticsService } from '@app/shared/lib/analytics/analyticsServiceInstance';
 import { MixEvents } from '@app/shared/lib/analytics/IAnalyticsService';
+import { palette } from '@app/shared/lib/constants/palette';
 import { getDefaultLogger } from '@app/shared/lib/services/loggerInstance';
 import { selectUserId } from '@entities/identity/model/selectors';
 
@@ -96,5 +97,9 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
 const styles = StyleSheet.create({
   gestureHandlerView: {
     flex: 1,
+    // Opaque, so a Unity view parked behind the app between tasks can't show
+    // through when a screen transition leaves part of the screen unpainted
+    // (M2-11244).
+    backgroundColor: palette.surface,
   },
 });
