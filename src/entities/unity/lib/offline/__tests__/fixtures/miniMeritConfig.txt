@@ -1,0 +1,97 @@
+New Task Data
+{
+    "m_sTaskName": "MiniTask",
+    "m_TaskData": {
+        "m_task2d": {
+            "m_listResourceSets": [
+                {
+                    "getName": "Fix",
+                    "m_resourceType": 1,
+                    "m_listResourceSetRoots": [
+                        {
+                            "m_maskRes": { "rid": -2 },
+                            "currentResourceSetType": 1,
+                            "instructionsRes": { "rid": -2 },
+                            "fixationRes": { "rid": 1000 },
+                            "criticalRes": { "rid": -2 },
+                            "compoundRes": { "rid": -2 }
+                        }
+                    ],
+                    "m_sType": "Fixation"
+                },
+                {
+                    "getName": "Maske",
+                    "m_resourceType": 4,
+                    "m_listResourceSetRoots": [
+                        {
+                            "m_maskRes": { "rid": 1001 },
+                            "currentResourceSetType": 4,
+                            "instructionsRes": { "rid": -2 },
+                            "fixationRes": { "rid": -2 },
+                            "criticalRes": { "rid": -2 },
+                            "compoundRes": { "rid": -2 }
+                        }
+                    ],
+                    "m_sType": "Mask"
+                },
+                {
+                    "getName": "ComCrit",
+                    "m_resourceType": 3,
+                    "m_listResourceSetRoots": [
+                        {
+                            "m_maskRes": { "rid": -2 },
+                            "currentResourceSetType": 3,
+                            "instructionsRes": { "rid": -2 },
+                            "fixationRes": { "rid": -2 },
+                            "criticalRes": { "rid": -2 },
+                            "compoundRes": { "rid": 1002 }
+                        }
+                    ],
+                    "m_sType": "Compound Stimulus Object"
+                }
+            ]
+        }
+    },
+    "references": {
+        "version": 2,
+        "RefIds": [
+            {
+                "rid": -2,
+                "type": { "class": "", "ns": "", "asm": "" },
+                "data": {}
+            },
+            {
+                "rid": 1000,
+                "type": { "class": "FixationRes", "ns": "MERIT.SharedCore.TaskComponents.Task2D", "asm": "MERIT.SharedCore.TaskComponents" },
+                "data": {
+                    "m_sName": "Cross",
+                    "m_bIsFromWeb": true,
+                    "m_sImageURL": "https://example.com/cross.png",
+                    "m_type": 1
+                }
+            },
+            {
+                "rid": 1001,
+                "type": { "class": "MaskRes", "ns": "MERIT.SharedCore.TaskComponents.Task2D", "asm": "MERIT.SharedCore.TaskComponents" },
+                "data": {
+                    "m_sName": "Dots",
+                    "m_bIsFromWeb": true,
+                    "m_sImageURL": "https://example.com/dots.png",
+                    "m_type": 4,
+                    "m_sAudioURL": "https://example.com/beep.mp3"
+                }
+            },
+            {
+                "rid": 1002,
+                "type": { "class": "CompoundObjectRes", "ns": "MERIT.SharedCore.TaskComponents.Task2D", "asm": "MERIT.SharedCore.TaskComponents" },
+                "data": {
+                    "m_sName": "Right",
+                    "m_bIsFromWeb": true,
+                    "m_sImageURL": "https://example.com/right.png",
+                    "m_sAudioURL": "",
+                    "m_type": 3
+                }
+            }
+        ]
+    }
+}
