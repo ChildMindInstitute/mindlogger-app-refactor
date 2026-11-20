@@ -1,0 +1,21 @@
+{
+  "Simulator Target Bundle": "lab.childmindinstitute.data.dev",
+  "aps": {
+    "alert": {
+      "title": "Daily Activity Reminder",
+      "body": "Time to complete your Test Notification Bug"
+    },
+    "sound": "default",
+    "badge": 1,
+    "mutable-content": 1
+  },
+  "gcm.message_id": "test-123",
+  "google.c.a.e": "1",
+  "google.c.sender.id": "1234567890",
+  "type": "schedule-event-alert",
+  "appletId": "34e8469e-39fa-464a-9d70-1657dc8d1d19",
+  "activityId": "1bad31ab-757b-4835-a22d-7cee48ecb982",
+  "eventId": "6b8b624e-414b-4f3b-a3af-47887abbcb61",
+  "entityName": "Test Notification Bug",
+  "targetSubjectId": null
+}
