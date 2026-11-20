@@ -6,10 +6,9 @@ import {
 
 import { httpService } from './httpService';
 import {
+  AllAppletAssignmentsResponse,
   AppletAndActivitiesDetailsRequest,
   AppletAndActivitiesDetailsResponse,
-  AppletAssignmentsRequest,
-  AppletAssignmentsResponse,
   AppletBaseInfoRequest,
   AppletBaseInfoResponse,
   AppletDetailsRequest,
@@ -87,10 +86,10 @@ export function appletsService(): IAppletService {
 
       return apiResponse;
     },
-    async getAppletAssignments(request: AppletAssignmentsRequest) {
+    async getAllAppletAssignments() {
       const apiCall = () => {
-        return httpService.get<AppletAssignmentsResponse>(
-          `/users/me/assignments/${request.appletId}`,
+        return httpService.get<AllAppletAssignmentsResponse>(
+          '/users/me/assignments',
         );
       };
       return await callApiWithRetry(withDataExtraction(apiCall));
