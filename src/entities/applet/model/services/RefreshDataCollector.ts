@@ -146,12 +146,28 @@ export class RefreshDataCollector implements IRefreshDataCollector {
       appletAssignments: {},
     };
 
-    for (const appletId of appletIds) {
-      const assignmentResponse = await this.appletService.getAppletAssignments({
-        appletId,
-      });
-      result.appletAssignments[appletId] = assignmentResponse;
+    if (!appletIds.length) {
+      return result;
     }
+
+    const assignmentsResponse =
+      await this.appletService.getAllAppletAssignments();
+
+    const assignmentsByAppletId = new Map(
+      assignmentsResponse.data.result.map(({ appletId, assignments }) => [
+        appletId,
+        assignments,
+      ]),
+    );
+
+    appletIds.forEach(appletId => {
+      result.appletAssignments[appletId] = toAxiosResponse({
+        result: {
+          appletId,
+          assignments: assignmentsByAppletId.get(appletId) ?? [],
+        },
+      });
+    });
 
     return result;
   }

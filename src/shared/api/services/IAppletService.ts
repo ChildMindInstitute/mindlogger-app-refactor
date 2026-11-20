@@ -152,10 +152,6 @@ export type AppletAndActivitiesDetailsResponse = {
   };
 };
 
-export type AppletAssignmentsRequest = {
-  appletId: string;
-};
-
 export type AssignmentParticipantDto = {
   id: string;
   appletId: string;
@@ -183,6 +179,13 @@ export type AppletAssignmentsResponse = {
   };
 };
 
+export type AllAppletAssignmentsResponse = SuccessfulResponse<
+  Array<{
+    appletId: string;
+    assignments: AssignmentDto[];
+  }>
+>;
+
 export type IAppletService = {
   getAppletBaseInfo: (
     request: AppletBaseInfoRequest,
@@ -194,7 +197,7 @@ export type IAppletService = {
   getAppletAndActivitiesDetails: (
     request: AppletAndActivitiesDetailsRequest,
   ) => Promise<AxiosResponse<AppletAndActivitiesDetailsResponse>>;
-  getAppletAssignments: (
-    request: AppletAssignmentsRequest,
-  ) => Promise<AxiosResponse<AppletAssignmentsResponse>>;
+  getAllAppletAssignments: () => Promise<
+    AxiosResponse<AllAppletAssignmentsResponse>
+  >;
 };
