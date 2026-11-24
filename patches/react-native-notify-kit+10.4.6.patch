@@ -1,0 +1,88 @@
+diff --git a/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/NotificationManager.java b/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/NotificationManager.java
+index 1549dce..34f5821 100644
+--- a/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/NotificationManager.java
++++ b/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/NotificationManager.java
+@@ -1014,15 +1014,36 @@ class NotificationManager {
+         new FutureCallback<List<WorkDataEntity>>() {
+           @Override
+           public void onSuccess(List<WorkDataEntity> workDataEntities) {
++            // Saved notifications that can't be decoded, e.g. bytes written on
++            // an older Android version. Skipped here and removed below so they
++            // can't crash the app on every read.
++            List<String> unreadableIds = new ArrayList<>();
++
+             for (WorkDataEntity workDataEntity : workDataEntities) {
+-              Bundle triggerNotificationBundle = new Bundle();
++              try {
++                Bundle triggerNotificationBundle = new Bundle();
+ 
+-              triggerNotificationBundle.putBundle(
+-                  "notification", ObjectUtils.bytesToBundle(workDataEntity.getNotification()));
++                triggerNotificationBundle.putBundle(
++                    "notification", ObjectUtils.bytesToBundle(workDataEntity.getNotification()));
++
++                triggerNotificationBundle.putBundle(
++                    "trigger", ObjectUtils.bytesToBundle(workDataEntity.getTrigger()));
++                triggerNotifications.add(triggerNotificationBundle);
++              } catch (Throwable t) {
++                Logger.w(
++                    TAG,
++                    "Removing unreadable trigger notification "
++                        + workDataEntity.getId()
++                        + ": "
++                        + t.getMessage());
++                unreadableIds.add(workDataEntity.getId());
++              }
++            }
+ 
+-              triggerNotificationBundle.putBundle(
+-                  "trigger", ObjectUtils.bytesToBundle(workDataEntity.getTrigger()));
+-              triggerNotifications.add(triggerNotificationBundle);
++            if (!unreadableIds.isEmpty()) {
++              // Cancels each one's scheduled alarm and job and deletes its row,
++              // so nothing fires later with no data behind it.
++              cancelAllNotificationsWithIds(NOTIFICATION_TYPE_TRIGGER, unreadableIds, null);
+             }
+ 
+             result.onComplete(null, triggerNotifications);
+diff --git a/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/utility/ObjectUtils.java b/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/utility/ObjectUtils.java
+index 1da7873..e9439f0 100644
+--- a/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/utility/ObjectUtils.java
++++ b/node_modules/react-native-notify-kit/android/src/main/java/app/notifee/core/utility/ObjectUtils.java
+@@ -105,7 +105,35 @@ public class ObjectUtils {
+     parcel.setDataPosition(0);
+     Bundle bundle = parcel.readBundle(ObjectUtils.class.getClassLoader());
+     parcel.recycle();
+-    return Objects.requireNonNull(bundle);
++    // Android decodes a Bundle lazily, the first time it's read. Read every
++    // value now so bytes that can't be decoded (e.g. saved on an older Android
++    // version) throw here, where callers can catch it, instead of later inside
++    // React Native where nothing catches it and the app crashes.
++    forceUnparcel(Objects.requireNonNull(bundle));
++    return bundle;
++  }
++
++  // Reads every value in the bundle, including nested bundles, which forces
++  // Android to finish decoding it. Throws if any value can't be decoded.
++  @SuppressWarnings("deprecation")
++  private static void forceUnparcel(@NonNull Bundle bundle) {
++    for (String key : bundle.keySet()) {
++      forceUnparcelValue(bundle.get(key));
++    }
++  }
++
++  private static void forceUnparcelValue(@Nullable Object value) {
++    if (value instanceof Bundle) {
++      forceUnparcel((Bundle) value);
++    } else if (value instanceof Object[]) {
++      for (Object item : (Object[]) value) {
++        forceUnparcelValue(item);
++      }
++    } else if (value instanceof List) {
++      for (Object item : (List<?>) value) {
++        forceUnparcelValue(item);
++      }
++    }
+   }
+ 
+   public static Map<String, Object> bundleToMap(Bundle bundle) throws IllegalArgumentException {
